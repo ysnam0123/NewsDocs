@@ -1,4 +1,4 @@
 <script setup></script>
 <template>
-  <RouterView />
+  <h1>NewsDetailView</h1>
 </template>

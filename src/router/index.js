@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -14,6 +14,16 @@ const router = createRouter({
       name: 'about',
 
       component: () => import('../views/AboutView.vue'),
+    },
+    {
+      path: '/news_detail',
+      name: 'newsList',
+      component: () => import('../views/NewsListView.vue'),
+    },
+    {
+      path: '/news_detail/:id',
+      name: 'newsDetail',
+      component: () => import('../layout/NewsDetailView.vue'),
     },
   ],
 })
