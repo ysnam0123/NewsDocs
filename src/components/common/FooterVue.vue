@@ -1,7 +1,5 @@
 <script setup></script>
 <template>
-  <div class="wrapper">
-    <h1>HomeView</h1>
-  </div>
+  <h1>footer</h1>
 </template>
 <style scoped></style>
