@@ -3,6 +3,5 @@
 </script>
 <template>
   <!-- <ProfileView /> -->
-  <RouterLink />
+  <RouterView />
 </template>
-<style scoped></style>
