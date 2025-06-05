@@ -1,1 +1,31 @@
 @import 'tailwindcss';
+
+@font-face {
+  font-family: BagelFatOne;
+  src: url('../assets/fonts/BagelFatOne.woff') format('woff');
+  src: url('../assets//fonts//BagelFatOne.woff2') format('woff2');
+}
+
+/* 토스트 메세지 테두리용 css */
+.interestToastWrapper {
+  background-color: #7537e3 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+/* 토스트 메세지 내부용 css */
+.interestToast {
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 12px;
+}
+
+/*
+toast() : 기본 일반 메시지
+toast.success() : 성공 메시지 (초록바)
+toast.error()
+toast.info() : 파란색
+tast.warning() : 경고 (주황색)
+
+*/

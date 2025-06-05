@@ -11,6 +11,7 @@ import ButtonVue from './ButtonVue.vue'
     </div>
     <div class="headerContainer">
       <div class="logoBox">
+        <img src="../../assets/icons/headerLogoImg.svg" alt="logoImg" />
         <h1 class="logo">NewsDocs</h1>
       </div>
       <div class="headerNav">
@@ -20,11 +21,11 @@ import ButtonVue from './ButtonVue.vue'
           <li>의견 나누기</li>
         </ul>
       </div>
-      <div class="search">
-        <input type="text" class="searchBox" placeholder="키워드로 뉴스 검색" />
-        <img src="../../assets/icons/searchIcon.svg" alt="searchIcon" class="searchIcon" />
-      </div>
       <div class="headerButtonBox">
+        <div class="search">
+          <input type="text" class="searchBox" placeholder="키워드로 뉴스 검색" />
+          <img src="../../assets/icons/searchIcon.svg" alt="searchIcon" class="searchIcon" />
+        </div>
         <ButtonVue class="logInBtn">로그인</ButtonVue>
       </div>
     </div>
@@ -51,11 +52,19 @@ import ButtonVue from './ButtonVue.vue'
   display: flex;
   align-items: center;
 }
+.logoBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
 .logo {
   font-size: 40px;
+  user-select: none;
+  font-family: 'BagelFatOne', BagelFatOne, sans-serif;
 }
 .headerNav {
-  margin-left: 40px;
+  margin-left: 30px;
 }
 .headerNav ul {
   display: flex;
@@ -65,14 +74,16 @@ import ButtonVue from './ButtonVue.vue'
 }
 .headerNav ul li {
   cursor: pointer;
+  width: 120px;
   padding: 8px 12px;
   transition: all 0.3s ease;
   border-radius: 10px;
+  text-align: center;
 }
 .headerNav ul li:hover {
-  background-color: #7537e3;
-  color: white;
+  color: #7537e3;
   font-weight: 700;
+  font-size: 18px;
 }
 .search {
   margin-left: 40px;
