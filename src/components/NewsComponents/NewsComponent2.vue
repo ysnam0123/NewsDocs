@@ -3,7 +3,7 @@
   <div class="flex w-[408px] h-[160px]">
     <div class="min-w-[160px] min-h-[160px]">
       <div class="relative bg-cover bg-center w-full h-full">
-        <img src="@/assets/img/son.jpeg" class="rounded-[20px]" />
+        <img class="rounded-[20px]" />
       </div>
     </div>
     <div class="relative flex flex-col p-3 w-full h-full">
