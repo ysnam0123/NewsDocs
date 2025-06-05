@@ -1,5 +1,9 @@
-<script setup></script>
+<script setup>
+import ProfileEditView from './views/ProfileEditView.vue'
+// import ProfileView from './views/ProfileView.vue'
+</script>
 <template>
-  <router-view />
+  <!-- <ProfileView /> -->
+  <ProfileEditView />
 </template>
 <style scoped></style>
