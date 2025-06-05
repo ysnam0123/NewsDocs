@@ -16,16 +16,26 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
-      path: '/news_detail',
-      name: 'newsList',
-      component: () => import('../views/NewsListView.vue'),
-    },
-    {
-      path: '/news_detail/:id',
-      name: 'newsDetail',
-      component: () => import('../layout/NewsDetailView.vue'),
+      path: '/news',
+      name: 'newsLayout',
+      component: () => import('../layout/NewsLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'newsList',
+          component: () => import('../views/NewsListView.vue'),
+        },
+        {
+          path: ':id',
+          name: 'news',
+          component: () => import('../views/NewsDetailView.vue'),
+        },
+      ],
     },
   ],
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
 export default router
