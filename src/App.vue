@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+// import ProfileView from './views/ProfileView.vue'
+</script>
 <template>
-  <RouterView />
+  <!-- <ProfileView /> -->
+  <RouterLink />
 </template>
+<style scoped></style>

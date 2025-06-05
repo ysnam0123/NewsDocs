@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import supabase from '@/utils/supabase'
+import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
 
 const route = useRoute()
 const newsId = route.params.id
@@ -18,7 +19,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div
+  <section
     v-if="news"
     class="w-[90%] flex-1 ml-2 my-20 justify-center text-center border-1 border-gray-300 rounded-lg"
   >
@@ -31,6 +32,12 @@ onMounted(async () => {
       {{ news.description }}
     </p>
     <button class="cursor-pointer mb-10"><a :href="news.url"></a>원문보기</button>
-  </div>
-  <p v-else>로딩중...</p>
+  </section>
+  <section v-else>
+    <p>로딩중...</p>
+  </section>
+  <section>
+    <h1>관심 가질만한 다른 뉴스</h1>
+    <NewsComponent2 />
+  </section>
 </template>

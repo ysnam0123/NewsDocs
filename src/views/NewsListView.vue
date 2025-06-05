@@ -19,7 +19,6 @@ const clickhandler = (newsItem) => {
 
 onMounted(async () => {
   newsList.value = await getNewsList()
-
   // handleFetchAndSave()
 })
 </script>
