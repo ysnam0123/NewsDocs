@@ -1,5 +1,5 @@
 <script setup>
-import ButtonVue from './ButtonVue.vue'
+import ButtonVue from './ButtonView.vue'
 </script>
 <template>
   <div class="header">
@@ -71,6 +71,7 @@ import ButtonVue from './ButtonVue.vue'
   flex-direction: row;
   gap: 20px;
   user-select: none;
+  margin-top: 10px;
 }
 .headerNav ul li {
   cursor: pointer;
@@ -78,6 +79,7 @@ import ButtonVue from './ButtonVue.vue'
   padding: 8px 12px;
   transition: all 0.3s ease;
   border-radius: 10px;
+  font-weight: 700;
   text-align: center;
 }
 .headerNav ul li:hover {
@@ -92,7 +94,7 @@ import ButtonVue from './ButtonVue.vue'
 .searchBox {
   width: 300px;
   height: 40px;
-  padding: 5px;
+  padding: 5px 10px;
   border: 1px solid #939393;
   border-radius: 10px;
 }

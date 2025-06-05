@@ -14,22 +14,6 @@ const router = createRouter({
       name: 'about',
       component: () => import('../views/AboutView.vue'),
     },
-    {
-      path: '/chooseinterest',
-      name: 'chooseinterest',
-      component: () => import('../views/ChooseInterest.vue'),
-      meta: {
-        hideHeader: true,
-      },
-    },
-    {
-      path: '/choosefavorite',
-      name: 'choosefavorite',
-      component: () => import('../views/FavoriteInterest.vue'),
-      meta: {
-        hideHeader: true,
-      },
-    },
   ],
 })
 

@@ -1,12 +1,14 @@
 <script setup>
-import DefaultLayout from './layout/DefaultLayout.vue'
+import HeaderView from './components/common/HeaderView.vue'
 
-import Vue3Toastify from 'vue3-toastify'
+// import DefaultLayout from './layout/DefaultLayout.vue'
+// import Vue3Toastify from 'vue3-toastify'
 </script>
 <template>
-  <DefaultLayout>
+  <!-- <DefaultLayout>
     <RouterView />
     <Vue3Toastify />
-  </DefaultLayout>
+  </DefaultLayout> -->
+  <HeaderView />
 </template>
 <style scoped></style>
