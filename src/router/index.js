@@ -44,6 +44,16 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/community',
+      name: 'community',
+      component: () => import('../views/community/CommunityListView.vue'),
+    },
+    {
+      path: '/community/:id',
+      name: 'communityDetail',
+      component: () => import('../views/community/CommunityDetailView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
