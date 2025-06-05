@@ -18,7 +18,7 @@
 
         <!-- 내용 -->
         <div class="mt-4">
-          <div class="text-xl font-bold">제목입니달</div>
+          <div class="text-xl font-bold">제목입니당</div>
           <div class="mt-4 text-[15px] text-[#8E8D8D]">
             내용내용내용내용.내용내용내용내용내용내용내용내용내용내용내,
           </div>

@@ -1,5 +1,5 @@
 <script setup>
-import ProfileCard from '@/components/commons/ProfileCard.vue'
+import ProfileCard from '@/components/common/ProfileCard.vue'
 import CommunityPostDetail from '@/components/community/CommunityPostDetail.vue'
 import { ref } from 'vue'
 
