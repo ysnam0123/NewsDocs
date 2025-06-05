@@ -23,7 +23,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div>
+  <div class="pb-10">
     <section class="justify-center item-center flex-1 mr-10">
       <div v-if="newsList.length">
         <div
