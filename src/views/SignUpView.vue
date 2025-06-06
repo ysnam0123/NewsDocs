@@ -18,7 +18,7 @@ export default {
 }
 </script>
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#ECE1FF]">
+  <div class="min-h-screen flex items-center justify-center bg-[#EDEBF1]">
     <div
       class="bg-white rounded-[20px] w-[464px] h-[779px] flex flex-col items-center justify-center"
     >
