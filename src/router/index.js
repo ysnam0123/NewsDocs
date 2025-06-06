@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
@@ -27,7 +27,37 @@ const router = createRouter({
 
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/news',
+      name: 'newsLayout',
+      component: () => import('../layout/NewsLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'newsList',
+          component: () => import('../views/NewsListView.vue'),
+        },
+        {
+          path: ':id',
+          name: 'news',
+          component: () => import('../views/NewsDetailView.vue'),
+        },
+      ],
+    },
+    {
+      path: '/community',
+      name: 'community',
+      component: () => import('../views/community/CommunityListView.vue'),
+    },
+    {
+      path: '/community/:id',
+      name: 'communityDetail',
+      component: () => import('../views/community/CommunityDetailView.vue'),
+    },
   ],
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
 export default router

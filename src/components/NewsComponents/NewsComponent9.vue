@@ -2,7 +2,7 @@
 <template>
   <div class="w-[350px] h-[346px]">
     <div class="w-[350px] h-[240px]">
-      <img src="@/assets/img/son.jpeg" class="w-full h-full object-cover space-y-0.5" />
+      <img src="@/assets/img/dog-face.svg" class="w-full h-full object-cover space-y-0.5" />
     </div>
     <div>
       <div class="text-xl font-bold mt-[7px] max-h-[56px]">
