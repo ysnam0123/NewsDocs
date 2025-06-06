@@ -1,19 +1,14 @@
 <script setup>
 import HeaderView from '@/components/common/HeaderView.vue'
-import FooterView from '@/components/common/FooterVue.vue'
+import FooterView from '@/components/common/FooterView.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 </script>
 <template>
   <HeaderView v-if="!route.meta.hideHeader" />
-  <div class="slotWrapper">
+  <div class="min-h-[100vh]">
     <slot></slot>
   </div>
   <FooterView />
 </template>
-<style scoped>
-.slotWrapper {
-  min-height: 100vh;
-}
-</style>
