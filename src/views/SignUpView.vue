@@ -11,7 +11,7 @@ export default {
     <div
       class="bg-white rounded-[20px] w-[770px] h-[920px] flex flex-col items-center justify-center"
     >
-      <img src="@/assets/img/logo.png" alt="logo" class="w-[110px] h-[110px] mx-auto" />
+      <img src="@/assets/img/logo.svg" alt="logo" class="w-[110px] h-[110px] mx-auto" />
       <h1 class="text-[50px] mb-6 text-center font-extrabold">newsDocs</h1>
       <form @submit.prevent="onLogin" class="flex flex-col items-center w-full">
         <div class="mb-5 w-full flex flex-col items-center">
