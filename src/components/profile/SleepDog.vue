@@ -9,7 +9,7 @@ import VioletBtn from '@/components/icon/violetBtn.vue'
     <div class="relative">
       <VioletBtn />
       <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-semibold text-[25px]"
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-semibold text-[25px]"
       >
         뉴스 보러가기
       </div>
