@@ -1,0 +1,12 @@
+:root {
+  --main-color: #7537e3;
+  --light-purple: #b394e7;
+  --background-purple: #ece1ff;
+  --lightGray: #d6d6d6;
+  --darkGray: #939393;
+  --white: #ffffff;
+
+  /* text color */
+  --text-color-black: #000000;
+  --text-color-white: #ffffff;
+}
