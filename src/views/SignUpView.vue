@@ -45,7 +45,7 @@ export default {
               />
               <button
                 type="button"
-                class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer"
+                class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer hover:bg-[#F3ECFF] transition-all duration-300"
               >
                 확인
               </button>
@@ -84,7 +84,7 @@ export default {
             />
             <button
               type="button"
-              class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer"
+              class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer hover:bg-[#F3ECFF] transition-all duration-300"
             >
               확인
             </button>
