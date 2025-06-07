@@ -1,12 +1,17 @@
 <script setup>
-import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
+import dummy3 from '@/assets/img/news_image/dummy3.png'
 </script>
 <template>
-  <section class="h-full w-[407px] mt-20 overflow-hidden">
-    <h2 class="text-xl mb-6">관심 가질만한 다른 뉴스</h2>
-    <div class="sm:gap-2 md:gap-10 ml-14 mb-10">
-      <NewsComponent2 class="border-1 border-gray-200 rounded-2xl" />
-      <NewsComponent2 class="border-1 border-gray-200 rounded-2xl ml-10" />
+  <section class="mt-10 sticky top-[60px]">
+    <div>
+      <h2 class="text-md mb-5 font-semibold">관심 가질만한 다른 뉴스</h2>
+      <div class="w-[307px] flex">
+        <div class="block">
+          <span class="text-[13px] text-[#7F7F7F]">#정치</span>
+          <h3>유강민 선수 최고기록 돌파...시속 620km로 압도적 우승</h3>
+        </div>
+        <img :src="dummy3" class="rounded-lg" />
+      </div>
     </div>
   </section>
 </template>

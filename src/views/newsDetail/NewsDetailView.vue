@@ -20,21 +20,24 @@ import dummy2 from '@/assets/img/news_image/dummy2.png'
 // })
 </script>
 <template>
-  <section class="w-[740px] flex-1 ml-2 my-20 justify-center rounded-xl">
+  <section class="my-10 justify-center rounded-xl max-w-[707px]">
     <div class="text-md text-[#7537E3] font-medium">
       <span># 연예</span>
     </div>
-    <h1 class="text-[32px] my-4 text-bold">
+    <h1 class="text-[32px] my-4 font-bold">
       나는 자연인이다...붉은 빛 골짜기에서 찍은 자연인의 사장이 세간의 엄청난 화제로 떠올라 광고
     </h1>
     <span class="mr-2 text-sm text-[#A6A6A6]">2025.06.07</span>
     <span class="text-sm text-[#A6A6A6]">매일경제</span>
-    <img :src="dummy2" class="mx-auto w-[680px] h-auto rounded-2xl mb-7.5" />
-    <div class="block text-left">
+    <img :src="dummy2" class="w-full h-auto rounded-2xl my-7.5" />
+    <div class="text-left">
       <button class="cursor-pointer px-4.5 py-3 rounded-lg bg-[#7537E3] text-white mr-2 mb-5">
         요약보기
       </button>
-      <span class="bg-[#EFEFEF] py-1.5 pl-4 pr-2.5">뉴스독이 기사를 세 줄로 요약해드려요!</span>
+      <div class="relative w-fit bg-[#EFEFEF] text-black px-4 py-2 rounded-xl">
+        뉴스독이 기사를 세 줄로 요약해드려요!
+        <div class="absolute -bottom-2 left-4 w-4 h-4 bg-[#EFEFEF] rotate-45"></div>
+      </div>
     </div>
     <span class="leading-[29px] text-lg text-left">
       코스닥 시장 육성방안, 기업지배구조 모범규준, 기간산업안정자금 등 경제정책 입안 경험이 풍부해

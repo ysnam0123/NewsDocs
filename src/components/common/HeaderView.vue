@@ -1,5 +1,6 @@
 <script setup>
 import ButtonVue from './ButtonVue.vue'
+import logo from '@/assets/img/logo_newsdocs.png'
 </script>
 <template>
   <div class="header">
@@ -11,7 +12,7 @@ import ButtonVue from './ButtonVue.vue'
     </div>
     <div class="headerContainer">
       <div class="logoBox">
-        <img src="../../assets/img/logo_newsdocs.png" alt="logoImg" />
+        <img :src="logo" alt="logoImg" class="w-[202px] h-11.5" />
         <h1 class="logo"></h1>
       </div>
       <div class="headerNav">
