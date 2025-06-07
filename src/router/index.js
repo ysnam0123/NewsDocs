@@ -24,10 +24,10 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-
       component: () => import('../views/AboutView.vue'),
     },
     {
+
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/ProfileView.vue'),
@@ -46,6 +46,22 @@ const router = createRouter({
       path: '/profile/news',
       name: 'ProfileNews',
       component: () => import('../views/ProfileNewsView.vue'),
+
+      path: '/chooseinterest',
+      name: 'chooseinterest',
+      component: () => import('../views/ChooseInterest.vue'),
+      meta: {
+        hideHeader: true,
+      },
+    },
+    {
+      path: '/choosefavorite',
+      name: 'choosefavorite',
+      component: () => import('../views/FavoriteInterest.vue'),
+      meta: {
+        hideHeader: true,
+      },
+
     },
     {
       path: '/news',

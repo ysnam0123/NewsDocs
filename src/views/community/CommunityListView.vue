@@ -14,9 +14,9 @@ const handleSort = (sort) => {
 }
 </script>
 <template>
-  <div class="w-[1440px] min-h-screen pl-[106px] mt-[40px] flex flex-col items-center">
+  <div class="w-[1440px] min-h-screen mt-[40px] flex flex-col items-center m-auto">
     <!-- 배너&검색 -->
-    <div class="flex w-[1222px] h-[40px] justify-between">
+    <div class="flex w-[1282px] h-[40px] justify-between">
       <div class="flex gap-[3px] w-[512px]">
         <button
           @click="handleCategory('전체')"
@@ -74,7 +74,7 @@ const handleSort = (sort) => {
           해외/기타
         </button>
       </div>
-      <div class="flex items-center w-[341px] h-10 rounded-[10px] border">
+      <div class="flex items-center w-[341px] h-10 rounded-[10px] border ml-auto">
         <input
           v-model="searchQuery"
           class="ml-[30px] w-[287px]"
@@ -86,7 +86,7 @@ const handleSort = (sort) => {
         </button>
       </div>
     </div>
-    <div class="flex w-[1272px] mt-[27px]">
+    <div class="flex w-[1332px] mt-[27px]">
       <!-- 왼쪽 화면 -->
       <div class="flex">
         <div class="w-[272px] min-h-screen mt-[43px]">
