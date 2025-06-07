@@ -1,4 +1,12 @@
-<script setup></script>
+<script setup>
+import { useModalStore } from '@/stores/newPostStore'
+import CommunityModal from '../community/CommunityModal.vue'
+const modalStore = useModalStore()
+
+const postHandler = () => {
+  modalStore.openModal()
+}
+</script>
 <template>
   <div
     class="flex flex-col items-center w-[228px] h-[260px] rounded-[15px] border border-[#DBDBDB]"
@@ -11,6 +19,7 @@
 
     <button
       class="mt-[14px] w-[169px] h-10 rounded-[5px] bg-[#7537E3] text-[#ffffff] font-semibold text-[15px] cursor-pointer"
+      @click="postHandler"
     >
       새 글 작성
     </button>
@@ -19,6 +28,9 @@
     >
       내가 쓴 글
     </button>
+  </div>
+  <div class="" v-if="modalStore.isModalOpen">
+    <CommunityModal />
   </div>
 </template>
 <style scoped></style>

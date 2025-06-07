@@ -14,7 +14,7 @@ const handleSort = (sort) => {
 }
 </script>
 <template>
-  <div class="w-[1440px] min-h-screen mt-[40px] flex flex-col items-center m-auto">
+  <div class="w-[1440px] min-h-screen mt-[40px] flex flex-col items-center">
     <!-- 배너&검색 -->
     <div class="flex w-[1282px] h-[40px] justify-between">
       <div class="flex gap-[3px] w-[512px]">
@@ -74,15 +74,15 @@ const handleSort = (sort) => {
           해외/기타
         </button>
       </div>
-      <div class="flex items-center w-[341px] h-10 rounded-[10px] border ml-auto">
+      <div class="relative w-[341px] h-10 ml-auto">
         <input
           v-model="searchQuery"
-          class="ml-[30px] w-[287px]"
+          class="w-full h-full pl-[30px] pr-[45px] rounded-[10px] border text-[15px]"
           type="text"
           placeholder="게시글 검색하기"
         />
-        <button class="mr-[23px]">
-          <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="w-[26px] h-[26px]" />
+        <button class="absolute right-[23px] top-1/2 -translate-y-1/2">
+          <img src="../../assets/icons/searchIcon.svg" alt="검색" class="w-[26px] h-[26px]" />
         </button>
       </div>
     </div>
