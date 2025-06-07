@@ -2,8 +2,10 @@
 // import { onMounted, ref } from 'vue'
 // import { useRoute } from 'vue-router'
 // import supabase from '@/utils/supabase'
+import ThumbsUp from '@/components/icon/thumbsUp.vue'
 import CommunityRecommend from './CommunityRecommend.vue'
 import dummy2 from '@/assets/img/news_image/dummy2.png'
+import ViewCount from '@/components/icon/viewCount.vue'
 
 // const route = useRoute()
 // const newsId = route.params.id
@@ -27,16 +29,28 @@ import dummy2 from '@/assets/img/news_image/dummy2.png'
     <h1 class="text-[32px] my-4 font-bold">
       나는 자연인이다...붉은 빛 골짜기에서 찍은 자연인의 사장이 세간의 엄청난 화제로 떠올라 광고
     </h1>
-    <span class="mr-2 text-sm text-[#A6A6A6]">2025.06.07</span>
-    <span class="text-sm text-[#A6A6A6]">매일경제</span>
+    <div class="flex justify-between">
+      <div>
+        <span class="mr-2 text-sm text-[#A6A6A6]">2025.06.07</span>
+        <span class="text-sm text-[#A6A6A6]">매일경제</span>
+      </div>
+      <div class="flex justify-center items-center gap-3">
+        <ThumbsUp />
+        <ViewCount />
+      </div>
+    </div>
     <img :src="dummy2" class="w-full h-auto rounded-2xl my-7.5" />
-    <div class="text-left">
-      <button class="cursor-pointer px-4.5 py-3 rounded-lg bg-[#7537E3] text-white mr-2 mb-5">
+    <div class="text-left flex gap-4 h-10 mb-5">
+      <button
+        class="cursor-pointer px-4 rounded-lg bg-[#7537E3] hover:bg-[#601ED5] text-white items-center justify-center"
+      >
         요약보기
       </button>
-      <div class="relative w-fit bg-[#EFEFEF] text-black px-4 py-2 rounded-xl">
+      <div
+        class="relative w-fit bg-[#EFEFEF] text-[#282828] px-4 mr-2 pt-2 rounded-sm items-center justify-center"
+      >
         뉴스독이 기사를 세 줄로 요약해드려요!
-        <div class="absolute -bottom-2 left-4 w-4 h-4 bg-[#EFEFEF] rotate-45"></div>
+        <div class="absolute -left-1 top-3 w-4 h-4 bg-[#EFEFEF] rotate-45"></div>
       </div>
     </div>
     <span class="leading-[29px] text-lg text-left">
@@ -52,6 +66,7 @@ import dummy2 from '@/assets/img/news_image/dummy2.png'
     <button class="cursor-pointer mb-10 text-gray-400">
       <a href="news.url" target="_blank">원문보기</a>
     </button>
+    <hr class="text-gray-200" />
     <CommunityRecommend />
   </section>
   <!-- <section v-else>

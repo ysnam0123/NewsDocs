@@ -1,4 +1,6 @@
 <script setup>
+import ThumbsUp from '@/components/icon/thumbsUp.vue'
+import ViewCount from '@/components/icon/viewCount.vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -9,7 +11,7 @@ const moreViewHandler = (post) => {
 </script>
 <template>
   <div>
-    <div class="flex mb-10 justify-between">
+    <div class="flex my-10 justify-between">
       <h2 class="text-xl font-bold justify-between">
         <span class="text-[#7537E3]">'스포츠' </span>에 대한 다른 유저의 생각
       </h2>
@@ -21,11 +23,19 @@ const moreViewHandler = (post) => {
       </button>
     </div>
     <!-- v-for="post in posts" :key="post.id" -->
-    <div class="border-1 border-gray-200 rounded-2xl pt-5 mb-4">
+    <div class="border-1 border-gray-200 rounded-2xl pt-5 mb-4 hover:bg-[#F6F6F6]">
       <div class="h-26">
         <div class="block mt-1 ml-4">
-          <p class="text-lg text-gray-600 text-left">안녕하세여</p>
-          <p class="mt-5 text-left">여러분 투표는 누구에게 하셨나여????????? 아무튼 화이팅</p>
+          <p class="text-lg text-gray-800 text-left font-bold">안녕하세여</p>
+          <div class="flex justify-between">
+            <span class="mt-5 text-left text-sm justify-between">
+              여러분 투표는 누구에게 하셨나여????????? 아무튼 화이팅
+            </span>
+            <div class="flex justify-center items-center gap-3 mr-5">
+              <ThumbsUp />
+              <ViewCount />
+            </div>
+          </div>
         </div>
         <hr class="text-gray-300 mt-4" />
       </div>
