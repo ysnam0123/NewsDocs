@@ -11,8 +11,8 @@ import ButtonVue from './ButtonVue.vue'
     </div>
     <div class="headerContainer">
       <div class="logoBox">
-        <img src="../../assets/icons/headerLogoImg.svg" alt="logoImg" />
-        <h1 class="logo">NewsDocs</h1>
+        <img src="../../assets/img/logo_newsdocs.png" alt="logoImg" />
+        <h1 class="logo"></h1>
       </div>
       <div class="headerNav">
         <ul>
@@ -61,7 +61,7 @@ import ButtonVue from './ButtonVue.vue'
 .logo {
   font-size: 40px;
   user-select: none;
-  font-family: 'BagelFatOne', BagelFatOne, sans-serif;
+  font-family: 'Luckiest Guy', BagelFatOne, sans-serif;
 }
 .headerNav {
   margin-left: 30px;
