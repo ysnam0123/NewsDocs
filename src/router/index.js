@@ -27,6 +27,26 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+
+      path: '/profile',
+      name: 'Profile',
+      component: () => import('../views/ProfileView.vue'),
+    },
+    {
+      path: '/profile/:id',
+      name: 'UserProfile',
+      component: () => import('../views/ProfileView.vue'),
+    },
+    {
+      path: '/profile/edit',
+      name: 'ProfileEdit',
+      component: () => import('../views/ProfileEditView.vue'),
+    },
+    {
+      path: '/profile/news',
+      name: 'ProfileNews',
+      component: () => import('../views/ProfileNewsView.vue'),
+
       path: '/chooseinterest',
       name: 'chooseinterest',
       component: () => import('../views/ChooseInterest.vue'),
@@ -41,6 +61,7 @@ const router = createRouter({
       meta: {
         hideHeader: true,
       },
+
     },
     {
       path: '/news',
