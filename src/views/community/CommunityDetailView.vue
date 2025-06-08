@@ -57,7 +57,7 @@ const toggleCommentModal = () => {
         <!-- 댓글입력 -->
         <div class="relative w-[830px] mt-5">
           <input
-            class="w-full h-[50px] px-5 text-[16px] text-[#191919] placeholder-[#CECECE] border rounded-[8px] outline-none"
+            class="w-full h-[50px] px-5 text-[16px] text-[#191919] placeholder-[#CECECE] border border-gray-200 rounded-[8px] outline-none"
             placeholder="댓글을 입력하세요"
           />
           <img
@@ -75,7 +75,7 @@ const toggleCommentModal = () => {
           />
           <div class="flex flex-col ml-[17px]">
             <div class="ml-[14px] flex items-center">
-              <span class="font-semibold text-[16px] text-[#191919]">공허의 코끼리</span>
+              <span class="text-[16px] text-[#191919]">공허의 코끼리</span>
               <span class="text-[13px] ml-[8px]">방금 전</span>
             </div>
             <p class="ml-[14px] mt-[2px] text-[16px]">댓글내용은 댓글내용이 댓글내용.</p>
@@ -91,7 +91,7 @@ const toggleCommentModal = () => {
           />
           <div class="flex flex-col ml-[17px]">
             <div class="ml-[14px] flex items-center">
-              <span class="font-semibold text-[16px] text-[#191919]">공허의 코끼리</span>
+              <span class="text-[16px] text-[#191919]">공허의 코끼리</span>
               <span class="text-[13px] ml-[8px]">방금 전</span>
             </div>
             <p class="ml-[14px] mt-[2px] text-[16px]">댓글내용은 댓글내용이 댓글내용.</p>
@@ -108,7 +108,7 @@ const toggleCommentModal = () => {
           <div class="flex flex-col w-full ml-[17px]">
             <div class="pl-[14px] w-full flex items-center justify-between">
               <div class="flex items-center">
-                <span class="font-semibold text-[16px] text-[#191919]">공허의 코끼리</span>
+                <span class="text-[16px] text-[#191919]">공허의 코끼리</span>
                 <span class="text-[13px] ml-[8px]">방금 전</span>
               </div>
               <div class="relative">
@@ -116,13 +116,19 @@ const toggleCommentModal = () => {
                   <img
                     src="../../assets/icons/commentModal.svg"
                     class="w-10 h-10 absolute top-0 left-0"
-                    :class="[isCommentModalOpen ? 'opacity-0' : 'group-hover:opacity-0']"
+                    :class="[
+                      isCommentModalOpen
+                        ? 'opacity-0'
+                        : 'group-hover:opacity-0  transition-all duration-300',
+                    ]"
                   />
                   <img
                     src="../../assets/icons/commentModalHover.svg"
                     class="w-10 h-10 absolute top-0 left-0"
                     :class="[
-                      isCommentModalOpen ? 'opacity-100' : ' opacity-0 group-hover:opacity-100',
+                      isCommentModalOpen
+                        ? 'opacity-100'
+                        : ' opacity-0 group-hover:opacity-100  transition-all duration-300',
                     ]"
                   />
                 </button>
@@ -134,14 +140,14 @@ const toggleCommentModal = () => {
                     <span class="ml-3 mt-3 block">내 댓글</span>
                     <li
                       @click="toggleCommentModal"
-                      class="flex items-center gap-[6px] w-full h-[46px] mt-[7px] px-3 py-[13px] cursor-pointer text-[14px] text-[#191919] hover:bg-[#C9C9C9]"
+                      class="flex items-center gap-[6px] w-full h-[46px] mt-[7px] px-3 py-[13px] cursor-pointer text-[14px] text-[#191919] hover:bg-gray-200 transition-all duration-300"
                     >
                       <img src="../../assets/icons/Edit.svg" class="w-4 h-4" />
                       수정하기
                     </li>
                     <li
                       @click="toggleCommentModal"
-                      class="flex items-center gap-[6px] w-full h-[46px] px-3 py-[13px] cursor-pointer text-[14px] text-[#E03333] hover:bg-[#C9C9C9]"
+                      class="flex items-center gap-[6px] w-full h-[46px] px-3 py-[13px] cursor-pointer text-[14px] text-[#E03333] hover:bg-gray-200 transition-all duration-300"
                     >
                       <img src="../../assets/icons/Trash-can.svg" class="w-4 h-4" />
                       삭제하기
@@ -165,7 +171,7 @@ const toggleCommentModal = () => {
           />
           <div class="flex flex-col ml-[17px]">
             <div class="ml-[14px] flex items-center">
-              <span class="font-semibold text-[16px] text-[#191919]">공허의 코끼리</span>
+              <span class="text-[16px] text-[#191919]">공허의 코끼리</span>
               <span class="text-[13px] ml-[8px]">방금 전</span>
             </div>
             <p class="ml-[14px] mt-[2px] text-[16px]">댓글내용은 댓글내용이 댓글내용.</p>
