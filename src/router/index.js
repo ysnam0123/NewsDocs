@@ -27,6 +27,26 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/profile',
+      name: 'Profile',
+      component: () => import('../views/ProfileView.vue'),
+    },
+    {
+      path: '/profile/:id',
+      name: 'UserProfile',
+      component: () => import('../views/ProfileView.vue'),
+    },
+    {
+      path: '/profile/edit',
+      name: 'ProfileEdit',
+      component: () => import('../views/ProfileEditView.vue'),
+    },
+    {
+      path: '/profile/news',
+      name: 'ProfileNews',
+      component: () => import('../views/ProfileNewsView.vue'),
+    },
+    {
       path: '/chooseinterest',
       name: 'chooseinterest',
       component: () => import('../views/ChooseInterest.vue'),
@@ -51,16 +71,20 @@ const router = createRouter({
       path: '/news',
       name: 'newsLayout',
       component: () => import('../layout/NewsLayout.vue'),
+      meta: {
+        hideHeader: false,
+        hideFooter: true,
+      },
       children: [
         {
           path: '',
           name: 'newsList',
-          component: () => import('../views/NewsListView.vue'),
+          component: () => import('../views/newsDetail/NewsListView.vue'),
         },
         {
-          path: ':id',
-          name: 'news',
-          component: () => import('../views/NewsDetailView.vue'),
+          path: 'detail',
+          name: 'newsDetail',
+          component: () => import('../views/newsDetail/NewsDetailView.vue'),
         },
       ],
     },
