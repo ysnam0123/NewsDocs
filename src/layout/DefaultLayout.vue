@@ -10,5 +10,5 @@ const route = useRoute()
   <div class="min-h-[100vh]">
     <slot></slot>
   </div>
-  <FooterView />
+  <FooterView v-if="!route.meta.hideFooter" />
 </template>
