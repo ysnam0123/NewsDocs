@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
-  <div class="w-[280px] h-[329px]">
-    <div class="w-[280px] h-[220px]">
+  <div class="w-[229px] h-[329px]">
+    <div class="w-[229px] h-[220px]">
       <img
         src="@/assets/img/son.jpeg"
         class="w-full h-full rounded-[20px] object-cover space-y-0.5"

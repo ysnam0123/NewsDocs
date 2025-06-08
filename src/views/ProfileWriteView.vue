@@ -31,7 +31,7 @@ import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
           />
         </svg>
       </div>
-      <div class="text-[28px] font-bold">내가 저장한 뉴스</div>
+      <div class="text-[28px] font-bold">내가 작성한 글</div>
       <div
         class="flex border-[#9A9A9A] border-b-[0.5px] h-[72px] items-center text-center space-x-4 mb-5"
       >
