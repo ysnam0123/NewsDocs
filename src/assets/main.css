@@ -49,3 +49,8 @@ body {
   font-family: 'Pretendard', sans-serif;
   color: #191919;
 }
+
+html.dark {
+  color: white;
+  background-color: #191919;
+}
