@@ -9,7 +9,7 @@ import SleepDog from '@/components/icon/sleepDog.vue'
     <div class="text-[16px] text-[#191919]">아직 저장한 뉴스가 없어요!</div>
     <div class="relative">
       <button
-        class="w-[106px] h-[36px] bg-[#7537E3] text-center rounded-[8px] text-sm text-[#FFFFFF] cursor-pointer"
+        class="w-[106px] h-[36px] bg-[#7537E3] text-center rounded-[8px] text-sm text-[#FFFFFF] cursor-pointer hover:bg-[#601ED5]"
       >
         뉴스 보러가기
       </button>

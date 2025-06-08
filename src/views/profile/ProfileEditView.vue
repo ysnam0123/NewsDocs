@@ -3,7 +3,7 @@ import SmallGrayBtn from '@/components/icon/smallGrayBtn.vue'
 import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
 </script>
 <template>
-  <div class="min-h-screen flex flex-col font-[Inter]">
+  <div class="min-h-screen flex flex-col">
     <div class="mx-auto p-[30px]">
       <div class="flex justify-between">
         <div class="flex flex-col justify-center space-y-4">
@@ -74,12 +74,18 @@ import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
         </div>
         <div class="sticky top-[40px] self-start">
           <div class="flex flex-col items-end space-y-2 ml-[46px]">
-            <button class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white">
+            <button
+              class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5]"
+            >
               변경사항 저장
             </button>
-            <button class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919]">
-              취소하기
-            </button>
+            <router-link to="/profile">
+              <button
+                class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED]"
+              >
+                취소하기
+              </button>
+            </router-link>
           </div>
         </div>
         <!-- <div>

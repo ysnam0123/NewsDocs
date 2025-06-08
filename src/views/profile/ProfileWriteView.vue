@@ -1,16 +1,25 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+const router = useRouter()
+
+const goBack = () => {
+  router.back()
+}
+
+const activeTab = ref('전체')
+
+const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 </script>
 <template>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-    rel="stylesheet"
-  />
-  <div class="min-h-screen flex flex-col font-[Inter]">
+  <div class="min-h-screen flex flex-col">
     <div class="max-w-[735px] mx-auto mt-10">
-      <div class="flex w-10 h-10 rounded-[50px] bg-[#F6F6F6] items-center justify-center mb-4">
+      <button
+        class="flex w-10 h-10 rounded-[50px] bg-[#F6F6F6] items-center justify-center mb-4 cursor-pointer hover:bg-[#EDEDED]"
+        @click="goBack"
+      >
         <svg
           width="18"
           height="18"
@@ -30,21 +39,33 @@ import CommunityPost from '@/components/community/CommunityPost.vue'
             fill="#161616"
           />
         </svg>
-      </div>
+      </button>
       <div class="text-[28px] font-bold">내가 작성한 글</div>
-      <div
-        class="flex border-[#9A9A9A] border-b-[0.5px] h-[72px] items-center text-center space-x-4 mb-5"
-      >
+      <div class="relative">
         <div
-          class="font-semibold w-[103px] text-[#7537E3] text-base underline underline-offset-[27px] decoration-[2px] cursor-pointer"
+          class="flex border-[#9A9A9A] border-b-[0.5px] h-[72px] items-center text-center space-x-4 mb-5 relative"
         >
-          전체
-        </div>
+          <div
+            v-for="tab in tabs"
+            :key="tab"
+            @click="activeTab = tab"
+            class="flex items-center justify-center w-[103px] h-full text-base cursor-pointer relative transition-all duration-300 hover:text-[#7537E3]"
+            :class="{
+              'text-[#7537E3] font-semibold': activeTab === tab,
+              'text-[#969696]': activeTab !== tab,
+            }"
+          >
+            {{ tab }}
+          </div>
 
-        <div class="text-[#969696] w-[103px] text-base cursor-pointer">정치/경제</div>
-        <div class="text-[#969696] w-[103px] text-base cursor-pointer">연예/스포츠</div>
-        <div class="text-[#969696] w-[103px] text-base cursor-pointer">사회/문화</div>
-        <div class="text-[#969696] w-[103px] text-base cursor-pointer">해외/기타</div>
+          <div
+            class="absolute bottom-[-1px] h-[2px] bg-[#7537E3] transition-all duration-300"
+            :style="{
+              left: `${tabs.indexOf(activeTab) * 119}px`,
+              width: '103px',
+            }"
+          />
+        </div>
       </div>
       <div class="flex flex-col w-[735px]">
         <CommunityPost class="mb-[40px] w-full" />
