@@ -4,6 +4,10 @@ import logo from '@/assets/img/logo_newsdocs.png'
 import { useThemeStore } from '@/stores/useDarkmode'
 
 const themeStore = useThemeStore()
+
+const handleToggleDark = () => {
+  themeStore.toggleDark()
+}
 </script>
 <template>
   <div class="header">
@@ -31,7 +35,7 @@ const themeStore = useThemeStore()
           <img src="../../assets/icons/searchIcon.svg" alt="searchIcon" class="searchIcon" />
         </div>
         <div>
-          <button @click="themeStore.toggleDark()" class="cursor-pointer">다크모드</button>
+          <button @click="handleToggleDark" class="cursor-pointer">다크모드</button>
         </div>
         <ButtonVue class="logInBtn">로그인</ButtonVue>
       </div>

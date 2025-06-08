@@ -23,10 +23,10 @@ import ViewCount from '@/components/icon/viewCount.vue'
 </script>
 <template>
   <section class="my-10 justify-center rounded-xl max-w-[707px]">
-    <div class="text-md text-[#7537E3] font-medium">
+    <div class="text-md text-[#7537E3] dark:text-[#A878FD] font-medium">
       <span># 연예</span>
     </div>
-    <h1 class="text-[32px] my-4 font-bold">
+    <h1 class="text-[32px] my-4 font-semibold dark:text-white">
       나는 자연인이다...붉은 빛 골짜기에서 찍은 자연인의 사장이 세간의 엄청난 화제로 떠올라 광고
     </h1>
     <div class="flex justify-between">
@@ -42,7 +42,7 @@ import ViewCount from '@/components/icon/viewCount.vue'
     <img :src="dummy2" class="w-full h-auto rounded-2xl my-7.5" />
     <div class="text-left flex gap-4 h-10 mb-5">
       <button
-        class="cursor-pointer px-4 rounded-lg bg-[#7537E3] hover:bg-[#601ED5] text-white items-center justify-center"
+        class="cursor-pointer px-4 rounded-lg bg-[#7537E3] hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300 text-white items-center justify-center"
       >
         요약보기
       </button>
@@ -53,7 +53,7 @@ import ViewCount from '@/components/icon/viewCount.vue'
         <div class="absolute -left-1 top-3 w-4 h-4 bg-[#EFEFEF] rotate-45"></div>
       </div>
     </div>
-    <span class="leading-[29px] text-lg text-left">
+    <span class="leading-[29px] text-lg text-left dark:text-white font-extralight">
       코스닥 시장 육성방안, 기업지배구조 모범규준, 기간산업안정자금 등 경제정책 입안 경험이 풍부해
       가계·소상공인 활력 제고, 공정한 경제구조 실현 등 이 대통령의 공약 이행을 뒷받침할 적임자라고
       대통령실은 설명했다. 강 실장은 "경제정책 전반에 높은 이해력과 국제감각을 가졌다"며 "코로나19
@@ -63,10 +63,10 @@ import ViewCount from '@/components/icon/viewCount.vue'
       직속 국민경제자문위원회에서 자문위원으로도 활동했다. 강 실장은 "거시경제와 산업 정책에 해박한
       학자로, 이 대통령의 공약...
     </span>
-    <button class="cursor-pointer mb-10 text-gray-400">
+    <button class="cursor-pointer mb-10 text-[#A6A6A6]">
       <a href="news.url" target="_blank">원문보기</a>
     </button>
-    <hr class="text-gray-200" />
+    <hr class="text-gray-200 dark:text-[#282828]" />
     <CommunityRecommend />
   </section>
   <!-- <section v-else>
