@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
+</script>
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
@@ -35,10 +37,10 @@
 
         <!-- 좋아요,댓글 -->
         <div class="flex items-center w-auto mt-auto h-[18px]">
-          <img src="../../assets/img/Thumbs-up.svg" alt="좋아요" class="w-4 h-4 text-[#B7B7B7]" />
+          <ThumbsUp class="w-4 h-4 text-[#B7B7B7]" />
           <div class="text-[#B7B7B7] ml-[3px] text-[13px]">32</div>
 
-          <img src="../../assets/img/Chat.svg" class="w-4 h-4 ml-[11px] text-[#B7B7B7]" />
+          <MessageSquare class="w-4 h-4 ml-[11px] text-[#B7B7B7]" />
           <div class="text-[#B7B7B7] ml-[3px] text-[13px]">124</div>
         </div>
       </div>

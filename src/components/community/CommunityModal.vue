@@ -8,7 +8,7 @@ import icon4 from '@/assets/icons/communityDropdown/culture.svg'
 import icon5 from '@/assets/icons/communityDropdown/global.svg'
 import icon6 from '@/assets/icons/communityDropdown/social.svg'
 import icon7 from '@/assets/icons/communityDropdown/economy.svg'
-
+import { Image } from 'lucide-vue-next'
 const modalStore = useModalStore()
 const handleModal = () => {
   modalStore.closeModal()
@@ -93,11 +93,7 @@ const categoryHandler = (categoryName) => {
       <div
         class="flex flex-col items-center justify-center w-[416px] min-h-[197px] mt-6 border border-[#EAEAEA] rounded-[12px] bg-[#F6F6F6] hover:bg-[#ECECEC] cursor-pointer"
       >
-        <img
-          src="../../assets/icons/Image.svg"
-          alt="이미지 업로드"
-          class="w-5 h-5 text-[#BBBBBB]"
-        />
+        <Image class="w-5 h-5 text-[#BBBBBB]" />
         <p class="min-w-[116px] mt-[6px] text-[14px] text-[#BBBBBB] text-center">
           눌러서 이미지 업로드
         </p>
