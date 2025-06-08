@@ -1,8 +1,10 @@
-<script setup></script>
+<script setup>
+import logo from '@/assets/img/logo_newsdocs.png'
+</script>
 <template>
   <div class="w-[233px] h-[329px]">
     <div class="w-[230px] h-[230px]">
-      <img src="@/assets/img/logo.png" class="rounded-[20px] bg-cover" />
+      <img :src="logo" class="rounded-[20px] bg-cover" />
     </div>
     <div>
       <div class="text-[15px]">언론사 이름</div>

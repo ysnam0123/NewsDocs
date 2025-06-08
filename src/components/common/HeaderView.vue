@@ -1,6 +1,9 @@
 <script setup>
 import ButtonVue from './ButtonVue.vue'
 import logo from '@/assets/img/logo_newsdocs.png'
+import { useThemeStore } from '@/stores/useDarkmode'
+
+const themeStore = useThemeStore()
 </script>
 <template>
   <div class="header">
@@ -26,6 +29,9 @@ import logo from '@/assets/img/logo_newsdocs.png'
         <div class="search">
           <input type="text" class="searchBox" placeholder="키워드로 뉴스 검색" />
           <img src="../../assets/icons/searchIcon.svg" alt="searchIcon" class="searchIcon" />
+        </div>
+        <div>
+          <button @click="themeStore.toggleDark()" class="cursor-pointer">다크모드</button>
         </div>
         <ButtonVue class="logInBtn">로그인</ButtonVue>
       </div>
