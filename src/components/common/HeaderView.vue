@@ -1,5 +1,8 @@
 <script setup>
 import logo from '@/assets/img/logo_newsdocs.png'
+import { useThemeStore } from '@/stores/useDarkmode'
+
+const themeStore = useThemeStore()
 </script>
 <template>
   <div class="w-[1240px] mx-auto py-[0px] flex items-center h-[100px]">
@@ -48,7 +51,12 @@ import logo from '@/assets/img/logo_newsdocs.png'
       <div
         class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] flex items-center justify-center"
       >
-        <img src="@/assets/icons/toDarkMode.svg" alt="modeToggle" class="w-[24px] h-[24px]" />
+        <img
+          src="@/assets/icons/toDarkMode.svg"
+          @click="themeStore.toggleDark()"
+          alt="modeToggle"
+          class="w-[24px] h-[24px]"
+        />
       </div>
       <div
         class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] flex items-center justify-center"
