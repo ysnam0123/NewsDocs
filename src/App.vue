@@ -1,11 +1,5 @@
-<script setup>
-import DefaultLayout from './layout/DefaultLayout.vue'
-
-import Vue3Toastify from 'vue3-toastify'
-</script>
+<script setup></script>
 <template>
-  <DefaultLayout>
-    <RouterView />
-    <Vue3Toastify />
-  </DefaultLayout>
+  <h1>App</h1>
 </template>
+<style scoped></style>
