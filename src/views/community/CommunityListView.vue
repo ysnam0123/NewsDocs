@@ -89,7 +89,7 @@ const handleSort = (sort) => {
             @click="handleSort('최신순')"
             :class="[
               'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer',
-              selectedSort === '최신순' ? 'underline text-[#191919]' : 'text-[#969696]',
+              selectedSort === '최신순' ? 'underline-offset-3 text-[#191919]' : 'text-[#969696]',
             ]"
           >
             최신순
@@ -98,7 +98,7 @@ const handleSort = (sort) => {
             @click="handleSort('인기순')"
             :class="[
               'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer',
-              selectedSort === '인기순' ? 'underline text-[#191919]' : 'text-[#969696]',
+              selectedSort === '인기순' ? 'underline-offset-3 text-[#191919]' : 'text-[#969696]',
             ]"
           >
             인기순

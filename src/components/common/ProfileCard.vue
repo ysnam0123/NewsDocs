@@ -20,13 +20,13 @@ const postHandler = () => {
     <p class="mt-[6px] text-[14px] text-[#8F8F8F]">스포츠, 정치, 문화</p>
 
     <button
-      class="mt-8 w-[170px] h-[50px] rounded-lg bg-[#7537E3] text-[#ffffff] font-semibold text-[16px] cursor-pointer"
+      class="mt-8 w-[170px] h-[50px] rounded-lg bg-[#7537E3] hover:bg-[#601ED5] text-[#ffffff] text-[16px] cursor-pointer"
       @click="postHandler"
     >
       새 글 작성
     </button>
     <button
-      class="mt-[10px] w-[170px] h-[50px] rounded-lg border border-[#7537E3] bg-[#ffffff] text-[#7537E3] text-[16px] cursor-pointer"
+      class="mt-[10px] w-[170px] h-[50px] rounded-lg border border-[#7537E3] bg-[#ffffff] hover:bg-[#F3ECFF] text-[#7537E3] text-[16px] cursor-pointer"
     >
       내가 작성한 글
     </button>
