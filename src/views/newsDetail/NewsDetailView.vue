@@ -63,7 +63,7 @@ import ViewCount from '@/components/icon/viewCount.vue'
       직속 국민경제자문위원회에서 자문위원으로도 활동했다. 강 실장은 "거시경제와 산업 정책에 해박한
       학자로, 이 대통령의 공약...
     </span>
-    <button class="cursor-pointer mb-10 text-[#A6A6A6]">
+    <button class="cursor-pointer mb-10 text-[#AEAEAE]">
       <a href="news.url" target="_blank">원문보기</a>
     </button>
     <hr class="text-gray-200 dark:text-[#282828]" />

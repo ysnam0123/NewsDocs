@@ -16,7 +16,7 @@ const moreViewHandler = (post) => {
         <span class="text-[#7537E3] dark:text-[#A878FD]">'스포츠' </span>에 대한 다른 유저의 생각
       </h2>
       <button
-        class="text-sm cursor-pointer mt-0.5 underline underline-offset-2"
+        class="text-sm cursor-pointer mt-0.5 underline underline-offset-2 dark:text-[#AEAEAE]"
         @click="moreViewHandler"
       >
         더보기
