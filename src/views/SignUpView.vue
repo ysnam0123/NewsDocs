@@ -1,30 +1,149 @@
-<script>
-export default {
-  name: 'SginUpView',
-  data() {
-    return {
-      email: '',
-      isEmailValid: true,
-      emailTouched: false,
-    }
-  },
-  methods: {
-    //이메일 검사
-    validateEmail() {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ //이메일 정규식
-      this.isEmailValid = emailPattern.test(this.email)
-    },
-  },
+<script setup>
+import { userAuthStore } from '@/stores/authStore'
+import supabase from '@/utils/supabase'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+
+const email = ref('')
+const name = ref('')
+const nickname = ref('')
+const password = ref('')
+const passwordCheck = ref('')
+
+const errorMsg = ref('')
+const nicknameError = ref('')
+const emailError = ref('')
+const nameError = ref('')
+const passwordError = ref('')
+const passwordCheckError = ref('')
+
+const router = useRouter()
+const authStore = userAuthStore()
+
+function validateEmail() {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!email.value) {
+    emailError.value = '이메일을 입력해주세요.'
+  } else if (!emailPattern.test(email.value)) {
+    emailError.value = '이메일 형식이 올바르지 않습니다.'
+  } else {
+    emailError.value = ''
+  }
 }
+
+function validateName() {
+  const namePattern = /^[가-힣]{2,12}$/
+  if (!name.value) {
+    nameError.value = '이름을 입력해주세요.'
+  } else if (!namePattern.test(name.value)) {
+    nameError.value = '2-12글자 한글로 입력해주세요.'
+  } else {
+    nameError.value = ''
+  }
+}
+
+function validateNickName() {
+  const nicknamePattern = /^[A-Za-z0-9가-힣]{2,8}$/
+  if (!nickname.value) {
+    nicknameError.value = '닉네임을 입력해주세요.'
+  } else if (!nicknamePattern.test(nickname.value)) {
+    nicknameError.value = '특수문자, 공백 제외 2~8글자로 입력해주세요.'
+  } else {
+    nicknameError.value = ''
+  }
+}
+
+function validatePassword() {
+  const pwPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,14}$/
+  if (!password.value) {
+    passwordError.value = '비밀번호를 입력해주세요.'
+  } else if (!pwPattern.test(password.value)) {
+    passwordError.value = '8~14자 영문, 숫자, 특수기호를 포함해주세요.'
+  } else {
+    passwordError.value = ''
+  }
+}
+
+function validatePasswordCheck() {
+  if (!passwordCheck.value) {
+    passwordCheckError.value = '비밀번호 확인을 입력해주세요.'
+  } else if (password.value !== passwordCheck.value) {
+    passwordCheckError.value = '비밀번호가 일치하지 않습니다.'
+  } else {
+    passwordCheckError.value = ''
+  }
+}
+
+//input 값 변경시 검증 실행
+watch(email, () => validateEmail())
+watch(name, () => validateName())
+watch(nickname, () => validateNickName())
+watch(password, () => validatePassword())
+watch(passwordCheck, () => validatePasswordCheck())
+
+//회원 가입 post - superbase연동
+async function onSignUp() {
+  validateEmail()
+  validateName()
+  validateNickName()
+  validatePassword()
+  validatePasswordCheck()
+
+  if (
+    emailError.value ||
+    nameError.value ||
+    nicknameError.value ||
+    passwordError.value ||
+    passwordCheckError.value
+  ) {
+    return
+  }
+
+  const { data, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+    options: {
+      data: {
+        name: name.value,
+        nickname: nickname.value,
+      },
+    },
+  })
+
+  if (error) {
+    errorMsg.value = error.message
+    return
+  }
+  toast.success('회원가입이 완료되었습니다. 이메일을 확인해주세요.')
+  router.push('/login')
+}
+
+//회원가입 버튼 비활성화
+const isDisabled = computed(
+  () =>
+    emailError.value ||
+    nameError.value ||
+    nicknameError.value ||
+    passwordError.value ||
+    passwordCheckError.value ||
+    !email.value ||
+    !name.value ||
+    !nickname.value ||
+    !password.value ||
+    !passwordCheck.value,
+)
 </script>
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#EDEBF1]">
     <div
-      class="bg-white rounded-[20px] w-[464px] h-[779px] flex flex-col items-center justify-center"
+      class="bg-white rounded-[20px] w-[464px] min-h-[779px] py-10 flex flex-col items-center justify-center"
     >
-      <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
-      <h1 class="text-[40px] mb-6 text-center font-extrabold luckiest-guy-regular">newsDocs</h1>
-      <form @submit.prevent="onLogin" class="flex flex-col items-center w-full">
+      <router-link to="/">
+        <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
+        <h1 class="text-[40px] mb-6 text-center font-extrabold luckiest-guy-regular">newsDocs</h1>
+      </router-link>
+      <form @submit.prevent="onSignUp" class="flex flex-col items-center w-full">
         <div class="mb-5 w-full flex flex-col items-center">
           <label class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919]"
             >이메일</label
@@ -38,10 +157,8 @@ export default {
                 required
                 :class="[
                   'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none',
-                  emailTouched && !isEmailValid ? 'border-[#F34040] ' : 'border-[#DFDFDF]',
+                  emailError ? 'border-[#F34040] ' : 'border-[#DFDFDF]',
                 ]"
-                @blur="emailTouched = true"
-                @input="validateEmail"
               />
               <button
                 type="button"
@@ -50,11 +167,8 @@ export default {
                 확인
               </button>
             </div>
-            <p
-              v-if="emailTouched && !isEmailValid"
-              class="text-[#F34040] text-[11px] mt-[6px] ml-1"
-            >
-              이메일 형식이 올바르지 않습니다
+            <p v-if="emailError" class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]">
+              {{ emailError }}
             </p>
           </div>
         </div>
@@ -62,62 +176,98 @@ export default {
           <label class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919]"
             >이름</label
           >
-          <input
-            type="text"
-            v-model="text"
-            placeholder="이름 입력"
-            required
-            class="w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none border-[#BDBDBD]"
-          />
-        </div>
-        <div class="mb-5 w-full flex flex-col items-center">
+
+          <div class="relative flex flex-col">
+            <input
+              type="text"
+              v-model="name"
+              placeholder="이름 입력"
+              required
+              :class="[
+                'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none',
+                nameError ? 'border-[#F34040] ' : 'border-[#DFDFDF]',
+              ]"
+            />
+            <p v-if="nameError" class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]">
+              {{ nameError }}
+            </p>
+          </div>
+          <div class="mb-5 w-full flex flex-col items-center"></div>
           <label class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919]"
             >닉네임</label
           >
-          <div class="relative w-[363px]">
-            <input
-              type="text"
-              v-model="text"
-              placeholder="2-8글자 이내 한글/영문/숫자"
-              required
-              class="w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none border-[#BDBDBD]"
-            />
-            <button
-              type="button"
-              class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer hover:bg-[#F3ECFF] transition-all duration-300"
-            >
-              확인
-            </button>
+          <div class="relative flex flex-col">
+            <div class="flex items-center relative">
+              <input
+                type="text"
+                v-model="nickname"
+                placeholder="특수문자, 공백 제외 2-8글자"
+                required
+                :class="[
+                  'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none',
+                  nicknameError ? 'border-[#F34040] ' : 'border-[#DFDFDF]',
+                ]"
+              />
+              <button
+                type="button"
+                class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer hover:bg-[#F3ECFF] transition-all duration-300"
+              >
+                확인
+              </button>
+            </div>
+            <p v-if="nicknameError" class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]">
+              {{ nicknameError }}
+            </p>
           </div>
         </div>
         <div class="mb-5 w-full flex flex-col items-center">
           <label class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919]"
             >비밀번호</label
           >
-          <input
-            type="password"
-            v-model="password"
-            placeholder="비밀번호 입력"
-            required
-            class="w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none border-[#BDBDBD]"
-          />
+          <div class="relative flex flex-col">
+            <input
+              type="password"
+              v-model="password"
+              placeholder="비밀번호 입력"
+              required
+              :class="[
+                'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none',
+                passwordError ? 'border-[#F34040] ' : 'border-[#DFDFDF]',
+              ]"
+            />
+            <p v-if="passwordError" class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]">
+              {{ passwordError }}
+            </p>
+          </div>
         </div>
         <div class="mb-5 w-full flex flex-col items-center">
           <label class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919]"
             >비밀번호 확인</label
           >
-          <input
-            type="password"
-            v-model="password"
-            placeholder="비밀번호 확인"
-            required
-            class="w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none border-[#BDBDBD]"
-          />
+          <div class="relative flex flex-col">
+            <input
+              type="password"
+              v-model="passwordCheck"
+              placeholder="비밀번호 확인"
+              required
+              :class="[
+                'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none',
+                passwordCheckError ? 'border-[#F34040] ' : 'border-[#DFDFDF]',
+              ]"
+            />
+            <p
+              v-if="passwordCheckError"
+              class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]"
+            >
+              {{ passwordCheckError }}
+            </p>
+          </div>
         </div>
 
         <button
           type="submit"
-          class="w-[360px] h-[50px] bg-[#7537e3] text-white text-[16px] font-semibold rounded-[8px] mt-[10px] mx-[40px] hover:bg-[#601ED5] cursor-pointer transition-colors duration-300"
+          :disabled="isDisabled"
+          class="w-[360px] h-[50px] bg-[#7537e3] text-white text-[16px] font-semibold rounded-[8px] mt-[10px] mx-[40px] hover:bg-[#601ED5] cursor-pointer transition-colors duration-300 disabled:bg-[#F2F2F2] disabled:text-[#B3B3B3] disabled:cursor-not-allowed disabled:hover:bg-[#F2F2F2]"
         >
           회원가입
         </button>

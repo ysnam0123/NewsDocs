@@ -29,8 +29,10 @@ export default {
     <div
       class="bg-white rounded-[16px] w-[464px] h-[696px] pt-[50px] flex flex-col items-center justify-center"
     >
-      <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
-      <h1 class="text-[40px] mb-6 text-center font-extrabold luckiest-guy-regular">newsDocs</h1>
+      <router-link to="/">
+        <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
+        <h1 class="text-[40px] mb-6 text-center font-extrabold luckiest-guy-regular">newsDocs</h1>
+      </router-link>
       <form @submit.prevent="onLogin" class="flex flex-col items-center w-full">
         <div class="mb-4 w-full flex flex-col items-center">
           <div class="relative">
@@ -114,9 +116,9 @@ export default {
         </button>
       </div>
       <div class="text-center font-semibold text-[16px] my-[40px] text-[#929292] w-full">
-        <a href="#" class="underline hover:text-[#191919] transition-colors duration-300"
-          >회원가입 하기</a
-        >
+        <router-link to="/signup">
+          <p class="underline hover:text-[#191919] transition-colors duration-300">회원가입 하기</p>
+        </router-link>
       </div>
     </div>
   </div>
