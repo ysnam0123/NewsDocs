@@ -1,5 +1,4 @@
 <script setup>
-import NewsComponent10 from './components/NewsComponents/NewsComponent10.vue'
 import DefaultLayout from './layout/DefaultLayout.vue'
 
 import Vue3Toastify from 'vue3-toastify'
