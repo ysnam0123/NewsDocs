@@ -1,13 +1,8 @@
 <script setup>
-import { ref } from 'vue'
-
-const save = ref(false)
-const saveHandler = () => {
-  save.value = !save.value
-}
+import ScrapImg from './children/ScrapImg.vue'
 </script>
 <template>
-  <div class="relative flex w-[600px] h-[184px]">
+  <div class="flex w-[600px] h-[184px] relative">
     <img src="@/assets/img/exImage/dmz.svg" alt="dmz" class="rounded-[16px] w-[600px] h-[184px]" />
     <div
       class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] w-[600px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
@@ -28,20 +23,7 @@ const saveHandler = () => {
         </div>
       </div>
     </div>
-    <img
-      v-if="!save"
-      @click="saveHandler"
-      src="@/assets/img/scrap.svg"
-      alt="scarp"
-      class="w-[45px] h-[45px] absolute right-[15px] top-[10px] cursor-pointer"
-    />
-    <img
-      v-else
-      @click="saveHandler"
-      src="@/assets/img/scrapped.svg"
-      alt="scarp"
-      class="w-[45px] h-[45px] absolute right-[15px] top-[10px] cursor-pointer"
-    />
+    <ScrapImg class="absolute right-[15px] top-[10px]" />
   </div>
 </template>
 <style scoped></style>

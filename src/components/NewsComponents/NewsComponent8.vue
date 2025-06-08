@@ -1,10 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-
-const save = ref(false)
-const saveHandler = () => {
-  save.value = !save.value
-}
+import ScrapImg from './children/ScrapImg.vue'
 
 const hovered = ref(false)
 const hoverHandler = () => {
@@ -37,27 +33,28 @@ const hoverHandler = () => {
           <p class="mt-[4px] text-[12px]">32</p>
         </div>
       </div>
+      <!-- 호버했을 때 나오는 창 -->
       <transition name="fade">
         <div
           v-if="hovered"
-          class="w-[380px] h-[440px] rounded-[20px] opacity-[70%] bg-[black] absolute top-0 blur-xs"
-        ></div>
+          class="w-[380px] h-[440px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+        >
+          <!-- 배경용 블러 -->
+          <div class="absolute inset-0 bg-black opacity-70 blur-xs rounded-[20px] z-0"></div>
+
+          <!-- 요약된 내용 -->
+          <div class="relative z-10">
+            <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
+            <ul class="text-white leading-8">
+              <li>해일의 높이는 2,000m</li>
+              <li>박은서, 기네스 기록 돒파</li>
+              <li>박은서, 세계대회 우승</li>
+            </ul>
+          </div>
+        </div>
       </transition>
     </div>
-    <img
-      v-if="!save"
-      @click="saveHandler"
-      src="@/assets/img/scrap.svg"
-      alt="scarp"
-      class="w-[45px] h-[45px] absolute right-[15px] top-[10px] cursor-pointer"
-    />
-    <img
-      v-else
-      @click="saveHandler"
-      src="@/assets/img/scrapped.svg"
-      alt="scarp"
-      class="w-[45px] h-[45px] absolute right-[15px] top-[10px] cursor-pointer"
-    />
+    <ScrapImg class="absolute right-[15px] top-[10px]" />
   </div>
 </template>
 <style scoped>
