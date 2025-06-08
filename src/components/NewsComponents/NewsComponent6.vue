@@ -1,28 +1,47 @@
 <script setup>
-import scrapOpacityBtn from '@/components/icon/scrapOpacityBtn.vue'
-import thumbsUpOpacity from '@/components/icon/thumbsUpOpacity.vue'
-import viewCountOpacityBtn from '@/components/icon/viewCountOpacity.vue'
+import { ref } from 'vue'
+
+const save = ref(false)
+const saveHandler = () => {
+  save.value = !save.value
+}
 </script>
 <template>
-  <div class="relative flex w-[600px] h-[152px]">
+  <div class="relative flex w-[600px] h-[184px]">
+    <img src="@/assets/img/exImage/dmz.svg" alt="dmz" class="rounded-[16px] w-[600px] h-[184px]" />
     <div
-      class="relative bg-[linear-gradient(to_top,oklch(0.2_0.05_250/0.9),oklch(0.2_0.05_250/0.4)_90%),url('@/assets/img/forest.png')] bg-cover bg-center w-full h-full p-3 rounded-[20px]"
+      class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] w-[600px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
     >
-      <scrapOpacityBtn class="absolute top-0 right-0 m-4" />
-      <div class="absolute flex left-0 bottom-0 text-white font-bold m-5">
-        DMZ·근현대 정원서 자연유산 찾는다…천연보호구역 조정 검토
-      </div>
-      <div class="flex absolute bottom-0 right-0 space-x-2 m-4">
-        <div class="flex items-center space-x-1">
-          <thumbsUpOpacity />
-          <div class="text-[11px] text-[#E4E4E4]">32</div>
+      <p class="font-bold text-[18px] text-[white]">
+        손흥민 사우디로 이적한답니다... 꼭 가야만 할까요?
+      </p>
+      <!-- 좋아요 상자 -->
+      <div class="flex gap-[8px]">
+        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
+          <img src="@/assets/img/Thumbs-up-white.svg" alt="likes" class="w-[20px] h-[20px]" />
+          <p class="mt-[4px] text-[15px]">32</p>
         </div>
-        <div class="flex items-center space-x-1">
-          <viewCountOpacityBtn />
-          <div class="text-[11px] text-[#E4E4E4]">168</div>
+
+        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
+          <img src="@/assets/img/View-white.svg" alt="likes" class="w-[20px] h-[20px]" />
+          <p class="mt-[4px] text-[15px]">32</p>
         </div>
       </div>
     </div>
+    <img
+      v-if="!save"
+      @click="saveHandler"
+      src="@/assets/img/scrap.svg"
+      alt="scarp"
+      class="w-[45px] h-[45px] absolute right-[15px] top-[10px] cursor-pointer"
+    />
+    <img
+      v-else
+      @click="saveHandler"
+      src="@/assets/img/scrapped.svg"
+      alt="scarp"
+      class="w-[45px] h-[45px] absolute right-[15px] top-[10px] cursor-pointer"
+    />
   </div>
 </template>
 <style scoped></style>

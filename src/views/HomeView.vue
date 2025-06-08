@@ -1,6 +1,7 @@
 <script setup>
 import ButtonVue from '@/components/common/ButtonVue.vue'
 import { ref } from 'vue'
+import BeforeLogin from './BeforeLogin.vue'
 
 const nextSection = ref(null)
 
@@ -30,7 +31,9 @@ const windowScroll = () => {
         <img src="../assets/icons/scrollDown.svg" alt="arrow" class="h-[50px]" />
       </div>
     </div>
-    <div ref="nextSection" class="h-[100vh]">dd</div>
+    <div ref="nextSection">
+      <BeforeLogin />
+    </div>
   </div>
 </template>
 
