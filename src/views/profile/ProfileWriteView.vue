@@ -1,5 +1,5 @@
 <script setup>
-import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
+import CommunityPost from '@/components/community/CommunityPost.vue'
 </script>
 <template>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,27 +46,10 @@ import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
         <div class="text-[#969696] w-[103px] text-base cursor-pointer">사회/문화</div>
         <div class="text-[#969696] w-[103px] text-base cursor-pointer">해외/기타</div>
       </div>
-      <div class="flex flex-col">
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
+      <div class="flex flex-col w-[735px]">
+        <CommunityPost class="mb-[40px] w-full" />
+        <CommunityPost class="mb-[40px] w-full" />
+        <CommunityPost class="mb-[40px] w-full" />
       </div>
     </div>
   </div>
