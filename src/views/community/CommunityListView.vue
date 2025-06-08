@@ -106,7 +106,7 @@ const handleSort = (sort) => {
         </div>
       </div>
       <!-- 게시글 -->
-      <div class="flex flex-col w-full">
+      <div class="flex flex-col w-[835px]">
         <CommunityPost class="mb-[40px]" />
         <CommunityPost class="mb-[40px]" />
         <CommunityPost class="mb-[40px]" />

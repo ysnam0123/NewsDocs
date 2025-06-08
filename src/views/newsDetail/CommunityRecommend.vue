@@ -34,8 +34,8 @@ const moreViewHandler = (post) => {
               여러분 투표는 누구에게 하셨나여????????? 아무튼 화이팅
             </span>
             <div class="flex justify-center items-center gap-3 mr-5">
-              <ThumbsUp />
-              <Eye />
+              <ThumbsUp class="text-[#B7B7B7] w-4" />
+              <Eye class="text-[#B7B7B7] w-4" />
             </div>
           </div>
         </div>

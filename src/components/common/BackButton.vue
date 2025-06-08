@@ -1,6 +1,5 @@
 <script setup>
 import { ChevronLeft } from 'lucide-vue-next'
-
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

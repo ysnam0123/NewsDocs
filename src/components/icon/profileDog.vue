@@ -1,6 +1,7 @@
 <script setup></script>
 <template>
-  <h1>footer</h1>
-  <img src="@/assets/img/logoDog.svg" />
+  <div class="w-[146px] h-[146px]">
+    <img src="@/assets/img/profileDog.svg" />
+  </div>
 </template>
 <style scoped></style>

@@ -1,28 +1,39 @@
 <script setup>
-import scrapOpacityBtn from '@/components/icon/scrapOpacityBtn.vue'
-import thumbsUpOpacity from '@/components/icon/thumbsUpOpacity.vue'
-import viewCountOpacityBtn from '@/components/icon/viewCountOpacity.vue'
+import ScrapImg from './children/ScrapImg.vue'
 </script>
 <template>
-  <div class="w-[290px] h-[318px]">
-    <div
-      class="relative bg-[linear-gradient(to_top,oklch(0.2_0.05_250/0.9),oklch(0.2_0.05_250/0.4)_30%),url('@/assets/img/lee.jpg')] bg-cover bg-center w-full h-full rounded-[16px]"
-    >
-      <scrapOpacityBtn class="absolute top-0 right-0 m-4" />
-      <div class="absolute text-white text-lg font-bold p-5 bottom-[30px]">
-        이동욱, “나는 얼굴에 자신이 없어 발언...수많은 남자들 자괴감에 빠져”
-      </div>
-      <div class="flex absolute bottom-0 left-0 space-x-2 m-5">
-        <div class="flex items-center space-x-1">
-          <thumbsUpOpacity />
-          <div class="text-[11px] text-[#E4E4E4]">32</div>
-        </div>
-        <div class="flex items-center space-x-1">
-          <viewCountOpacityBtn />
-          <div class="text-[11px] text-[#E4E4E4]">168</div>
+  <div class="w-[292px] h-[384px] relative">
+    <div class="relative">
+      <img
+        src="@/assets/img/exImage/karina.png"
+        alt="karina"
+        class="w-[292px] h-[384px] rounded-3xl"
+      />
+      <div
+        class="flex flex-col px-[20px] absolute h-[187px] w-[292px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
+      >
+        <p class="font-bold text-[20px] text-[white] mt-auto">
+          손흥민 사우디로 이적한답니다.. <br />꼭 가야만 할까요?
+        </p>
+        <!-- 좋아요 상자 -->
+        <div class="flex gap-[8px] mb-[16px]">
+          <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
+            <img src="@/assets/img/Thumbs-up-white.svg" alt="likes" class="w-[18px] h-[18px]" />
+            <p class="mt-[4px] text-[12px]">32</p>
+          </div>
+
+          <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
+            <img src="@/assets/img/View-white.svg" alt="likes" class="w-[18px] h-[18px]" />
+            <p class="mt-[4px] text-[12px]">32</p>
+          </div>
         </div>
       </div>
     </div>
+    <ScrapImg class="absolute right-[8px] top-[10px]" />
   </div>
 </template>
 <style scoped></style>
+
+<!-- <div
+      class="relative bg-[linear-gradient(to_top,oklch(0.2_0.05_250/0.9),oklch(0.2_0.05_250/0.4)_30%),url('@/assets/img/lee.jpg')] bg-cover bg-center w-full h-full rounded-[16px]"
+    > -->
