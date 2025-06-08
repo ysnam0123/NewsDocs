@@ -139,8 +139,10 @@ const isDisabled = computed(
     <div
       class="bg-white rounded-[20px] w-[464px] min-h-[779px] py-10 flex flex-col items-center justify-center"
     >
-      <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
-      <h1 class="text-[40px] mb-6 text-center font-extrabold luckiest-guy-regular">newsDocs</h1>
+      <router-link to="/">
+        <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
+        <h1 class="text-[40px] mb-6 text-center font-extrabold luckiest-guy-regular">newsDocs</h1>
+      </router-link>
       <form @submit.prevent="onSignUp" class="flex flex-col items-center w-full">
         <div class="mb-5 w-full flex flex-col items-center">
           <label class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919]"
