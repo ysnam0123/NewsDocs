@@ -43,7 +43,7 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
       <div class="text-[28px] font-bold">내가 저장한 뉴스</div>
       <div class="relative">
         <div
-          class="flex border-[#9A9A9A] border-b-[0.5px] h-[72px] items-center text-center space-x-4 mb-5 relative"
+          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative"
         >
           <div
             v-for="tab in tabs"
@@ -52,7 +52,7 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
             class="flex items-center justify-center w-[103px] h-full text-base cursor-pointer relative transition-all duration-300 hover:text-[#7537E3]"
             :class="{
               'text-[#7537E3] font-semibold': activeTab === tab,
-              'text-[#969696]': activeTab !== tab,
+              'text-gray-200': activeTab !== tab,
             }"
           >
             {{ tab }}

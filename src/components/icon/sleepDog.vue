@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <div class="w-[106px] h-[63px]">
+  <div class="w-[156px] h-[113px]">
     <img src="@/assets/img/sleepDog.svg" />
   </div>
 </template>

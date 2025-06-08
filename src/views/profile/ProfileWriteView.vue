@@ -43,7 +43,7 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
       <div class="text-[28px] font-bold">내가 작성한 글</div>
       <div class="relative">
         <div
-          class="flex border-[#9A9A9A] border-b-[0.5px] h-[72px] items-center text-center space-x-4 mb-5 relative"
+          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative"
         >
           <div
             v-for="tab in tabs"
@@ -68,9 +68,9 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
         </div>
       </div>
       <div class="flex flex-col w-[735px]">
-        <CommunityPost class="mb-[40px] w-full" />
-        <CommunityPost class="mb-[40px] w-full" />
-        <CommunityPost class="mb-[40px] w-full" />
+        <CommunityPost class="w-full" />
+        <CommunityPost class="w-full" />
+        <CommunityPost class="w-full" />
       </div>
     </div>
   </div>
