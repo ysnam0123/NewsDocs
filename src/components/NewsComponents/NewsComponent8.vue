@@ -15,7 +15,7 @@ const summarizeHandler = () => {
 }
 </script>
 <template>
-  <div class="h-[470px] relative cursor-pointer z-1">
+  <div class="h-[470px] relative cursor-pointer">
     <div class="h-[300px]">
       <img
         src="@/assets/img/exImage/sports.svg"
@@ -46,8 +46,8 @@ const summarizeHandler = () => {
       <!-- 클릭했을 때 나오는 창 -->
       <transition name="fade">
         <div
-          v-if="hovered"
-          class="w-full h-full rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+          v-if="wantSummary"
+          class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
         >
           <!-- 배경용 블러 -->
           <div class="absolute inset-0 bg-black/80 blur-xs rounded-[20px] z-30"></div>
