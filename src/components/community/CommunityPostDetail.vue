@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
   <div
-    class="flex flex-col w-[830px] min-h-[846px] px-10 rounded-[16px] border border-gray-200 dark:border-[#333333]"
+    class="flex flex-col w-[830px] min-h-[846px] px-10 rounded-[16px] border border-gray-200 dark:bg-[#242424] dark:border-[#333333]"
   >
     <!-- 작성자 -->
     <div class="flex w-full justify-between mt-8">
