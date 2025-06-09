@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import ScrapImg from './children/ScrapImg.vue'
+
+import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -24,7 +25,7 @@ const summarizeHandler = () => {
     <div class="flex flex-col max-h-[260px]">
       <!-- 기사 -->
       <div class="w-[211px] relative flex flex-col mb-[10px]">
-        <div class="font-bold text-[18px] max-h-[58px]">
+        <div class="text-[var(--text-title)] font-bold text-[18px] max-h-[58px]">
           손흥민 유로파 리그 우승, 다음 행보는 어디일까요??
         </div>
         <div class="text-[#A8A8A8] text-[14px] pt-0.5 max-h-[48px] line-clamp-2">
@@ -42,7 +43,7 @@ const summarizeHandler = () => {
         </div>
       </div>
     </div>
-    <ScrapImg class="absolute right-[2px] top-[0px] z-20" />
+    <ScrapNotOnImg class="absolute right-[4px] top-[2px] z-20" />
     <!-- 호버했을때 나오는 창 -->
     <div
       v-show="!wantSummary"

@@ -24,7 +24,7 @@ const summarizeHandler = () => {
       />
     </div>
     <div class="mb-[12px] px-[10px]">
-      <div class="text-xl font-bold mb-[10px] max-h-[56px]">
+      <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px]">
         폭탄 제안! 이 정도로 진심이다...호날두와 극적 재계약
       </div>
       <div class="text-sm text-[#A8A8A8] max-h-[40px] line-clamp-2 mb-[12px]">

@@ -25,7 +25,7 @@ const summarizeHandler = () => {
     </div>
     <div>
       <div class="px-[10px]">
-        <div class="text-[20px] font-bold mt-[12px] mb-[5px]">
+        <div class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px]">
           손흥민 유로파 리그 우승, 다음 행보는?
         </div>
         <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2">

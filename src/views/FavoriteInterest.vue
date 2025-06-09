@@ -2,6 +2,7 @@
 import InterestCard from '@/components/interest/InterestCard.vue'
 import { useInterestStore } from '@/stores/interestStore'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const store = useInterestStore()
 
@@ -26,6 +27,11 @@ const addFavorite = (item) => {
   }
 
   console.log('현재 선택:', store.favoriteInterest)
+}
+
+const router = useRouter()
+const myInterest = () => {
+  router.push('/myinterest')
 }
 </script>
 <template>
@@ -72,6 +78,7 @@ const addFavorite = (item) => {
               : 'bg-[#f2f2f2] text-[#b3b3b3] cursor-not-allowed',
           ]"
           @select="chooseFavorite"
+          @click="myInterest"
         >
           다음
         </button>

@@ -10,7 +10,7 @@ import SleepDog from '@/components/profile/SleepDog.vue'
       <div class="flex justify-between">
         <div class="flex space-x-5 mt-5">
           <ProfileDog />
-          <div class="flex flex-col ml-3">
+          <div class="flex flex-col justify-center ml-3">
             <div class="text-[24px] font-semibold mb-1 dark:text-white">유저 닉네임</div>
             <div class="flex space-x-2">
               <div class="text-[#8F8F8F] text-sm"># 스포츠</div>
