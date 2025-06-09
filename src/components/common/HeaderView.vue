@@ -24,6 +24,10 @@ const changeInterest = () => {
 const gotohome = () => {
   route.push('/myinterest')
 }
+
+const seeNews = () => {
+  route.push('/news')
+}
 </script>
 <template>
   <div class="w-[1240px] mx-auto py-[0px] flex items-center h-[100px]">
@@ -45,6 +49,7 @@ const gotohome = () => {
         </li>
         <li
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] ease-in duration-75 hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
+          @click="seeNews"
         >
           다른 소식
         </li>
