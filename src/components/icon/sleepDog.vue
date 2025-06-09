@@ -1,5 +1,7 @@
 <script setup></script>
 <template>
-  <img src="@/assets/img/sleepDog.svg" />
+  <div class="w-[156px] h-[113px]">
+    <img src="@/assets/img/sleepDog.svg" />
+  </div>
 </template>
 <style scoped></style>

@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <div class="flex items-center gap-[24px] w-[830px] h-[237px] group cursor-pointer">
+  <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
     <img
       src="../../assets/img/communityPostImg.svg"
@@ -8,7 +8,7 @@
     />
     <div class="flex flex-col flex-grow">
       <!-- 게시글 내용 -->
-      <div class="flex flex-col justify-center w-[574px] h-[172px]">
+      <div class="flex flex-col justify-center w-full h-[172px]">
         <!-- 작성자&태그 -->
         <div class="w-full h-10 flex items-center justify-between">
           <!-- 작성자 -->

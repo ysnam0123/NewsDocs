@@ -1,9 +1,7 @@
 <script setup></script>
 <template>
-<<<<<<<< HEAD:src/components/common/FooterVue.vue
-  <h1>footer</h1>
-========
-  <img src="@/assets/img/logoDog.svg" />
->>>>>>>> dev:src/components/common/profileDog.vue
+  <div class="w-[146px] h-[146px]">
+    <img src="@/assets/img/profileDog.svg" />
+  </div>
 </template>
 <style scoped></style>

@@ -42,7 +42,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'Profile',
-      component: () => import('../views/ProfileView.vue'),
+      component: () => import('../views/profile/ProfileView.vue'),
       meta: {
         hideHeaderBasic: true,
       },
@@ -50,7 +50,7 @@ const router = createRouter({
     {
       path: '/profile/:id',
       name: 'UserProfile',
-      component: () => import('../views/ProfileView.vue'),
+      component: () => import('../views/profile/ProfileView.vue'),
       meta: {
         hideHeaderBasic: true,
       },
@@ -58,7 +58,7 @@ const router = createRouter({
     {
       path: '/profile/edit',
       name: 'ProfileEdit',
-      component: () => import('../views/ProfileEditView.vue'),
+      component: () => import('../views/profile/ProfileEditView.vue'),
       meta: {
         hideHeaderBasic: true,
       },
@@ -66,10 +66,15 @@ const router = createRouter({
     {
       path: '/profile/news',
       name: 'ProfileNews',
-      component: () => import('../views/ProfileNewsView.vue'),
+      component: () => import('../views/profile/ProfileNewsView.vue'),
       meta: {
         hideHeaderBasic: true,
       },
+    },
+    {
+      path: '/profile/write',
+      name: 'ProfileWrite',
+      component: () => import('../views/profile/ProfileWriteView.vue'),
     },
     {
       path: '/chooseinterest',
