@@ -8,10 +8,8 @@ const hoverHandler = () => {
 }
 </script>
 <template>
-
-  <div class="w-[380px] h-[470px] relative cursor-pointer">
-    <div class="w-[380px] h-[300px]">
-
+  <div class="h-[470px] relative cursor-pointer">
+    <div class="h-[300px]">
       <img
         src="@/assets/img/exImage/sports.svg"
         class="w-full h-full rounded-[20px] object-cover space-y-0.5"
