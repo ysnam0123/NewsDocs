@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
 import HomeView from '../views/HomeView.vue'
+import LoginView from '../views/LoginView.vue'
+import SignUpView from '@/views/SignUpView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +17,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      component: LoginView,
       meta: {
         hideHeader: true,
         hideFooter: true,
@@ -25,11 +27,8 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignUpView.vue'),
-      meta: {
-        hideHeader: true,
-        hideFooter: true,
-      },
+      component: SignUpView,
+      meta: { hideHeader: true, hideFooter: true },
     },
     {
       path: '/about',
@@ -77,16 +76,16 @@ const router = createRouter({
       component: () => import('../views/profile/ProfileWriteView.vue'),
     },
     {
-      path: '/chooseinterest',
-      name: 'chooseinterest',
+      path: '/interest',
+      name: 'interest',
       component: () => import('../views/ChooseInterest.vue'),
       meta: {
         hideHeader: true,
       },
     },
     {
-      path: '/choosefavorite',
-      name: 'choosefavorite',
+      path: '/favoriteinterest',
+      name: 'favoriteinterest',
       component: () => import('../views/FavoriteInterest.vue'),
       meta: {
         hideHeader: true,

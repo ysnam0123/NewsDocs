@@ -6,13 +6,12 @@ import SleepDog from '@/components/profile/SleepDog.vue'
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="bg-white w-full h-[100px] top-0"></div>
     <div class="max-w-[1200px] mx-auto">
       <div class="flex justify-between">
         <div class="flex space-x-5 mt-5">
           <ProfileDog />
           <div class="flex flex-col ml-3">
-            <div class="text-[24px] font-semibold mb-1">유저 닉네임</div>
+            <div class="text-[24px] font-semibold mb-1 dark:text-white">유저 닉네임</div>
             <div class="flex space-x-2">
               <div class="text-[#8F8F8F] text-sm"># 스포츠</div>
               <div class="text-[#8F8F8F] text-sm"># 사회</div>
@@ -21,7 +20,7 @@ import SleepDog from '@/components/profile/SleepDog.vue'
             <div class="mt-3">
               <router-link to="/profile/edit">
                 <button
-                  class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED]"
+                  class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
                 >
                   내 정보 수정
                 </button>
@@ -32,13 +31,15 @@ import SleepDog from '@/components/profile/SleepDog.vue'
       </div>
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
-          <div class="text-[20px] font-bold">내가 저장한 뉴스</div>
+          <div class="text-[20px] font-bold dark:text-white">내가 저장한 뉴스</div>
           <router-link to="/profile/news">
-            <button class="text-[#191919] text-base cursor-pointer underline">더보기</button>
+            <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
+              더보기
+            </button>
           </router-link>
         </div>
         <!-- <SleepDog /> -->
-        <div class="flex pt-12 space-x-[24px]">
+        <div class="flex pt-12 space-x-[24px] w-full">
           <NewsComponent8 />
           <NewsComponent8 />
           <NewsComponent8 />
@@ -47,9 +48,11 @@ import SleepDog from '@/components/profile/SleepDog.vue'
 
       <div class="mt-10 w-[735px] h-[244px]">
         <div class="flex justify-between">
-          <div class="text-[20px] font-bold">내가 작성한 글</div>
+          <div class="text-[20px] font-bold dark:text-white">내가 작성한 글</div>
           <router-link to="/profile/write">
-            <button class="text-[#191919] text-base cursor-pointer underline">더보기</button>
+            <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
+              더보기
+            </button>
           </router-link>
         </div>
         <!-- <div class="w-[934px] h-[253px] my-5 bg-amber-700 rounded-[20px]"></div>

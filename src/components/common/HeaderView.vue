@@ -58,7 +58,7 @@ const movePage = (path) => {
           class="w-[96px] h-[41px]"
         />
       </div>
-      <!-- 다크모드  -->
+
       <div
         class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] flex items-center justify-center ml-[14px]"
       >
