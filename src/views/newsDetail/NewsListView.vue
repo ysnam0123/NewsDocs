@@ -1,9 +1,7 @@
 <script setup>
-// import { fetchKoreanNewsData } from '@/api/fetchNews'
-import { getNewsList } from '@/api/getSupabaseNews'
-// import { useRouter } from 'vue-router'
-// import { saveNewsToSupabase } from '@/api/saveNews'
+import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import { fetchKoreanData } from '@/api/fetchNews'
 import NewsComponent1 from '@/components/NewsComponents/NewsComponent1.vue'
 import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
@@ -22,10 +20,10 @@ import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
+const news = ref(null)
 const newsList = ref([])
+const router = useRouter()
 const categories = ref(['전체', '정치', '경제', '사회', '문화', '스포츠', '연예', '해외'])
 const activeCategory = ref('전체')
 const swiperInstance = ref(null)
@@ -34,38 +32,37 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+// swiper btn
 const slidePrev = () => {
   swiperInstance.value?.slidePrev()
 }
+// swiper btn
+
 const slideNext = () => {
   swiperInstance.value?.slideNext()
 }
-
+// swiper 설정
 const onSwiper = (swiper) => {
   swiperInstance.value = swiper
 }
-
+// swiper 설정
 const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
 
-// const router = useRouter()
-// const handleFetchAndSave = async () => {
-//   const KoreanNews = await fetchKoreanNewsData('연예')
-//   await saveNewsToSupabase(KoreanNews, 'ko')
-//   newsList.value = await getNewsList()
-// }
-
+// category active
 const selectCategory = (category) => {
   activeCategory.value = category
 }
-// const clickhandler = (newsItem) => {
-//   router.push(`/news/${newsItem.id}`)
-// }
+
+const newsDetailHandler = (news_id) => {
+  router.push(`/news/detail/${news_id}`)
+}
 
 onMounted(async () => {
-  newsList.value = await getNewsList()
-  // handleFetchAndSave()
+  const fetchNews = await fetchKoreanData('정치')
+  console.log('뉴스 데이터', fetchNews)
+  newsList.value = fetchNews
 })
 </script>
 <template>
@@ -92,9 +89,9 @@ onMounted(async () => {
     <div class="mx-auto max-w-[1240px] pt-8">
       <div class="section1">
         <div class="flex gap-10 mb-20">
-          <NewsComponent1 />
+          <NewsComponent1 :news="news" :news-detail="newsDetailHandler" />
           <div class="flex flex-col gap-8.5">
-            <NewsComponent2 />
+            <NewsComponent2 :news="news" :news-detail="newsDetailHandler" />
             <NewsComponent2 />
             <NewsComponent2 />
           </div>
