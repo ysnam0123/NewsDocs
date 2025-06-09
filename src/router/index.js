@@ -39,6 +39,7 @@ const router = createRouter({
       },
     },
     {
+
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/ProfileView.vue'),
@@ -118,6 +119,7 @@ const router = createRouter({
           path: 'detail',
           name: 'newsDetail',
           component: () => import('../views/newsDetail/NewsDetailView.vue'),
+          // props: true,
         },
       ],
     },
