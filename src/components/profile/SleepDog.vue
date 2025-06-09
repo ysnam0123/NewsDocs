@@ -8,11 +8,13 @@ import SleepDog from '@/components/icon/sleepDog.vue'
     <SleepDog />
     <div class="text-lg text-[#191919] dark:text-white">아직 저장한 뉴스가 없어요!</div>
     <div class="relative">
-      <button
-        class="w-[106px] h-[36px] bg-[#7537E3] text-center rounded-[8px] text-sm text-[#FFFFFF] cursor-pointer hover:bg-[#601ED5]"
-      >
-        뉴스 보러가기
-      </button>
+      <router-link to="/news">
+        <button
+          class="w-[106px] h-[36px] bg-[#7537E3] text-center rounded-[8px] text-sm text-[#FFFFFF] cursor-pointer hover:bg-[#601ED5]"
+        >
+          뉴스 보러가기
+        </button>
+      </router-link>
     </div>
   </div>
 
