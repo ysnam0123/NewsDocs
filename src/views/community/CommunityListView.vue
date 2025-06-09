@@ -30,10 +30,10 @@ const handleSort = (sort) => {
           <button
             @click="handleCategory('전체')"
             :class="[
-              'w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] font-semibold cursor-pointer',
+              'w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '전체'
-                ? 'border-b-2 border-b-[#7537E3] text-[#7537E3]'
-                : 'text-[#9D9D9D]',
+                ? ' border-b-[#7537E3] text-[#7537E3]'
+                : 'border-b-transparent text-[#9D9D9D]',
             ]"
           >
             전체
@@ -41,10 +41,10 @@ const handleSort = (sort) => {
           <button
             @click="handleCategory('정치/경제')"
             :class="[
-              'w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] font-semibold cursor-pointer',
+              'w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '정치/경제'
-                ? 'border-b-2 border-b-[#7537E3] text-[#7537E3]'
-                : 'text-[#9D9D9D]',
+                ? 'border-b-[#7537E3] text-[#7537E3]'
+                : 'border-b-transparent text-[#9D9D9D]',
             ]"
           >
             정치/경제
@@ -52,10 +52,10 @@ const handleSort = (sort) => {
           <button
             @click="handleCategory('연예/스포츠')"
             :class="[
-              'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] font-semibold cursor-pointer',
+              'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '연예/스포츠'
-                ? 'border-b-2 border-b-[#7537E3] text-[#7537E3]'
-                : 'text-[#9D9D9D]',
+                ? 'border-b-[#7537E3] text-[#7537E3]'
+                : 'border-b-transparent text-[#9D9D9D]',
             ]"
           >
             연예/스포츠
@@ -63,10 +63,10 @@ const handleSort = (sort) => {
           <button
             @click="handleCategory('사회/문화')"
             :class="[
-              'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] font-semibold cursor-pointer',
+              'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '사회/문화'
-                ? 'border-b-2 border-b-[#7537E3] text-[#7537E3]'
-                : 'text-[#9D9D9D]',
+                ? ' border-b-[#7537E3] text-[#7537E3]'
+                : 'border-b-transparent text-[#9D9D9D]',
             ]"
           >
             사회/문화
@@ -74,10 +74,10 @@ const handleSort = (sort) => {
           <button
             @click="handleCategory('해외/기타')"
             :class="[
-              'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] font-semibold cursor-pointer',
+              'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '해외/기타'
-                ? 'border-b-2 border-b-[#7537E3] text-[#7537E3]'
-                : 'text-[#9D9D9D]',
+                ? 'border-b-[#7537E3] text-[#7537E3]'
+                : 'border-b-transparent text-[#9D9D9D]',
             ]"
           >
             해외/기타
@@ -88,8 +88,10 @@ const handleSort = (sort) => {
           <button
             @click="handleSort('최신순')"
             :class="[
-              'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer',
-              selectedSort === '최신순' ? 'underline text-[#191919]' : 'text-[#969696]',
+              'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer transition-all duration-300',
+              selectedSort === '최신순'
+                ? 'underline underline-offset-3 text-[#191919]'
+                : 'text-[#969696]',
             ]"
           >
             최신순
@@ -97,8 +99,10 @@ const handleSort = (sort) => {
           <button
             @click="handleSort('인기순')"
             :class="[
-              'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer',
-              selectedSort === '인기순' ? 'underline text-[#191919]' : 'text-[#969696]',
+              'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer transition-all duration-300',
+              selectedSort === '인기순'
+                ? ' underline underline-offset-3 text-[#191919]'
+                : 'text-[#969696]',
             ]"
           >
             인기순
@@ -107,15 +111,15 @@ const handleSort = (sort) => {
       </div>
       <!-- 게시글 -->
       <div class="flex flex-col w-[835px]">
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
-        <CommunityPost class="mb-[40px]" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
       </div>
     </div>
   </div>
