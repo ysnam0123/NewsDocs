@@ -1,0 +1,151 @@
+:root {
+  /* 공통 요소 */
+  --bg-color: #f6f6f6;
+  --main-text: #ffffff;
+  --sub-text: #8f8f8f;
+  --message-bg: #efefef;
+  --border-gray: #ebebeb;
+
+  --main-color: #7b42df;
+  --light-purple: #ece1ff;
+  --background-purple: #edebf1;
+  --lightGray: #e0e0e0;
+
+  --element-background: #f6f6f6;
+  --element-background-hover: #ededed;
+
+  /* 버튼 */
+
+  /* 1. 보라색배경 버튼 */
+  --purple-button-bg: #7846d2;
+  --purple-button-bg-hover: #6524d9;
+
+  /* 2. 회색배경 버튼 */
+  --gb-bg: #f6f6f6;
+  --gb-hover: #ededed;
+  --gb-text: #191919;
+  --gb-selected: #191919;
+  --gb-selected-hover: #3a3a3a;
+
+  /* 3. 배경색 없는 버튼 */
+  --simple-button-bg: #ffffff;
+  --simple-button-hover: #f6f6f6;
+
+  /* 4. 회색에서 보라색이 되는 버튼 */
+  --GP-button-bg: #f6f6f6;
+  --GP-button-hover: #ededed;
+  --GP-button-text: #7846d2;
+
+  /* input 태그 */
+  --input-border: #e0e0e0;
+
+  /* 헤더 */
+  --nav-text: #191919;
+  --nav-text-hover: #7a42df;
+  --nav-active: #7a42df;
+
+  /* 뉴스 페이지 */
+  --text-title: #000000;
+  --text-sub-purple: #7a42df;
+  --text-content: #7f7f7f;
+  --section-contents-bg: #ffffff;
+  --section-contents-border: #343434;
+  --show-more: #191919;
+
+  /* 모든 소식 */
+  --newsnav-bg: #f3f3f3;
+  --newsnav-color: #191919;
+  --newsnav-hover: #e0e0e0;
+  --newsnav-selected: #191919;
+  --newsnav-hover: #3a3a3a;
+
+  /* 커뮤니티 */
+  --username-text: #191919;
+  --userinterest-text: #8f8f8f;
+  --post-bg: #ebebeb;
+  --comment-text: #191919;
+  --comment-time: #9a9a9a;
+  --upload-img-bg: #f6f6f6;
+  --upload-img-bg-hover: #ececec;
+  --upload-text: #191919;
+}
+
+/* 다크모드 */
+.dark {
+  /* 공통 요소 */
+  --bg-color: #363636;
+  --main-text: #ffffff;
+  --sub-text: #8f8f8f;
+  --message-bg: #3c3c3c;
+  --border-gray: #ebebeb;
+
+  --main-color: #7b42df;
+  --light-purple: #ece1ff;
+  --background-purple: #edebf1;
+  --lightGray: #e0e0e0;
+
+  /* 수정해야함 */
+  --element-background: #f6f6f6;
+  --element-background-hover: #ededed;
+
+  /* 버튼 */
+
+  /* 1. 보라색배경 버튼 */
+  --purple-button-bg: #7846d2;
+  --purple-button-bg-hover: #6524d9;
+
+  /* 2. 회색배경 버튼 */
+  --gb-bg: #363636;
+  --gb-hover: #4a4a4a;
+  --gb-text: #f6f6f6;
+  --gb-selected: #7846d2;
+  --gb-selected-hover: #6524d9;
+
+  /* 3. 배경색 없는 버튼 */
+  --simple-button-bg: #363636;
+  --simple-button-hover: #4a4a4a;
+
+  /* 4. 회색에서 보라색이 되는 버튼 */
+  --GP-button-bg: #7846d2;
+  --GP-button-hover: #6524d9;
+  --GP-button-text: #f6f6f6;
+
+  /* input 태그 */
+  --input-border: #e0e0e0;
+
+  /* 헤더 */
+  --nav-text: #8f8f8f;
+  --nav-text-hover: #eaeaea;
+  --search-border: #4d4d4d;
+
+  /* 뉴스 페이지 */
+  --text-title: #ffffff;
+  --text-sub-purple: #a878fd;
+  --text-content: #8f8f8f;
+  --section-contents-bg: #1f1f1f;
+  --section-contents-border: #343434;
+  --show-more: #8f8f8f;
+
+  /* 모든 소식 */
+  --newsnav-bg: #f3f3f3;
+  --newsnav-color: #191919;
+  --newsnav-hover: #e0e0e0;
+  --newsnav-selected: #191919;
+  --newsnav-hover: #3a3a3a;
+
+  /* 커뮤니티 */
+  --username-text: #ffffff;
+  --userinterest-text: #8f8f8f;
+  --post-bg: #242424;
+  --comment-text: #8f8f8f;
+  --comment-time: #9a9a9a;
+  --upload-img-bg: #2c2c2c;
+  --upload-img-bg-hover: #1f1f1f;
+  --upload-text: #ffffff;
+}
+
+* {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
