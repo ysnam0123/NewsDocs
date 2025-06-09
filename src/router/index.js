@@ -24,11 +24,6 @@ const router = createRouter({
       meta: { hideHeader: true, hideFooter: true },
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-    },
-    {
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/ProfileView.vue'),
@@ -92,6 +87,7 @@ const router = createRouter({
           path: 'detail',
           name: 'newsDetail',
           component: () => import('../views/newsDetail/NewsDetailView.vue'),
+          // props: true,
         },
       ],
     },
