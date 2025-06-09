@@ -32,7 +32,7 @@ const handleSort = (sort) => {
             :class="[
               'w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '전체'
-                ? ' border-b-[#7537E3] text-[#7537E3]'
+                ? ' border-b-[#7537E3] dark:border-b-[#A878FD] text-[#7537E3] dark:text-[#A878FD]'
                 : 'border-b-transparent text-[#9D9D9D]',
             ]"
           >
@@ -43,8 +43,8 @@ const handleSort = (sort) => {
             :class="[
               'w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '정치/경제'
-                ? 'border-b-[#7537E3] text-[#7537E3]'
-                : 'border-b-transparent text-[#9D9D9D]',
+                ? 'border-b-[#7537E3] dark:border-b-[#A878FD] text-[#7537E3] dark:text-[#A878FD]'
+                : 'border-b-transparent text-[#9D9D9D] dark:text-[#8F8F8F]',
             ]"
           >
             정치/경제
@@ -54,8 +54,8 @@ const handleSort = (sort) => {
             :class="[
               'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '연예/스포츠'
-                ? 'border-b-[#7537E3] text-[#7537E3]'
-                : 'border-b-transparent text-[#9D9D9D]',
+                ? 'border-b-[#7537E3] dark:border-b-[#A878FD] text-[#7537E3] dark:text-[#A878FD]'
+                : 'border-b-transparent text-[#9D9D9D] dark:text-[#8F8F8F]',
             ]"
           >
             연예/스포츠
@@ -65,8 +65,8 @@ const handleSort = (sort) => {
             :class="[
               'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '사회/문화'
-                ? ' border-b-[#7537E3] text-[#7537E3]'
-                : 'border-b-transparent text-[#9D9D9D]',
+                ? ' border-b-[#7537E3] dark:border-b-[#A878FD] text-[#7537E3] dark:text-[#A878FD]'
+                : 'border-b-transparent text-[#9D9D9D] dark:text-[#8F8F8F]',
             ]"
           >
             사회/문화
@@ -76,8 +76,8 @@ const handleSort = (sort) => {
             :class="[
               'flex w-[102.8px] whitespace-nowrap items-center justify-center text-[16px] border-b-2 cursor-pointer transition-all duration-300',
               selectCategory === '해외/기타'
-                ? 'border-b-[#7537E3] text-[#7537E3]'
-                : 'border-b-transparent text-[#9D9D9D]',
+                ? 'border-b-[#7537E3] dark:border-b-[#A878FD] text-[#7537E3] dark:text-[#A878FD]'
+                : 'border-b-transparent text-[#9D9D9D] dark:text-[#8F8F8F]',
             ]"
           >
             해외/기타
@@ -90,8 +90,8 @@ const handleSort = (sort) => {
             :class="[
               'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer transition-all duration-300',
               selectedSort === '최신순'
-                ? 'underline underline-offset-3 text-[#191919]'
-                : 'text-[#969696]',
+                ? 'underline underline-offset-3 text-[#191919] dark:text-[#ffffff]'
+                : 'text-[#969696] dark:text-[#6F6F6F]',
             ]"
           >
             최신순
@@ -101,8 +101,8 @@ const handleSort = (sort) => {
             :class="[
               'w-12 h-[30px] flex items-center justify-center text-[12px] cursor-pointer transition-all duration-300',
               selectedSort === '인기순'
-                ? ' underline underline-offset-3 text-[#191919]'
-                : 'text-[#969696]',
+                ? ' underline underline-offset-3 text-[#191919] dark:text-[#ffffff]'
+                : 'text-[#969696] dark:text-[#6F6F6F]',
             ]"
           >
             인기순
@@ -111,15 +111,15 @@ const handleSort = (sort) => {
       </div>
       <!-- 게시글 -->
       <div class="flex flex-col w-[835px]">
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
       </div>
     </div>
   </div>
