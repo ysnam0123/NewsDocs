@@ -20,7 +20,7 @@ import SleepDog from '@/components/profile/SleepDog.vue'
             <div class="mt-3">
               <router-link to="/profile/edit">
                 <button
-                  class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#8F8F8F]"
+                  class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
                 >
                   내 정보 수정
                 </button>

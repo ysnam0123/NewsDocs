@@ -1,13 +1,8 @@
 <script setup>
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
-import { ChevronLeft } from 'lucide-vue-next'
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-const router = useRouter()
 
-const goBack = () => {
-  router.back()
-}
+import { ref } from 'vue'
+import BackButton from '@/components/common/BackButton.vue'
 
 const activeTab = ref('전체')
 
@@ -17,20 +12,12 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
   <div class="min-h-screen flex flex-col">
     <div class="max-w-[735px] mx-auto mt-10">
       <div class="flex space-x-2.5 mb-4">
-        <button
-          class="flex w-10 h-10 rounded-[50px] bg-[#F6F6F6] items-center justify-center cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#8F8F8F]"
-          @click="goBack"
-        >
-          <ChevronLeft />
-        </button>
-        <div class="flex items-center justify-center text-base text-[#191919] dark:text-white">
-          돌아가기
-        </div>
+        <BackButton />
       </div>
       <div class="text-[28px] font-bold dark:text-white mb-8">내가 저장한 뉴스</div>
       <div class="relative">
         <div
-          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative"
+          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative dark:border-[#3C3C3C]"
         >
           <div
             v-for="tab in tabs"

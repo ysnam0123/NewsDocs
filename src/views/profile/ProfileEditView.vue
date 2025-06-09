@@ -26,7 +26,7 @@ import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
               />
               <button
                 type="button"
-                class="w-[67px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer hover:bg-[#F3ECFF] transition-all duration-300 dark:border-[#7846D2] dark:text-[#B185FF] dark:hover:bg-[#4D4D4D]"
+                class="w-[67px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer hover:bg-[#F3ECFF] transition-all duration-300 dark:border-[#7846D2] dark:text-[#B185FF] dark:hover:bg-[#3A3247]"
               >
                 중복 확인
               </button>
@@ -81,13 +81,13 @@ import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
         <div class="sticky top-[40px] self-start">
           <div class="flex flex-col items-end space-y-2 ml-[46px]">
             <button
-              class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2]"
+              class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
             >
               변경사항 저장
             </button>
             <router-link to="/profile">
               <button
-                class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4D4D4D]"
+                class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
               >
                 취소하기
               </button>
