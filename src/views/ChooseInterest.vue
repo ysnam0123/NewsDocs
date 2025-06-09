@@ -31,7 +31,7 @@ const addInterest = (item) => {
 
 const router = useRouter()
 const chooseFavorite = () => {
-  router.push('/choosefavorite')
+  router.push('/favoriteinterest')
 }
 const pageMounted = ref(false)
 onMounted(() => {
