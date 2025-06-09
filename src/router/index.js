@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
 import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
+import LoginView from '../views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 
 const router = createRouter({
@@ -30,7 +30,14 @@ const router = createRouter({
       component: SignUpView,
       meta: { hideHeader: true, hideFooter: true },
     },
-
+    // {
+    //   path: '/about',
+    //   name: 'about',
+    //   component: () => import('../views/AboutView.vue'),
+    //   meta: {
+    //     hideHeaderBasic: true,
+    //   },
+    // },
     {
       path: '/profile',
       name: 'Profile',
@@ -132,6 +139,9 @@ const router = createRouter({
       },
     },
   ],
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
 export default router

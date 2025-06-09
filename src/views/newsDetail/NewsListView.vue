@@ -45,7 +45,7 @@ const slideNext = () => {
 const onSwiper = (swiper) => {
   swiperInstance.value = swiper
 }
-// swiper 설정햣
+// swiper 설정
 const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
