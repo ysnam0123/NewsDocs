@@ -8,10 +8,8 @@ const hoverHandler = () => {
 }
 </script>
 <template>
-
-  <div class="w-[380px] h-[470px] relative cursor-pointer">
-    <div class="w-[380px] h-[300px]">
-
+  <div class="h-[470px] relative cursor-pointer">
+    <div class="h-[300px]">
       <img
         src="@/assets/img/exImage/sports.svg"
         class="w-full h-full rounded-[20px] object-cover space-y-0.5"
@@ -39,7 +37,7 @@ const hoverHandler = () => {
       <transition name="fade">
         <div
           v-if="hovered"
-          class="w-[380px] h-[440px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+          class="w-full h-full rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
         >
           <!-- 배경용 블러 -->
           <div class="absolute inset-0 bg-black opacity-70 blur-xs rounded-[20px] z-0"></div>
