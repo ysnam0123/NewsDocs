@@ -15,11 +15,13 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: { hideHeader: true, hideFooter: true },
     },
     {
       path: '/signup',
       name: 'signup',
       component: SignUpView,
+      meta: { hideHeader: true, hideFooter: true },
     },
     {
       path: '/about',
