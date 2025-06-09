@@ -1,6 +1,8 @@
 <script setup></script>
 <template>
-  <div class="flex flex-col h-[792px] border-1 border-[#e0e0e0] rounded-[18px] px-[32px] pt-[28px]">
+  <div
+    class="flex flex-col text-[var(--text-title)] h-[792px] border-1 border-[#e0e0e0] rounded-[18px] px-[32px] pt-[28px]"
+  >
     <!-- 이미지가 있는 기사 -->
     <div class="flex gap-[20px] w-[496px] h-[151px] mb-[20px]">
       <img

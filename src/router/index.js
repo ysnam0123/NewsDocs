@@ -10,12 +10,19 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { hideHeader: true, hideFooter: true },
+      meta: {
+        hideHeader: true,
+        hideFooter: true,
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/signup',
@@ -23,30 +30,45 @@ const router = createRouter({
       component: SignUpView,
       meta: { hideHeader: true, hideFooter: true },
     },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-    },
+    // {
+    //   path: '/about',
+    //   name: 'about',
+    //   component: () => import('../views/AboutView.vue'),
+    //   meta: {
+    //     hideHeaderBasic: true,
+    //   },
+    // },
     {
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/ProfileView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/profile/:id',
       name: 'UserProfile',
       component: () => import('../views/profile/ProfileView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/profile/edit',
       name: 'ProfileEdit',
       component: () => import('../views/profile/ProfileEditView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/profile/news',
       name: 'ProfileNews',
       component: () => import('../views/profile/ProfileNewsView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/profile/write',
@@ -54,16 +76,16 @@ const router = createRouter({
       component: () => import('../views/profile/ProfileWriteView.vue'),
     },
     {
-      path: '/chooseinterest',
-      name: 'chooseinterest',
+      path: '/interest',
+      name: 'interest',
       component: () => import('../views/ChooseInterest.vue'),
       meta: {
         hideHeader: true,
       },
     },
     {
-      path: '/choosefavorite',
-      name: 'choosefavorite',
+      path: '/favoriteinterest',
+      name: 'favoriteinterest',
       component: () => import('../views/FavoriteInterest.vue'),
       meta: {
         hideHeader: true,
@@ -73,6 +95,9 @@ const router = createRouter({
       path: '/myinterest',
       name: 'myInterest',
       component: () => import('../views/MyInterest.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/news',
@@ -81,6 +106,7 @@ const router = createRouter({
       meta: {
         hideHeader: false,
         hideFooter: true,
+        hideHeaderBasic: true,
       },
       children: [
         {
@@ -92,6 +118,7 @@ const router = createRouter({
           path: 'detail',
           name: 'newsDetail',
           component: () => import('../views/newsDetail/NewsDetailView.vue'),
+          // props: true,
         },
       ],
     },
@@ -99,11 +126,17 @@ const router = createRouter({
       path: '/community',
       name: 'community',
       component: () => import('../views/community/CommunityListView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
     {
       path: '/community/:id',
       name: 'communityDetail',
       component: () => import('../views/community/CommunityDetailView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
     },
   ],
   scrollBehavior() {

@@ -18,13 +18,20 @@ const scrollToTop = () => {
   <div class="mx-auto max-w-[1240px] pt-[50px]">
     <!-- 섹션 1: 스포츠 -->
     <div class="section1 mb-[44px]">
-      <!-- 스포츠 제목 -->
-      <div class="flex items-center gap-[20px] font-semibold mb-[30px] select-none">
+      <!-- 제목 -->
+      <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
         <h1 class="flex gap-[10px] items-center">
-          <img src="../assets/icons/sportsIcon.svg" alt="sportsIcon" />
-          <p class="text-[30px] font-bold">스포츠</p>
+          <img src="../assets/icons/sportsIcon.svg" alt="politics" />
+          <p class="text-[30px] text-[var(--text-title)] font-bold">스포츠</p>
         </h1>
-        <h2 class="text-[#7A4EdF] text-[16px]">내가 가장 관심있는</h2>
+        <div class="flex">
+          <h2 class="text-[var(--text-sub-purple)] text-[16px]">내가 가장 관심있는</h2>
+        </div>
+        <div class="ml-auto cursor-pointer">
+          <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+            더보기
+          </h3>
+        </div>
       </div>
       <div class="flex gap-[40px] mb-[50px]">
         <div class="flex gap-[20px]">
@@ -46,8 +53,10 @@ const scrollToTop = () => {
       </div>
     </div>
     <!-- 섹션 2 : 커뮤니티로 접근 -->
-    <div class="rounded-[24px] bg-[#F8F8F8] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]">
-      <h1 class="text-[30px] font-bold mb-[32px] select-none">
+    <div
+      class="rounded-[24px] bg-[var(--section-contents-bg)] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]"
+    >
+      <h1 class="text-[30px] text-[var(--text-title)] font-bold mb-[32px] select-none">
         나의 관심사에 대해 사람들과 이야기해보세요!
       </h1>
       <div class="flex flex-row justify-between gap-[24px]">
@@ -67,13 +76,15 @@ const scrollToTop = () => {
       <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
         <h1 class="flex gap-[10px] items-center">
           <img src="../assets/icons/politicsIcon.svg" alt="politics" />
-          <p class="text-[30px] font-bold">정치</p>
+          <p class="text-[30px] text-[var(--text-title)] font-bold">정치</p>
         </h1>
         <div class="flex">
-          <h2 class="text-[#7A4EdF] text-[16px]">나의 관심사</h2>
+          <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
         </div>
         <div class="ml-auto cursor-pointer">
-          <h3 class="text-[16px] text-[#191919] underline font-medium select-none">더보기</h3>
+          <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+            더보기
+          </h3>
         </div>
       </div>
       <div class="flex gap-[24px] overflow-x-scroll">
@@ -92,13 +103,15 @@ const scrollToTop = () => {
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
             <img src="../assets/icons/entertainmentIcon.svg" alt="politics" />
-            <p class="text-[30px] font-bold">연예</p>
+            <p class="text-[30px] text-[var(--text-title)] font-bold">연예</p>
           </h1>
           <div class="flex">
-            <h2 class="text-[#7A4EdF] text-[16px]">나의 관심사</h2>
+            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
           </div>
           <div class="ml-auto cursor-pointer">
-            <h3 class="text-[16px] text-[#191919] underline font-medium select-none">더보기</h3>
+            <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+              더보기
+            </h3>
           </div>
         </div>
         <div class="flex flex-wrap gap-[24px] h-[792px]">
@@ -115,10 +128,10 @@ const scrollToTop = () => {
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
             <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
-            <p class="text-[30px] font-bold">오늘의 핫 독스</p>
+            <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
           </h1>
           <div class="flex">
-            <h2 class="text-[#7A4EdF] text-[16px]">세상은 지금</h2>
+            <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
           </div>
         </div>
         <HotDocsComponent />
@@ -132,13 +145,15 @@ const scrollToTop = () => {
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
             <img src="../assets/icons/economyIcon.svg" alt="economy" />
-            <p class="text-[30px] font-bold">경제</p>
+            <p class="text-[30px] text-[var(--text-title)] font-bold">경제</p>
           </h1>
           <div class="flex">
-            <h2 class="text-[#7A4EdF] text-[16px]">나의 관심사</h2>
+            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
           </div>
           <div class="ml-auto cursor-pointer">
-            <h3 class="text-[16px] text-[#191919] underline font-medium select-none">더보기</h3>
+            <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+              더보기
+            </h3>
           </div>
         </div>
         <div class="flex flex-col gap-[15px]">
@@ -151,14 +166,16 @@ const scrollToTop = () => {
         <!-- 제목 -->
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
-            <img src="../assets/icons/economyIcon.svg" alt="economy" />
-            <p class="text-[30px] font-bold">경제</p>
+            <img src="../assets/icons/cultureIcon.svg" alt="economy" />
+            <p class="text-[30px] text-[var(--text-title)] font-bold">문화</p>
           </h1>
           <div class="flex">
-            <h2 class="text-[#7A4EdF] text-[16px]">나의 관심사</h2>
+            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
           </div>
           <div class="ml-auto cursor-pointer">
-            <h3 class="text-[16px] text-[#191919] underline font-medium select-none">더보기</h3>
+            <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+              더보기
+            </h3>
           </div>
         </div>
         <div class="flex flex-col gap-[15px]">
@@ -173,13 +190,15 @@ const scrollToTop = () => {
       <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
         <h1 class="flex gap-[10px] items-center">
           <img src="../assets/icons/worldIcon.svg" alt="world" />
-          <p class="text-[30px] font-bold">해외</p>
+          <p class="text-[30px] text-[var(--text-title)] font-bold">해외</p>
         </h1>
         <div class="flex">
-          <h2 class="text-[#7A4EdF] text-[16px]">나의 관심사</h2>
+          <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
         </div>
         <div class="ml-auto cursor-pointer">
-          <h3 class="text-[16px] text-[#191919] underline font-medium select-none">더보기</h3>
+          <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+            더보기
+          </h3>
         </div>
       </div>
       <div class="flex flex-col gap-[15px]">

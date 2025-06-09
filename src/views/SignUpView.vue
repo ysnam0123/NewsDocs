@@ -4,7 +4,10 @@ import { useThemeStore } from '@/stores/useDarkmode'
 import supabase from '@/utils/supabase'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { toast } from 'vue3-toastify'
+
+//토스트 메시지 팝업
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const email = ref('')
 const name = ref('')
@@ -12,12 +15,15 @@ const nickname = ref('')
 const password = ref('')
 const passwordCheck = ref('')
 
-const errorMsg = ref('')
 const nicknameError = ref('')
 const emailError = ref('')
 const nameError = ref('')
 const passwordError = ref('')
 const passwordCheckError = ref('')
+
+//중복 체크 결과
+const isEmailAvailable = ref(false)
+const isNicknameAvailable = ref(false)
 
 const router = useRouter()
 const authStore = userAuthStore()
@@ -46,12 +52,14 @@ function validateName() {
   }
 }
 
-function validateNickName() {
+async function validateNickName() {
   const nicknamePattern = /^[A-Za-z0-9가-힣]{2,8}$/
   if (!nickname.value) {
     nicknameError.value = '닉네임을 입력해주세요.'
   } else if (!nicknamePattern.test(nickname.value)) {
     nicknameError.value = '특수문자, 공백 제외 2~8글자로 입력해주세요.'
+  } else if (/^\d+$/.test(nickname.value)) {
+    nicknameError.value = '영문이나 한글을 포함해 주세요.'
   } else {
     nicknameError.value = ''
   }
@@ -78,7 +86,43 @@ function validatePasswordCheck() {
   }
 }
 
-//input 값 변경시 검증 실행
+//이메일 중복 확인
+async function checkEmailDuplicate() {
+  validateEmail()
+  if (emailError.value) return
+  const { data } = await supabase
+    .from('profiles')
+    .select('email')
+    .eq('email', email.value)
+    .maybeSingle()
+  if (data) {
+    emailError.value = '이미 등록된 이메일입니다.'
+    isEmailAvailable.value = false
+  } else {
+    emailError.value = ''
+    isEmailAvailable.value = true
+  }
+}
+
+//닉네임 중복 확인
+async function checkNicknameDuplicate() {
+  validateNickName()
+  if (nicknameError.value) return
+  const { data } = await supabase
+    .from('profiles')
+    .select('nickname')
+    .eq('nickname', nickname.value)
+    .maybeSingle()
+  if (data) {
+    nicknameError.value = '이미 등록된 닉네임입니다.'
+    isNicknameAvailable.value = false
+  } else {
+    nicknameError.value = ''
+    isNicknameAvailable.value = true
+  }
+}
+
+//input값 변경시 검증 실행
 watch(email, () => validateEmail())
 watch(name, () => validateName())
 watch(nickname, () => validateNickName())
@@ -87,22 +131,26 @@ watch(passwordCheck, () => validatePasswordCheck())
 
 //회원 가입 post - superbase연동
 async function onSignUp() {
+  //제출 전 검증
   validateEmail()
   validateName()
   validateNickName()
   validatePassword()
   validatePasswordCheck()
 
+  // 중복 체크 상태 확인
   if (
-    emailError.value ||
+    !isEmailAvailable.value ||
+    !isNicknameAvailable.value ||
     nameError.value ||
-    nicknameError.value ||
     passwordError.value ||
     passwordCheckError.value
   ) {
+    toast.error('문제가 발생하였습니다.')
     return
   }
 
+  // Supabase 회원가입
   const { data, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
@@ -115,19 +163,23 @@ async function onSignUp() {
   })
 
   if (error) {
-    errorMsg.value = error.message
+    toast.error('회원가입에 문제가 발생했습니다: ' + error.message)
     return
   }
-  toast.success('회원가입이 완료되었습니다. 이메일을 확인해주세요.')
-  router.push('/login')
+
+  authStore.setUser(data.user)
+  toast('회원가입이 완료되었습니다. 이메일을 확인해주세요!')
+  setTimeout(() => {
+    router.push('/login')
+  }, 1200)
 }
 
 //회원가입 버튼 비활성화
 const isDisabled = computed(
   () =>
-    emailError.value ||
+    !isEmailAvailable.value ||
+    !isNicknameAvailable.value ||
     nameError.value ||
-    nicknameError.value ||
     passwordError.value ||
     passwordCheckError.value ||
     !email.value ||
@@ -172,11 +224,16 @@ const isDisabled = computed(
                 required
                 :class="[
                   'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
-                  emailError ? 'border-[#F34040] ' : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
+                  emailError
+                    ? 'border-[#F34040]'
+                    : isEmailAvailable
+                      ? 'border-[#00D62B]'
+                      : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
                 ]"
               />
               <button
                 type="button"
+                @click="checkEmailDuplicate"
                 class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer dark:text-[#B185FF] dark:border-[#B185FF] dark:hover:border-[#6524D9] dark:hover:bg-[#6524D9] hover:dark:text-white transition-all duration-300"
               >
                 확인
@@ -184,6 +241,12 @@ const isDisabled = computed(
             </div>
             <p v-if="emailError" class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]">
               {{ emailError }}
+            </p>
+            <p
+              v-else-if="isEmailAvailable"
+              class="text-[#00D62B] text-[11px] mt-[6px] ml-1 leading-[1.5]"
+            >
+              사용 가능한 이메일입니다.
             </p>
           </div>
         </div>
@@ -222,11 +285,16 @@ const isDisabled = computed(
                 required
                 :class="[
                   'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
-                  nicknameError ? 'border-[#F34040] ' : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
+                  nicknameError
+                    ? 'border-[#F34040]'
+                    : isNicknameAvailable
+                      ? 'border-[#00D62B]'
+                      : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
                 ]"
               />
               <button
                 type="button"
+                @click="checkNicknameDuplicate"
                 class="w-[51px] h-[28px] text-[#7537e3] text-[13px] rounded-[6px] border font-medium border-[#7537e3] absolute top-1/2 -translate-y-1/2 right-[10px] cursor-pointer dark:text-[#B185FF] dark:border-[#B185FF] dark:hover:border-[#6524D9] dark:hover:bg-[#6524D9] hover:dark:text-white transition-all duration-300"
               >
                 확인
@@ -234,6 +302,12 @@ const isDisabled = computed(
             </div>
             <p v-if="nicknameError" class="text-[#F34040] text-[11px] mt-[6px] ml-1 leading-[1.5]">
               {{ nicknameError }}
+            </p>
+            <p
+              v-else-if="isNicknameAvailable"
+              class="text-[#00D62B] text-[11px] mt-[6px] ml-1 leading-[1.5]"
+            >
+              사용 가능한 닉네임입니다.
             </p>
           </div>
         </div>

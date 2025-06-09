@@ -47,7 +47,7 @@ import ViewCount from '@/components/icon/viewCount.vue'
         요약보기
       </button>
       <div
-        class="relative w-fit bg-[#EFEFEF] text-[#282828] px-4 mr-2 pt-2 rounded-sm items-center justify-center"
+        class="bounce relative w-fit bg-[#EFEFEF] text-[#282828] px-4 mr-2 pt-2 rounded-sm items-center justify-center"
       >
         뉴스독이 기사를 세 줄로 요약해드려요!
         <div class="absolute -left-1 top-3 w-4 h-4 bg-[#EFEFEF] rotate-45"></div>
@@ -64,7 +64,7 @@ import ViewCount from '@/components/icon/viewCount.vue'
       학자로, 이 대통령의 공약...
     </span>
     <button class="cursor-pointer mb-10 text-[#AEAEAE]">
-      <a :href="news.url" target="_blank">원문보기</a>
+      <a href="news.url" target="_blank">원문보기</a>
     </button>
     <hr class="text-gray-200 dark:text-[#282828]" />
     <CommunityRecommend />
@@ -73,3 +73,16 @@ import ViewCount from '@/components/icon/viewCount.vue'
     <p>로딩중...</p>
   </section> -->
 </template>
+<style scoped>
+.bounce {
+  animation: 0.5s linear 0s infinite alternate bounce;
+}
+@keyframes bounce {
+  from {
+    transform: translateY(-0.3vh);
+  }
+  to {
+    transform: translateY(0vh);
+  }
+}
+</style>

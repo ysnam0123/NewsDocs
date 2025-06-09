@@ -6,14 +6,14 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const isDetailPage = computed(() => route.name === 'newsDetail')
+const isDetailPage = computed(() => route.path.includes('/news/detail'))
 </script>
 <template>
   <div class="mx-auto max-w-[1240px] flex justify-between">
     <aside>
       <BackButton v-if="isDetailPage" />
     </aside>
-    <div class="flex flex-1">
+    <div :class="[isDetailPage ? 'flex flex-1' : '']">
       <router-view />
     </div>
     <aside class="w-[307px]">

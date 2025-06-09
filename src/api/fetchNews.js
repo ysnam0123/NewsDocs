@@ -1,25 +1,22 @@
 import axios from 'axios'
 
-// 국내 뉴스 불러오기
-export const fetchKoreanNewsData = async (keyword) => {
-  const res = await axios.get('https://newsdata.io/api/1/news', {
-    params: {
-      apikey: import.meta.env.VITE_NEWSDATA_API_KEY,
-      q: keyword,
-      language: 'ko',
-    },
-  })
-  return res.data.results.slice(0, 10)
+// 뉴스 불러오기
+export const fetchNewsData = async (keywords, language) => {
+  try {
+    const res = await axios.get('https://newsdata.io/api/1/news', {
+      params: {
+        apikey: import.meta.env.VITE_NEWSDATA_API_KEY,
+        q: keywords,
+        language,
+      },
+    })
+    const results = res.data?.results || []
+    return results.slice(0, 10)
+  } catch (e) {
+    console.error(e)
+    return []
+  }
 }
 
-// 해외 뉴스 불러오기
-export const fetchForeignNews = async (keyword) => {
-  const res = await axios.get('https://newsdata.io/api/1/news', {
-    params: {
-      apikey: import.meta.env.VITE_NEWSDATA_API_KEY,
-      q: keyword,
-      language: 'en',
-    },
-  })
-  return res.data.results.slice(0, 10)
-}
+export const fetchKoreanData = (keyword) => fetchNewsData(keyword, 'ko')
+export const fetchForeignData = (keyword) => fetchNewsData(keyword, 'en')

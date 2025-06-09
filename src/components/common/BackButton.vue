@@ -14,7 +14,7 @@ const goBackHandler = () => {
         class="w-10 h-10 relative flex items-center justify-center bg-[#f6f6f6] dark:bg-[#363636] hover:bg-[#ededed] dark:hover:bg-[#4A4A4A] transition duration-300 rounded-full mr-2.5"
         @click="goBackHandler"
       >
-        <ChevronLeft class="text-[#161616] dark:text-white" />
+        <ChevronLeft class="text-[#161616] dark:text-white" stroke-width="1" />
       </div>
       <span class="flex text-md items-center justify-center text-[#191919] dark:text-white"
         >돌아가기</span
