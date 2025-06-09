@@ -13,7 +13,7 @@ const count = ref(20)
       <div class="absolute w-[415px] bottom-0">
         <div class="relative text-center inline-block ml-8">
           <p class="inset-0 flex text-white text-xs mb-1.5">#스포츠</p>
-          <p class="text-white text-2xl text-left font-medium w-[520px] break-words">
+          <p class="text-white font-semibold text-2xl text-left w-[520px] break-words">
             토트넘, 맨유 꺾고 유로파 우승… 손흥민, 무관의 한 풀었다 (종합2보)
           </p>
         </div>

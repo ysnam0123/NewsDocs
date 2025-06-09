@@ -11,9 +11,9 @@ import ScrapImg from './children/ScrapImg.vue'
     <div class="flex flex-col max-h-[260px]">
       <!-- 기사 -->
       <div class="w-[211px] relative flex flex-col mb-[14px]">
-        <div class="font-bold text-[18px] max-h-[58px]">
+        <h2 class="text-[18px] max-h-[58px] dark:text-white">
           손흥민 유로파 리그 우승, 다음 행보는 어디일까요??
-        </div>
+        </h2>
         <div class="text-[#A8A8A8] text-[14px] pt-0.5 max-h-[48px]">
           기사내용입니다.기사내용입니다.기사내용...기사내용입니다.기사내용입니다.
         </div>
@@ -29,7 +29,7 @@ import ScrapImg from './children/ScrapImg.vue'
         </div>
       </div>
     </div>
-    <ScrapImg class="absolute right-[-5px] top-[-8px]" />
+    <ScrapImg class="absolute top-0 right-0" />
   </div>
 </template>
 <style scoped></style>
