@@ -58,6 +58,8 @@ async function validateNickName() {
     nicknameError.value = '닉네임을 입력해주세요.'
   } else if (!nicknamePattern.test(nickname.value)) {
     nicknameError.value = '특수문자, 공백 제외 2~8글자로 입력해주세요.'
+  } else if (/^\d+$/.test(nickname.value)) {
+    nicknameError.value = '영문이나 한글을 포함해 주세요.'
   } else {
     nicknameError.value = ''
   }
