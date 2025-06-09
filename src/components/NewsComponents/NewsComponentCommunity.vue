@@ -8,7 +8,7 @@
         <img src="@/assets/img/exImage/userImg.svg" alt="userImg" class="w-[40px] h-[40px]" />
         <p class="text-[var(--text-title)] text-[16px] font-semibold">혁신적인 돼지</p>
       </div>
-      <p class="text-[#7537E3] text-[16px] ml-auto">#스포츠</p>
+      <p class="text-[#7537E3] dark:text-[#A878FD] text-[16px] ml-auto">#스포츠</p>
     </div>
     <div class="text-[var(--text-title)] text-[16px] max-w-[310px] max-h-[107] mb-[9px]">
       아니 나는 이강인이 결승전만큼은 뛰었으면 좋겠다고 생각했는데 진짜 너무아쉽다. 다음에는 꼭 더

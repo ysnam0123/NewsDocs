@@ -24,6 +24,7 @@ const summarizeHandler = () => {
     </div>
     <div class="flex flex-col max-h-[260px]">
       <!-- 기사 -->
+
       <div class="w-[211px] relative flex flex-col mb-[10px]">
         <div class="text-[var(--text-title)] font-bold text-[18px] max-h-[58px]">
           손흥민 유로파 리그 우승, 다음 행보는 어디일까요??
@@ -43,6 +44,7 @@ const summarizeHandler = () => {
         </div>
       </div>
     </div>
+
     <ScrapNotOnImg class="absolute right-[4px] top-[2px] z-20" />
     <!-- 호버했을때 나오는 창 -->
     <div
@@ -78,6 +80,7 @@ const summarizeHandler = () => {
         </div>
       </div>
     </transition>
+    >>>>>>> dev
   </div>
 </template>
 <style scoped>

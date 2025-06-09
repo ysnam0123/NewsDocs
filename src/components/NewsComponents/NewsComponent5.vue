@@ -26,10 +26,10 @@ const summarizeHandler = () => {
       <div class="font-bold text-[18px] w-[272px] text-[var(--text-title)]">
         트럼프, “나는 미국에 자신이 없어 발언.. 수많은 미국인들 자괴감에 빠져”
       </div>
-      <div class="text-sm text-[var(--text-content)] w-[237px]">
+      <span class="text-sm text-[var(--text-content)] w-[237px]">
         트럼프가 양심없는 발언을 하여 논란이 되었다. 이날 트럼프는 미국은 평균 이하라며 말도 안되는
         소리를 연이어 토해내어...
-      </div>
+      </span>
       <!-- 좋아요 박스 -->
       <div class="flex gap-[8px]">
         <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
