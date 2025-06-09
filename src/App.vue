@@ -5,6 +5,5 @@ import DefaultLayout from './layout/DefaultLayout.vue'
   <DefaultLayout>
     <RouterView />
   </DefaultLayout>
-  >>>>>>> dev
 </template>
 <style scoped></style>
