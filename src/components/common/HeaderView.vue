@@ -20,11 +20,20 @@ const movePage = (path) => {
 const changeInterest = () => {
   route.push('/interest')
 }
+
+const gotohome = () => {
+  route.push('/myinterest')
+}
 </script>
 <template>
   <div class="w-[1240px] mx-auto py-[0px] flex items-center h-[100px]">
     <div class="flex items-center gap-[10px] cursor-pointer">
-      <img :src="themeStore.isDark ? logoWhite : logo" alt="logoImg" class="w-[202px] h-11.5" />
+      <img
+        :src="themeStore.isDark ? logoWhite : logo"
+        alt="logoImg"
+        class="w-[202px] h-11.5"
+        @click="gotohome"
+      />
     </div>
     <div class="ml-[56px]">
       <ul class="flex gap-[32px] select-none">

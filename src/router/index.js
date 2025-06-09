@@ -30,16 +30,15 @@ const router = createRouter({
       component: SignUpView,
       meta: { hideHeader: true, hideFooter: true },
     },
+    // {
+    //   path: '/about',
+    //   name: 'about',
+    //   component: () => import('../views/AboutView.vue'),
+    //   meta: {
+    //     hideHeaderBasic: true,
+    //   },
+    // },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-      meta: {
-        hideHeaderBasic: true,
-      },
-    },
-    {
-
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/ProfileView.vue'),
