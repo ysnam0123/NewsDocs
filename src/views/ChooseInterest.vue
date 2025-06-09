@@ -1,25 +1,37 @@
 <script setup>
+import InterestCard from '@/components/interest/InterestCard.vue'
 import { useInterestStore } from '@/stores/interestStore'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import politicsIcon from '@/assets/icons/politicsIcon.svg'
+import sportsIcon from '@/assets/icons/sportsIcon.svg'
+import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
+import cultureIcon from '@/assets/icons/cultureIcon.svg'
+import worldIcon from '@/assets/icons/worldIcon.svg'
+import societyIcon from '@/assets/icons/societyIcon.svg'
+import economyIcon from '@/assets/icons/economyIcon.svg'
+import etcIcon from '@/assets/icons/etcIcon.svg'
+
 const store = useInterestStore()
 
-const addInterest = (e) => {
-  const interest = e.target.innerText
-  if (store.interest.includes(interest)) {
-    store.interest = store.interest.filter((item) => item != interest)
-    console.log(`${interest}가 삭제됨!`)
+const addInterest = (item) => {
+  // 관심사가 이미 선택되어있는지 확인
+  const selectedInterest = store.interest.some((interest) => interest.id === item.id)
+  // 이미 선택된거 -> 제거
+  if (selectedInterest) {
+    store.interest = store.interest.filter((interest) => interest.id !== item.id)
+    console.log(`${item.id}가 삭제됨!`)
   } else {
-    store.interest.push(interest)
-    console.log(`${interest}가 추가됨!`)
+    // 선택되지 않은건 상태에 저장
+    store.interest.push(item)
   }
   console.log(store.interest)
 }
 
 const router = useRouter()
 const chooseFavorite = () => {
-  router.push('/choosefavorite')
+  router.push('/favoriteinterest')
 }
 const pageMounted = ref(false)
 onMounted(() => {
@@ -27,114 +39,80 @@ onMounted(() => {
     pageMounted.value = true
   }, 300)
 })
+
+const interests = [
+  { id: 'politics', label: '정치', icon: politicsIcon },
+  { id: 'sports', label: '스포츠', icon: sportsIcon },
+  { id: 'entertain', label: '연예', icon: entertainmentIcon },
+  { id: 'culture', label: '문화', icon: cultureIcon },
+  { id: 'aboard', label: '해외', icon: worldIcon },
+  { id: 'society', label: '사회', icon: societyIcon },
+  { id: 'economy', label: '경제', icon: economyIcon },
+  { id: 'etc', label: '그 외', icon: etcIcon },
+]
 </script>
 <template>
   <transition name="fade">
-    <div v-if="pageMounted" class="w-[50%] m-auto mt-[5%]">
-      <div class="flex items-center gap-[50px] mb-[130px]">
-        <img src="../assets/icons/newspaperDog.svg" alt="newsPaperDog" class="w-[120px]" />
-        <h1 class="text-[30px] font-bold">
-          당신의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요 (최소 3개)
-        </h1>
-      </div>
-      <div>
-        <div class="interestRow">
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('정치') }"
-            @click="addInterest"
-          >
-            정치
-          </div>
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('스포츠') }"
-            @click="addInterest"
-          >
-            스포츠
-          </div>
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('연예') }"
-            @click="addInterest"
-          >
-            연예
-          </div>
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('문화') }"
-            @click="addInterest"
-          >
-            문화
+    <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
+      <div class="flex flex-col w-[444px] h-[399px]">
+        <div class="flex gap-[50px] mb-[24px]">
+          <h1 class="text-[18px] font-bold">
+            OO님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
+            <span class="text-[#8b8b8b] text-[14px] font-medium">(최소 3개)</span>
+          </h1>
+        </div>
+        <div>
+          <div class="flex flex-col w-[444px] justify-center items-center gap-[12px]">
+            <div class="flex flex-col gap-[12px]">
+              <div class="flex gap-[12px]">
+                <InterestCard
+                  v-for="item in interests.slice(0, 4)"
+                  :key="item.id"
+                  :id="item.id"
+                  :label="item.label"
+                  :icon="item.icon"
+                  :isSelected="store.interest.some((interest) => interest.id === item.id)"
+                  @select="addInterest"
+                />
+              </div>
+              <div class="flex gap-[12px]">
+                <InterestCard
+                  v-for="item in interests.slice(4)"
+                  :key="item.id"
+                  :id="item.id"
+                  :label="item.label"
+                  :icon="item.icon"
+                  :isSelected="store.interest.some((interest) => interest.id === item.id)"
+                  @select="addInterest"
+                />
+              </div>
+            </div>
           </div>
         </div>
-        <div class="interestRow">
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('해외') }"
-            @click="addInterest"
-          >
-            해외
-          </div>
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('사회') }"
-            @click="addInterest"
-          >
-            사회
-          </div>
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('경제') }"
-            @click="addInterest"
-          >
-            경제
-          </div>
-          <div
-            class="interest"
-            :class="{ clicked: store.interest.includes('그 외') }"
-            @click="addInterest"
-          >
-            그 외
-          </div>
-        </div>
-      </div>
-      <transition name="fade">
+
         <button
-          v-if="store.interest.length >= 3"
-          class="flex items-center justify-center w-[150px] h-[55px] text-xl font-bold mt-[200px] ml-auto border-2 border-[black] rounded-2xl hover:text-[#7537E3] cursor-pointer ease-in-out duration-200 hover:scale-[1.025]"
+          :disabled="store.interest.length < 3"
+          :class="[
+            'flex items-center justify-center w-[140px] h-[50px] text-[16px] font-semibold mt-[40px] rounded-[8px] ml-auto cursor-pointer ease-in-out duration-200 hover:scale-[1.025]',
+            store.interest.length >= 3
+              ? 'bg-[#7537e3] text-white'
+              : 'bg-[#f2f2f2] text-[#b3b3b3] cursor-not-allowed',
+          ]"
           @click="chooseFavorite"
         >
           다음
         </button>
-      </transition>
+      </div>
     </div>
   </transition>
 </template>
 <style scoped>
-.interest {
-  width: 186px;
-  background-color: #f8f4ff;
-  /* color: #727070; */
-  font-size: 30px;
-  text-align: center;
-  padding: 10px 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.interest:hover {
-  background-color: #e3daf4;
-}
-.interestRow {
-  display: flex;
-  gap: 70px;
-  margin-bottom: 75px;
-}
 .clicked {
-  background-color: #7537e3;
-  color: white;
-  font-weight: 700;
+  background-color: #f5f2fa;
+  border: 1px solid #7537e3;
+}
+.clicked:hover {
+  background-color: #ede4fd;
 }
 
 @keyframes fadeIn {
