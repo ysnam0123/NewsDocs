@@ -21,6 +21,10 @@ import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCom
 const newsList = ref([])
 const categories = ref(['전체', '정치', '경제', '사회', '문화', '스포츠', '연예', '해외'])
 const activeCategory = ref('전체')
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 // const router = useRouter()
 // const handleFetchAndSave = async () => {
 //   const KoreanNews = await fetchKoreanNewsData('연예')
@@ -197,6 +201,14 @@ onMounted(async () => {
           글쓰러 가기
         </button>
       </div>
+    </div>
+    <div>
+      <img
+        src="@/assets/icons/moveToTop.svg"
+        alt="move to top Button"
+        class="cursor-pointer fixed bottom-0 right-[30px]"
+        @click="scrollToTop"
+      />
     </div>
   </section>
 </template>
