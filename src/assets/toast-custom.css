@@ -1,0 +1,8 @@
+.Vue-Toastification__toast {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  border-radius: 8px;
+  background: #191919;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}

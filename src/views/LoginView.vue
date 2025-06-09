@@ -77,7 +77,7 @@ function onLogin() {
               v-model="password"
               placeholder=""
               required
-              class="peer w-[360px] h-[61px] text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border dark:border-[#4D4D4D]"
+              class="peer w-[360px] h-[61px] text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
             />
             <label
               class="absolute left-[16px] top-[12px] text-[#BDBDBD] text-[12px] transition-all duration-200 pointer-events-none origin-[0] peer-focus:top-[12px] peer-focus:text-[12px] peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-[20px]"
