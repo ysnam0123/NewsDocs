@@ -64,7 +64,7 @@ import ViewCount from '@/components/icon/viewCount.vue'
       학자로, 이 대통령의 공약...
     </span>
     <button class="cursor-pointer mb-10 text-[#AEAEAE]">
-      <a :href="news.url" target="_blank">원문보기</a>
+      <a href="news.url" target="_blank">원문보기</a>
     </button>
     <hr class="text-gray-200 dark:text-[#282828]" />
     <CommunityRecommend />
