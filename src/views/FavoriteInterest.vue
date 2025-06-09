@@ -39,16 +39,29 @@ const addFavorite = (item) => {
         </h1>
 
         <!-- 카드 -->
-        <div class="flex flex-wrap justify-center gap-[12px]">
-          <InterestCard
-            v-for="item in store.interest"
-            :key="item.id"
-            :id="item.id"
-            :label="item.label"
-            :icon="item.icon"
-            :isSelected="store.favoriteInterest === item.id"
-            @select="addFavorite"
-          />
+        <div class="flex flex-col flex-wrap justify-center gap-[12px]">
+          <div class="flex gap-[12px]">
+            <InterestCard
+              v-for="item in store.interest.slice(0, 4)"
+              :key="item.id"
+              :id="item.id"
+              :label="item.label"
+              :icon="item.icon"
+              :isSelected="store.favoriteInterest === item.id"
+              @select="addFavorite"
+            />
+          </div>
+          <div class="flex gap-[12px]">
+            <InterestCard
+              v-for="item in store.interest.slice(4)"
+              :key="item.id"
+              :id="item.id"
+              :label="item.label"
+              :icon="item.icon"
+              :isSelected="store.favoriteInterest === item.id"
+              @select="addFavorite"
+            />
+          </div>
         </div>
         <button
           :disabled="store.favoriteInterest === ''"
