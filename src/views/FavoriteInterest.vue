@@ -1,7 +1,7 @@
 <script setup>
+import InterestCard from '@/components/interest/InterestCard.vue'
 import { useInterestStore } from '@/stores/interestStore'
 import { onMounted, ref } from 'vue'
-import { toast } from 'vue3-toastify'
 
 const store = useInterestStore()
 
@@ -12,51 +12,57 @@ onMounted(() => {
   }, 500)
 })
 
-const addFavorite = (e) => {
-  const selectedCard = e.target.innerText
-  if (store.favoriteInterest === '') {
-    store.favoriteInterest = selectedCard
-    console.log(store.favoriteInterest)
-  } else if (store.favoriteInterest === selectedCard) {
-    store.favoriteInterest = ''
-    console.log('선택 취소됨!')
+const addFavorite = (item) => {
+  const selectedId = item.id
+  if (store.favoriteInterest !== '') {
+    if (store.favoriteInterest === selectedId) {
+      store.favoriteInterest = ''
+    } else {
+      console.log(`이미 선택됨!: ${store.favoriteInterest}`)
+      return
+    }
   } else {
-    toast.error('하나만 선택해주세요!', {
-      toastClassName: 'interestToastWrapper',
-      bodyClassName: 'interestToast',
-    })
-    return
+    store.favoriteInterest = selectedId
   }
+
+  console.log('현재 선택:', store.favoriteInterest)
 }
 </script>
 <template>
   <transition name="fade">
-    <div v-if="pageMounted" class="w-[50%] mt-[5%] m-auto">
-      <div class="flex items-center gap-[50px] mb-[130px]">
-        <img src="../assets/icons/newspaperDog.svg" alt="newsPaperDog" class="w-[120px]" />
-        <h1 class="text-[30px] font-bold">
-          당신의 <span class="text-[#7537E3]">최대 관심사</span>를 선택해주세요
+    <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
+      <div class="w-[444px] h-[284px]">
+        <!-- 제목 -->
+        <h1 class="text-[18px] font-semibold mb-[22px]">
+          마지막으로 00님의 <br />
+          <span class="text-[#7537E3]">최대 관심사</span>를 1개 선택해주세요
         </h1>
-      </div>
-      <div class="flex flex-wrap gap-[15px] justify-center">
-        <div
-          v-for="item in store.interest"
-          :key="item"
-          @click="addFavorite"
-          :class="{ selected: store.favoriteInterest === item }"
-          class="selectedInterest w-[200px] h-[200px] flex items-center justify-center bg-[#7537e3] rounded-2xl text-white text-[25px] font-bold"
-        >
-          {{ item }}
+
+        <!-- 카드 -->
+        <div class="flex flex-wrap justify-center gap-[12px]">
+          <InterestCard
+            v-for="item in store.interest"
+            :key="item.id"
+            :id="item.id"
+            :label="item.label"
+            :icon="item.icon"
+            :isSelected="store.favoriteInterest === item.id"
+            @select="addFavorite"
+          />
         </div>
-      </div>
-      <transition name="fade">
         <button
-          v-if="store.favoriteInterest"
-          class="flex items-center justify-center w-[210px] h-[60px] text-xl font-bold mt-[200px] ml-auto border-2 border-[black] rounded-2xl hover:text-[#7537E3] cursor-pointer ease-in-out duration-200 hover:scale-[1.025]"
+          :disabled="store.favoriteInterest === ''"
+          :class="[
+            'flex items-center justify-center w-[140px] h-[50px] text-[16px] font-semibold mt-[40px] rounded-[8px] ml-auto cursor-pointer ease-in-out duration-200 hover:scale-[1.025]',
+            store.favoriteInterest !== ''
+              ? 'bg-[#7537e3] text-white'
+              : 'bg-[#f2f2f2] text-[#b3b3b3] cursor-not-allowed',
+          ]"
+          @select="chooseFavorite"
         >
-          newsDocs 시작하기
+          다음
         </button>
-      </transition>
+      </div>
     </div>
   </transition>
 </template>

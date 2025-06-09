@@ -18,13 +18,18 @@ const scrollToTop = () => {
   <div class="mx-auto max-w-[1240px] pt-[50px]">
     <!-- 섹션 1: 스포츠 -->
     <div class="section1 mb-[44px]">
-      <!-- 스포츠 제목 -->
-      <div class="flex items-center gap-[20px] font-semibold mb-[30px] select-none">
+      <!-- 제목 -->
+      <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
         <h1 class="flex gap-[10px] items-center">
-          <img src="../assets/icons/sportsIcon.svg" alt="sportsIcon" />
+          <img src="../assets/icons/sportsIcon.svg" alt="politics" />
           <p class="text-[30px] font-bold">스포츠</p>
         </h1>
-        <h2 class="text-[#7A4EdF] text-[16px]">내가 가장 관심있는</h2>
+        <div class="flex">
+          <h2 class="text-[#7A4EdF] text-[16px]">내가 가장 관심있는</h2>
+        </div>
+        <div class="ml-auto cursor-pointer">
+          <h3 class="text-[16px] text-[#191919] underline font-medium select-none">더보기</h3>
+        </div>
       </div>
       <div class="flex gap-[40px] mb-[50px]">
         <div class="flex gap-[20px]">
@@ -151,8 +156,8 @@ const scrollToTop = () => {
         <!-- 제목 -->
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
-            <img src="../assets/icons/economyIcon.svg" alt="economy" />
-            <p class="text-[30px] font-bold">경제</p>
+            <img src="../assets/icons/cultureIcon.svg" alt="economy" />
+            <p class="text-[30px] font-bold">문화</p>
           </h1>
           <div class="flex">
             <h2 class="text-[#7A4EdF] text-[16px]">나의 관심사</h2>

@@ -1,31 +1,111 @@
 <script setup>
+import { ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
+
+const summaryHover = ref(false)
+const hoverHandler = () => {
+  summaryHover.value = true
+}
+const hoverOut = () => {
+  summaryHover.value = false
+}
+const wantSummary = ref(false)
+const summarizeHandler = () => {
+  wantSummary.value = !wantSummary.value
+}
 </script>
 <template>
   <div class="w-[300px] h-[385px] relative">
     <div class="w-[300px] h-[217px] mb-[16px]">
-      <img src="@/assets/img/exImage/ronaldo.svg" class="w-full h-full object-cover" />
+      <img
+        src="@/assets/img/exImage/ronaldo.svg"
+        class="w-full h-full object-cover"
+        @mouseover="hoverHandler"
+      />
     </div>
-    <div class="mb-[12px]">
+    <div class="mb-[12px] px-[10px]">
       <div class="text-xl font-bold mb-[10px] max-h-[56px]">
         폭탄 제안! 이 정도로 진심이다...호날두와 극적 재계약
       </div>
-      <div class="text-sm text-[#A8A8A8] max-h-[40px]">
+      <div class="text-sm text-[#A8A8A8] max-h-[40px] line-clamp-2 mb-[12px]">
         기사내용입니다. 기사내용입니다. 기사내용 인데 기사내용인데기사내용인데기사내용인데
         기사내용...
       </div>
-    </div>
-    <div class="flex gap-[8px] mb-[16px]">
-      <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-        <img src="@/assets/img/Thumbs-up-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
-        <p class="mt-[4px] text-[12px]">32</p>
+      <div class="flex gap-[8px] mb-[16px]">
+        <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
+          <img src="@/assets/img/Thumbs-up-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
+          <p class="mt-[4px] text-[12px]">32</p>
+        </div>
+        <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
+          <img src="@/assets/img/View-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
+          <p class="mt-[4px] text-[12px]">32</p>
+        </div>
       </div>
-      <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-        <img src="@/assets/img/View-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
-        <p class="mt-[4px] text-[12px]">32</p>
-      </div>
     </div>
-    <ScrapImg class="absolute right-[8px] top-[10px]" />
+    <!-- 호버했을때 나오는 창 -->
+    <div
+      v-show="!wantSummary"
+      v-if="summaryHover"
+      class="absolute w-[300px] h-[217px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      @click="summarizeHandler"
+      @mouseleave="hoverOut"
+    >
+      <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
+    </div>
+    <!-- 클릭했을 때 나오는 창 -->
+    <transition name="fade">
+      <div
+        v-if="wantSummary"
+        class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+      >
+        <!-- 배경용 블러 -->
+        <div class="absolute inset-0 bg-black/80 blur-xs rounded-[20px] z-30"></div>
+
+        <!-- 요약된 내용 -->
+        <div class="flex flex-col relative z-30 h-full">
+          <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
+          <ul class="text-white leading-8">
+            <li>해일의 높이는 2,000m</li>
+            <li>박은서, 기네스 기록 돒파</li>
+            <li>박은서, 세계대회 우승</li>
+          </ul>
+          <button
+            class="w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-auto ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+            @click="summarizeHandler"
+          >
+            원문보기
+          </button>
+        </div>
+      </div>
+    </transition>
+    <ScrapImg class="absolute right-[8px] top-[10px] z-25" />
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+.fade-enter-active {
+  animation: fadeIn 0.5s ease forwards;
+}
+.fade-leave-active {
+  animation: fadeOut 0.3s ease forwards;
+}
+</style>
