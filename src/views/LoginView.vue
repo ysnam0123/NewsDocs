@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useThemeStore } from '@/stores/useDarkmode'
+import supabase from '@/utils/supabase'
+import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
+import router from '@/router'
 
 const { toggleDark } = useThemeStore()
 
@@ -11,13 +15,31 @@ const isEmailValid = ref(true)
 
 const isLoginDisabled = computed(() => !(email.value && password.value))
 
+const toast = useToast()
+
 function validateEmail() {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   isEmailValid.value = emailPattern.test(email.value)
 }
 
-function onLogin() {
-  // 로그인 처리 로직 추가
+async function onLogin() {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  })
+
+  if (error) {
+    if (error.message.includes('Invalid login credentials')) {
+      toast('이메일 또는 비밀번호가 올바르지 않습니다.')
+    } else if (error.message.includes('Email not confirmed')) {
+      toast('이메일 인증이 완료되지 않았습니다. 메일을 확인하세요.')
+    } else {
+      toast('로그인에 실패했습니다.', { icon: false })
+    }
+    return
+  }
+
+  router.push('/')
 }
 </script>
 <template>

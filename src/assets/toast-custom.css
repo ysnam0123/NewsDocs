@@ -5,4 +5,31 @@
   background: #191919;
   color: #fff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  min-width: 160px;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 32px !important;
 }
+
+.Vue-Toastification__icon {
+  display: none;
+}
+
+.Vue-Toastification__close-button {
+  color: #fff !important;
+  opacity: 0.8;
+  font-size: 16px !important;
+  top: 12px;
+  right: 18px;
+  margin-left: 10px;
+}
+
+/* .Vue-Toastification__container.top-center {
+  top: 24px !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+} */

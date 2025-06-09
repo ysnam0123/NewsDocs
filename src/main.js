@@ -12,7 +12,8 @@ import { faHeart, faMessage } from '@fortawesome/free-regular-svg-icons'
 import { faMagnifyingGlass, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 import Toast from 'vue-toastification'
-import '@/assets/toast-custom.css'
+// import '@/assets/toast-custom.css'
+import 'vue-toastification/dist/index.css'
 
 library.add(faHeart, faMessage, faMagnifyingGlass, faCaretDown)
 
