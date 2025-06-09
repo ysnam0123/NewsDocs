@@ -43,7 +43,7 @@ const summarizeHandler = () => {
         </div>
       </div>
     </div>
-    <ScrapImg class="absolute right-[8px] top-[10px]" />
+    <ScrapImg class="absolute right-[8px] top-[10px] z-15" />
 
     <!-- 호버했을때 나오는 창 -->
     <div

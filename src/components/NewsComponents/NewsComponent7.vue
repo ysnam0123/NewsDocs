@@ -40,7 +40,7 @@ const summarizeHandler = () => {
         </div>
       </div>
     </div>
-    <ScrapImg class="absolute right-[5px] top-[0px]" />
+    <ScrapImg class="absolute right-[5px] top-[0px] z-15" />
     <!-- 호버했을때 나오는 창 -->
     <div
       v-show="!wantSummary"
