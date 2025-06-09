@@ -91,7 +91,7 @@ function onLogin() {
           :class="[
             'w-[360px] h-[50px] text-white text-[16px] font-semibold rounded-[10px] mx-[40px] transition-colors duration-300 ',
             isLoginDisabled
-              ? 'bg-[#B3B3B3] cursor-not-allowed'
+              ? 'bg-[#B3B3B3] cursor-not-allowed dark:bg-[#363636]'
               : 'bg-[#7537e3]  hover:bg-[#601ED5] cursor-pointer',
           ]"
         >
