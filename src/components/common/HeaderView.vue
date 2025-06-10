@@ -11,8 +11,8 @@ import profile from '@/assets/icons/profile.svg'
 import profileWhite from '@/assets/icons/profile-white.svg'
 
 const themeStore = useThemeStore()
-
 const route = useRouter()
+
 const movePage = (path) => {
   route.push(path)
 }
@@ -30,7 +30,9 @@ const seeNews = () => {
 }
 </script>
 <template>
-  <div class="w-[1240px] mx-auto py-[0px] flex items-center h-[100px]">
+  <div
+    class="max-w-[80%] mx-auto py-4 flex items-center md:h-[100px] h-[80px] bg-[var(--bg-color)] backdrop-blur-[28px]"
+  >
     <div class="flex items-center gap-[10px] cursor-pointer">
       <img
         :src="themeStore.isDark ? logoWhite : logo"
@@ -78,7 +80,7 @@ const seeNews = () => {
       <!-- 관심사 변경 -->
       <div class="cursor-pointer ml-[14px]">
         <button
-          class="cursor-pointer rounded-[8px] w-[96px] h-[41px] bg-[var(--GP-button-bg)] text-[var(--GP-button-text)] hover:bg-[var(--GP-button-hover)]"
+          class="cursor-pointer rounded-[8px] w-[96px] h-[41px] font-semibold bg-[var(--GP-button-bg)] text-[var(--GP-button-text)] hover:bg-[var(--GP-button-hover)]"
           @click="changeInterest"
         >
           관심사 수정
@@ -86,7 +88,7 @@ const seeNews = () => {
       </div>
 
       <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--gray-button-bg)] hover:bg-[var(--gray-button-hover)] flex items-center justify-center ml-[14px]"
+        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[14px]"
       >
         <img
           :src="themeStore.isDark ? lightIcon : darkIcon"
@@ -98,7 +100,7 @@ const seeNews = () => {
 
       <!-- 알림 -->
       <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--gray-button-bg)] hover:bg-[var(--gray-button-hover)] flex items-center justify-center ml-[12px]"
+        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
       >
         <img
           :src="themeStore.isDark ? notificationWhite : notification"
@@ -109,7 +111,7 @@ const seeNews = () => {
 
       <!-- 프로필 -->
       <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--gray-button-bg)] hover:bg-[var(--gray-button-hover)] flex items-center justify-center ml-[12px]"
+        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
       >
         <img
           :src="themeStore.isDark ? profileWhite : profile"
