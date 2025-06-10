@@ -60,7 +60,7 @@ const handleImgUpload = async (e) => {
   const selected = e.target.files[0]
   if (!selected) return
   file.value = selected
-  imageUrl.value = URL.createObjectURL(file)
+  imageUrl.value = URL.createObjectURL(file.value)
 } //이미지 임시 업로드
 
 const handleFinalUpload = async () => {
