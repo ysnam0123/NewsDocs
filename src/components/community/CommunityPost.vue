@@ -1,11 +1,16 @@
 <script setup>
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
+defineProps({
+  title: String,
+  content: String,
+  image: String,
+})
 </script>
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
     <img
-      src="../../assets/img/communityPostImg.svg"
+      :src="image"
       class="w-[232px] h-[171px] rounded-[12px] bg-gray-300 group-hover:opacity-80 transition-all duration-300"
     />
     <div class="flex flex-col flex-grow">
@@ -26,12 +31,12 @@ import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
           <div
             class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
           >
-            제목입니당
+            {{ title }}
           </div>
           <div
             class="mt-[6px] text-[14px] group-hover:text-[#515151] text-[#191919] dark:text-[#8F8F8F] transition-all duration-300"
           >
-            내용내용내용내용.내용내용내용내용내용내용내용내용내용내용내,
+            {{ content }}
           </div>
         </div>
 

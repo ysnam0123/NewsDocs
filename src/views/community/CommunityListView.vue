@@ -1,8 +1,13 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileCard from '@/components/common/ProfileCard.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { fetchPost } from '@/api/fetchPost'
+import { getCurrentUser } from '@/api/getCurrentUser'
+import { fetchUser } from '@/api/fetchUser'
 
+const posts = ref([])
+const currentUser = ref(null)
 const selectCategory = ref('전체')
 const selectedSort = ref('최신순')
 const handleCategory = (category) => {
@@ -11,6 +16,15 @@ const handleCategory = (category) => {
 const handleSort = (sort) => {
   selectedSort.value = sort
 }
+onMounted(async () => {
+  try {
+    posts.value = await fetchPost()
+    const user = await getCurrentUser()
+    currentUser.value = await fetchUser(user.metadata?.[0]?.user_id)
+  } catch (e) {
+    alert(e.message)
+  }
+})
 </script>
 <template>
   <div class="flex w-[1440px] mx-auto">
@@ -18,7 +32,7 @@ const handleSort = (sort) => {
     <div class="w-[330px] pl-[100px] mt-[40px]">
       <div class="sticky top-[40px] w-full">
         <!-- 프로필 & 태그 -->
-        <ProfileCard />
+        <ProfileCard :profileImg="currentUser.profile_img" :nickname="currentUser.nickname" />
       </div>
     </div>
 
@@ -111,15 +125,14 @@ const handleSort = (sort) => {
       </div>
       <!-- 게시글 -->
       <div class="flex flex-col w-[835px]">
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
-        <CommunityPost class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0" />
+        <div v-for="post in posts" :key="post.post_id">
+          <CommunityPost
+            :title="post.title"
+            :content="post.contents"
+            :image="post.content_image"
+            class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+          />
+        </div>
       </div>
     </div>
   </div>

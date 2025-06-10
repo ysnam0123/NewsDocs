@@ -1,6 +1,6 @@
 <script setup>
 import { useModalStore } from '@/stores/newPostStore'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import icon1 from '@/assets/icons/communityDropdown/politics.svg'
 import icon2 from '@/assets/icons/communityDropdown/sports.svg'
 import icon3 from '@/assets/icons/communityDropdown/celeb.svg'
@@ -9,7 +9,8 @@ import icon5 from '@/assets/icons/communityDropdown/global.svg'
 import icon6 from '@/assets/icons/communityDropdown/social.svg'
 import icon7 from '@/assets/icons/communityDropdown/economy.svg'
 import { ArrowUpToLine, ChevronDown, Image, Trash2 } from 'lucide-vue-next'
-import supabase from '@/utils/supabase'
+import { postUpload } from '@/api/postUpload'
+// import supabase from '@/utils/supabase'
 const modalStore = useModalStore()
 const handleModal = () => {
   modalStore.closeModal()
@@ -26,6 +27,9 @@ const categories = [
   { name: '사회', icon: icon6 },
   { name: '경제', icon: icon7 },
 ]
+const categoryId = computed(() =>
+  categories.findIndex((category) => category.name === selectedCategory.value),
+)
 const toggleModal = () => {
   isSortOpen.value = !isSortOpen.value
 }
@@ -36,11 +40,8 @@ const categoryHandler = (categoryName) => {
   selectedCategoryIcon.value = categoryObj?.icon ?? null
   isSortOpen.value = false
 }
-
-const imageUrl = ref('')
-const isUploading = ref(false)
 const fileInputRef = ref(null)
-const file = ref(null)
+const { isUploading, imageUrl, file, uploadPost } = postUpload()
 
 const title = ref('')
 const content = ref('')
@@ -53,54 +54,35 @@ const handleDeleteImg = () => {
   file.value = null
   fileInputRef.value.value = ''
 }
+
+//이미지 url생성
 const handleImgUpload = (e) => {
-  file.value = e.target.files[0]
-  if (!file.value) return
-  imageUrl.value = URL.createObjectURL(file.value)
+  const selected = e.target.files[0]
+  if (!selected) return
+  file.value = selected
+  imageUrl.value = URL.createObjectURL(selected)
 }
 
 const handleFinalUpload = async () => {
-  if (!file.value&&!content.value.trim()) {
+  if (!file.value && !content.value.trim()) {
     alert('내용 또는 이미지를 작성해주세요.')
     return
   }
-
-  isUploading.value = true
-
-  let fileName=''
-  if(file.value){
-  fileName = `${Date.now()}_${file.value.name}`
-  const { error:imageError } = await supabase.storage.from('post-images').upload(fileName, file.value)
-
-  if (imageError) {
-    alert('이미지 업로드 실패!') //토스트 메시지
-    isUploading.value = false
-    console.error(imageError)
-    return
+  try {
+    await uploadPost({
+      categoryId: categoryId.value,
+      title: title.value,
+      content: content.value,
+    })
+    alert('게시글 업로드 성공!')
+    content.value = ''
+    title.value = ''
+    imageUrl.value = ''
+    file.value = null
+  } catch (err) {
+    alert('업로드 중 오류 발생')
+    console.error(err)
   }
-  const { data: publicData } = supabase.storage.from('post-images').getPublicUrl(fileName)
-  console.log(publicData.publicUrl)
-  imageUrl.value = publicData.publicUrl
-  }
-  const {error:insertError}=await supabase
-    .from('post')
-    .insert([{
-      user_id: ,
-      category_id:,
-      title:title.value,
-      contents:content.value,
-      content_image:imageUrl.value,
-    }])
-
-    if(insertError){
-      alert('게시글 업로드 실패!')
-    }else{
-      alert('게시글 업로드 성공!')
-      content.value=''
-      imageUrl.value=''
-      file.value=null
-    }
-  isUploading.value = false
 }
 </script>
 <template>
