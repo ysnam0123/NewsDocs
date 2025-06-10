@@ -102,7 +102,7 @@ const scrollToTop = () => {
         <!-- 제목 -->
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
-            <img src="../assets/icons/entertainmentIcon.svg" alt="politics" />
+            <img src="" alt="politics" />
             <p class="text-[30px] text-[var(--text-title)] font-bold">연예</p>
           </h1>
           <div class="flex">
