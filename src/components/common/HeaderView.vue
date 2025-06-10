@@ -105,7 +105,7 @@ const seeNews = () => {
         <img
           :src="themeStore.isDark ? notificationWhite : notification"
           alt="notification"
-          class="w-[24px] h-[24px]"
+          class="w-[22px] h-[22px]"
         />
       </div>
 
