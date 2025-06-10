@@ -1,5 +1,7 @@
 <script setup>
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
+
+const props = defineProps({ post: String })
 </script>
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
@@ -26,12 +28,12 @@ import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
           <div
             class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
           >
-            제목입니당
+            {{ props.post.title }}
           </div>
           <div
             class="mt-[6px] text-[14px] group-hover:text-[#515151] text-[#191919] dark:text-[#8F8F8F] transition-all duration-300"
           >
-            내용내용내용내용.내용내용내용내용내용내용내용내용내용내용내,
+            {{ props.post.content }}
           </div>
         </div>
 

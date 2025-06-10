@@ -1,7 +1,68 @@
 <script setup>
+import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileDog from '@/components/icon/profileDog.vue'
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import SleepDog from '@/components/profile/SleepDog.vue'
+
+const userScrapNewsMock = [
+  {
+    news_id: 'nws001',
+    created_at: '2025-06-10T12:00:00Z',
+    News_API: {
+      title: '자바스크립트는 여전히 인기 1위',
+      url: 'https://example.com/news/102',
+      published_at: '2025-06-09',
+    },
+  },
+  {
+    news_id: 'nws002',
+    created_at: '2025-06-08T10:00:00Z',
+    News_API: {
+      title: 'OpenAI, GPT-5 출시 임박',
+      url: 'https://example.com/news/101',
+      published_at: '2025-06-07',
+    },
+  },
+  {
+    news_id: 'nws003',
+    created_at: '2025-06-08T10:00:00Z',
+    News_API: {
+      title: 'OpenAI, GPT-5 출시 임박',
+      url: 'https://example.com/news/101',
+      published_at: '2025-06-07',
+    },
+  },
+]
+
+const postMock = [
+  {
+    post_id: 'post001',
+    user_id: 'user001',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 1위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+  {
+    post_id: 'post002',
+    user_id: 'user002',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 2위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+  {
+    post_id: 'post003',
+    user_id: 'user003',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 3위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+]
 </script>
 
 <template>
@@ -18,13 +79,13 @@ import SleepDog from '@/components/profile/SleepDog.vue'
               <div class="text-[#8F8F8F] text-sm"># 문화</div>
             </div>
             <div class="mt-3">
-              <router-link to="/profile/edit">
+              <RouterLink to="/profile/edit">
                 <button
                   class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
                 >
                   내 정보 수정
                 </button>
-              </router-link>
+              </RouterLink>
             </div>
           </div>
         </div>
@@ -32,32 +93,53 @@ import SleepDog from '@/components/profile/SleepDog.vue'
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
           <div class="text-[20px] font-bold dark:text-white">내가 저장한 뉴스</div>
-          <router-link to="/profile/news">
+          <RouterLink to="/profile/news">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
             </button>
-          </router-link>
+          </RouterLink>
         </div>
-        <!-- <SleepDog /> -->
-        <div class="flex pt-12 space-x-[24px] w-full">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
+        <div>
+          <SleepDog
+            content="아직 저장한 뉴스가 없어요!"
+            btnText="뉴스 보러가기"
+            v-if="userScrapNewsMock.length === 0"
+          />
+          <div v-else-if="userScrapNewsMock.length !== 0" class="flex pt-12 space-x-[24px] w-full">
+            <NewsComponent8
+              v-for="(item, itemIndex) in userScrapNewsMock"
+              :key="item + '-' + itemIndex"
+              :news="item"
+              class="w-[229px]"
+            />
+          </div>
         </div>
       </div>
 
-      <div class="mt-10 w-[735px] h-[244px]">
+      <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
           <div class="text-[20px] font-bold dark:text-white">내가 작성한 글</div>
-          <router-link to="/profile/write">
+          <RouterLink to="/profile/write">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
             </button>
-          </router-link>
+          </RouterLink>
         </div>
-        <!-- <div class="w-[934px] h-[253px] my-5 bg-amber-700 rounded-[20px]"></div>
-        <div class="w-[934px] h-[253px] my-5 bg-amber-700 rounded-[20px]"></div> -->
-        <SleepDog />
+        <div>
+          <SleepDog
+            content="아직 작성한 글이 없어요!"
+            btnText="글 쓰러가기"
+            v-if="postMock.length === 0"
+          />
+          <div v-else-if="postMock.length !== 0" class="flex flex-col w-[735px]">
+            <CommunityPost
+              v-for="(item, itemIndex) in postMock"
+              :key="item + '-' + itemIndex"
+              :post="item"
+              class="w-full border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>

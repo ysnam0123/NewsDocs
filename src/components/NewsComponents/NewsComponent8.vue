@@ -13,6 +13,10 @@ const wantSummary = ref(false)
 const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
+
+defineProps({
+  news: Object,
+})
 </script>
 <template>
   <div class="h-[470px] relative cursor-pointer">
@@ -25,11 +29,13 @@ const summarizeHandler = () => {
     </div>
     <div>
       <div class="px-[10px]">
-        <div class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px]">
-          손흥민 유로파 리그 우승, 다음 행보는?
+        <div
+          class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] overflow-ellipsis"
+        >
+          {{ news.News_API.title }}
         </div>
-        <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2">
-          기사내용입니다.기사내용입니다기사내용입니다기사내용입니다기사내용입니다기사내용입니다.기사내용...
+        <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2 overflow-ellipsis">
+          {{ news.News_API.url }}
         </div>
         <div class="flex gap-[8px] mb-[16px]">
           <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">

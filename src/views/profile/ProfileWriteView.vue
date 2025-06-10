@@ -6,6 +6,45 @@ import BackButton from '@/components/common/BackButton.vue'
 const activeTab = ref('전체')
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
+
+const postMock = [
+  {
+    post_id: 'post001',
+    user_id: 'user001',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 1위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+  {
+    post_id: 'post002',
+    user_id: 'user002',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 2위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+  {
+    post_id: 'post003',
+    user_id: 'user003',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 3위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+  {
+    post_id: 'post004',
+    user_id: 'user004',
+    category_id: 'ct1',
+    created_at: '2025-06-10T12:00:00Z',
+    title: '자바스크립트는 여전히 인기 4위',
+    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
+    published_at: '2025-06-09',
+  },
+]
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -41,9 +80,12 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
         </div>
       </div>
       <div class="flex flex-col w-[735px]">
-        <CommunityPost class="w-full" />
-        <CommunityPost class="w-full" />
-        <CommunityPost class="w-full" />
+        <CommunityPost
+          v-for="(item, itemIndex) in postMock"
+          :key="item + '-' + itemIndex"
+          :post="item"
+          class="w-full border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+        />
       </div>
     </div>
   </div>

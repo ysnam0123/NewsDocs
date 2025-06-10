@@ -1,17 +1,66 @@
 <script setup>
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
-
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import BackButton from '@/components/common/BackButton.vue'
 
 const activeTab = ref('전체')
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
+
+const userScrapNewsMock = [
+  {
+    news_id: 'nws001',
+    created_at: '2025-06-10T12:00:00Z',
+    News_API: {
+      title: '자바스크립트는 여전히 인기 1위',
+      url: 'https://example.com/news/102',
+      published_at: '2025-06-09',
+    },
+  },
+  {
+    news_id: 'nws002',
+    created_at: '2025-06-08T10:00:00Z',
+    News_API: {
+      title: 'OpenAI, GPT-5 출시 임박',
+      url: 'https://example.com/news/101',
+      published_at: '2025-06-07',
+    },
+  },
+  {
+    news_id: 'nws003',
+    created_at: '2025-06-08T10:00:00Z',
+    News_API: {
+      title: 'OpenAI, GPT-5 출시 임박',
+      url: 'https://example.com/news/101',
+      published_at: '2025-06-07',
+    },
+  },
+  {
+    news_id: 'nws004',
+    created_at: '2025-06-08T10:00:00Z',
+    News_API: {
+      title: 'OpenAI, GPT-5 출시 임박',
+      url: 'https://example.com/news/101',
+      published_at: '2025-06-07',
+    },
+  },
+]
+
+const NewsList = computed(() => {
+  const size = 3
+  const result = []
+  for (let i = 0; i < userScrapNewsMock.length; i += size) {
+    result.push(userScrapNewsMock.slice(i, i + size))
+  }
+  return result
+})
+
+console.log(userScrapNewsMock)
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
     <div class="max-w-[735px] mx-auto mt-10">
-      <div class="flex space-x-2.5 mb-4">
+      <div class="mb-4">
         <BackButton />
       </div>
       <div class="text-[28px] font-bold dark:text-white mb-8">내가 저장한 뉴스</div>
@@ -42,7 +91,21 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
         </div>
       </div>
       <div class="flex flex-col">
-        <div class="flex space-x-[24px] py-5">
+        <div>
+          <div
+            v-for="(row, rowIndex) in NewsList"
+            :key="'row-' + rowIndex"
+            class="flex space-x-[24px] pt-5"
+          >
+            <NewsComponent8
+              v-for="(item, itemIndex) in row"
+              :key="item.news_id + '-' + itemIndex"
+              :news="item"
+              class="w-[229px]"
+            />
+          </div>
+        </div>
+        <!-- <div class="flex space-x-[24px] py-5">
           <NewsComponent8 />
           <NewsComponent8 />
           <NewsComponent8 />
@@ -56,12 +119,7 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
           <NewsComponent8 />
           <NewsComponent8 />
           <NewsComponent8 />
-        </div>
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
