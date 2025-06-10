@@ -1,16 +1,30 @@
 <script setup>
+import { fetchCategory } from '@/api/fetchCategory'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
-defineProps({
+import { onMounted, ref } from 'vue'
+
+const props = defineProps({
   title: String,
   content: String,
   image: String,
+  categoryid: Number,
+})
+
+const categoryData = ref(null)
+
+onMounted(async () => {
+  if (props.categoryid) {
+    const result = await fetchCategory(props.categoryid)
+    categoryData.value = result
+  }
 })
 </script>
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
     <img
-      :src="image"
+      :src="props.image"
+      alt="게시글 이미지"
       class="w-[232px] h-[171px] rounded-[12px] bg-gray-300 group-hover:opacity-80 transition-all duration-300"
     />
     <div class="flex flex-col flex-grow">
@@ -24,19 +38,24 @@ defineProps({
             <div class="text-[16px] dark:text-[#ffffff]">userName</div>
           </div>
           <!-- 태그 -->
-          <p class="flex items-center text-[16px] text-[#7537E3] dark:text-[#A878FD]">#스포츠</p>
+          <p
+            v-if="categoryData"
+            class="flex items-center text-[16px] text-[#7537E3] dark:text-[#A878FD]"
+          >
+            #{{ categoryData.title }}
+          </p>
         </div>
         <!-- 내용 -->
         <div class="mt-5">
           <div
             class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
           >
-            {{ title }}
+            {{ props.title }}
           </div>
           <div
             class="mt-[6px] text-[14px] group-hover:text-[#515151] text-[#191919] dark:text-[#8F8F8F] transition-all duration-300"
           >
-            {{ content }}
+            {{ props.content }}
           </div>
         </div>
 

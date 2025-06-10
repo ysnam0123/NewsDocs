@@ -8,9 +8,8 @@ import icon4 from '@/assets/icons/communityDropdown/culture.svg'
 import icon5 from '@/assets/icons/communityDropdown/global.svg'
 import icon6 from '@/assets/icons/communityDropdown/social.svg'
 import icon7 from '@/assets/icons/communityDropdown/economy.svg'
-import { ArrowUpToLine, ChevronDown, Image, Trash2 } from 'lucide-vue-next'
+import { ArrowUpToLine, Trash2, ChevronDown, Image } from 'lucide-vue-next'
 import { postUpload } from '@/api/postUpload'
-// import supabase from '@/utils/supabase'
 const modalStore = useModalStore()
 const handleModal = () => {
   modalStore.closeModal()
@@ -18,6 +17,11 @@ const handleModal = () => {
 const isSortOpen = ref(false)
 const selectedCategory = ref('카테고리 선택')
 const selectedCategoryIcon = ref(null)
+//
+const title = ref('')
+const content = ref('')
+const fileInputRef = ref(null)
+//
 const categories = [
   { name: '정치', icon: icon1 },
   { name: '스포츠', icon: icon2 },
@@ -33,35 +37,31 @@ const categoryId = computed(() =>
 const toggleModal = () => {
   isSortOpen.value = !isSortOpen.value
 }
-
 const categoryHandler = (categoryName) => {
+  // console.log('클릭한 카테고리:',categoryName)
   const categoryObj = categories.find((a) => a.name === categoryName)
   selectedCategory.value = categoryName
   selectedCategoryIcon.value = categoryObj?.icon ?? null
   isSortOpen.value = false
 }
-const fileInputRef = ref(null)
 const { isUploading, imageUrl, file, uploadPost } = postUpload()
-
-const title = ref('')
-const content = ref('')
 
 const handleDivClick = () => {
   fileInputRef.value?.click()
 }
-const handleDeleteImg = () => {
-  imageUrl.value = ''
+
+const handleDeleteImg = async () => {
+  imageUrl.value = null
   file.value = null
-  fileInputRef.value.value = ''
+  fileInputRef.value = null
 }
 
-//이미지 url생성
-const handleImgUpload = (e) => {
+const handleImgUpload = async (e) => {
   const selected = e.target.files[0]
   if (!selected) return
   file.value = selected
-  imageUrl.value = URL.createObjectURL(selected)
-}
+  imageUrl.value = URL.createObjectURL(file)
+} //이미지 임시 업로드
 
 const handleFinalUpload = async () => {
   if (!file.value && !content.value.trim()) {
@@ -80,7 +80,7 @@ const handleFinalUpload = async () => {
     imageUrl.value = ''
     file.value = null
   } catch (err) {
-    alert('업로드 중 오류 발생')
+    alert(err.message || '업로드 중 오류 발생')
     console.error(err)
   }
 }

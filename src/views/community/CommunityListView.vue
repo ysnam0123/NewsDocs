@@ -20,7 +20,8 @@ onMounted(async () => {
   try {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
-    currentUser.value = await fetchUser(user.metadata?.[0]?.user_id)
+    console.log(user.id)
+    currentUser.value = await fetchUser(user?.id)
   } catch (e) {
     alert(e.message)
   }
@@ -32,7 +33,7 @@ onMounted(async () => {
     <div class="w-[330px] pl-[100px] mt-[40px]">
       <div class="sticky top-[40px] w-full">
         <!-- 프로필 & 태그 -->
-        <ProfileCard :profileImg="currentUser.profile_img" :nickname="currentUser.nickname" />
+        <ProfileCard :profileImg="currentUser?.profile_img" :nickname="currentUser?.nickname" />
       </div>
     </div>
 
@@ -130,6 +131,8 @@ onMounted(async () => {
             :title="post.title"
             :content="post.contents"
             :image="post.content_image"
+            :categoryid="post.category_id"
+            :userid="post.user_id"
             class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
           />
         </div>
