@@ -113,12 +113,20 @@ const router = createRouter({
           path: '',
           name: 'newsList',
           component: () => import('../views/newsDetail/NewsListView.vue'),
+          meta: {
+            hideHeaderBasic: true,
+            hideHeader: false,
+          },
         },
         {
-          path: 'detail',
+          path: 'detail/:id',
           name: 'newsDetail',
           component: () => import('../views/newsDetail/NewsDetailView.vue'),
-          // props: true,
+          props: true,
+          meta: {
+            hideHeaderBasic: true,
+            hideHeader: false,
+          },
         },
       ],
     },
