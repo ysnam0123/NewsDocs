@@ -80,7 +80,6 @@ const summarizeHandler = () => {
         </div>
       </div>
     </transition>
-    >>>>>>> dev
   </div>
 </template>
 <style scoped>
