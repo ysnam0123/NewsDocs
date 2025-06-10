@@ -1,5 +1,6 @@
 <script setup>
 import { fetchCategory } from '@/api/fetchCategory'
+import { fetchUser } from '@/api/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 
@@ -8,14 +9,19 @@ const props = defineProps({
   content: String,
   image: String,
   categoryid: Number,
+  userid: String,
 })
 
 const categoryData = ref(null)
-
+const userData = ref(null)
 onMounted(async () => {
   if (props.categoryid) {
-    const result = await fetchCategory(props.categoryid)
-    categoryData.value = result
+    const categoryres = await fetchCategory(props.categoryid)
+    categoryData.value = categoryres
+  }
+  if (props.userid) {
+    const userres = await fetchUser(props.userid)
+    userData.value = userres
   }
 })
 </script>
@@ -34,8 +40,12 @@ onMounted(async () => {
         <div class="w-full h-10 flex items-center justify-between">
           <!-- 작성자 -->
           <div class="flex gap-[9.5px] items-center">
-            <div class="w-10 h-10 rounded-full bg-gray-300"></div>
-            <div class="text-[16px] dark:text-[#ffffff]">userName</div>
+            <img
+              :src="userData?.profile_img"
+              alt="작성자 프로필 이미지"
+              class="w-10 h-10 rounded-full bg-gray-300"
+            />
+            <div class="text-[16px] dark:text-[#ffffff]">{{ userData?.nickname }}</div>
           </div>
           <!-- 태그 -->
           <p
