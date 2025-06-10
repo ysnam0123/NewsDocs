@@ -1,5 +1,5 @@
 <script setup>
-import ButtonVue from '@/components/common/ButtonVue.vue'
+import ButtonVue from '@/components/common/ButtonView.vue'
 import { ref } from 'vue'
 import BeforeLogin from './BeforeLogin.vue'
 
