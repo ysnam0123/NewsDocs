@@ -1,6 +1,7 @@
 <script setup>
 import ButtonVue from '@/components/common/ButtonView.vue'
 import { ref } from 'vue'
+import BeforeLogin from './BeforeLogin.vue'
 
 const nextSection = ref(null)
 
@@ -26,11 +27,13 @@ const windowScroll = () => {
         class="scrollArrow absolute bottom-0 left-[46%] flex flex-col justify-center items-center cursor-pointer"
         @click="windowScroll"
       >
-        <p class="text-[20px] font-bold">스크롤해서 둘러보기</p>
-        <img src="../assets/homeIntro/scrollArrow.svg" alt="arrow" class="h-[50px]" />
+        <p class="text-[20px] font-bold">클릭해서 둘러보기</p>
+        <img src="../assets/icons/scrollDown.svg" alt="arrow" class="h-[50px]" />
       </div>
     </div>
-    <div ref="nextSection" class="h-[100vh]">dd</div>
+    <div ref="nextSection">
+      <BeforeLogin />
+    </div>
   </div>
 </template>
 
