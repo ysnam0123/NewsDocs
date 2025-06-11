@@ -15,10 +15,7 @@ const windowScroll = () => {
     <div class="relative min-h-[calc(100vh-100px)] bg-[var(--light-purple)] px-[130px] py-[60px]">
       <h1 class="text-[50px] font-bold mb-[150px]">NewsDocs에 오신것을 환영합니다</h1>
       <div class="flex flex-col justify-center items-center">
-        <div class="flex justify-between gap-[200px] mb-[200px]">
-          <img src="../assets/homeIntro/Group 151.svg" alt="" />
-          <img src="../assets/homeIntro/Group 151.svg" alt="" />
-        </div>
+        <div class="flex justify-between gap-[200px] mb-[200px]"></div>
         <div>
           <ButtonVue class="w-[480px] h-[60px] text-[25px] font-bold">로그인</ButtonVue>
         </div>
