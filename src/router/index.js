@@ -160,6 +160,14 @@ const router = createRouter({
         hideHeaderBasic: true,
       },
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'notFound',
+      component: () => import('../views/NotFound.vue'),
+      meta: {
+        hideHeader: true,
+      },
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
