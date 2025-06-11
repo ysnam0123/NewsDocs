@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
+import { useInterestStore } from '@/stores/interestStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,7 +85,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/favoriteinterest',
+      path: '/interest/fav',
       name: 'favoriteinterest',
       component: () => import('../views/FavoriteInterest.vue'),
       meta: {
@@ -150,6 +151,16 @@ const router = createRouter({
   scrollBehavior() {
     return { top: 0 }
   },
+})
+
+//관심사 3개 이상 선택 안하고 /fav로 라우팅 방지
+router.beforeEach((to, from, next) => {
+  const interestStore = useInterestStore()
+  if (to.path === '/interest/fav' && interestStore.interest.length === 0) {
+    console.log('관심사가 선택되지 않음. /interest로 리다이렉트')
+    return next('/interest')
+  }
+  next()
 })
 
 export default router

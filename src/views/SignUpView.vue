@@ -170,7 +170,7 @@ async function onSignUp() {
   authStore.setUser(data.user)
   toast('회원가입이 완료되었습니다. 이메일을 확인해주세요!')
   setTimeout(() => {
-    router.push('/login')
+    router.push('/interest')
   }, 1200)
 }
 
