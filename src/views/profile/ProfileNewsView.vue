@@ -54,8 +54,6 @@ const NewsList = computed(() => {
   }
   return result
 })
-
-console.log(userScrapNewsMock)
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -105,21 +103,6 @@ console.log(userScrapNewsMock)
             />
           </div>
         </div>
-        <!-- <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
-        <div class="flex space-x-[24px] py-5">
-          <NewsComponent8 />
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div> -->
       </div>
     </div>
   </div>

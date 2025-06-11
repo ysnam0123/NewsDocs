@@ -49,7 +49,7 @@ const router = createRouter({
     },
     {
       path: '/profile/:nickname',
-      name: 'UserProfile',
+      name: 'DiffProfile',
       component: () => import('../views/profile/ProfileView.vue'),
       meta: {
         hideHeaderBasic: true,
@@ -73,7 +73,7 @@ const router = createRouter({
     },
     {
       path: '/profile/:nickname/news',
-      name: 'ProfileNews',
+      name: 'DiffProfileNews',
       component: () => import('../views/profile/ProfileNewsView.vue'),
       meta: {
         hideHeaderBasic: true,
@@ -86,7 +86,7 @@ const router = createRouter({
     },
     {
       path: '/profile/:nickname/write',
-      name: 'ProfileWrite',
+      name: 'DiffProfileWrite',
       component: () => import('../views/profile/ProfileWriteView.vue'),
     },
     {
