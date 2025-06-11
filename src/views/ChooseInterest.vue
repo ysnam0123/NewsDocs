@@ -16,7 +16,7 @@ import { userAuthStore } from '@/stores/authStore'
 
 const store = useInterestStore()
 const auth = userAuthStore()
-const nickname = ref(auth.user?.nickname || '사용자')
+const name = ref(auth.user?.name || '사용자')
 const interests = [
   { id: 'politics', label: '정치', icon: politicsIcon },
   { id: 'sports', label: '스포츠', icon: sportsIcon },
@@ -62,7 +62,7 @@ onMounted(() => {
       <div class="flex flex-col w-[444px] h-[399px]">
         <div class="flex gap-[50px] mb-[24px]">
           <h1 class="text-[18px] font-bold">
-            {{ nickname }}님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
+            {{ name }}님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
             <span class="text-[#8b8b8b] text-[14px] font-medium">(최소 3개)</span>
           </h1>
         </div>

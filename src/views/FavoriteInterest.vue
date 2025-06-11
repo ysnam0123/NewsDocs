@@ -11,7 +11,7 @@ const toast = useToast()
 const store = useInterestStore()
 const auth = userAuthStore()
 const userId = auth.user?.id
-const nickname = ref(auth.user?.nickname || '사용자')
+const name = ref(auth.user?.name || '사용자')
 const router = useRouter()
 
 const pageMounted = ref(false)
@@ -105,7 +105,7 @@ const saveInterests = async () => {
       <div class="w-[444px] h-[284px]">
         <!-- 제목 -->
         <h1 class="text-[18px] font-semibold mb-[22px]">
-          마지막으로 {{ nickname }}님의 <br />
+          마지막으로 {{ name }}님의 <br />
           <span class="text-[#7537E3]">최대 관심사</span>를 1개 선택해주세요
         </h1>
 
