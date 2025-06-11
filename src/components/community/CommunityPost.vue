@@ -3,7 +3,7 @@ import { fetchCategory } from '@/api/fetchCategory'
 import { fetchUser } from '@/api/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
-
+import defaultImg from '../../assets/img/communityImg/newsdog4.svg'
 const props = defineProps({
   title: String,
   content: String,
@@ -28,11 +28,15 @@ onMounted(async () => {
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
-    <img
-      :src="props.image"
-      alt="게시글 이미지"
-      class="w-[232px] h-[171px] rounded-[12px] bg-gray-300 group-hover:opacity-80 transition-all duration-300"
-    />
+    <div
+      class="flex items-center justify-center w-[232px] h-[171px] rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
+    >
+      <img
+        :src="props.image ? props.image : defaultImg"
+        alt="게시글 이미지"
+        :class="props.image ? 'w-full h-full' : 'w-[144px] h-[93px] '"
+      />
+    </div>
     <div class="flex flex-col flex-grow">
       <!-- 게시글 내용 -->
       <div class="flex flex-col justify-center w-full h-[172px]">

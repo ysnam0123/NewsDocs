@@ -10,6 +10,8 @@ import icon6 from '@/assets/icons/communityDropdown/social.svg'
 import icon7 from '@/assets/icons/communityDropdown/economy.svg'
 import { ArrowUpToLine, Trash2, ChevronDown, Image } from 'lucide-vue-next'
 import { postUpload } from '@/api/postUpload'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const modalStore = useModalStore()
 const handleModal = () => {
   modalStore.closeModal()
@@ -50,6 +52,10 @@ const handleDivClick = () => {
   fileInputRef.value?.click()
 }
 
+const handleUploadClick = () => {
+  if (isUploading.value) return
+  handleDivClick()
+}
 const handleDeleteImg = async () => {
   imageUrl.value = null
   file.value = null
@@ -57,10 +63,12 @@ const handleDeleteImg = async () => {
 }
 
 const handleImgUpload = async (e) => {
+  isUploading.value = true
   const selected = e.target.files[0]
   if (!selected) return
   file.value = selected
   imageUrl.value = URL.createObjectURL(file.value)
+  isUploading.value = false
 } //이미지 임시 업로드
 
 const handleFinalUpload = async () => {
@@ -69,7 +77,7 @@ const handleFinalUpload = async () => {
     return
   }
   try {
-    await uploadPost({
+    const newPost = await uploadPost({
       categoryId: categoryId.value,
       title: title.value,
       content: content.value,
@@ -79,6 +87,8 @@ const handleFinalUpload = async () => {
     title.value = ''
     imageUrl.value = ''
     file.value = null
+    modalStore.closeModal()
+    router.push(`/community/${newPost.post_id}`)
   } catch (err) {
     alert(err.message || '업로드 중 오류 발생')
     console.error(err)
@@ -137,8 +147,11 @@ const handleFinalUpload = async () => {
 
       <!-- 이미지업로드 -->
       <div
-        @click="handleDivClick"
-        class="flex flex-col items-center justify-center w-[416px] min-h-[197px] mt-6 border border-[#EAEAEA] dark:border-[#343434] rounded-[12px] bg-[#F6F6F6] dark:bg-[#2C2C2C] hover:bg-[#ECECEC] dark:hover:bg-[#1F1F1F] cursor-pointer overflow-hidden"
+        @click="handleUploadClick"
+        :class="[
+          'flex flex-col items-center justify-center w-[416px] min-h-[197px] mt-6 border border-[#EAEAEA] dark:border-[#343434] rounded-[12px] bg-[#F6F6F6] dark:bg-[#2C2C2C] hover:bg-[#ECECEC] dark:hover:bg-[#1F1F1F] cursor-pointer overflow-hidden',
+          isUploading ? 'pointer-events-none opacity-50 cursor-not-allowed' : '',
+        ]"
       >
         <input
           type="file"
