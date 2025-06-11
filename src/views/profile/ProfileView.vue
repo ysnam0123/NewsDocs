@@ -3,6 +3,31 @@ import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileDog from '@/components/icon/profileDog.vue'
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import SleepDog from '@/components/profile/SleepDog.vue'
+import { computed, onMounted, ref } from 'vue'
+import { fetchPost } from '@/api/fetchPost'
+import { getCurrentUser } from '@/api/getCurrentUser'
+import { fetchUser } from '@/api/fetchUser'
+
+const posts = ref([])
+const currentUser = ref(null)
+
+onMounted(async () => {
+  try {
+    posts.value = await fetchPost()
+    const user = await getCurrentUser()
+    console.log(user.id)
+    currentUser.value = await fetchUser(user?.id)
+    console.log(currentUser.value.nickname)
+  } catch (e) {
+    alert(e.message)
+  }
+})
+
+const myPosts = computed(() =>
+  currentUser.value ? posts.value.filter((post) => post.user_id === currentUser.value.user_id) : [],
+)
+
+const nickname = computed(() => currentUser.value?.nickname || '닉네임')
 
 const userScrapNewsMock = [
   {
@@ -33,36 +58,6 @@ const userScrapNewsMock = [
     },
   },
 ]
-
-const postMock = [
-  {
-    post_id: 'post001',
-    user_id: 'user001',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 1위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-  {
-    post_id: 'post002',
-    user_id: 'user002',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 2위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-  {
-    post_id: 'post003',
-    user_id: 'user003',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 3위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-]
 </script>
 
 <template>
@@ -72,7 +67,9 @@ const postMock = [
         <div class="flex space-x-5 mt-5">
           <ProfileDog />
           <div class="flex flex-col justify-center ml-3">
-            <div class="text-[24px] font-semibold mb-1 dark:text-white">유저 닉네임</div>
+            <div class="text-[24px] font-semibold mb-1 dark:text-white">
+              {{ nickname }}
+            </div>
             <div class="flex space-x-2">
               <div class="text-[#8F8F8F] text-sm"># 스포츠</div>
               <div class="text-[#8F8F8F] text-sm"># 사회</div>
@@ -129,15 +126,19 @@ const postMock = [
           <SleepDog
             content="아직 작성한 글이 없어요!"
             btnText="글 쓰러가기"
-            v-if="postMock.length === 0"
+            v-if="myPosts.length === 0"
           />
-          <div v-else-if="postMock.length !== 0" class="flex flex-col w-[735px]">
-            <CommunityPost
-              v-for="(item, itemIndex) in postMock"
-              :key="item + '-' + itemIndex"
-              :post="item"
-              class="w-full border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
-            />
+          <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px]">
+            <div v-for="post in myPosts" :key="post.post_id">
+              <CommunityPost
+                :title="post.title"
+                :content="post.contents"
+                :image="post.content_image"
+                :categoryid="post.category_id"
+                :userid="post.user_id"
+                class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+              />
+            </div>
           </div>
         </div>
       </div>

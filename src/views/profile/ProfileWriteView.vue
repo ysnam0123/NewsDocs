@@ -1,50 +1,32 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BackButton from '@/components/common/BackButton.vue'
+import { fetchPost } from '@/api/fetchPost'
+import { getCurrentUser } from '@/api/getCurrentUser'
+import { fetchUser } from '@/api/fetchUser'
 
 const activeTab = ref('전체')
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 
-const postMock = [
-  {
-    post_id: 'post001',
-    user_id: 'user001',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 1위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-  {
-    post_id: 'post002',
-    user_id: 'user002',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 2위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-  {
-    post_id: 'post003',
-    user_id: 'user003',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 3위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-  {
-    post_id: 'post004',
-    user_id: 'user004',
-    category_id: 'ct1',
-    created_at: '2025-06-10T12:00:00Z',
-    title: '자바스크립트는 여전히 인기 4위',
-    content: '테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용',
-    published_at: '2025-06-09',
-  },
-]
+const posts = ref([])
+const currentUser = ref(null)
+
+onMounted(async () => {
+  try {
+    posts.value = await fetchPost()
+    const user = await getCurrentUser()
+    console.log(user.id)
+    currentUser.value = await fetchUser(user?.id)
+  } catch (e) {
+    alert(e.message)
+  }
+})
+
+const myPosts = computed(() =>
+  currentUser.value ? posts.value.filter((post) => post.user_id === currentUser.value.user_id) : [],
+)
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -60,7 +42,12 @@ const postMock = [
           <div
             v-for="tab in tabs"
             :key="tab"
-            @click="activeTab = tab"
+            @click="
+              () => {
+                activeTab = tab
+                console.log('activeTab:', activeTab)
+              }
+            "
             class="flex items-center justify-center w-[103px] h-full text-base cursor-pointer relative transition-all duration-300 dark:hover:text-[#A878FD] hover:text-[#7537E3]"
             :class="{
               'text-[#7537E3] dark:text-[#A878FD] font-semibold': activeTab === tab,
@@ -80,12 +67,16 @@ const postMock = [
         </div>
       </div>
       <div class="flex flex-col w-[735px]">
-        <CommunityPost
-          v-for="(item, itemIndex) in postMock"
-          :key="item + '-' + itemIndex"
-          :post="item"
-          class="w-full border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
-        />
+        <div v-for="post in myPosts" :key="post.post_id">
+          <CommunityPost
+            :title="post.title"
+            :content="post.contents"
+            :image="post.content_image"
+            :categoryid="post.category_id"
+            :userid="post.user_id"
+            class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+          />
+        </div>
       </div>
     </div>
   </div>
