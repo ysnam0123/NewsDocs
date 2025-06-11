@@ -5,6 +5,8 @@ import BackButton from '@/components/common/BackButton.vue'
 import { fetchPost } from '@/api/fetchPost'
 import { getCurrentUser } from '@/api/getCurrentUser'
 import { fetchUser } from '@/api/fetchUser'
+import { useRoute } from 'vue-router'
+import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 
 const activeTab = ref('전체')
 
@@ -12,20 +14,29 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
 
 const posts = ref([])
 const currentUser = ref(null)
+const route = useRoute()
+const profileUser = ref(null)
+
+const nicknameParam = route.params.nickname
 
 onMounted(async () => {
   try {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
-    console.log(user.id)
     currentUser.value = await fetchUser(user?.id)
+
+    if (nicknameParam) {
+      profileUser.value = await fetchUserByNickname(nicknameParam)
+    } else {
+      profileUser.value = currentUser.value
+    }
   } catch (e) {
     alert(e.message)
   }
 })
 
 const myPosts = computed(() =>
-  currentUser.value ? posts.value.filter((post) => post.user_id === currentUser.value.user_id) : [],
+  profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
 )
 </script>
 <template>

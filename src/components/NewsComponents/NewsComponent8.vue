@@ -32,10 +32,10 @@ defineProps({
         <div
           class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] overflow-ellipsis"
         >
-          {{ news.News_API.title }}
+          title
         </div>
         <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2 overflow-ellipsis">
-          {{ news.News_API.url }}
+          content
         </div>
         <div class="flex gap-[8px] mb-[16px]">
           <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">

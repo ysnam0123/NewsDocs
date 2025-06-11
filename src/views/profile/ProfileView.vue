@@ -7,21 +7,39 @@ import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'
 import { getCurrentUser } from '@/api/getCurrentUser'
 import { fetchUser } from '@/api/fetchUser'
+import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchInterest } from '@/api/fetchInterest'
+import { useRoute } from 'vue-router'
 
 const posts = ref([])
+const route = useRoute()
+const profileUser = ref(null)
 const currentUser = ref(null)
 const interest = ref(null)
 const categorys = ref([])
+
+const nicknameParam = route.params.nickname
+const isMyProfile = computed(() => {
+  return currentUser.value?.user_id === profileUser.value?.user_id
+})
 
 onMounted(async () => {
   try {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
-    // console.log(user)
     currentUser.value = await fetchUser(user?.id)
-    // console.log(currentUser.value)
-    interest.value = await fetchInterest(user?.id)
+
+    if (nicknameParam) {
+      profileUser.value = await fetchUserByNickname(nicknameParam)
+    } else {
+      profileUser.value = currentUser.value
+    }
+
+    if (profileUser.value?.user_id) {
+      interest.value = await fetchInterest(profileUser.value.user_id)
+      console.log(profileUser.value.user_id)
+      console.log(interest.value)
+    }
 
     categorys.value = interest.value?.map((item) => item.category_id) || []
   } catch (e) {
@@ -30,10 +48,9 @@ onMounted(async () => {
 })
 
 const myPosts = computed(() =>
-  currentUser.value ? posts.value.filter((post) => post.user_id === currentUser.value.user_id) : [],
+  profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
 )
 
-const nickname = computed(() => currentUser.value?.nickname || '닉네임')
 const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사회', '경제']
 
 const userScrapNewsMock = [
@@ -75,7 +92,7 @@ const userScrapNewsMock = [
           <ProfileDog />
           <div class="flex flex-col justify-center ml-3">
             <div class="text-[24px] font-semibold mb-1 dark:text-white">
-              {{ nickname }}
+              {{ profileUser?.nickname || '닉네임을 지어주세요' }}
             </div>
             <div class="flex space-x-2">
               <div
@@ -87,7 +104,7 @@ const userScrapNewsMock = [
               </div>
             </div>
             <div class="mt-3">
-              <RouterLink to="/profile/edit">
+              <RouterLink v-if="isMyProfile" to="/profile/edit">
                 <button
                   class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
                 >

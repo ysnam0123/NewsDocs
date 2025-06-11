@@ -48,7 +48,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/profile/:id',
+      path: '/profile/:nickname',
       name: 'UserProfile',
       component: () => import('../views/profile/ProfileView.vue'),
       meta: {
@@ -72,7 +72,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/profile/write',
+      path: '/profile/:nickname/write',
       name: 'ProfileWrite',
       component: () => import('../views/profile/ProfileWriteView.vue'),
     },
