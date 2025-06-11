@@ -72,6 +72,19 @@ const router = createRouter({
       },
     },
     {
+      path: '/profile/:nickname/news',
+      name: 'ProfileNews',
+      component: () => import('../views/profile/ProfileNewsView.vue'),
+      meta: {
+        hideHeaderBasic: true,
+      },
+    },
+    {
+      path: '/profile/write',
+      name: 'ProfileWrite',
+      component: () => import('../views/profile/ProfileWriteView.vue'),
+    },
+    {
       path: '/profile/:nickname/write',
       name: 'ProfileWrite',
       component: () => import('../views/profile/ProfileWriteView.vue'),

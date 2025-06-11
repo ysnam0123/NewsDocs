@@ -118,7 +118,7 @@ const userScrapNewsMock = [
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
           <div class="text-[20px] font-bold dark:text-white">내가 저장한 뉴스</div>
-          <RouterLink to="/profile/news">
+          <RouterLink :to="isMyProfile ? '/profile/news' : `/profile/${nicknameParam}/news`">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
             </button>
@@ -144,7 +144,7 @@ const userScrapNewsMock = [
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
           <div class="text-[20px] font-bold dark:text-white">내가 작성한 글</div>
-          <RouterLink to="/profile/write">
+          <RouterLink :to="isMyProfile ? '/profile/write' : `/profile/${nicknameParam}/write`">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
             </button>
