@@ -7,17 +7,23 @@ import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'
 import { getCurrentUser } from '@/api/getCurrentUser'
 import { fetchUser } from '@/api/fetchUser'
+import { fetchInterest } from '@/api/fetchInterest'
 
 const posts = ref([])
 const currentUser = ref(null)
+const interest = ref(null)
+const categorys = ref([])
 
 onMounted(async () => {
   try {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
-    console.log(user.id)
+    // console.log(user)
     currentUser.value = await fetchUser(user?.id)
-    console.log(currentUser.value.nickname)
+    // console.log(currentUser.value)
+    interest.value = await fetchInterest(user?.id)
+
+    categorys.value = interest.value?.map((item) => item.category_id) || []
   } catch (e) {
     alert(e.message)
   }
@@ -28,6 +34,7 @@ const myPosts = computed(() =>
 )
 
 const nickname = computed(() => currentUser.value?.nickname || '닉네임')
+const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사회', '경제']
 
 const userScrapNewsMock = [
   {
@@ -71,9 +78,13 @@ const userScrapNewsMock = [
               {{ nickname }}
             </div>
             <div class="flex space-x-2">
-              <div class="text-[#8F8F8F] text-sm"># 스포츠</div>
-              <div class="text-[#8F8F8F] text-sm"># 사회</div>
-              <div class="text-[#8F8F8F] text-sm"># 문화</div>
+              <div
+                v-for="category in categorys"
+                :key="category.category_id"
+                class="text-[#8F8F8F] text-sm"
+              >
+                # {{ categoryNames[category - 1] }}
+              </div>
             </div>
             <div class="mt-3">
               <RouterLink to="/profile/edit">
