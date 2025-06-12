@@ -13,23 +13,27 @@ const wantSummary = ref(false)
 const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
+
+const props = defineProps({
+  newsObj: {
+    type: Object,
+    required: true,
+  },
+})
+
+console.log('newsObj in NewsComponent9:', props.newsObj)
 </script>
 <template>
   <div class="w-[300px] h-[385px] relative">
     <div class="w-[300px] h-[217px] mb-[16px]">
-      <img
-        src="@/assets/img/exImage/ronaldo.svg"
-        class="w-full h-full object-cover"
-        @mouseover="hoverHandler"
-      />
+      <img :src="newsObj.image_url" class="w-full h-full object-cover" @mouseover="hoverHandler" />
     </div>
     <div class="mb-[12px] px-[10px]">
-      <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px]">
-        폭탄 제안! 이 정도로 진심이다...호날두와 극적 재계약
+      <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px] line-clamp-2">
+        {{ newsObj.title || '' }}
       </div>
       <div class="text-sm text-[#A8A8A8] max-h-[40px] line-clamp-2 mb-[12px]">
-        기사내용입니다. 기사내용입니다. 기사내용 인데 기사내용인데기사내용인데기사내용인데
-        기사내용...
+        {{ newsObj.description || '' }}
       </div>
       <div class="flex gap-[8px] mb-[16px]">
         <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">

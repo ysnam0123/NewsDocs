@@ -18,14 +18,14 @@ const cardClass = computed(() =>
 <template>
   <div
     :id="id"
-    class="cursor-pointer w-[102px] h-[126px] text-[8px] rounded-[8px] flex flex-col items-center justify-center pt-[21px] pb-[16px] px-[32px]"
+    class="cursor-pointer w-[122px] h-[146px] text-[8px] rounded-[8px] flex flex-col items-center justify-center pt-[21px] pb-[16px] px-[32px] select-none"
     :class="cardClass"
     @click="$emit('select', { id, label, icon })"
   >
     <img :src="icon" :alt="id" class="w-[40px] h-[40px] mb-[21px]" />
     <div class="flex flex-col gap-[4px] text-center">
-      <h1 class="text-center text-[13px]">{{ label }}</h1>
-      <p class="text-[12px] text-[#929292]">{{ id }}</p>
+      <h1 class="text-center text-[15px]">{{ label }}</h1>
+      <p class="text-[14px] text-[#929292]">{{ id }}</p>
     </div>
   </div>
 </template>

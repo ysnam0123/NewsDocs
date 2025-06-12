@@ -1,5 +1,4 @@
 <script setup>
-import ButtonVue from '@/components/common/ButtonView.vue'
 import { ref } from 'vue'
 import BeforeLogin from './BeforeLogin.vue'
 
@@ -7,6 +6,12 @@ const nextSection = ref(null)
 
 const windowScroll = () => {
   nextSection.value.scrollIntoView({ behavior: 'smooth' })
+}
+import { useRouter } from 'vue-router'
+
+const route = useRouter()
+const logIn = () => {
+  route.push('/login')
 }
 </script>
 
@@ -17,7 +22,12 @@ const windowScroll = () => {
       <div class="flex flex-col justify-center items-center">
         <div class="flex justify-between gap-[200px] mb-[200px]"></div>
         <div>
-          <ButtonVue class="w-[480px] h-[60px] text-[25px] font-bold">로그인</ButtonVue>
+          <button
+            class="bg-[var(--main-color)] text-[var(--main-text)] w-[480px] h-[60px] text-[25px] font-bold rounded-[10px] cursor-pointer"
+            @click="logIn"
+          >
+            로그인
+          </button>
         </div>
       </div>
       <div

@@ -59,7 +59,7 @@ onMounted(() => {
 <template>
   <transition name="fade">
     <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
-      <div class="flex flex-col w-[444px] h-[399px]">
+      <div class="flex flex-col w-[500px] min-h-[400px]">
         <div class="flex gap-[50px] mb-[24px]">
           <h1 class="text-[18px] font-bold">
             {{ name }}님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
@@ -67,7 +67,7 @@ onMounted(() => {
           </h1>
         </div>
         <div>
-          <div class="flex flex-col w-[444px] justify-center items-center gap-[12px]">
+          <div class="flex flex-col w-[500px] justify-center items-center gap-[12px]">
             <div class="flex flex-col gap-[12px]">
               <div class="flex gap-[12px]">
                 <InterestCard
@@ -98,8 +98,8 @@ onMounted(() => {
         <button
           :disabled="store.interest.length < 3"
           :class="[
-            'flex items-center justify-center w-[140px] h-[50px] text-[16px] font-semibold mt-[40px] rounded-[8px] ml-auto cursor-pointer ease-in-out duration-200 hover:scale-[1.025]',
-            store.interest.length >= 3
+            'flex items-center select-none justify-center w-[140px] h-[50px] text-[16px] font-semibold mt-[40px] rounded-[8px] ml-auto cursor-pointer ease-in-out duration-200 hover:scale-[1.025]',
+            store.interest.length >= 3 && store.interest.length <= 4
               ? 'bg-[#7537e3] text-white'
               : 'bg-[#f2f2f2] text-[#b3b3b3] cursor-not-allowed',
           ]"

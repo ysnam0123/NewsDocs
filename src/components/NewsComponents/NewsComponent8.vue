@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
+// import { fetchNews } from '@/api/fetchNewsPractice'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -15,20 +16,35 @@ const summarizeHandler = () => {
 }
 
 const props = defineProps({
+<<<<<<< HEAD
   news: Object,
+=======
+  newsObj: {
+    type: Object,
+    required: true,
+  },
+>>>>>>> 134bf04c78ee38450c81f1481989f2b740c58bf2
 })
+
+console.log('newsObj in NewsComponent8:', props.newsObj)
 </script>
 <template>
-  <div class="h-[470px] relative cursor-pointer">
-    <div class="h-[300px]">
+  <div v-if="newsObj" class="w-[383px] h-[470px] relative">
+    <div class="w-[383px] h-[300px] cursor-pointer">
       <img
+<<<<<<< HEAD
         :src="props.news.image_url"
         class="w-full h-full rounded-[20px] object-cover space-y-0.5"
+=======
+        :src="newsObj.image_url"
+        class="w-full h-full object-cover rounded-[20px] space-y-0.5"
+>>>>>>> 134bf04c78ee38450c81f1481989f2b740c58bf2
         @mouseover="hoverHandler"
       />
     </div>
     <div>
       <div class="px-[10px]">
+<<<<<<< HEAD
         <div
           class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] overflow-ellipsis"
         >
@@ -36,6 +52,13 @@ const props = defineProps({
         </div>
         <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2 overflow-ellipsis">
           {{ props.news.description }}
+=======
+        <div class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-2">
+          {{ newsObj.title || '' }}
+        </div>
+        <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2">
+          {{ newsObj.description || '' }}
+>>>>>>> 134bf04c78ee38450c81f1481989f2b740c58bf2
         </div>
         <div class="flex gap-[8px] mb-[16px]">
           <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
@@ -88,6 +111,18 @@ const props = defineProps({
       @mouseleave="hoverOut"
     >
       <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
+    </div>
+  </div>
+
+  <div v-else class="animate-pulse">
+    <div class="w-[383px] h-[300px] bg-gray-300 rounded-[20px]"></div>
+    <div class="px-[10px] mt-[12px] space-y-2">
+      <div class="h-[24px] bg-gray-300 rounded"></div>
+      <div class="h-[20px] bg-gray-200 rounded w-5/6"></div>
+      <div class="flex gap-[8px] mt-[10px]">
+        <div class="w-[60px] h-[18px] bg-gray-200 rounded"></div>
+        <div class="w-[60px] h-[18px] bg-gray-200 rounded"></div>
+      </div>
     </div>
   </div>
 </template>
