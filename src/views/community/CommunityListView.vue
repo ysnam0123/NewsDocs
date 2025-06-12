@@ -2,12 +2,10 @@
 import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileCard from '@/components/common/ProfileCard.vue'
 import { onMounted, ref } from 'vue'
-import { fetchPost } from '@/api/fetchPost'
-import { getCurrentUser } from '@/api/getCurrentUser'
-import { fetchUser } from '@/api/fetchUser'
-
+import { fetchPost } from '@/api/community/post'
+import { useRouter } from 'vue-router'
 const posts = ref([])
-const currentUser = ref(null)
+const router = useRouter()
 const selectCategory = ref('전체')
 const selectedSort = ref('최신순')
 const handleCategory = (category) => {
@@ -16,12 +14,12 @@ const handleCategory = (category) => {
 const handleSort = (sort) => {
   selectedSort.value = sort
 }
+const goToPostDetail = (post_id) => {
+  router.push(`/community/${post_id}`)
+}
 onMounted(async () => {
   try {
     posts.value = await fetchPost()
-    const user = await getCurrentUser()
-    console.log(user.id)
-    currentUser.value = await fetchUser(user?.id)
   } catch (e) {
     alert(e.message)
   }
@@ -31,9 +29,9 @@ onMounted(async () => {
   <div class="flex w-[1440px] mx-auto">
     <!-- 왼쪽 화면 -->
     <div class="w-[330px] pl-[100px] mt-[40px]">
-      <div class="sticky top-[40px] w-full">
+      <div class="sticky top-[70px] w-full">
         <!-- 프로필 & 태그 -->
-        <ProfileCard :profileImg="currentUser?.profile_img" :nickname="currentUser?.nickname" />
+        <ProfileCard />
       </div>
     </div>
 
@@ -128,12 +126,14 @@ onMounted(async () => {
       <div class="flex flex-col w-[835px]">
         <div v-for="post in posts" :key="post.post_id">
           <CommunityPost
+            @click="goToPostDetail(post.post_id)"
+            :postid="post.post_id"
             :title="post.title"
             :content="post.contents"
             :image="post.content_image"
             :categoryid="post.category_id"
             :userid="post.user_id"
-            class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+            class="border-b border-b-gray-200 dark:border-b-gray-500"
           />
         </div>
       </div>

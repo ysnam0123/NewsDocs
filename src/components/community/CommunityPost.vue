@@ -1,19 +1,26 @@
 <script setup>
-import { fetchCategory } from '@/api/fetchCategory'
-import { fetchUser } from '@/api/fetchUser'
+import { fetchCategory } from '@/api/community/fetchCategory'
+import { fetchUser } from '@/api/community/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import defaultImg from '../../assets/img/communityImg/newsdog4.svg'
+import defaultProfile from '../../assets/img/communityImg/profileDefault.svg'
+import { fetchLike } from '@/api/community/like'
+import { fetchComment } from '@/api/community/comment'
 const props = defineProps({
+  postid: Number,
   title: String,
   content: String,
   image: String,
   categoryid: Number,
   userid: String,
 })
-
+console.log('사용자 이미지:', props.image)
+const likeData = ref([])
 const categoryData = ref(null)
 const userData = ref(null)
+const commentData = ref('')
+
 onMounted(async () => {
   if (props.categoryid) {
     const categoryres = await fetchCategory(props.categoryid)
@@ -22,6 +29,13 @@ onMounted(async () => {
   if (props.userid) {
     const userres = await fetchUser(props.userid)
     userData.value = userres
+  }
+  try {
+    likeData.value = await fetchLike(props.postid)
+    // console.log('좋아요개수:', likeData.value.length)
+    commentData.value = await fetchComment(props.postid)
+  } catch (err) {
+    console.log('post렌더링에러:', err.message)
   }
 })
 </script>
@@ -45,7 +59,7 @@ onMounted(async () => {
           <!-- 작성자 -->
           <div class="flex gap-[9.5px] items-center">
             <img
-              :src="userData?.profile_img"
+              :src="userData?.profile_img ? userData.profile_img : defaultProfile"
               alt="작성자 프로필 이미지"
               class="w-10 h-10 rounded-full bg-gray-300"
             />
@@ -76,10 +90,14 @@ onMounted(async () => {
         <!-- 좋아요,댓글 -->
         <div class="flex items-center w-auto mt-auto h-[18px]">
           <ThumbsUp class="w-4 h-4 text-[#B7B7B7]" />
-          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">32</div>
+          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
+            {{ likeData.length }}
+          </div>
 
           <MessageSquare class="w-4 h-4 ml-[11px] text-[#B7B7B7]" />
-          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">124</div>
+          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
+            {{ commentData.length }}
+          </div>
         </div>
       </div>
     </div>

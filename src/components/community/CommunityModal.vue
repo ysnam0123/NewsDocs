@@ -9,7 +9,7 @@ import icon5 from '@/assets/icons/communityDropdown/global.svg'
 import icon6 from '@/assets/icons/communityDropdown/social.svg'
 import icon7 from '@/assets/icons/communityDropdown/economy.svg'
 import { ArrowUpToLine, Trash2, ChevronDown, Image } from 'lucide-vue-next'
-import { postUpload } from '@/api/postUpload'
+import { postUpload } from '@/api/community/post'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const modalStore = useModalStore()
@@ -74,6 +74,9 @@ const handleImgUpload = async (e) => {
 const handleFinalUpload = async () => {
   if (!file.value && !content.value.trim()) {
     alert('내용 또는 이미지를 작성해주세요.')
+    return
+  } else if (selectedCategory.value === '카테고리 선택') {
+    alert('카테고리를 선택해주세요')
     return
   }
   try {

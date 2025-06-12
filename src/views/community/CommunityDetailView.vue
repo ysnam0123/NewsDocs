@@ -1,19 +1,101 @@
 <script setup>
 import ProfileCard from '@/components/common/ProfileCard.vue'
 import CommunityPostDetail from '@/components/community/CommunityPostDetail.vue'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { ChevronLeft, MessageSquare, MessageSquarePlus, ThumbsUp } from 'lucide-vue-next'
 import CommunityComment from '@/components/community/CommunityComment.vue'
 import CommunityMyComment from '@/components/community/CommunityMyComment.vue'
+import { fetchPostDetail } from '@/api/community/fetchPostDetail'
+import { fetchCategory } from '@/api/community/fetchCategory'
+import { fetchUser } from '@/api/community/fetchUser'
+import { fetchLike } from '@/api/community/like'
+import { isLikedByUser, likeUpload, unlikeUpload } from '@/api/community/like'
+import { userAuthStore } from '@/stores/authStore'
+import { storeToRefs } from 'pinia'
+import { fetchComment } from '@/api/community/comment'
 const isLiked = ref(false)
 const router = useRouter()
+const route = useRoute()
+const postId = route.params.id
+const post = ref('')
+const category = ref('')
+const likeCount = ref('')
+const writer = ref(null)
+const comment = ref('')
+const auth = userAuthStore()
+const { user } = storeToRefs(auth)
+// console.log('상세페이지 사용자정보:', user.value.user_id)
+onMounted(async () => {
+  if (!postId) return
+  try {
+    const postData = await fetchPostDetail(postId)
+    post.value = postData
+    // console.log('포스트정보:', post.value)
+
+    const categoryData = await fetchCategory(postData.category_id)
+    category.value = categoryData.title
+    // console.log('카테고리 정보:', category.value)
+
+    const writerData = await fetchUser(postData.user_id)
+    writer.value = writerData
+    // console.log('작성자 정보:', writer.value.user_id)
+    // console.log('작성자 닉네임:', user)
+
+    //게시글 좋아요 리스트
+    const likeData = await fetchLike(postData.post_id)
+    likeCount.value = likeData.length
+
+    //로그인 사용자의 좋아요여부
+    const liked = await isLikedByUser(postData.post_id, user.value.user_id)
+    isLiked.value = liked
+
+    const commentData = await fetchComment(postData.post_id)
+    comment.value = commentData
+  } catch (err) {
+    console.error('상세페이지에서 불러오기 오류:', err)
+  }
+})
 const goToCommunity = () => {
   router.push('/community')
 }
-const toggleLike = () => {
+const toggleLike = async () => {
+  if (!user.value?.user_id) {
+    alert('로그인이 필요합니다')
+    return
+  }
   isLiked.value = !isLiked.value
+  if (isLiked.value) likeCount.value += 1
+  else likeCount.value -= 1
+  try {
+    if (isLiked.value) {
+      await likeUpload(post.value.post_id, user.value.user_id)
+    } else {
+      await unlikeUpload(post.value.post_id, user.value.user_id)
+    }
+    //좋아요 삭제도 구현해야함
+  } catch (err) {
+    console.error('좋아요 업로드/삭제 에러', err)
+  }
 }
+// const toggleLike = async () => {
+//   if (!user.value?.user_id) {
+//     alert('로그인이 필요합니다')
+//     return
+//   } else if (!post.value?.post_id) return
+//   try {
+//     if (isLiked.value) {
+//       await unlikeUpload(post.value.post_id, user.value.user_id)
+//       isLiked.value = false
+//     } else {
+//       await likeUpload(post.value.post_id, user.value.user_id)
+//       isLiked.value = true
+//     }
+//     //좋아요 삭제도 구현해야함
+//   } catch (err) {
+//     console.error(err)
+//   }
+// }
 </script>
 <template>
   <div class="flex w-[1440px] mx-auto">
@@ -41,7 +123,18 @@ const toggleLike = () => {
         </button>
 
         <!-- 게시글 -->
-        <CommunityPostDetail class="mt-5" />
+        <CommunityPostDetail
+          v-if="writer && post"
+          :postId="postId"
+          :img="post.content_image"
+          :title="post.title"
+          :content="post.contents"
+          :category="category"
+          :userId="writer.user_id"
+          :userName="writer.nickname"
+          :userImg="writer.profile_img"
+          class="mt-5"
+        />
         <!-- 좋아요,댓글 개수 -->
         <div class="flex items-center mt-[30px] w-auto h-[22px]">
           <div
@@ -54,11 +147,11 @@ const toggleLike = () => {
             ]"
           >
             <ThumbsUp class="w-5 h-5" />
-            <div class="ml-[3px] text-[16px]">32</div>
+            <div class="ml-[3px] text-[16px]">{{ likeCount }}</div>
           </div>
           <div class="flex items-center text-[#B7B7B7] dark:text-[#7A7A7A]">
             <MessageSquare class="ml-4 w-5 h-5" />
-            <div class="ml-[3px] text-[16px]">124</div>
+            <div class="ml-[3px] text-[16px]">{{ comment?.length }}</div>
           </div>
         </div>
         <!-- 댓글입력 -->
