@@ -15,23 +15,22 @@ const summarizeHandler = () => {
 }
 
 const props = defineProps({
-  newsObj: {
-    type: Object,
-    required: true,
-  },
+  news: Object,
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 </script>
 <template>
-  <div class="flex w-[600px] h-[184px] relative" @mouseover="hoverHandler">
+  <div v-if="props.news" class="flex w-[600px] h-[184px] relative" @mouseover="hoverHandler">
     <div class="w-[600px] h-[184px]">
-      <img :src="newsObj.image_url" alt="dmz" class="rounded-[16px] w-full h-full object-cover" />
+      <img :src="news.image_url" alt="dmz" class="rounded-[16px] w-full h-full object-cover" />
     </div>
     <div
       v-show="!wantSummary"
       class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] w-[600px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
     >
       <p class="font-bold text-[18px] text-[white]">
-        {{ newsObj.title }}
+        {{ props.news.title }}
       </p>
       <!-- 좋아요 상자 -->
       <div class="flex gap-[8px]">
