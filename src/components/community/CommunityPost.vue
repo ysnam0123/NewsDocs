@@ -1,6 +1,6 @@
 <script setup>
 import { fetchCategory } from '@/api/community/fetchCategory'
-import { fetchUser } from '@/api/community/fetchUser'
+import { fetchUser } from '@/api/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 
 import { onMounted, ref } from 'vue'
@@ -16,7 +16,7 @@ const props = defineProps({
   categoryid: Number,
   userid: String,
 })
-console.log('사용자 이미지:', props.image)
+// console.log('사용자 이미지:', props.image)
 const likeData = ref([])
 const categoryData = ref(null)
 const userData = ref(null)

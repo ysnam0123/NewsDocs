@@ -2,7 +2,7 @@
 import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileCard from '@/components/common/ProfileCard.vue'
 import { onMounted, ref } from 'vue'
-import { fetchPost } from '@/api/community/post'
+import { fetchPost } from '@/api/fetchPost'
 import { useRouter } from 'vue-router'
 const posts = ref([])
 const router = useRouter()

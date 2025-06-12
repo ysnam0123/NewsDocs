@@ -1,6 +1,6 @@
 import supabase from '@/utils/supabase'
 import { ref } from 'vue'
-import { getCurrentUser } from './getCurrentUser'
+import { getCurrentUser } from '../getCurrentUser'
 
 //uploadPost
 export const postUpload = () => {
@@ -66,16 +66,4 @@ export const postUpload = () => {
     file,
     uploadPost,
   }
-}
-
-export const fetchPost = async () => {
-  const { data, error } = await supabase
-    .from('post')
-    .select()
-    .order('created_at', { ascending: false })
-  if (error) {
-    console.error('게시글 불러오기 실패')
-    return []
-  }
-  return data
 }

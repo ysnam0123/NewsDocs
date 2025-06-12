@@ -3,26 +3,28 @@ import { useModalStore } from '@/stores/newPostStore'
 import CommunityModal from '../community/CommunityModal.vue'
 import { useRouter } from 'vue-router'
 import defaultImg from '../../assets/img/communityImg/profileDefault.svg'
-// import { onMounted, ref } from 'vue'
-// import { getCurrentUser } from '@/api/community/getCurrentUser'
-// import { fetchUser } from '@/api/community/fetchUser'
-import { storeToRefs } from 'pinia'
-import { userAuthStore } from '@/stores/authStore'
-const auth = userAuthStore()
-const { user } = storeToRefs(auth)
+// import { storeToRefs } from 'pinia'
+// import { userAuthStore } from '@/stores/authStore'
+import { onMounted, ref } from 'vue'
+import { getCurrentUser } from '@/api/getCurrentUser'
+import { fetchUser } from '@/api/fetchUser'
+// const auth = userAuthStore()
+// const { user, isLoggedin } = storeToRefs(auth)
+// console.log('로그인 여부:', isLoggedin.value)
+// console.log('로그인한 사용자 정보:', user.value)
 // const { isLoggedin } = storeToRefs(auth) //isLoggedIn이 안됨
 
 // if (user) console.log('사용자 정보:', user)
 
 //삭제예정
-// const currentUser = ref(null)
+const currentUser = ref(null)
 
-// onMounted(async () => {
-//   const user = await getCurrentUser()
-//   //console.log(user.id)
-//   currentUser.value = await fetchUser(user?.id)
-// })
-//
+onMounted(async () => {
+  const user = await getCurrentUser()
+  //console.log(user.id)
+  currentUser.value = await fetchUser(user?.id)
+})
+
 const modalStore = useModalStore()
 const router = useRouter()
 const goToMyPost = () => {
@@ -38,7 +40,7 @@ const postHandler = () => {
 <template>
   <div class="relative flex flex-col items-center w-[170px] min-h-[260px]">
     <!-- 프로필 -->
-    <!-- <div class="w-full flex flex-col items-center">
+    <div class="w-full flex flex-col items-center">
       <img
         :src="currentUser && currentUser.profile_img ? currentUser.profile_img : defaultImg"
         alt="프로필이미지"
@@ -46,8 +48,8 @@ const postHandler = () => {
       />
       <p class="mt-4 text-xl dark:text-[#ffffff]">{{ currentUser?.nickname }}</p>
       <p class="mt-[6px] text-[14px] text-[#8F8F8F]">스포츠, 정치, 문화</p>
-    </div> -->
-    <div class="w-full flex flex-col items-center">
+    </div>
+    <!-- <div class="w-full flex flex-col items-center">
       <img
         :src="user && user.profile_img ? user.profile_img : defaultImg"
         alt="프로필이미지"
@@ -55,7 +57,7 @@ const postHandler = () => {
       />
       <p class="mt-4 text-xl dark:text-[#ffffff]">{{ user?.nickname }}</p>
       <p class="mt-[6px] text-[14px] text-[#8F8F8F]">스포츠, 정치, 문화</p>
-    </div>
+    </div> -->
 
     <!-- 버튼 -->
     <button
@@ -70,12 +72,12 @@ const postHandler = () => {
     >
       내가 작성한 글
     </button>
-    <div v-if="!user">로그인 안되어있습니다</div>
-    <div v-else-if="user">로그인 되어있습니다</div>
+    <div v-if="!currentUser">로그인 안되어있습니다</div>
+    <div v-else-if="currentUser">로그인 되어있습니다</div>
 
     <!-- 비로그인시 로그인 하러가기 버튼-->
     <div
-      v-if="!user"
+      v-if="!currentUser"
       class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/70 dark:bg-black/30 text-center"
     >
       <p class="text-[14px] font-medium text-[#7537E3] dark:text-[#C2A5FF]">로그인이 필요합니다</p>
