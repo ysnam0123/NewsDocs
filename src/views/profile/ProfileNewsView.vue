@@ -1,56 +1,51 @@
 <script setup>
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BackButton from '@/components/common/BackButton.vue'
+import { useRoute } from 'vue-router'
+import { getCurrentUser } from '@/api/getCurrentUser'
+import { fetchUser } from '@/api/fetchUser'
+import { fetchUserByNickname } from '@/api/fetchUserByNickname'
+import { fetchUserScrap } from '@/api/fetchUserScrap'
+import { fetchScrapNews } from '@/api/fetchScrapNews'
 
 const activeTab = ref('전체')
-
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 
-const userScrapNewsMock = [
-  {
-    news_id: 'nws001',
-    created_at: '2025-06-10T12:00:00Z',
-    News_API: {
-      title: '자바스크립트는 여전히 인기 1위',
-      url: 'https://example.com/news/102',
-      published_at: '2025-06-09',
-    },
-  },
-  {
-    news_id: 'nws002',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-  {
-    news_id: 'nws003',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-  {
-    news_id: 'nws004',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-]
+const currentUser = ref(null)
+const route = useRoute()
+const profileUser = ref(null)
+const nicknameParam = route.params.nickname
+
+const scrapNews = ref(null)
+const userScrap = ref([])
+
+onMounted(async () => {
+  try {
+    const user = await getCurrentUser()
+    userScrap.value = await fetchUserScrap(user?.id)
+
+    currentUser.value = await fetchUser(user?.id)
+    const scrapNewsId = userScrap.value.map((item) => item.news_id)
+    console.log(scrapNewsId)
+    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
+    console.log(scrapNews.value)
+
+    if (nicknameParam) {
+      profileUser.value = await fetchUserByNickname(nicknameParam)
+    } else {
+      profileUser.value = currentUser.value
+    }
+  } catch (e) {
+    alert(e.message)
+  }
+})
 
 const NewsList = computed(() => {
   const size = 3
   const result = []
-  for (let i = 0; i < userScrapNewsMock.length; i += size) {
-    result.push(userScrapNewsMock.slice(i, i + size))
+  for (let i = 0; i < userScrap.value.length; i += size) {
+    result.push(userScrap.value.slice(i, i + size))
   }
   return result
 })
@@ -96,7 +91,7 @@ const NewsList = computed(() => {
             class="flex space-x-[24px] pt-5"
           >
             <NewsComponent8
-              v-for="(item, itemIndex) in row"
+              v-for="(item, itemIndex) in scrapNews"
               :key="item.news_id + '-' + itemIndex"
               :news="item"
               class="w-[229px]"

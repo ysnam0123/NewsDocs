@@ -14,15 +14,16 @@ const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
 
-defineProps({
+const props = defineProps({
   news: Object,
 })
+console.log(props.news.news_id)
 </script>
 <template>
   <div class="h-[470px] relative cursor-pointer">
     <div class="h-[300px]">
       <img
-        src="@/assets/img/exImage/sports.svg"
+        :src="props.news.image_url"
         class="w-full h-full rounded-[20px] object-cover space-y-0.5"
         @mouseover="hoverHandler"
       />
@@ -32,10 +33,10 @@ defineProps({
         <div
           class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] overflow-ellipsis"
         >
-          title
+          {{ props.news.title }}
         </div>
         <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2 overflow-ellipsis">
-          content
+          {{ props.news.description }}
         </div>
         <div class="flex gap-[8px] mb-[16px]">
           <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">

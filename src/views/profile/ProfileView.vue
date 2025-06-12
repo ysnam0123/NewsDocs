@@ -10,6 +10,8 @@ import { fetchUser } from '@/api/fetchUser'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchInterest } from '@/api/fetchInterest'
 import { useRoute } from 'vue-router'
+import { fetchUserScrap } from '@/api/fetchUserScrap'
+import { fetchScrapNews } from '@/api/fetchScrapNews'
 
 const posts = ref([])
 const route = useRoute()
@@ -17,6 +19,8 @@ const profileUser = ref(null)
 const currentUser = ref(null)
 const interest = ref(null)
 const categorys = ref([])
+const scrapNews = ref(null)
+const userScrap = ref([])
 
 const nicknameParam = route.params.nickname
 const isMyProfile = computed(() => {
@@ -28,6 +32,10 @@ onMounted(async () => {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
     currentUser.value = await fetchUser(user?.id)
+    userScrap.value = await fetchUserScrap(user?.id)
+    const scrapNewsId = userScrap.value.map((item) => item.news_id)
+
+    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
 
     if (nicknameParam) {
       profileUser.value = await fetchUserByNickname(nicknameParam)
@@ -51,37 +59,13 @@ const myPosts = computed(() =>
   profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
 )
 
-const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사회', '경제']
+const myNews = computed(() =>
+  profileUser.value
+    ? userScrap.value.filter((userScrap) => userScrap.user_id === profileUser.value.user_id)
+    : [],
+)
 
-const userScrapNewsMock = [
-  {
-    news_id: 'nws001',
-    created_at: '2025-06-10T12:00:00Z',
-    News_API: {
-      title: '자바스크립트는 여전히 인기 1위',
-      url: 'https://example.com/news/102',
-      published_at: '2025-06-09',
-    },
-  },
-  {
-    news_id: 'nws002',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-  {
-    news_id: 'nws003',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-]
+const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사회', '경제']
 </script>
 
 <template>
@@ -128,12 +112,12 @@ const userScrapNewsMock = [
           <SleepDog
             content="아직 저장한 뉴스가 없어요!"
             btnText="뉴스 보러가기"
-            v-if="userScrapNewsMock.length === 0"
+            v-if="myNews.length === 0"
           />
-          <div v-else-if="userScrapNewsMock.length !== 0" class="flex pt-12 space-x-[24px] w-full">
+          <div v-else-if="myNews.length !== 0" class="flex pt-12 space-x-[24px] w-full">
             <NewsComponent8
-              v-for="(item, itemIndex) in userScrapNewsMock"
-              :key="item + '-' + itemIndex"
+              v-for="(item, itemIndex) in scrapNews"
+              :key="item.news_id + '-' + itemIndex"
               :news="item"
               class="w-[229px]"
             />
