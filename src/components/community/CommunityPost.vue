@@ -2,6 +2,7 @@
 import { fetchCategory } from '@/api/fetchCategory'
 import { fetchUser } from '@/api/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
+
 import { onMounted, ref } from 'vue'
 
 const props = defineProps({
