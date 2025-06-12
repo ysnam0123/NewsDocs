@@ -3,6 +3,7 @@ import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileDog from '@/components/icon/profileDog.vue'
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import SleepDog from '@/components/profile/SleepDog.vue'
+import ProfileSkel from '@/components/NewsComponents/skeleton/ProfileSkel.vue'
 import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'
 import { getCurrentUser } from '@/api/getCurrentUser'
@@ -21,6 +22,7 @@ const interest = ref(null)
 const categorys = ref([])
 const scrapNews = ref(null)
 const userScrap = ref([])
+const isLoading = ref(true)
 
 const nicknameParam = route.params.nickname
 const isMyProfile = computed(() => {
@@ -42,6 +44,7 @@ onMounted(async () => {
 
     interest.value = await fetchInterest(profileUser.value.user_id)
     categorys.value = interest.value?.map((item) => item.category_id) || []
+    isLoading.value = false
   } catch (e) {
     alert(e.message)
   }
@@ -61,7 +64,8 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
     <div class="max-w-[1200px] mx-auto">
       <div class="flex justify-between">
         <div class="flex space-x-5 mt-5">
-          <ProfileDog />
+          <profileSkel v-if="isLoading" />
+          <ProfileDog v-else />
           <div class="flex flex-col justify-center ml-3">
             <div class="text-[24px] font-semibold mb-1 dark:text-white">
               {{ profileUser?.nickname || '닉네임을 지어주세요' }}
