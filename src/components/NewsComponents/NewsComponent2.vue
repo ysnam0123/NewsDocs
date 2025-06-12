@@ -20,6 +20,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  news: Object,
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 
 console.log('newsObj in NewsComponent2:', props.newsObj)
