@@ -1,11 +1,18 @@
 <script setup>
-import dogImg from '@/assets/img/dog-notfound.png'
+import RenderingAnimation from '@/components/common/renderingAnimation.vue'
+
+//import dogImg from '@/assets/img/dog-notfound.png'
+RenderingAnimation
 </script>
 
 <template>
   <div class="flex flex-col justify-center items-center h-screen bg-white">
     <div class="flex flex-col justify-center items-center mt-[-200px]">
-      <img :src="dogImg" alt="dog" class="w-[400px] ml-14" />
+      <!-- <img :src="dogImg" alt="dog" class="w-[400px] ml-14" /> -->
+      <RenderingAnimation
+        path="https://lottie.host/0e6b861b-f17a-4efb-a463-bd3cc02ee392/A5vrFBQBQ4.json"
+        height="300px"
+      />
       <h1 class="font-bold text-[32px] text-[#191919]">어라..? 이건 본 적 없는 페이지인데요!</h1>
       <h2 class="font-semibold text-[18px] text-[#929292] mt-3.5">
         가끔은 길을 잃을 때가 있죠. 같이 집으로 돌아가요!
