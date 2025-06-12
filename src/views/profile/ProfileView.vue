@@ -106,7 +106,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
             <NewsComponent8
               v-for="(item, itemIndex) in scrapNews"
               :key="item.news_id + '-' + itemIndex"
-              :news="item"
+              :newsObj="item"
               class="w-[229px]"
             />
           </div>

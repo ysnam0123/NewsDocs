@@ -88,7 +88,7 @@ const NewsList = computed(() => {
             <NewsComponent8
               v-for="(item, itemIndex) in scrapNews"
               :key="item.news_id + '-' + itemIndex"
-              :news="item"
+              :newsObj="item"
               class="w-[229px]"
             />
           </div>
