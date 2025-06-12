@@ -1,5 +1,5 @@
 <script setup>
-import { fetchNews } from '@/api/fetchNewsPractice'
+import { fetchNewsData } from '@/api/fetchNews'
 import FavoriteSectionSkel from '@/components/NewsComponents/\bskeleton/FavoriteSectionSkel.vue'
 import FifthSecionSkel from '@/components/NewsComponents/\bskeleton/FifthSecionSkel.vue'
 import FourthSectionSkel from '@/components/NewsComponents/\bskeleton/FourthSectionSkel.vue'
@@ -44,7 +44,7 @@ onMounted(async () => {
   if (interestList.value.length > 0) {
     try {
       for (const item of interestList.value) {
-        const result = await fetchNews(item.id)
+        const result = await fetchNewsData(item.id, 'ko')
         newsResults.push(result)
         await new Promise((resolve) => setTimeout(resolve, 200)) // 200ms 쉬기
       }
