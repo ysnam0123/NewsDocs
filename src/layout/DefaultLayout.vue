@@ -7,8 +7,8 @@ import HeaderBasic from '@/components/common/HeaderBasic.vue'
 const route = useRoute()
 </script>
 <template>
-  <HeaderBasic v-if="!route.meta.hideHeaderBasic" />
   <HeaderView v-if="!route.meta.hideHeader" />
+  <HeaderBasic v-else-if="!route.meta.hideHeaderBasic" />
   <div class="min-h-[100vh]">
     <slot></slot>
   </div>

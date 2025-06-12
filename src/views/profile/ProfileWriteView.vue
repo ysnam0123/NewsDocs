@@ -1,11 +1,43 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BackButton from '@/components/common/BackButton.vue'
+import { fetchPost } from '@/api/fetchPost'
+import { getCurrentUser } from '@/api/getCurrentUser'
+import { fetchUser } from '@/api/fetchUser'
+import { useRoute } from 'vue-router'
+import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 
 const activeTab = ref('전체')
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
+
+const posts = ref([])
+const currentUser = ref(null)
+const route = useRoute()
+const profileUser = ref(null)
+
+const nicknameParam = route.params.nickname
+
+onMounted(async () => {
+  try {
+    posts.value = await fetchPost()
+    const user = await getCurrentUser()
+    currentUser.value = await fetchUser(user?.id)
+
+    if (nicknameParam) {
+      profileUser.value = await fetchUserByNickname(nicknameParam)
+    } else {
+      profileUser.value = currentUser.value
+    }
+  } catch (e) {
+    alert(e.message)
+  }
+})
+
+const myPosts = computed(() =>
+  profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
+)
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -21,7 +53,12 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
           <div
             v-for="tab in tabs"
             :key="tab"
-            @click="activeTab = tab"
+            @click="
+              () => {
+                activeTab = tab
+                console.log('activeTab:', activeTab)
+              }
+            "
             class="flex items-center justify-center w-[103px] h-full text-base cursor-pointer relative transition-all duration-300 dark:hover:text-[#A878FD] hover:text-[#7537E3]"
             :class="{
               'text-[#7537E3] dark:text-[#A878FD] font-semibold': activeTab === tab,
@@ -41,9 +78,16 @@ const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '�
         </div>
       </div>
       <div class="flex flex-col w-[735px]">
-        <CommunityPost class="w-full" />
-        <CommunityPost class="w-full" />
-        <CommunityPost class="w-full" />
+        <div v-for="post in myPosts" :key="post.post_id">
+          <CommunityPost
+            :title="post.title"
+            :content="post.contents"
+            :image="post.content_image"
+            :categoryid="post.category_id"
+            :userid="post.user_id"
+            class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+          />
+        </div>
       </div>
     </div>
   </div>

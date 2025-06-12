@@ -3,8 +3,12 @@ import { ref, computed } from 'vue'
 import { useThemeStore } from '@/stores/useDarkmode'
 import supabase from '@/utils/supabase'
 import { useToast } from 'vue-toastification'
-import { useRouter } from 'vue-router'
+//import { useRouter } from 'vue-router'
 import router from '@/router'
+
+//구글 로그인
+import { useGoogleAuth } from '@/composables/useGoogleAuth'
+const { signInWithGoogle } = useGoogleAuth()
 
 const { toggleDark } = useThemeStore()
 
@@ -22,8 +26,12 @@ function validateEmail() {
   isEmailValid.value = emailPattern.test(email.value)
 }
 
+function onGoogleLogin() {
+  signInWithGoogle(toast)
+}
+
 async function onLogin() {
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value,
   })
@@ -128,6 +136,7 @@ async function onLogin() {
       <div class="flex flex-col gap-[12px] items-center w-full">
         <button
           class="flex items-center justify-center border border-[#DFDFDF] dark:hover:bg-[#3a3a3a] dark:border-[#4D4D4D] dark:text-white rounded-[8px] py-2 text-[16px] font-medium w-[360px] h-[50px] hover:bg-[#F9F9F9] transition-colors duration-300 cursor-pointer"
+          @click="onGoogleLogin"
         >
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"

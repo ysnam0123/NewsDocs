@@ -2,6 +2,7 @@
 import { fetchCategory } from '@/api/community/fetchCategory'
 import { fetchUser } from '@/api/community/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
+
 import { onMounted, ref } from 'vue'
 import defaultImg from '../../assets/img/communityImg/newsdog4.svg'
 import defaultProfile from '../../assets/img/communityImg/profileDefault.svg'
