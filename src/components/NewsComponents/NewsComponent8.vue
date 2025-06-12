@@ -25,8 +25,8 @@ const props = defineProps({
 console.log('newsObj in NewsComponent8:', props.newsObj)
 </script>
 <template>
-  <div v-if="newsObj" class="w-[383px] h-[470px] relative">
-    <div class="w-[383px] h-[300px] cursor-pointer">
+  <div v-if="newsObj" class="h-[470px] relative">
+    <div class="h-[300px] cursor-pointer">
       <img
         :src="newsObj.image_url"
         class="w-full h-full object-cover rounded-[20px] space-y-0.5"

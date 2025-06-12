@@ -15,18 +15,19 @@ const summarizeHandler = () => {
 }
 
 const props = defineProps({
-  newsObj: {
-    type: Object,
-    required: true,
-  },
+  news: Object,
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
-
-console.log('newsObj in SlideNewsComponent:', props.newsObj)
 </script>
 <template>
-  <div class="rounded-[16px] w-[292px] h-[384px] relative" @mouseover="hoverHandler">
+  <div
+    v-if="props.news"
+    class="rounded-[16px] w-[292px] h-[384px] relative"
+    @mouseover="hoverHandler"
+  >
     <img
-      :src="newsObj.image_url"
+      :src="news.image_url"
       alt="slide"
       class="w-full h-full object-cover rounded-[16px] relative"
     />
@@ -35,7 +36,7 @@ console.log('newsObj in SlideNewsComponent:', props.newsObj)
       class="flex flex-col px-[20px] absolute h-[187px] w-[292px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
     >
       <p class="text-[20px] text-white mt-auto break-words line-clamp-2">
-        {{ newsObj.title }}
+        {{ props.news.title }}
       </p>
       <!-- 좋아요 상자 -->
       <div class="flex gap-2 mb-[16px]">

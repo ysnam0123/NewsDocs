@@ -16,33 +16,27 @@ const summarizeHandler = () => {
 }
 
 const props = defineProps({
-  newsObj: {
-    type: Object,
-    required: true,
-  },
   news: Object,
   newsSaveHandler: Function,
   newsDetail: Function,
 })
-
-console.log('newsObj in NewsComponent2:', props.newsObj)
 </script>
 <template>
   <!-- 전체 -->
-  <div class="flex gap-[15px] w-[414px] h-[132px] relative">
+  <div v-if="props.news" class="flex gap-[15px] w-[414px] h-[132px] relative">
     <!-- 이미지 -->
     <div class="cursor-pointer w-[140px]" @mouseover="hoverHandler">
-      <img :src="newsObj.image_url" class="rounded-[20px] w-full h-full object-cover" />
+      <img :src="news.image_url" class="rounded-[20px] w-full h-full object-cover" />
     </div>
     <div class="flex flex-col max-h-[260px]">
       <!-- 기사 -->
 
       <div class="w-[211px] relative flex flex-col mb-[10px]">
         <div class="text-[var(--text-title)] font-bold text-[18px] max-h-[58px] line-clamp-2">
-          {{ newsObj.title || '' }}
+          {{ props.news.title }}
         </div>
         <div class="text-[#A8A8A8] text-[14px] pt-0.5 max-h-[48px] line-clamp-2">
-          {{ newsObj.description || '' }}
+          {{ props.news.description || '' }}
         </div>
       </div>
       <div class="flex gap-[8px] mb-[16px]">

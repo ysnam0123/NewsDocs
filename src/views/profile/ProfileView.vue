@@ -10,6 +10,8 @@ import { fetchUser } from '@/api/fetchUser'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchInterest } from '@/api/fetchInterest'
 import { useRoute } from 'vue-router'
+import { fetchUserScrap } from '@/api/fetchUserScrap'
+import { fetchScrapNews } from '@/api/fetchScrapNews'
 
 const posts = ref([])
 const route = useRoute()
@@ -17,6 +19,8 @@ const profileUser = ref(null)
 const currentUser = ref(null)
 const interest = ref(null)
 const categorys = ref([])
+const scrapNews = ref(null)
+const userScrap = ref([])
 
 const nicknameParam = route.params.nickname
 const isMyProfile = computed(() => {
@@ -29,18 +33,14 @@ onMounted(async () => {
     const user = await getCurrentUser()
     currentUser.value = await fetchUser(user?.id)
 
-    if (nicknameParam) {
-      profileUser.value = await fetchUserByNickname(nicknameParam)
-    } else {
-      profileUser.value = currentUser.value
-    }
+    profileUser.value = nicknameParam ? await fetchUserByNickname(nicknameParam) : currentUser.value
 
-    if (profileUser.value?.user_id) {
-      interest.value = await fetchInterest(profileUser.value.user_id)
-      console.log(profileUser.value.user_id)
-      console.log(interest.value)
-    }
+    userScrap.value = await fetchUserScrap(profileUser.value.user_id)
 
+    const scrapNewsId = userScrap.value.map((item) => item.news_id)
+    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
+
+    interest.value = await fetchInterest(profileUser.value.user_id)
     categorys.value = interest.value?.map((item) => item.category_id) || []
   } catch (e) {
     alert(e.message)
@@ -51,37 +51,9 @@ const myPosts = computed(() =>
   profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
 )
 
+const name = nicknameParam ? nicknameParam + '님이' : '내가'
+const myNews = computed(() => userScrap.value)
 const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사회', '경제']
-
-const userScrapNewsMock = [
-  {
-    news_id: 'nws001',
-    created_at: '2025-06-10T12:00:00Z',
-    News_API: {
-      title: '자바스크립트는 여전히 인기 1위',
-      url: 'https://example.com/news/102',
-      published_at: '2025-06-09',
-    },
-  },
-  {
-    news_id: 'nws002',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-  {
-    news_id: 'nws003',
-    created_at: '2025-06-08T10:00:00Z',
-    News_API: {
-      title: 'OpenAI, GPT-5 출시 임박',
-      url: 'https://example.com/news/101',
-      published_at: '2025-06-07',
-    },
-  },
-]
 </script>
 
 <template>
@@ -117,7 +89,7 @@ const userScrapNewsMock = [
       </div>
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
-          <div class="text-[20px] font-bold dark:text-white">내가 저장한 뉴스</div>
+          <div class="text-[20px] font-bold dark:text-white">{{ name }} 저장한 뉴스</div>
           <RouterLink :to="isMyProfile ? '/profile/news' : `/profile/${nicknameParam}/news`">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
@@ -128,13 +100,13 @@ const userScrapNewsMock = [
           <SleepDog
             content="아직 저장한 뉴스가 없어요!"
             btnText="뉴스 보러가기"
-            v-if="userScrapNewsMock.length === 0"
+            v-if="myNews.length === 0"
           />
-          <div v-else-if="userScrapNewsMock.length !== 0" class="flex pt-12 space-x-[24px] w-full">
+          <div v-else-if="myNews.length !== 0" class="flex pt-12 space-x-[24px] w-full">
             <NewsComponent8
-              v-for="(item, itemIndex) in userScrapNewsMock"
-              :key="item + '-' + itemIndex"
-              :news="item"
+              v-for="(item, itemIndex) in scrapNews"
+              :key="item.news_id + '-' + itemIndex"
+              :newsObj="item"
               class="w-[229px]"
             />
           </div>
@@ -143,7 +115,7 @@ const userScrapNewsMock = [
 
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
-          <div class="text-[20px] font-bold dark:text-white">내가 작성한 글</div>
+          <div class="text-[20px] font-bold dark:text-white">{{ name }} 작성한 글</div>
           <RouterLink :to="isMyProfile ? '/profile/write' : `/profile/${nicknameParam}/write`">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
