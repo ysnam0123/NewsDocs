@@ -18,6 +18,7 @@ const route = useRoute()
 const profileUser = ref(null)
 
 const nicknameParam = route.params.nickname
+const name = nicknameParam ? nicknameParam + '님이' : '내가'
 
 onMounted(async () => {
   try {
@@ -45,7 +46,7 @@ const myPosts = computed(() =>
       <div class="mb-4">
         <BackButton />
       </div>
-      <div class="text-[28px] font-bold dark:text-white mb-8">내가 작성한 글</div>
+      <div class="text-[28px] font-bold dark:text-white mb-8">{{ name }} 작성한 글</div>
       <div class="relative">
         <div
           class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative dark:border-[#3C3C3C]"

@@ -1,6 +1,6 @@
 <script setup>
-import SmallGrayBtn from '@/components/icon/smallGrayBtn.vue'
-import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
+// import SmallGrayBtn from '@/components/icon/smallGrayBtn.vue'
+// import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -60,7 +60,7 @@ import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
             />
           </div>
 
-          <div class="text-[24px] font-bold my-5 dark:text-white">관심사 수정하기</div>
+          <!-- <div class="text-[24px] font-bold my-5 dark:text-white">관심사 수정하기</div>
           <div
             class="w-[444px] h-[259px] border-[1px] border-[#ABABAB] rounded-[15px] dark:border-[#4D4D4D]"
           >
@@ -76,7 +76,7 @@ import SmallVioletBtn from '@/components/icon/smallVioletBtn.vue'
                 <SmallGrayBtn> 스포츠2 </SmallGrayBtn>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="sticky top-[40px] self-start">
           <div class="flex flex-col items-end space-y-2 ml-[46px]">
