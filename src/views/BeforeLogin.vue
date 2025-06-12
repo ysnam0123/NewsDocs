@@ -1,9 +1,6 @@
 <script setup>
-import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
 import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
-import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
-import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
-import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
+
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
@@ -53,21 +50,6 @@ import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCom
         글쓰러 가기
       </button>
     </div>
-    <!-- 섹션 3 : 슬라이드 카드뉴스 -->
-    <div class="w-[100%] h-[524px]">
-      <!-- 제목 -->
-      <div class="mb-[30px]">
-        <h1 class="flex gap-[10px] items-center">
-          <img src="../assets/icons/sportsIcon.svg" alt="sportsIcon" />
-          <p class="text-[30px] font-bold">스포츠</p>
-        </h1>
-      </div>
-    </div>
   </div>
-
-  <NewsComponent5 />
-  <NewsComponent6 />
-  <NewsComponent7 />
-  <NewsComponent10 />
 </template>
 <style scoped></style>

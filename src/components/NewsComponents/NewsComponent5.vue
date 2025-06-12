@@ -13,22 +13,29 @@ const wantSummary = ref(false)
 const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
+const props = defineProps({
+  newsObj: {
+    type: Object,
+    required: true,
+  },
+})
 </script>
 <template>
   <div class="relative flex gap-[22px] w-[600px] h-[184px] rounded-[16px]">
-    <img
-      src="@/assets/img/exImage/trump.png"
-      class="w-[200px] h-[184px] rounded-l-[16px]"
-      @mouseover="hoverHandler"
-    />
+    <div class="w-[200px] h-[184px]">
+      <img
+        :src="newsObj.image_url"
+        class="w-full h-full object-cover rounded-l-[16px]"
+        @mouseover="hoverHandler"
+      />
+    </div>
 
     <div class="flex flex-col gap-[10px] py-[18px] h-[184px]">
       <div class="font-bold text-[18px] w-[272px] text-[var(--text-title)]">
-        트럼프, “나는 미국에 자신이 없어 발언.. 수많은 미국인들 자괴감에 빠져”
+        {{ newsObj.title }}
       </div>
-      <span class="text-sm text-[var(--text-content)] w-[237px]">
-        트럼프가 양심없는 발언을 하여 논란이 되었다. 이날 트럼프는 미국은 평균 이하라며 말도 안되는
-        소리를 연이어 토해내어...
+      <span class="text-sm text-[var(--text-content)] w-[237px] line-clamp-2">
+        {{ newsObj.description || '' }}
       </span>
       <!-- 좋아요 박스 -->
       <div class="flex gap-[8px]">
