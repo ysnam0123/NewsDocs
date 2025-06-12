@@ -16,49 +16,30 @@ const summarizeHandler = () => {
 }
 
 const props = defineProps({
-<<<<<<< HEAD
-  news: Object,
-=======
   newsObj: {
     type: Object,
     required: true,
   },
->>>>>>> 134bf04c78ee38450c81f1481989f2b740c58bf2
 })
 
 console.log('newsObj in NewsComponent8:', props.newsObj)
 </script>
 <template>
-  <div v-if="newsObj" class="w-[383px] h-[470px] relative">
-    <div class="w-[383px] h-[300px] cursor-pointer">
+  <div v-if="newsObj" class="h-[470px] relative">
+    <div class="h-[300px] cursor-pointer">
       <img
-<<<<<<< HEAD
-        :src="props.news.image_url"
-        class="w-full h-full rounded-[20px] object-cover space-y-0.5"
-=======
         :src="newsObj.image_url"
         class="w-full h-full object-cover rounded-[20px] space-y-0.5"
->>>>>>> 134bf04c78ee38450c81f1481989f2b740c58bf2
         @mouseover="hoverHandler"
       />
     </div>
     <div>
       <div class="px-[10px]">
-<<<<<<< HEAD
-        <div
-          class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] overflow-ellipsis"
-        >
-          {{ props.news.title }}
-        </div>
-        <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2 overflow-ellipsis">
-          {{ props.news.description }}
-=======
         <div class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-2">
           {{ newsObj.title || '' }}
         </div>
         <div class="text-[16px] text-[#A8A8A8] mb-[5px] line-clamp-2">
           {{ newsObj.description || '' }}
->>>>>>> 134bf04c78ee38450c81f1481989f2b740c58bf2
         </div>
         <div class="flex gap-[8px] mb-[16px]">
           <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
