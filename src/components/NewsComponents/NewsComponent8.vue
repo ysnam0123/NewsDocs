@@ -17,7 +17,6 @@ const summarizeHandler = () => {
 const props = defineProps({
   news: Object,
 })
-console.log(props.news.news_id)
 </script>
 <template>
   <div class="h-[470px] relative cursor-pointer">

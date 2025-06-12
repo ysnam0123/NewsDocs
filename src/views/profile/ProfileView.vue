@@ -32,23 +32,15 @@ onMounted(async () => {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
     currentUser.value = await fetchUser(user?.id)
-    userScrap.value = await fetchUserScrap(user?.id)
-    const scrapNewsId = userScrap.value.map((item) => item.news_id)
 
+    profileUser.value = nicknameParam ? await fetchUserByNickname(nicknameParam) : currentUser.value
+
+    userScrap.value = await fetchUserScrap(profileUser.value.user_id)
+
+    const scrapNewsId = userScrap.value.map((item) => item.news_id)
     scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
 
-    if (nicknameParam) {
-      profileUser.value = await fetchUserByNickname(nicknameParam)
-    } else {
-      profileUser.value = currentUser.value
-    }
-
-    if (profileUser.value?.user_id) {
-      interest.value = await fetchInterest(profileUser.value.user_id)
-      console.log(profileUser.value.user_id)
-      console.log(interest.value)
-    }
-
+    interest.value = await fetchInterest(profileUser.value.user_id)
     categorys.value = interest.value?.map((item) => item.category_id) || []
   } catch (e) {
     alert(e.message)
@@ -59,12 +51,8 @@ const myPosts = computed(() =>
   profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
 )
 
-const myNews = computed(() =>
-  profileUser.value
-    ? userScrap.value.filter((userScrap) => userScrap.user_id === profileUser.value.user_id)
-    : [],
-)
-
+const name = nicknameParam ? nicknameParam + '님이' : '내가'
+const myNews = computed(() => userScrap.value)
 const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사회', '경제']
 </script>
 
@@ -101,7 +89,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
       </div>
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
-          <div class="text-[20px] font-bold dark:text-white">내가 저장한 뉴스</div>
+          <div class="text-[20px] font-bold dark:text-white">{{ name }} 저장한 뉴스</div>
           <RouterLink :to="isMyProfile ? '/profile/news' : `/profile/${nicknameParam}/news`">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기
@@ -127,7 +115,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
 
       <div class="mt-10 w-[735px]">
         <div class="flex justify-between">
-          <div class="text-[20px] font-bold dark:text-white">내가 작성한 글</div>
+          <div class="text-[20px] font-bold dark:text-white">{{ name }} 작성한 글</div>
           <RouterLink :to="isMyProfile ? '/profile/write' : `/profile/${nicknameParam}/write`">
             <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
               더보기

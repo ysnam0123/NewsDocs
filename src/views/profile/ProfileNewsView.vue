@@ -19,23 +19,18 @@ const nicknameParam = route.params.nickname
 
 const scrapNews = ref(null)
 const userScrap = ref([])
-
+const name = nicknameParam ? nicknameParam + '님이' : '내가'
 onMounted(async () => {
   try {
     const user = await getCurrentUser()
-    userScrap.value = await fetchUserScrap(user?.id)
-
     currentUser.value = await fetchUser(user?.id)
-    const scrapNewsId = userScrap.value.map((item) => item.news_id)
-    console.log(scrapNewsId)
-    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
-    console.log(scrapNews.value)
 
-    if (nicknameParam) {
-      profileUser.value = await fetchUserByNickname(nicknameParam)
-    } else {
-      profileUser.value = currentUser.value
-    }
+    profileUser.value = nicknameParam ? await fetchUserByNickname(nicknameParam) : currentUser.value
+
+    userScrap.value = await fetchUserScrap(profileUser.value.user_id)
+
+    const scrapNewsId = userScrap.value.map((item) => item.news_id)
+    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
   } catch (e) {
     alert(e.message)
   }
@@ -56,7 +51,7 @@ const NewsList = computed(() => {
       <div class="mb-4">
         <BackButton />
       </div>
-      <div class="text-[28px] font-bold dark:text-white mb-8">내가 저장한 뉴스</div>
+      <div class="text-[28px] font-bold dark:text-white mb-8">{{ name }} 저장한 뉴스</div>
       <div class="relative">
         <div
           class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative dark:border-[#3C3C3C]"
