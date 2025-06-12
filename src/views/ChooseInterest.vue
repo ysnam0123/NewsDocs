@@ -12,26 +12,42 @@ import worldIcon from '@/assets/icons/worldIcon.svg'
 import societyIcon from '@/assets/icons/societyIcon.svg'
 import economyIcon from '@/assets/icons/economyIcon.svg'
 import etcIcon from '@/assets/icons/etcIcon.svg'
+import { userAuthStore } from '@/stores/authStore'
 
 const store = useInterestStore()
+const auth = userAuthStore()
+const name = ref(auth.user?.name || '사용자')
+const interests = [
+  { id: 'politics', label: '정치', icon: politicsIcon },
+  { id: 'sports', label: '스포츠', icon: sportsIcon },
+  { id: 'entertain', label: '연예', icon: entertainmentIcon },
+  { id: 'culture', label: '문화', icon: cultureIcon },
+  { id: 'abroad', label: '해외', icon: worldIcon },
+  { id: 'society', label: '사회', icon: societyIcon },
+  { id: 'economy', label: '경제', icon: economyIcon },
+  { id: 'etc', label: '그 외', icon: etcIcon },
+]
 
+//관심사 추가
 const addInterest = (item) => {
   // 관심사가 이미 선택되어있는지 확인
   const selectedInterest = store.interest.some((interest) => interest.id === item.id)
   // 이미 선택된거 -> 제거
   if (selectedInterest) {
     store.interest = store.interest.filter((interest) => interest.id !== item.id)
-    console.log(`${item.id}가 삭제됨!`)
+    //console.log(`${item.id}가 삭제됨!`)
   } else {
-    // 선택되지 않은건 상태에 저장
+    //전역 상태 저장
     store.interest.push(item)
   }
-  console.log(store.interest)
+  //console.log(store.interest)
 }
 
 const router = useRouter()
 const chooseFavorite = () => {
-  router.push('/favoriteinterest')
+  if (store.interest.length >= 3) {
+    router.push('/interest/fav')
+  }
 }
 const pageMounted = ref(false)
 onMounted(() => {
@@ -39,17 +55,6 @@ onMounted(() => {
     pageMounted.value = true
   }, 300)
 })
-
-const interests = [
-  { id: 'politics', label: '정치', icon: politicsIcon },
-  { id: 'sports', label: '스포츠', icon: sportsIcon },
-  { id: 'entertain', label: '연예', icon: entertainmentIcon },
-  { id: 'culture', label: '문화', icon: cultureIcon },
-  { id: 'aboard', label: '해외', icon: worldIcon },
-  { id: 'society', label: '사회', icon: societyIcon },
-  { id: 'economy', label: '경제', icon: economyIcon },
-  { id: 'etc', label: '그 외', icon: etcIcon },
-]
 </script>
 <template>
   <transition name="fade">
@@ -57,8 +62,8 @@ const interests = [
       <div class="flex flex-col w-[500px] min-h-[400px]">
         <div class="flex gap-[50px] mb-[24px]">
           <h1 class="text-[18px] font-bold">
-            OO님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
-            <span class="text-[#8b8b8b] text-[14px] font-medium">(최대 4개)</span>
+            {{ name }}님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
+            <span class="text-[#8b8b8b] text-[14px] font-medium">(최소 3개)</span>
           </h1>
         </div>
         <div>

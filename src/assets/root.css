@@ -1,6 +1,6 @@
 :root {
   /* 공통 요소 */
-  --bg-color: #f6f6f6;
+  --bg-color: #ffffff;
   --main-text: #ffffff;
   --sub-text: #8f8f8f;
   --message-bg: #efefef;
@@ -73,7 +73,7 @@
 /* 다크모드 */
 .dark {
   /* 공통 요소 */
-  --bg-color: #363636;
+  --bg-color: #262626;
   --main-text: #ffffff;
   --sub-text: #8f8f8f;
   --message-bg: #3c3c3c;
@@ -84,9 +84,9 @@
   --background-purple: #edebf1;
   --lightGray: #e0e0e0;
 
-  /* 수정해야함 */
-  --element-background: #f6f6f6;
-  --element-background-hover: #ededed;
+  /* 헤더 버튼 */
+  --element-background: #363636;
+  --element-background-hover: #4a4a4a;
 
   /* 버튼 */
 
