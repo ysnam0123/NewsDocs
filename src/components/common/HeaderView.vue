@@ -53,7 +53,7 @@ const seeNews = () => {
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] ease-in duration-75 hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
           @click="seeNews"
         >
-          다른 소식
+          모든 소식
         </li>
         <li
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] ease-in duration-75 hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"

@@ -21,6 +21,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { useNewsStore } from '@/stores/newsStore'
+import supabase from '@/utils/supabase'
 
 const newsList = ref([])
 const randomNews = ref(null)
@@ -55,13 +56,44 @@ const selectCategory = (category) => {
   activeCategory.value = category
 }
 
-const newsDetailHandler = (news) => {
+// 뉴스를 전역과 동시에 supabase db에 저장
+const newsSavedHandler = async (news) => {
   newsStore.selectedNews = news
-  router.push(`/news/detail/${news.article_id}`)
+
+  const { data: savedNews, error } = await supabase
+    .from('news')
+    .select('news_id')
+    .eq('news_id', news.article_id)
+    .maybeSingle()
+
+  if (error) {
+    console.error('뉴스 저장 실패', error)
+    return
+  }
+
+  if (!savedNews) {
+    const { error: insertError } = await supabase.from('news').insert([
+      {
+        news_id: news.article_id,
+        category_id: news.category_id,
+        title: news.title,
+        link: news.link,
+        keywords: news.keywords,
+        description: news.description,
+        pub_date: news.pub_date,
+        image_url: news.image_url,
+        source_name: news.source_name,
+        category: news.category,
+      },
+    ])
+    if (insertError) {
+      console.error('뉴스 저장 실패함', insertError)
+    }
+  }
 }
 
 onMounted(async () => {
-  const fetchNews = await fetchNewsData('연예', 'ko')
+  const fetchNews = await fetchNewsData('경제', 'ko')
   console.log('뉴스 데이터', fetchNews)
   newsList.value = fetchNews
 
@@ -95,7 +127,7 @@ onMounted(async () => {
     <div class="mx-auto max-w-[1240px] pt-8">
       <div class="section1">
         <div class="flex gap-10 mb-20">
-          <NewsComponent1 :news-detail="newsDetailHandler" :news="randomNews" />
+          <NewsComponent1 :news-save-handler="newsSavedHandler" :news="randomNews" />
 
           <div class="flex flex-col gap-8.5">
             <NewsComponent2 />
