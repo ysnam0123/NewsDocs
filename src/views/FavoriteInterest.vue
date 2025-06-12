@@ -37,7 +37,7 @@ const myInterest = () => {
 <template>
   <transition name="fade">
     <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
-      <div class="w-[444px] h-[284px]">
+      <div class="w-[530px] h-[284px]">
         <!-- 제목 -->
         <h1 class="text-[18px] font-semibold mb-[22px]">
           마지막으로 00님의 <br />

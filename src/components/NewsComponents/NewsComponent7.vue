@@ -13,18 +13,24 @@ const wantSummary = ref(false)
 const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
+
+const props = defineProps({
+  newsObj: {
+    type: Object,
+    required: true,
+  },
+})
 </script>
 <template>
-  <div class="relative" @mouseover="hoverHandler">
+  <div v-if="newsObj" class="relative" @mouseover="hoverHandler">
     <div class="w-[600px] h-[118px] rounded-[16px] p-[20px] border-1 border-[#EBEBEB]">
       <div class="flex flex-col gap-[12px]">
-        <h1 class="w-[425px] text-[18px] font-bold text-[var(--text-title)]">
-          NH농협은행, 예금금리 최고 0.3%p 내려…"시장금리 반영"
+        <h1 class="w-[425px] text-[18px] font-bold text-[var(--text-title)] line-clamp-1">
+          {{ newsObj.title }}
         </h1>
         <div class="flex">
-          <p class="text-[#8f8f8f] text-[14px] font-medium w-[425px]">
-            NH농협은행은 이날 홈페이지에서 거치식 예금 금리를 이날부터 0.25~0.30%포인트(p)
-            인하한다고 고객들에게 안내했다. 아울러 적립식 예
+          <p class="text-[#8f8f8f] text-[14px] font-medium w-[425px] line-clamp-2">
+            {{ newsObj.description }}
           </p>
           <!-- 좋아요 박스 -->
           <div class="flex gap-[5px] ml-auto mt-auto">
@@ -75,6 +81,9 @@ const summarizeHandler = () => {
         </div>
       </div>
     </transition>
+  </div>
+  <div v-else class="animate-pulse">
+    <div class="w-[600px] h-[118px] bg-gray-300 rounded-[20px]"></div>
   </div>
 </template>
 <style scoped>
