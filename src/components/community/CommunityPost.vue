@@ -1,11 +1,37 @@
 <script setup>
+import { fetchCategory } from '@/api/fetchCategory'
+import { fetchUser } from '@/api/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
+
+import { onMounted, ref } from 'vue'
+
+const props = defineProps({
+  title: String,
+  content: String,
+  image: String,
+  categoryid: Number,
+  userid: String,
+})
+
+const categoryData = ref(null)
+const userData = ref(null)
+onMounted(async () => {
+  if (props.categoryid) {
+    const categoryres = await fetchCategory(props.categoryid)
+    categoryData.value = categoryres
+  }
+  if (props.userid) {
+    const userres = await fetchUser(props.userid)
+    userData.value = userres
+  }
+})
 </script>
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
     <img
-      src="../../assets/img/communityPostImg.svg"
+      :src="props.image"
+      alt="게시글 이미지"
       class="w-[232px] h-[171px] rounded-[12px] bg-gray-300 group-hover:opacity-80 transition-all duration-300"
     />
     <div class="flex flex-col flex-grow">
@@ -15,23 +41,32 @@ import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
         <div class="w-full h-10 flex items-center justify-between">
           <!-- 작성자 -->
           <div class="flex gap-[9.5px] items-center">
-            <div class="w-10 h-10 rounded-full bg-gray-300"></div>
-            <div class="text-[16px] dark:text-[#ffffff]">userName</div>
+            <img
+              :src="userData?.profile_img"
+              alt="작성자 프로필 이미지"
+              class="w-10 h-10 rounded-full bg-gray-300"
+            />
+            <div class="text-[16px] dark:text-[#ffffff]">{{ userData?.nickname }}</div>
           </div>
           <!-- 태그 -->
-          <p class="flex items-center text-[16px] text-[#7537E3] dark:text-[#A878FD]">#스포츠</p>
+          <p
+            v-if="categoryData"
+            class="flex items-center text-[16px] text-[#7537E3] dark:text-[#A878FD]"
+          >
+            #{{ categoryData.title }}
+          </p>
         </div>
         <!-- 내용 -->
         <div class="mt-5">
           <div
             class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
           >
-            제목입니당
+            {{ props.title }}
           </div>
           <div
             class="mt-[6px] text-[14px] group-hover:text-[#515151] text-[#191919] dark:text-[#8F8F8F] transition-all duration-300"
           >
-            내용내용내용내용.내용내용내용내용내용내용내용내용내용내용내,
+            {{ props.content }}
           </div>
         </div>
 
