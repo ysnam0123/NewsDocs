@@ -121,13 +121,13 @@ watch(isLoading, async (value) => {
       class="justify-center rounded-xl max-w-[707px] bg-[#EFEFEF] mb-5 dark:bg-[#323232] dark:text-white"
     >
       <!-- 로딩중 -->
-      <div v-if="isLoading" class="flex flex-col justify-center items-center h-[200px]">
+      <div v-if="!isLoading" class="flex flex-col justify-center items-center h-[200px]">
         <DotLottieVue
-          style="width: 130px"
+          style="height: 120px"
           autoplay
           loop
           noMargin
-          src="https://lottie.host/550b5606-0cf1-47aa-9817-0871d746e99b/N4PnQiVNl0.lottie"
+          src="https://lottie.host/c3112035-c95f-40a1-b006-a53c7780f4a7/MFmjOedJhQ.lottie"
         />
         <p class="text-lg mt-2">요약중...</p>
       </div>
