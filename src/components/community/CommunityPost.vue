@@ -1,20 +1,27 @@
 <script setup>
-import { fetchCategory } from '@/api/fetchCategory'
+import { fetchCategory } from '@/api/community/fetchCategory'
 import { fetchUser } from '@/api/fetchUser'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 
 import { onMounted, ref } from 'vue'
-
+import defaultImg from '../../assets/img/communityImg/newsdog4.svg'
+import defaultProfile from '../../assets/img/communityImg/profileDefault.svg'
+// import { fetchLike } from '@/api/community/like'
+import { fetchComment } from '@/api/community/comment'
 const props = defineProps({
+  postid: Number,
   title: String,
   content: String,
   image: String,
   categoryid: Number,
   userid: String,
+  like: Number,
 })
-
+// const likeData = ref([])
 const categoryData = ref(null)
 const userData = ref(null)
+const commentData = ref('')
+
 onMounted(async () => {
   if (props.categoryid) {
     const categoryres = await fetchCategory(props.categoryid)
@@ -24,16 +31,27 @@ onMounted(async () => {
     const userres = await fetchUser(props.userid)
     userData.value = userres
   }
+  try {
+    // likeData.value = await fetchLike(props.postid)
+    // console.log('좋아요개수:', likeData.value.length)
+    commentData.value = await fetchComment(props.postid)
+  } catch (err) {
+    console.log('post렌더링에러:', err.message)
+  }
 })
 </script>
 <template>
   <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
-    <img
-      :src="props.image"
-      alt="게시글 이미지"
-      class="w-[232px] h-[171px] rounded-[12px] bg-gray-300 group-hover:opacity-80 transition-all duration-300"
-    />
+    <div
+      class="flex items-center justify-center w-[232px] h-[171px] rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
+    >
+      <img
+        :src="props.image ? props.image : defaultImg"
+        alt="게시글 이미지"
+        :class="props.image ? 'w-full h-full rounded-[12px]' : 'w-[144px] h-[93px] rounded-[12px] '"
+      />
+    </div>
     <div class="flex flex-col flex-grow">
       <!-- 게시글 내용 -->
       <div class="flex flex-col justify-center w-full h-[172px]">
@@ -42,7 +60,7 @@ onMounted(async () => {
           <!-- 작성자 -->
           <div class="flex gap-[9.5px] items-center">
             <img
-              :src="userData?.profile_img"
+              :src="userData?.profile_img ? userData.profile_img : defaultProfile"
               alt="작성자 프로필 이미지"
               class="w-10 h-10 rounded-full bg-gray-300"
             />
@@ -73,10 +91,14 @@ onMounted(async () => {
         <!-- 좋아요,댓글 -->
         <div class="flex items-center w-auto mt-auto h-[18px]">
           <ThumbsUp class="w-4 h-4 text-[#B7B7B7]" />
-          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">32</div>
+          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
+            {{ props.like }}
+          </div>
 
           <MessageSquare class="w-4 h-4 ml-[11px] text-[#B7B7B7]" />
-          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">124</div>
+          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
+            {{ commentData.length }}
+          </div>
         </div>
       </div>
     </div>
