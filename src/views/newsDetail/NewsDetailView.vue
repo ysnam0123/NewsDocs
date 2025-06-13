@@ -129,7 +129,7 @@ watch(isLoading, async (value) => {
           noMargin
           src="https://lottie.host/c3112035-c95f-40a1-b006-a53c7780f4a7/MFmjOedJhQ.lottie"
         />
-        <p class="text-lg mt-2">요약중...</p>
+        <p class="text-lg">요약중...</p>
       </div>
       <!-- 요약보기 -->
       <div v-else>
