@@ -1,6 +1,6 @@
 import supabase from '@/utils/supabase'
 import { ref } from 'vue'
-import { getCurrentUser } from './getCurrentUser'
+import { getCurrentUser } from '../getCurrentUser'
 
 //uploadPost
 export const postUpload = () => {
@@ -10,7 +10,7 @@ export const postUpload = () => {
 
   const uploadImage = async (fileObj) => {
     const fileName = `${Date.now()}_${fileObj.name}`
-    console.log('fileName:', fileName)
+    // console.log('fileName:', fileName)
     const { data: uploadData, error: imageError } = await supabase.storage
       .from('post-images')
       .upload(fileName, fileObj)
@@ -31,27 +31,31 @@ export const postUpload = () => {
     const user = await getCurrentUser()
 
     isUploading.value = true
-    console.log('제목:', title)
+    // console.log('제목:', title)
     try {
       if (file.value) {
         imageUrl.value = await uploadImage(file.value)
       }
 
-      const { error: insertError } = await supabase.from('post').insert([
-        {
-          user_id: user.id,
-          category_id: categoryId + 1,
-          title: title,
-          contents: content,
-          content_image: imageUrl.value,
-        },
-      ])
+      const { data, error: insertError } = await supabase
+        .from('post')
+        .insert([
+          {
+            user_id: user.id,
+            category_id: categoryId + 1,
+            title: title,
+            contents: content,
+            content_image: imageUrl.value,
+          },
+        ])
+        .select() //
 
       if (insertError) {
         alert('게시글 업로드 실패!')
         console.error('게시글 업로드 실패!:', insertError)
         throw new Error('게시글 저장 실패')
       }
+      return data?.[0] //
     } finally {
       isUploading.value = false
     }
