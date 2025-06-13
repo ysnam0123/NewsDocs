@@ -110,7 +110,10 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
         <div class="flex justify-between">
           <div class="text-[20px] font-bold dark:text-white">{{ name }} 저장한 뉴스</div>
           <RouterLink :to="isMyProfile ? '/profile/news' : `/profile/${nicknameParam}/news`">
-            <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
+            <button
+              v-if="myNews.length !== 0"
+              class="text-[#191919] text-base cursor-pointer underline dark:text-white"
+            >
               더보기
             </button>
           </RouterLink>
@@ -144,7 +147,10 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
         <div class="flex justify-between">
           <div class="text-[20px] font-bold dark:text-white">{{ name }} 작성한 글</div>
           <RouterLink :to="isMyProfile ? '/profile/write' : `/profile/${nicknameParam}/write`">
-            <button class="text-[#191919] text-base cursor-pointer underline dark:text-white">
+            <button
+              v-if="myPosts.length !== 0"
+              class="text-[#191919] text-base cursor-pointer underline dark:text-white"
+            >
               더보기
             </button>
           </RouterLink>
