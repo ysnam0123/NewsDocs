@@ -14,23 +14,29 @@ const wantSummary = ref(false)
 const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
+
+const props = defineProps({
+  news: Object,
+  newsSaveHandler: Function,
+  newsDetail: Function,
+})
 </script>
 <template>
   <!-- 전체 -->
-  <div class="flex gap-[15px] w-[414px] h-[132px] relative">
+  <div v-if="props.news" class="flex gap-[15px] w-[414px] h-[132px] relative">
     <!-- 이미지 -->
-    <div class="min-w-[140px] min-h-[132px] cursor-pointer" @mouseover="hoverHandler">
-      <img src="@/assets/img/exImage/newscomponent2.svg" class="rounded-[20px]" />
+    <div class="cursor-pointer w-[140px]" @mouseover="hoverHandler">
+      <img :src="news.image_url" class="rounded-[20px] w-full h-full object-cover" />
     </div>
     <div class="flex flex-col max-h-[260px]">
       <!-- 기사 -->
 
       <div class="w-[211px] relative flex flex-col mb-[10px]">
-        <div class="text-[var(--text-title)] font-bold text-[18px] max-h-[58px]">
-          손흥민 유로파 리그 우승, 다음 행보는 어디일까요??
+        <div class="text-[var(--text-title)] font-bold text-[18px] max-h-[58px] line-clamp-2">
+          {{ props.news.title }}
         </div>
         <div class="text-[#A8A8A8] text-[14px] pt-0.5 max-h-[48px] line-clamp-2">
-          기사내용입니다.기사내용입니다.기사내용...기사내용입니다.기사내용입니다.
+          {{ props.news.description || '' }}
         </div>
       </div>
       <div class="flex gap-[8px] mb-[16px]">

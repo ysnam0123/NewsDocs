@@ -1,57 +1,71 @@
 <script setup>
+import { fetchNewsData } from '@/api/fetchNews'
+import FavoriteSectionSkel from '@/components/NewsComponents/\bskeleton/FavoriteSectionSkel.vue'
+import FifthSecionSkel from '@/components/NewsComponents/\bskeleton/FifthSecionSkel.vue'
+import FourthSectionSkel from '@/components/NewsComponents/\bskeleton/FourthSectionSkel.vue'
+import SecondSectionSkel from '@/components/NewsComponents/\bskeleton/SecondSectionSkel.vue'
+import SixthSectionSkel from '@/components/NewsComponents/\bskeleton/SixthSectionSkel.vue'
+import ThirdSectionSkel from '@/components/NewsComponents/\bskeleton/ThirdSectionSkel.vue'
 import HotDocsComponent from '@/components/NewsComponents/HotDocsComponent.vue'
-import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
-import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
-import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
-import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
-import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
-import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
-import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
-import SlideNewsComponent from '@/components/NewsComponents/SlideNewsComponent.vue'
+import FavoriteSection from '@/components/NewsComponents/section/FavoriteSection.vue'
+import FifthSection from '@/components/NewsComponents/section/FifthSection.vue'
+import FourthSection from '@/components/NewsComponents/section/FourthSection.vue'
+import SecondSection from '@/components/NewsComponents/section/SecondSection.vue'
+import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
+import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
+import { useInterestStore } from '@/stores/interestStore'
+import { computed, onMounted, ref } from 'vue'
+
+const interestStore = useInterestStore()
+const interestList = computed(() => interestStore.interestList)
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+const allNews = ref([])
+const loading = ref(true)
+
+// 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
+const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
+const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 1)
+const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
+const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
+const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
+const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
+
+onMounted(async () => {
+  const checkToken = localStorage.getItem('accessToken')
+  console.log(`로그인 토큰 : ${checkToken}`)
+
+  const newsResults = []
+
+  if (interestList.value.length > 0) {
+    try {
+      for (const item of interestList.value) {
+        const result = await fetchNewsData(item.id, 'ko')
+        newsResults.push(result)
+        await new Promise((resolve) => setTimeout(resolve, 200)) // 200ms 쉬기
+      }
+      allNews.value = newsResults
+      console.log(allNews.value)
+      console.log(allNews.value[0])
+      console.log(allNews.value[1])
+      loading.value = false
+      console.log(loading.value)
+    } catch (error) {
+      console.error('Error fetching news:', error)
+    }
+  }
+})
 </script>
+
 <template>
   <div class="mx-auto max-w-[1240px] pt-[50px]">
     <!-- 섹션 1: 스포츠 -->
-    <div class="section1 mb-[44px]">
-      <!-- 제목 -->
-      <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-        <h1 class="flex gap-[10px] items-center">
-          <img src="../assets/icons/sportsIcon.svg" alt="politics" />
-          <p class="text-[30px] text-[var(--text-title)] font-bold">스포츠</p>
-        </h1>
-        <div class="flex">
-          <h2 class="text-[var(--text-sub-purple)] text-[16px]">내가 가장 관심있는</h2>
-        </div>
-        <div class="ml-auto cursor-pointer">
-          <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
-            더보기
-          </h3>
-        </div>
-      </div>
-      <div class="flex gap-[40px] mb-[50px]">
-        <div class="flex gap-[20px]">
-          <NewsComponent8 />
-          <NewsComponent8 />
-        </div>
-        <div class="flex flex-col gap-[24px]">
-          <NewsComponent2 />
-          <NewsComponent2 />
-          <NewsComponent2 />
-        </div>
-      </div>
-
-      <div class="flex justify-between ]">
-        <NewsComponent9 />
-        <NewsComponent9 />
-        <NewsComponent9 />
-        <NewsComponent9 />
-      </div>
-    </div>
+    <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
+    <FavoriteSectionSkel v-else-if="loading" />
     <!-- 섹션 2 : 커뮤니티로 접근 -->
     <div
       class="rounded-[24px] bg-[var(--section-contents-bg)] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]"
@@ -70,58 +84,16 @@ const scrollToTop = () => {
         글쓰러 가기
       </button>
     </div>
+
     <!-- 섹션 3 : 슬라이드 카드뉴스 -->
-    <div class="h-[524px]">
-      <!-- 제목 -->
-      <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-        <h1 class="flex gap-[10px] items-center">
-          <img src="../assets/icons/politicsIcon.svg" alt="politics" />
-          <p class="text-[30px] text-[var(--text-title)] font-bold">정치</p>
-        </h1>
-        <div class="flex">
-          <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-        </div>
-        <div class="ml-auto cursor-pointer">
-          <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
-            더보기
-          </h3>
-        </div>
-      </div>
-      <div class="flex gap-[24px] overflow-x-scroll">
-        <!-- 슬라이드 아직 구현 안함 -->
-        <SlideNewsComponent />
-        <SlideNewsComponent />
-        <SlideNewsComponent />
-        <SlideNewsComponent />
-      </div>
-    </div>
+    <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
+    <SecondSectionSkel v-else-if="loading" />
+
     <!-- 섹션 4,5 연예, 핫독스 -->
     <div class="flex gap-[72px] mb-[50px]">
       <!-- 섹션 4 : 연예 -->
-      <div class="w-[608px]">
-        <!-- 제목 -->
-        <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-          <h1 class="flex gap-[10px] items-center">
-            <img src="" alt="politics" />
-            <p class="text-[30px] text-[var(--text-title)] font-bold">연예</p>
-          </h1>
-          <div class="flex">
-            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-          </div>
-          <div class="ml-auto cursor-pointer">
-            <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
-              더보기
-            </h3>
-          </div>
-        </div>
-        <div class="flex flex-wrap gap-[24px] h-[792px]">
-          <NewsComponent10 />
-          <NewsComponent10 />
-          <NewsComponent10 />
-          <NewsComponent10 />
-        </div>
-      </div>
-
+      <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
+      <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
       <!-- 섹션 5 : 오늘의 핫 독스 -->
       <div class="w-[560px]">
         <!-- 제목 -->
@@ -140,72 +112,16 @@ const scrollToTop = () => {
     <!-- 섹션 6, 7 -->
     <div class="flex gap-[40px] mb-[50px]">
       <!-- 섹션 6: 경제 -->
-      <div class="w-[600px]">
-        <!-- 제목 -->
-        <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-          <h1 class="flex gap-[10px] items-center">
-            <img src="../assets/icons/economyIcon.svg" alt="economy" />
-            <p class="text-[30px] text-[var(--text-title)] font-bold">경제</p>
-          </h1>
-          <div class="flex">
-            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-          </div>
-          <div class="ml-auto cursor-pointer">
-            <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
-              더보기
-            </h3>
-          </div>
-        </div>
-        <div class="flex flex-col gap-[15px]">
-          <NewsComponent5 />
-          <NewsComponent5 />
-        </div>
-      </div>
+      <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
+      <FourthSectionSkel v-else-if="loading" />
       <!-- 섹션 7 : 문화 -->
-      <div class="w-[600px]">
-        <!-- 제목 -->
-        <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-          <h1 class="flex gap-[10px] items-center">
-            <img src="../assets/icons/cultureIcon.svg" alt="economy" />
-            <p class="text-[30px] text-[var(--text-title)] font-bold">문화</p>
-          </h1>
-          <div class="flex">
-            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-          </div>
-          <div class="ml-auto cursor-pointer">
-            <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
-              더보기
-            </h3>
-          </div>
-        </div>
-        <div class="flex flex-col gap-[15px]">
-          <NewsComponent6 />
-          <NewsComponent6 />
-        </div>
-      </div>
+      <FifthSection v-if="hasNews4" :newsArr="allNews[4]" />
+      <FifthSecionSkel v-else-if="loading" />
     </div>
+
     <!-- 섹션 8: 해외 -->
-    <div class="w-[600px]">
-      <!-- 제목 -->
-      <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-        <h1 class="flex gap-[10px] items-center">
-          <img src="../assets/icons/worldIcon.svg" alt="world" />
-          <p class="text-[30px] text-[var(--text-title)] font-bold">해외</p>
-        </h1>
-        <div class="flex">
-          <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-        </div>
-        <div class="ml-auto cursor-pointer">
-          <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
-            더보기
-          </h3>
-        </div>
-      </div>
-      <div class="flex flex-col gap-[15px]">
-        <NewsComponent7 />
-        <NewsComponent7 />
-      </div>
-    </div>
+    <SixthSection v-if="hasNews5" :newsArr="allNews[5]" />
+    <SixthSectionSkel v-else-if="loading" />
 
     <!-- 탑으로 이동 버튼 -->
     <div>
@@ -220,5 +136,7 @@ const scrollToTop = () => {
   <br />
   <br />
   <br />
+  <br />
 </template>
+
 <style scoped></style>

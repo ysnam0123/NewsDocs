@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
@@ -14,21 +13,30 @@ const wantSummary = ref(false)
 const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
+
+const props = defineProps({
+  news: Object,
+  newsSaveHandler: Function,
+  newsDetail: Function,
+})
 </script>
 <template>
-  <div class="rounded-[16px] w-[292px] h-[384px] relative" @mouseover="hoverHandler">
+  <div
+    v-if="props.news"
+    class="rounded-[16px] w-[292px] h-[384px] relative"
+    @mouseover="hoverHandler"
+  >
     <img
-      src="@/assets/img/exImage/slideImg.svg"
+      :src="news.image_url"
       alt="slide"
-      class="w-[292px] h-[384px] rounded-[16px] relative"
+      class="w-full h-full object-cover rounded-[16px] relative"
     />
     <div
       v-if="!wantSummary"
       class="flex flex-col px-[20px] absolute h-[187px] w-[292px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
-
     >
-      <p class="text-[20px] text-white mt-auto break-words">
-        손흥민 사우디로 이적한답니다..꼭 가야만 할까요?
+      <p class="text-[20px] text-white mt-auto break-words line-clamp-2">
+        {{ props.news.title }}
       </p>
       <!-- 좋아요 상자 -->
       <div class="flex gap-2 mb-[16px]">
@@ -82,7 +90,6 @@ const summarizeHandler = () => {
         </div>
       </div>
     </transition>
-
   </div>
 </template>
 <style scoped>
