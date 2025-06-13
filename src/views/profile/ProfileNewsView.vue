@@ -9,16 +9,21 @@ import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchUserScrap } from '@/api/fetchUserScrap'
 import { fetchScrapNews } from '@/api/fetchScrapNews'
 
-const activeTab = ref('전체')
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
-
+const tabsMap = {
+  '정치/경제': [1, 7],
+  '연예/스포츠': [2, 3],
+  '사회/문화': [4, 6],
+  '해외/기타': [5],
+}
 const currentUser = ref(null)
 const route = useRoute()
 const profileUser = ref(null)
-const nicknameParam = route.params.nickname
-
 const scrapNews = ref(null)
 const userScrap = ref([])
+const activeTab = ref('전체')
+
+const nicknameParam = route.params.nickname
 const name = nicknameParam ? nicknameParam + '님이' : '내가'
 onMounted(async () => {
   try {
@@ -36,12 +41,21 @@ onMounted(async () => {
   }
 })
 
+const filteredScrapNews = computed(() => {
+  if (!scrapNews.value) return []
+
+  if (activeTab.value === '전체') return scrapNews.value
+
+  const categoryIds = tabsMap[activeTab.value] || []
+  return scrapNews.value.filter((news) => categoryIds.includes(news.category_id))
+})
+
 const NewsList = computed(() => {
   const size = 3
   const result = []
-  if (!scrapNews.value) return result
-  for (let i = 0; i < scrapNews.value.length; i += size) {
-    result.push(scrapNews.value.slice(i, i + size))
+  if (!filteredScrapNews.value) return result
+  for (let i = 0; i < filteredScrapNews.value.length; i += size) {
+    result.push(filteredScrapNews.value.slice(i, i + size))
   }
   return result
 })
