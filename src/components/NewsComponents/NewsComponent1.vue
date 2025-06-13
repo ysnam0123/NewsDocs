@@ -8,10 +8,11 @@ import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
 import Typed from 'typed.js'
+import { updateViewCount } from '@/utils/updateViewCount'
 
 const props = defineProps({
   news: Object,
-  newsSaveHandler: Function,
+  newsSavedHandler: Function,
   newsDetail: Function,
 })
 
@@ -28,7 +29,7 @@ const isSummaryLoading = ref(true)
 // 클릭 했을 때 요약,
 const handleClick = async () => {
   if (newsStore.selectedNews?.article_id !== props.news.article_id) {
-    await props.newsSaveHandler(props.news)
+    await props.newsSavedHandler(props.news)
   }
   if (!props.news.description) return
   isOpen.value = !isOpen.value
@@ -39,6 +40,7 @@ const handleClick = async () => {
   }
 }
 
+// 타이핑 효과
 const runTyped = async (text) => {
   await nextTick()
 
@@ -57,6 +59,7 @@ const runTyped = async (text) => {
   }
 }
 
+// 요약 핸들러
 const summarizeHandler = async () => {
   try {
     if (!props.news.description) return
@@ -98,9 +101,12 @@ const summarizeHandler = async () => {
   }
 }
 
-const toDetailHandler = () => {
+// 클릭 시 디테일 페이지로 이동, 조회수 +1
+const toDetailHandler = async () => {
+  await updateViewCount(props.news.article_id)
   router.push(`/news/detail/${props.news.article_id}`)
 }
+
 onMounted(() => {
   if (props.news) {
     isLoading.value = false
@@ -196,7 +202,7 @@ onMounted(() => {
               </div>
               <div class="flex gap-1">
                 <Eye class="w-4" />
-                <span>300</span>
+                <span>{{ viewCount }}</span>
               </div>
             </div>
           </div>
