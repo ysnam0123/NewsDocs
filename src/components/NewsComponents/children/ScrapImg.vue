@@ -17,7 +17,7 @@ const scrapHandler = () => {
   <div
     @mouseover="hoverHandler"
     @mouseleave="hoverOutHandler"
-    @click="scrapHandler"
+    @click.stop="scrapHandler"
     class="cursor-pointer"
   >
     <div v-if="!hover && !scrapped">
