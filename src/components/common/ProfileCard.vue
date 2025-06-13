@@ -31,8 +31,12 @@ onMounted(async () => {
     if (user) {
       currentUser.value = await fetchUser(user?.id)
       interests.value = await fetchInterest(user?.id)
+
       if (interests.value) {
-        interestArr.value = interests.value.map((interest) => fetchCategory(interest.category_id))
+        interestArr.value = await Promise.all(
+          interests.value.map((interest) => fetchCategory(interest.category_id)),
+        )
+        console.log(interestArr.value)
       }
     }
   } catch (e) {
