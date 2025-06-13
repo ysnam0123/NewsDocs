@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-
+import { ThumbsUp } from 'lucide-vue-next'
+import { Eye } from 'lucide-vue-next'
 import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
+import router from '@/router'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -20,6 +22,10 @@ const props = defineProps({
   newsSaveHandler: Function,
   newsDetail: Function,
 })
+
+const toDetailHandler = () => {
+  router.push(`/news/detail/${props.news.article_id}`)
+}
 </script>
 <template>
   <!-- 전체 -->
@@ -39,14 +45,16 @@ const props = defineProps({
           {{ props.news.description || '' }}
         </div>
       </div>
-      <div class="flex gap-[8px] mb-[16px]">
-        <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-          <img src="@/assets/img/Thumbs-up-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
-          <p class="mt-[4px] text-[12px]">32</p>
+
+      <!-- 좋아요 박스 -->
+      <div class="flex gap-2 text-[#A8A8A8] mb-16">
+        <div class="flex gap-1">
+          <ThumbsUp class="w-4" />
+          <span>23</span>
         </div>
-        <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-          <img src="@/assets/img/View-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
-          <p class="mt-[4px] text-[12px]">32</p>
+        <div class="flex gap-1">
+          <Eye class="w-4" />
+          <span>300</span>
         </div>
       </div>
     </div>
@@ -79,7 +87,7 @@ const props = defineProps({
 
           <button
             class="w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-            @click="summarizeHandler"
+            @click.stop="toDetailHandler"
           >
             원문보기
           </button>

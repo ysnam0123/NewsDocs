@@ -42,10 +42,10 @@ onMounted(async () => {
     </div>
     <div class="w-[608px]">
       <div class="flex flex-wrap gap-[24px] h-[792px]">
-        <NewsComponent10 v-if="newsArr[0]" :newsObj="newsArr[0]" />
-        <NewsComponent10 v-if="newsArr[1]" :newsObj="newsArr[1]" />
-        <NewsComponent10 v-if="newsArr[2]" :newsObj="newsArr[2]" />
-        <NewsComponent10 v-if="newsArr[3]" :newsObj="newsArr[3]" />
+        <NewsComponent10 v-if="newsArr[0]" :news="newsArr[0]" />
+        <NewsComponent10 v-if="newsArr[1]" :news="newsArr[1]" />
+        <NewsComponent10 v-if="newsArr[2]" :news="newsArr[2]" />
+        <NewsComponent10 v-if="newsArr[3]" :news="newsArr[3]" />
       </div>
     </div>
   </div>

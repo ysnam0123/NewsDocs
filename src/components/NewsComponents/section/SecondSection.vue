@@ -43,10 +43,10 @@ onMounted(async () => {
     </div>
     <div class="flex gap-[24px] overflow-x-scroll">
       <!-- 슬라이드 아직 구현 안함 -->
-      <SlideNewsComponent v-if="newsArr[0]" :newsObj="newsArr[0]" />
-      <SlideNewsComponent v-if="newsArr[1]" :newsObj="newsArr[1]" />
-      <SlideNewsComponent v-if="newsArr[2]" :newsObj="newsArr[2]" />
-      <SlideNewsComponent v-if="newsArr[3]" :newsObj="newsArr[3]" />
+      <SlideNewsComponent v-if="newsArr[0]" :news="newsArr[0]" />
+      <SlideNewsComponent v-if="newsArr[1]" :news="newsArr[1]" />
+      <SlideNewsComponent v-if="newsArr[2]" :news="newsArr[2]" />
+      <SlideNewsComponent v-if="newsArr[3]" :news="newsArr[3]" />
     </div>
   </div>
 </template>

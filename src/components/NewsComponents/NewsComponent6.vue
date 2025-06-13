@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
+import { ThumbsUp } from 'lucide-vue-next'
+import { Eye } from 'lucide-vue-next'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -29,19 +31,18 @@ const props = defineProps({
       v-show="!wantSummary"
       class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] w-[600px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
     >
-      <p class="font-bold text-[18px] text-[white]">
+      <p class="font-bold w-[400px] text-[18px] text-[white]">
         {{ props.news.title }}
       </p>
-      <!-- 좋아요 상자 -->
-      <div class="flex gap-[8px]">
-        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
-          <img src="@/assets/img/Thumbs-up-white.svg" alt="likes" class="w-[20px] h-[20px]" />
-          <p class="mt-[4px] text-[15px]">32</p>
+      <!-- 좋아요 박스 -->
+      <div class="flex gap-2 text-[#A8A8A8]">
+        <div class="flex gap-1">
+          <ThumbsUp class="w-4" />
+          <span>23</span>
         </div>
-
-        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
-          <img src="@/assets/img/View-white.svg" alt="likes" class="w-[20px] h-[20px]" />
-          <p class="mt-[4px] text-[15px]">32</p>
+        <div class="flex gap-1">
+          <Eye class="w-4" />
+          <span>300</span>
         </div>
       </div>
     </div>

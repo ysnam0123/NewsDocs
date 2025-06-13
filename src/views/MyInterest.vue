@@ -1,11 +1,11 @@
 <script setup>
 import { fetchNewsData } from '@/api/fetchNews'
-import FavoriteSectionSkel from '@/components/NewsComponents/\bskeleton/FavoriteSectionSkel.vue'
-import FifthSecionSkel from '@/components/NewsComponents/\bskeleton/FifthSecionSkel.vue'
-import FourthSectionSkel from '@/components/NewsComponents/\bskeleton/FourthSectionSkel.vue'
-import SecondSectionSkel from '@/components/NewsComponents/\bskeleton/SecondSectionSkel.vue'
-import SixthSectionSkel from '@/components/NewsComponents/\bskeleton/SixthSectionSkel.vue'
-import ThirdSectionSkel from '@/components/NewsComponents/\bskeleton/ThirdSectionSkel.vue'
+import FavoriteSectionSkel from '@/components/NewsComponents/skeleton/FavoriteSectionSkel.vue'
+import FifthSecionSkel from '@/components/NewsComponents/skeleton/FifthSecionSkel.vue'
+import FourthSectionSkel from '@/components/NewsComponents/skeleton/FourthSectionSkel.vue'
+import SecondSectionSkel from '@/components/NewsComponents/skeleton/SecondSectionSkel.vue'
+import SixthSectionSkel from '@/components/NewsComponents/skeleton/SixthSectionSkel.vue'
+import ThirdSectionSkel from '@/components/NewsComponents/skeleton/ThirdSectionSkel.vue'
 import HotDocsComponent from '@/components/NewsComponents/HotDocsComponent.vue'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
 import FavoriteSection from '@/components/NewsComponents/section/FavoriteSection.vue'
@@ -15,10 +15,13 @@ import SecondSection from '@/components/NewsComponents/section/SecondSection.vue
 import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
 import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
 import { useInterestStore } from '@/stores/interestStore'
+import { useNewsStore } from '@/stores/newsStore'
 import { computed, onMounted, ref } from 'vue'
+import supabase from '@/utils/supabase'
 
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
+const newsStore = useNewsStore()
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -26,6 +29,41 @@ const scrollToTop = () => {
 
 const allNews = ref([])
 const loading = ref(true)
+
+const newsSavedHandler = async (news) => {
+  newsStore.selectedNews = news
+
+  const { data: savedNews, error } = await supabase
+    .from('news')
+    .select('news_id')
+    .eq('news_id', news.article_id)
+    .maybeSingle()
+
+  if (error) {
+    console.error('뉴스 저장 실패', error)
+    return
+  }
+
+  if (!savedNews) {
+    const { error: insertError } = await supabase.from('news').insert([
+      {
+        news_id: news.article_id,
+        category_id: news.category_id,
+        title: news.title,
+        link: news.link,
+        keywords: news.keywords,
+        description: news.description,
+        pub_date: news.pub_date,
+        image_url: news.image_url,
+        source_name: news.source_name,
+        category: news.category,
+      },
+    ])
+    if (insertError) {
+      console.error('뉴스 저장 실패함', insertError)
+    }
+  }
+}
 
 // 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
 const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
@@ -64,7 +102,7 @@ onMounted(async () => {
 <template>
   <div class="mx-auto max-w-[1240px] pt-[50px]">
     <!-- 섹션 1: 스포츠 -->
-    <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
+    <FavoriteSection v-if="hasNews0" :news-save-handler="newsSavedHandler" :newsArr="allNews[0]" />
     <FavoriteSectionSkel v-else-if="loading" />
     <!-- 섹션 2 : 커뮤니티로 접근 -->
     <div

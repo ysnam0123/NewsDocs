@@ -1,7 +1,8 @@
 <script setup>
-import ThumbsUp from '@/components/icon/thumbsUp.vue'
+import { ThumbsUp } from 'lucide-vue-next'
+import { Eye } from 'lucide-vue-next'
 import CommunityRecommend from './CommunityRecommend.vue'
-import ViewCount from '@/components/icon/viewCount.vue'
+
 import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
@@ -58,7 +59,7 @@ const summarizeHandler = async () => {
       </div>
       <div class="flex justify-center items-center gap-3">
         <ThumbsUp />
-        <ViewCount />
+        <Eye />
       </div>
     </div>
     <div class="bg-[#f5f5f5]/70 rounded-2xl">

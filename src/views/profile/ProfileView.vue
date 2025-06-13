@@ -1,7 +1,7 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileDog from '@/components/icon/profileDog.vue'
-import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
+import NewsComponent8 from '@/components/NewsComponents/NewsComponent82.vue'
 import SleepDog from '@/components/profile/SleepDog.vue'
 import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'

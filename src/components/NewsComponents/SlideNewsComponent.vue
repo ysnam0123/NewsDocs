@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
+import { ThumbsUp } from 'lucide-vue-next'
+import { Eye } from 'lucide-vue-next'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -38,16 +40,15 @@ const props = defineProps({
       <p class="text-[20px] text-white mt-auto break-words line-clamp-2">
         {{ props.news.title }}
       </p>
-      <!-- 좋아요 상자 -->
-      <div class="flex gap-2 mb-[16px]">
-        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
-          <img src="@/assets/img/Thumbs-up-white.svg" alt="likes" class="w-[18px] h-[18px]" />
-          <p class="mt-[4px] text-[12px]">32</p>
+      <!-- 좋아요 박스 -->
+      <div class="flex gap-2 text-[#A8A8A8] mb-2">
+        <div class="flex gap-1">
+          <ThumbsUp class="w-4" />
+          <span>23</span>
         </div>
-
-        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
-          <img src="@/assets/img/View-white.svg" alt="likes" class="w-[18px] h-[18px]" />
-          <p class="mt-[4px] text-[12px]">32</p>
+        <div class="flex gap-1">
+          <Eye class="w-4" />
+          <span>300</span>
         </div>
       </div>
     </div>

@@ -106,6 +106,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex gap-4">
+    <!-- 스켈레톤 -->
     <section
       v-if="isNewsLoading"
       class="flex flex-shrink-0 w-[786px] h-[468px] bg-gray-400 animate-pulse rounded-[20px]"

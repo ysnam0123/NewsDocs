@@ -32,9 +32,9 @@ const router = createRouter({
       meta: { hideHeader: true, hideFooter: true },
     },
     // {
-    //   path: '/about',
-    //   name: 'about',
-    //   component: () => import('../views/AboutView.vue'),
+    //   path: '/practicePage',
+    //   name: 'practice',
+    //   component: () => import('../components/NewsComponents/PracticePage.vue'),
     //   meta: {
     //     hideHeaderBasic: true,
     //   },
