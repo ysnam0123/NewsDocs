@@ -1,7 +1,7 @@
 import supabase from '@/utils/supabase'
 
 export const fetchCategory = async (categoryId) => {
-  console.log('카테고리id', categoryId)
+  // console.log('카테고리id', categoryId)
   const { data, error } = await supabase
     .from('category')
     .select()
