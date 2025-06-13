@@ -121,7 +121,7 @@ watch(isLoading, async (value) => {
       class="justify-center rounded-xl max-w-[707px] bg-[#EFEFEF] mb-5 dark:bg-[#323232] dark:text-white"
     >
       <!-- 로딩중 -->
-      <div v-if="!isLoading" class="flex flex-col justify-center items-center h-[200px]">
+      <div v-if="isLoading" class="flex flex-col justify-center items-center h-[200px]">
         <DotLottieVue
           style="height: 120px"
           autoplay
