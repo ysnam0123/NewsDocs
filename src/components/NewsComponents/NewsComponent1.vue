@@ -23,7 +23,9 @@ const isLoading = ref(true)
 const isNewsLoading = computed(() => !props.news?.image_url)
 const typedTarget = ref(null)
 let typedInstance = null
+const isSummaryLoading = ref(true)
 
+// 클릭 했을 때 요약,
 const handleClick = async () => {
   if (newsStore.selectedNews?.article_id !== props.news.article_id) {
     await props.newsSaveHandler(props.news)
@@ -32,11 +34,8 @@ const handleClick = async () => {
   isOpen.value = !isOpen.value
 
   if (isOpen.value) {
-    if (!summaryStore.summaryNews) {
-      await summarizeHandler()
-    } else {
-      await runTyped(summaryStore.summaryNews)
-    }
+    if (!summaryStore.summaryNews) await summarizeHandler()
+    await runTyped(summaryStore.summaryNews)
   }
 }
 
@@ -61,6 +60,7 @@ const runTyped = async (text) => {
 const summarizeHandler = async () => {
   try {
     if (!props.news.description) return
+    isSummaryLoading.value = true
 
     const { data: savedSummary } = await supabase
       .from('summaries')
@@ -70,11 +70,13 @@ const summarizeHandler = async () => {
 
     if (savedSummary && savedSummary.summaries_contents) {
       summaryStore.summaryNews = savedSummary.summaries_contents
+      await nextTick()
       await runTyped(savedSummary.summaries_contents)
       return
     }
     const result = await fetchOpenAi(props.news.description)
     summaryStore.summaryNews = result
+    await nextTick()
     await runTyped(result)
     const { error } = await supabase
       .from('summaries')
@@ -92,6 +94,7 @@ const summarizeHandler = async () => {
     console.error('요약 중 요류', err)
   } finally {
     isLoading.value = false
+    isSummaryLoading.value = false
   }
 }
 
@@ -101,6 +104,7 @@ const toDetailHandler = () => {
 onMounted(() => {
   if (props.news) {
     isLoading.value = false
+    isSummaryLoading.value = false
   }
 })
 </script>
@@ -129,15 +133,28 @@ onMounted(() => {
           <div
             class="absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center justify-center gap-4 rounded-[20px] z-20 backdrop-blur-lg"
           >
-            <div v-if="summaryStore.summaryNews" class="flex flex-col">
-              <div class="flex flex-col text-white absolute top-10 left-10 gap-4">
-                <h2 class="text-xl mb-6 text-white font-semibold">세 줄 요약</h2>
-
-                <div class="flex flex-col">
-                  <div class="flex flex-col whitespace-pre-line text-xl mr-16 leading-8">
-                    <span ref="typedTarget" class="text-white"></span>
+            <div class="flex flex-col">
+              <div class="flex flex-col text-white absolute top-10 left-10">
+                <!-- 요약 스켈레톤 -->
+                <template v-if="isSummaryLoading">
+                  <div class="flex flex-col animate-pulse shrink-0">
+                    <div class="mb-8 h-7 w-[84px] bg-[#626262]/70 rounded-md"></div>
+                    <div class="mb-3 h-8 w-[500px] bg-[#626262]/70 rounded-md"></div>
+                    <div class="mb-3 h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
+                    <div class="h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
                   </div>
-                </div>
+                </template>
+                <!-- 요약 렌더링 -->
+                <template v-else-if="summaryStore.summaryNews">
+                  <div>
+                    <h2 class="text-xl mb-6 text-white font-semibold">세 줄 요약</h2>
+                    <div class="flex flex-col">
+                      <div class="flex flex-col whitespace-pre-line text-xl mr-16 leading-8">
+                        <span ref="typedTarget" class="text-white"></span>
+                      </div>
+                    </div>
+                  </div>
+                </template>
               </div>
               <button
                 @click.stop="toDetailHandler"
