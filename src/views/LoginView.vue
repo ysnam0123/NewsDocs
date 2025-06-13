@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useThemeStore } from '@/stores/useDarkmode'
 import supabase from '@/utils/supabase'
 import { useToast } from 'vue-toastification'
 //import { useRouter } from 'vue-router'
@@ -9,8 +8,6 @@ import router from '@/router'
 //구글 로그인
 import { useGoogleAuth } from '@/composables/useGoogleAuth'
 const { signInWithGoogle } = useGoogleAuth()
-
-const { toggleDark } = useThemeStore()
 
 const email = ref('')
 const password = ref('')
@@ -54,11 +51,8 @@ async function onLogin() {
   <div
     class="min-h-screen flex items-center justify-center bg-[#EDEBF1] dark:bg-[#1F1F1F] relative"
   >
-    <div
-      class="absolute top-10 right-10 w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] dark:bg-[#262626] hover:bg-white flex items-center justify-center z-50 transition-colors duration-300"
-      @click="toggleDark()"
-    >
-      <img src="@/assets/icons/toDarkMode.svg" alt="modeToggle" class="w-[24px] h-[24px]" />
+    <div class="absolute top-10 right-10 z-50">
+      <DarkModeButton />
     </div>
     <div
       class="bg-white dark:bg-[#262626] rounded-[16px] w-[464px] h-[696px] pt-[50px] flex flex-col items-center justify-center"

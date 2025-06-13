@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import UserForm from '@/components/UserForm.vue'
 import { signUpSchema } from '@/utils/userSchema'
+import DarkModeButton from '@/components/common/DarkModeButton.vue'
 
 const toast = useToast()
 const router = useRouter()
@@ -155,11 +156,8 @@ const isDisabled = computed(() => {
     class="min-h-screen flex items-center justify-center bg-[#EDEBF1] relative dark:bg-[#1F1F1F]"
   >
     <!-- 다크모드 버튼 -->
-    <div
-      class="absolute top-10 right-10 w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] dark:bg-[#262626] hover:bg-white flex items-center justify-center z-50 transition-colors duration-300"
-      @click="toggleDark()"
-    >
-      <img src="@/assets/icons/toDarkMode.svg" alt="modeToggle" class="w-[24px] h-[24px]" />
+    <div class="absolute top-10 right-10 z-50">
+      <DarkModeButton />
     </div>
     <div
       class="bg-white dark:bg-[#262626] rounded-[20px] w-[464px] min-h-[779px] py-10 flex flex-col items-center justify-center"
