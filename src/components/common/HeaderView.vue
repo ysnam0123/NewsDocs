@@ -11,23 +11,9 @@ import profile from '@/assets/icons/profile.svg'
 import profileWhite from '@/assets/icons/profile-white.svg'
 
 const themeStore = useThemeStore()
-const route = useRouter()
+const router = useRouter()
 
-const movePage = (path) => {
-  route.push(path)
-}
-
-const changeInterest = () => {
-  route.push('/interest')
-}
-
-const gotohome = () => {
-  route.push('/myinterest')
-}
-
-const seeNews = () => {
-  route.push('/news')
-}
+const movePage = (path) => router.push(path)
 </script>
 <template>
   <div
@@ -37,8 +23,8 @@ const seeNews = () => {
       <img
         :src="themeStore.isDark ? logoWhite : logo"
         alt="logoImg"
+        @click="movePage('/')"
         class="w-[202px] h-11.5"
-        @click="gotohome"
       />
     </div>
     <div class="ml-[56px]">
@@ -51,7 +37,6 @@ const seeNews = () => {
         </li>
         <li
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] ease-in duration-75 hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
-          @click="seeNews"
         >
           모든 소식
         </li>
@@ -81,7 +66,7 @@ const seeNews = () => {
       <div class="cursor-pointer ml-[14px]">
         <button
           class="cursor-pointer rounded-[8px] w-[96px] h-[41px] font-semibold bg-[var(--GP-button-bg)] text-[var(--GP-button-text)] hover:bg-[var(--GP-button-hover)]"
-          @click="changeInterest"
+          @click="movePage('/interest')"
         >
           관심사 수정
         </button>
@@ -112,6 +97,7 @@ const seeNews = () => {
       <!-- 프로필 -->
       <div
         class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+        @click="movePage('/profile')"
       >
         <img
           :src="themeStore.isDark ? profileWhite : profile"
