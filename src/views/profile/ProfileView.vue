@@ -119,7 +119,11 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
           <News8Skel v-if="isLoading" class="pt-12" />
           <div v-else>
             <div v-if="myNews.length === 0">
-              <SleepDog content="아직 저장한 뉴스가 없어요!" btnText="뉴스 보러가기" />
+              <SleepDog
+                :content="name + ' 스크랩한 뉴스가 없습니다.'"
+                :btnText="isMyProfile ? '뉴스 보러가기' : null"
+                to="/news"
+              />
             </div>
             <div v-else-if="myNews.length !== 0" class="flex pt-12 space-x-[24px] w-full">
               <News8Skel v-if="isLoading" />
@@ -149,10 +153,10 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
         <div v-else>
           <div v-if="myPosts.length === 0">
             <SleepDog
-              content="아직 작성한 글이 없어요!"
-              btnText="글 쓰러가기"
+              :content="name + ' 작성한 글이 없습니다.'"
+              :btnText="isMyProfile ? '글 쓰러가기' : null"
               class="mb-15"
-              :to="community"
+              to="/community"
             />
           </div>
           <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px] pt-6 mb-15">
