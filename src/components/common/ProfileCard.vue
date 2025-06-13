@@ -6,9 +6,13 @@ import defaultImg from '../../assets/img/communityImg/profileDefault.svg'
 import { getCurrentUser } from '@/api/getCurrentUser'
 import { fetchUser } from '@/api/fetchUser'
 import { onMounted, ref } from 'vue'
+import { fetchInterest } from '@/api/fetchInterest'
+import { fetchCategory } from '@/api/community/fetchCategory'
 const currentUser = ref(null)
 const modalStore = useModalStore()
 const router = useRouter()
+const interests = ref([])
+const interestArr = ref([])
 
 const goToMyPost = () => {
   router.push('/profile/write')
@@ -19,13 +23,20 @@ const goToLogin = () => {
 const postHandler = () => {
   modalStore.openModal()
 }
+
 onMounted(async () => {
   try {
     const user = await getCurrentUser()
     // console.log(user.id)
-    currentUser.value = await fetchUser(user?.id)
+    if (user) {
+      currentUser.value = await fetchUser(user?.id)
+      interests.value = await fetchInterest(user?.id)
+      if (interests.value) {
+        interestArr.value = interests.value.map((interest) => fetchCategory(interest.category_id))
+      }
+    }
   } catch (e) {
-    alert(e.message)
+    console.error(e.message)
   }
 })
 </script>
@@ -39,7 +50,9 @@ onMounted(async () => {
         class="w-[146px] h-[146px] mt-[15px] rounded-full"
       />
       <p class="mt-4 text-xl dark:text-[#ffffff]">{{ currentUser?.nickname }}</p>
-      <p class="mt-[6px] text-[14px] text-[#8F8F8F]">스포츠, 정치, 문화</p>
+      <p class="mt-[6px] text-[14px] text-[#8F8F8F]">
+        {{ interestArr.map((i) => i.title).join(', ') }}
+      </p>
     </div>
     <!-- <div class="w-full flex flex-col items-center">
       <img
