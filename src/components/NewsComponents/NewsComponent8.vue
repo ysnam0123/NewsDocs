@@ -10,13 +10,17 @@ import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 
+// 요약하기 창을 호버
 const summaryHover = ref(false)
 const hoverHandler = () => {
   summaryHover.value = true
 }
+// 호버 아웃
 const hoverOut = () => {
   summaryHover.value = false
 }
+
+// 요약하기 창 클릭해서 생성
 const wantSummary = ref(false)
 const summarizeToggle = () => {
   wantSummary.value = !wantSummary.value
@@ -28,13 +32,18 @@ const props = defineProps({
   newsDetail: Function,
 })
 
+// 요약중인 상태
 const isLoading = ref(true)
 const router = useRouter()
+
 const summaryStore = useSummaryStore()
 const newsStore = useNewsStore()
+
 const typedTarget = ref(null)
 let typedInstance = null
+
 const isSummaryLoading = ref(true)
+
 const handleClick = async () => {
   if (newsStore.selectedNews?.article_id !== props.news.article_id) {
     console.log('저장 호출됨:', props.news.title)
