@@ -10,10 +10,9 @@ import { fetchCategory } from '@/api/community/fetchCategory'
 import { fetchUser } from '@/api/fetchUser'
 import { fetchLike } from '@/api/community/like'
 import { isLikedByUser, likeUpload, unlikeUpload } from '@/api/community/like'
-import { userAuthStore } from '@/stores/authStore'
-import { storeToRefs } from 'pinia'
-import { commentUpload, fetchComment } from '@/api/community/comment'
+import { commentUpload, deleteComment, fetchComment, updateComment } from '@/api/community/comment'
 import CommunityMyComment from '@/components/community/CommunityMyComment.vue'
+import { getCurrentUser } from '@/api/getCurrentUser'
 const isLiked = ref(false)
 const router = useRouter()
 const route = useRoute()
@@ -23,38 +22,41 @@ const category = ref('')
 const likeCount = ref('')
 const writer = ref(null)
 const comments = ref('')
-const inputComment = ref('')
-const auth = userAuthStore()
-const { user } = storeToRefs(auth)
-// console.log('상세페이지 사용자정보:', user.value.user_id)
+const inputContent = ref('') //작성한 댓글내용
+const commentCount = ref('')
+const authUserId = ref(null)
 
+const currentUser = ref(null)
 onMounted(async () => {
   if (!postId) return
   try {
+    const user = await getCurrentUser()
+    if (user) {
+      authUserId.value = user?.id
+      currentUser.value = await fetchUser(user?.id)
+    }
+
     const postData = await fetchPostDetail(postId)
     post.value = postData
-    // console.log('포스트정보:', post.value)
 
     const categoryData = await fetchCategory(postData.category_id)
     category.value = categoryData.title
-    // console.log('카테고리 정보:', category.value)
 
     const writerData = await fetchUser(postData.user_id)
     writer.value = writerData
-    // console.log('작성자 정보:', writer.value.user_id)
-    // console.log('작성자 닉네임:', user)
 
     //게시글 좋아요 리스트
     const likeData = await fetchLike(postData.post_id)
     likeCount.value = likeData.length
 
     //로그인 사용자의 좋아요여부
-    const liked = await isLikedByUser(postData.post_id, user.value.user_id)
-    isLiked.value = liked
-
+    if (currentUser.value) {
+      const liked = await isLikedByUser(postData.post_id, currentUser.value.user_id)
+      isLiked.value = liked
+    }
     const commentData = await fetchComment(postData.post_id)
     comments.value = commentData
-    console.log('댓글 불러오기:', comments.value.contents)
+    commentCount.value = commentData.length
   } catch (err) {
     console.error('상세페이지에서 불러오기 오류:', err)
   }
@@ -63,8 +65,10 @@ onMounted(async () => {
 const goToCommunity = () => {
   router.push('/community')
 }
+
+//좋아요 추가,삭제
 const toggleLike = async () => {
-  if (!user.value?.user_id) {
+  if (!currentUser.value) {
     alert('로그인이 필요합니다')
     return
   }
@@ -73,24 +77,74 @@ const toggleLike = async () => {
   else likeCount.value -= 1
   try {
     if (isLiked.value) {
-      await likeUpload(post.value.post_id, user.value.user_id)
+      await likeUpload(post.value.post_id, currentUser.value.user_id)
     } else {
-      await unlikeUpload(post.value.post_id, user.value.user_id)
+      await unlikeUpload(post.value.post_id, currentUser.value.user_id)
     }
     //좋아요 삭제도 구현해야함
   } catch (err) {
     console.error('좋아요 업로드/삭제 에러', err)
   }
 }
+
+//댓글 추가
 const commentSubmitHandler = async () => {
-  console.log('댓글 업로드 준비완료')
-  if (!inputComment.value.trim()) return
+  // console.log('댓글 업로드 준비완료')
+  if (!currentUser.value) {
+    alert('로그인이 필요합니다')
+    return
+  } else if (!inputContent.value.trim()) return
+  const tempComment = {
+    post_id: post.value.post_id,
+    user_id: currentUser.value.user_id,
+    contents: inputContent.value,
+    created_at: new Date().toISOString().replace('Z', '+00:00'),
+  }
+  comments.value.unshift(tempComment)
+  commentCount.value += 1
+  const saveContent = inputContent.value // 댓글 전송하자마자 input창 비우기 위함
+  inputContent.value = ''
   try {
-    await commentUpload(post.value.post_id, user.value.user_id, inputComment.value)
+    await commentUpload({
+      postId: post.value.post_id,
+      userId: currentUser.value.user_id,
+      content: saveContent,
+    })
   } catch (err) {
     console.error('댓글 등록 에러', err)
+    comments.value = comments.value.filter((c) => c.comments_id !== tempComment.comments_id)
+    commentCount.value -= 1
+    alert('댓글 등록에 실패했습니다.')
   }
-  inputComment.value = ''
+}
+//댓글 수정
+const editCommentHandler = async ({ commentId, newContent }) => {
+  try {
+    await updateComment(commentId, newContent)
+    const target = comments.value.find((c) => c.comments_id === commentId)
+    if (target) target.contents = newContent
+  } catch (err) {
+    alert('댓글 수정 실패')
+    console.error(err)
+  }
+}
+//댓글 삭제
+const deleteCommentHandler = async (commentId) => {
+  const target = comments.value.find((c) => c.comments_id === commentId)
+  if (target?.isTemp) {
+    // 임시저장해둔 댓글일경우 comments에서만 제외시킴
+    comments.value = comments.value.filter((c) => c.comments_id !== commentId)
+    commentCount.value -= 1
+    return
+  }
+  //임시저장이아니면 실제 data에서 삭제
+  try {
+    await deleteComment(commentId)
+    comments.value = comments.value.filter((c) => c.comments_id !== commentId)
+    commentCount.value -= 1
+  } catch (err) {
+    console.error('댓글 삭제 실패', err)
+  }
 }
 </script>
 <template>
@@ -153,7 +207,7 @@ const commentSubmitHandler = async () => {
         <!-- 댓글입력 -->
         <label class="relative w-[830px] mt-[20px] inline-block">
           <input
-            v-model="inputComment"
+            v-model="inputContent"
             @keyup.enter="commentSubmitHandler"
             class="w-full h-[50px] px-5 text-[16px] text-[#191919] dark:text-[#FFFFFF] placeholder-[#CECECE] border border-gray-200 dark:border-[#4D4D4D] rounded-[8px] outline-none"
             placeholder="댓글을 입력해주세요"
@@ -165,30 +219,33 @@ const commentSubmitHandler = async () => {
         </label>
         <!-- 댓글 내용  -->
         <div
-          v-if="!comments.contents"
+          v-if="comments.length === 0"
           class="w-full h-[200px] flex items-center justify-center text-[#CECECE]"
         >
           아직 댓글이 없습니다.
         </div>
-        <template v-for="comment in comments" :key="comment.comments_id">
-          <!-- 댓글1 -->
-          <div :v-if="comment.user_id === user.user_id">
+        <div v-else>
+          <template v-for="comment in comments" :key="comment.comments_id">
+            <!-- 댓글 -->
             <CommunityMyComment
+              v-if="comment.user_id === currentUser?.user_id"
               :commentId="comment.comments_id"
               :userId="comment.user_id"
               :contents="comment.contents"
               :createdAt="comment.created_at"
+              @delete="deleteCommentHandler"
+              @edit="editCommentHandler"
             />
-          </div>
-          <div :v-else>
             <CommunityComment
+              v-else
               :commentId="comment.comments_id"
               :userId="comment.user_id"
               :contents="comment.contents"
               :createdAt="comment.created_at"
             />
-          </div>
-        </template>
+          </template>
+          <div class="w-full h-[64px]"></div>
+        </div>
       </div>
     </div>
   </div>

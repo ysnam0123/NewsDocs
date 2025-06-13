@@ -17,7 +17,7 @@ export const userAuthStore = defineStore('auth', {
     },
 
     async fetchUser() {
-      // if (!this.isLoggedin) return
+      if (!this.isLoggedin) return
       try {
         const {
           data: { user: authUser },

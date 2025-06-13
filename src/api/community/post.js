@@ -10,7 +10,7 @@ export const postUpload = () => {
 
   const uploadImage = async (fileObj) => {
     const fileName = `${Date.now()}_${fileObj.name}`
-    console.log('fileName:', fileName)
+    // console.log('fileName:', fileName)
     const { data: uploadData, error: imageError } = await supabase.storage
       .from('post-images')
       .upload(fileName, fileObj)
@@ -31,7 +31,7 @@ export const postUpload = () => {
     const user = await getCurrentUser()
 
     isUploading.value = true
-    console.log('제목:', title)
+    // console.log('제목:', title)
     try {
       if (file.value) {
         imageUrl.value = await uploadImage(file.value)

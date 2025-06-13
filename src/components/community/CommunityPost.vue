@@ -16,7 +16,6 @@ const props = defineProps({
   categoryid: Number,
   userid: String,
 })
-// console.log('사용자 이미지:', props.image)
 const likeData = ref([])
 const categoryData = ref(null)
 const userData = ref(null)
