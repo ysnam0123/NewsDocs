@@ -118,15 +118,70 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="w-[300px] h-[385px] relative" @click="handleClick">
+  <div v-if="props.news" class="w-[300px] h-[385px] relative select-none" @click="handleClick">
+    <!-- 호버했을때 나오는 창 -->
+    <div
+      v-show="!wantSummary"
+      v-if="summaryHover"
+      class="absolute w-[300px] h-[217px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      @click="summarizeToggle"
+      @mouseleave="hoverOut"
+    >
+      <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
+    </div>
+
+    <!-- 클릭했을 때 나오는 창 -->
+    <div
+      v-if="wantSummary"
+      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center justify-center gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      @click="summarizeToggle"
+    >
+      <template v-if="isSummaryLoading">
+        <div class="flex flex-col animate-pulse shrink-0">
+          <div class="mb-8 h-7 w-[84px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[500px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
+        </div>
+      </template>
+      <template v-else-if="summaryStore.summaryNews">
+        <div
+          class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+        >
+          <div class="flex flex-col justify-between relative z-30 h-full">
+            <div>
+              <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
+              <div class="max-h-[220px] overflow-y-auto pr-1">
+                <div class="text-white whitespace-pre-line leading-8">
+                  <span ref="typedTarget" class="text-white"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 버튼 (카드 안쪽에 위치) -->
+            <button
+              class="w-[81px] h-[33px] px-[16px] z-40 py-[8px] text-[14px] font-semibold bg-white rounded-[8px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+              @click="toDetailHandler"
+            >
+              원문보기
+            </button>
+          </div>
+        </div>
+      </template>
+    </div>
+
     <div class="w-[300px] h-[217px] mb-[16px]">
-      <img :src="news.image_url" class="w-full h-full object-cover" @mouseover="hoverHandler" />
+      <img
+        :src="news.image_url"
+        class="w-full h-full object-cover space-y-0.5 rounded-[20px]"
+        @mouseover="hoverHandler"
+      />
     </div>
     <div class="mb-[12px] px-[10px]">
       <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px] line-clamp-2">
         {{ props.news.title }}
       </div>
-      <div class="text-sm text-[#A8A8A8] max-h-[40px] line-clamp-2 mb-[12px]">
+      <div class="text-sm text-[#A8A8A8] min-h-[40px] line-clamp-2 mb-[12px]">
         {{ props.news.description || '' }}
       </div>
       <!-- 좋아요 박스 -->
@@ -141,70 +196,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <!-- 호버했을때 나오는 창 -->
-    <div
-      v-show="!wantSummary"
-      v-if="summaryHover"
-      class="absolute w-[300px] h-[217px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
-      @click="summarizeToggle"
-      @mouseleave="hoverOut"
-    >
-      <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
-    </div>
-    <!-- 클릭했을 때 나오는 창 -->
-    <transition name="fade">
-      <div
-        v-if="wantSummary"
-        class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
-      >
-        <!-- 배경용 블러 -->
-        <div class="absolute inset-0 bg-black/80 blur-xs rounded-[20px] z-30"></div>
 
-        <!-- 요약된 내용 -->
-        <div class="flex flex-col relative z-30 h-full">
-          <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
-          <ul class="text-white leading-8">
-            <li>해일의 높이는 2,000m</li>
-            <li>박은서, 기네스 기록 돒파</li>
-            <li>박은서, 세계대회 우승</li>
-          </ul>
-          <button
-            class="w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-auto ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-            @click="toDetailHandler"
-          >
-            원문보기
-          </button>
-        </div>
-      </div>
-    </transition>
     <ScrapImg class="absolute right-[8px] top-[10px] z-25" />
   </div>
 </template>
-<style scoped>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-}
-.fade-enter-active {
-  animation: fadeIn 0.5s ease forwards;
-}
-.fade-leave-active {
-  animation: fadeOut 0.3s ease forwards;
-}
-</style>

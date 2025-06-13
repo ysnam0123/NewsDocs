@@ -10,8 +10,12 @@ const interestList = computed(() => interestStore.interestList)
 const props = defineProps({
   newsArr: {
     type: Array,
-    required: true,
   },
+  loading: {
+    type: Boolean,
+  },
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 
 // 안전하게 newsArr 변수 생성
@@ -44,8 +48,16 @@ onMounted(async () => {
       <!-- 뉴스 목록 -->
       <div class="w-[600px]" v-if="newsArr.length >= 2">
         <div class="flex flex-col gap-[15px]">
-          <NewsComponent5 v-if="newsArr[0]" :news="newsArr[0]" />
-          <NewsComponent5 v-if="newsArr[1]" :news="newsArr[1]" />
+          <NewsComponent5
+            :news-save-handler="newsSaveHandler"
+            v-if="newsArr[0]"
+            :news="newsArr[0]"
+          />
+          <NewsComponent5
+            :news-save-handler="newsSaveHandler"
+            v-if="newsArr[1]"
+            :news="newsArr[1]"
+          />
         </div>
       </div>
     </div>

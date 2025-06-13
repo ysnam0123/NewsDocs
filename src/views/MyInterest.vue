@@ -124,13 +124,13 @@ onMounted(async () => {
     </div>
 
     <!-- 섹션 3 : 슬라이드 카드뉴스 -->
-    <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
+    <SecondSection :news-save-handler="newsSavedHandler" v-if="hasNews1" :newsArr="allNews[1]" />
     <SecondSectionSkel v-else-if="loading" />
 
     <!-- 섹션 4,5 연예, 핫독스 -->
     <div class="flex gap-[72px] mb-[50px]">
       <!-- 섹션 4 : 연예 -->
-      <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
+      <ThirdSection :news-save-handler="newsSavedHandler" v-if="hasNews2" :newsArr="allNews[2]" />
       <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
       <!-- 섹션 5 : 오늘의 핫 독스 -->
       <div class="w-[560px]">
@@ -150,15 +150,15 @@ onMounted(async () => {
     <!-- 섹션 6, 7 -->
     <div class="flex gap-[40px] mb-[50px]">
       <!-- 섹션 6: 경제 -->
-      <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
+      <FourthSection :news-save-handler="newsSavedHandler" v-if="hasNews3" :newsArr="allNews[3]" />
       <FourthSectionSkel v-else-if="loading" />
       <!-- 섹션 7 : 문화 -->
-      <FifthSection v-if="hasNews4" :newsArr="allNews[4]" />
+      <FifthSection :news-save-handler="newsSavedHandler" v-if="hasNews4" :newsArr="allNews[4]" />
       <FifthSecionSkel v-else-if="loading" />
     </div>
 
     <!-- 섹션 8: 해외 -->
-    <SixthSection v-if="hasNews5" :newsArr="allNews[5]" />
+    <SixthSection :news-save-handler="newsSavedHandler" v-if="hasNews5" :newsArr="allNews[5]" />
     <SixthSectionSkel v-else-if="loading" />
 
     <!-- 탑으로 이동 버튼 -->

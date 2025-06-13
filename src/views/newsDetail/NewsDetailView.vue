@@ -1,8 +1,5 @@
 <script setup>
-import { ThumbsUp } from 'lucide-vue-next'
-import { Eye } from 'lucide-vue-next'
-import CommunityRecommend from './CommunityRecommend.vue'
-
+// import CommunityRecommend from './CommunityRecommend.vue'
 import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews'
 import { fetchOpenAi } from '@/api/fetchOpenAi'

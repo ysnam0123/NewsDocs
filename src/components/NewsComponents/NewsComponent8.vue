@@ -28,23 +28,23 @@ const props = defineProps({
   newsDetail: Function,
 })
 
+const isLoading = ref(true)
 const router = useRouter()
-const isOpen = ref(false)
 const summaryStore = useSummaryStore()
 const newsStore = useNewsStore()
-const isLoading = ref(true)
 const typedTarget = ref(null)
 let typedInstance = null
-
+const isSummaryLoading = ref(true)
 const handleClick = async () => {
   if (newsStore.selectedNews?.article_id !== props.news.article_id) {
     console.log('저장 호출됨:', props.news.title)
     await props.newsSaveHandler(props.news)
   }
   if (!props.news.description) return
-  isOpen.value = !isOpen.value
 
-  if (isOpen.value) {
+  if (!wantSummary.value) {
+    wantSummary.value = true
+
     if (!summaryStore.summaryNews) {
       await summarizeHandler()
     } else {
@@ -87,6 +87,7 @@ const summarizeHandler = async () => {
       return
     }
     const result = await fetchOpenAi(props.news.description)
+
     summaryStore.summaryNews = result
     await runTyped(result)
     const { error } = await supabase
@@ -96,15 +97,17 @@ const summarizeHandler = async () => {
 
     if (error) {
       console.error('요약 저장 실패', error)
-      const { error } = await supabase
-        .from('summaries')
-        .select('*')
-        .eq('news_id', props.news.article_id)
+      // 요약 저장에 실패한 상태에서 불러오는거라 주석처리 했습니다.
+      // const { error } = await supabase
+      //   .from('summaries')
+      //   .select('*')
+      //   .eq('news_id', props.news.article_id)
     }
   } catch (err) {
     console.error('요약 중 요류', err)
   } finally {
     isLoading.value = false
+    isSummaryLoading.value = false
   }
 }
 
@@ -114,48 +117,44 @@ const toDetailHandler = () => {
 onMounted(() => {
   if (props.news) {
     isLoading.value = false
+    isSummaryLoading.value = false
   }
 })
 </script>
 <template>
-  <div v-if="props.news" class="w-[383px] h-[470px] relative" @click="handleClick">
-    <div class="w-full h-[300px] cursor-pointer">
-      <img
-        :src="news.image_url"
-        class="w-full h-full object-cover rounded-[20px] space-y-0.5"
-        @mouseover="hoverHandler"
-      />
+  <div
+    v-if="props.news"
+    class="w-[383px] h-[470px] relative group select-none"
+    @click="handleClick"
+  >
+    <!-- 호버했을때 나오는 창 -->
+    <div
+      v-if="summaryHover && !wantSummary"
+      class="absolute h-[300px] inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      @click.stop="summarizeToggle"
+      @mouseleave="hoverOut"
+    >
+      <p class="text-white font-medium text-[16px] z-20">요약보기</p>
     </div>
-    <div>
-      <div class="px-[10px]">
-        <div class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-2">
-          {{ props.news.title }}
-        </div>
-        <div class="text-[16px] text-[#A8A8A8] min-h-[45px] mb-[5px] line-clamp-2">
-          {{ props.news.description || '' }}
-        </div>
-        <!-- 좋아요 박스 -->
-        <div class="flex gap-2 text-[#A8A8A8] mb-16">
-          <div class="flex gap-1">
-            <ThumbsUp class="w-4" />
-            <span>23</span>
-          </div>
-          <div class="flex gap-1">
-            <Eye class="w-4" />
-            <span>300</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- 클릭했을 때 나오는 창 -->
-      <transition name="fade">
+    <!-- 클릭했을 때 나오는 창 -->
+    <div
+      v-if="wantSummary"
+      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center justify-center gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      @click.stop="summarizeToggle"
+    >
+      <template v-if="isSummaryLoading">
+        <div class="flex flex-col animate-pulse shrink-0">
+          <div class="mb-8 h-7 w-[84px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[500px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
+        </div>
+      </template>
+      <template v-else-if="summaryStore.summaryNews">
         <div
-          v-if="wantSummary && summaryStore.summaryNews"
           class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
         >
-          <!-- 배경용 블러 -->
-          <div class="absolute inset-0 bg-black/80 blur-xs rounded-[20px] z-30"></div>
-
           <!-- 요약된 내용 -->
           <div class="flex flex-col relative z-30 h-full">
             <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
@@ -164,40 +163,53 @@ onMounted(() => {
                 <span ref="typedTarget" class="text-white"></span>
               </div>
             </div>
-            <button
-              class="w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-auto ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-              @click.stop="toDetailHandler"
-            >
-              원문보기
-            </button>
           </div>
         </div>
-      </transition>
+      </template>
+      <button
+        class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+        @click.stop="toDetailHandler"
+      >
+        원문보기
+      </button>
     </div>
-    <!-- 스크랩 이미지 -->
-    <ScrapImg class="absolute right-[15px] top-[10px] z-25" />
 
-    <!-- 호버했을때 나오는 창 -->
-    <div
-      v-show="!wantSummary"
-      v-if="summaryHover"
-      class="absolute h-[300px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
-      @click="summarizeToggle"
-      @mouseleave="hoverOut"
-    >
-      <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
-    </div>
-  </div>
-
-  <div v-else class="animate-pulse">
-    <div class="w-[383px] h-[300px] bg-gray-300 rounded-[20px]"></div>
-    <div class="px-[10px] mt-[12px] space-y-2">
-      <div class="h-[24px] bg-gray-300 rounded"></div>
-      <div class="h-[20px] bg-gray-200 rounded w-5/6"></div>
-      <div class="flex gap-[8px] mt-[10px]">
-        <div class="w-[60px] h-[18px] bg-gray-200 rounded"></div>
-        <div class="w-[60px] h-[18px] bg-gray-200 rounded"></div>
+    <!-- 뉴스 내용 -->
+    <div>
+      <!-- 뉴스 이미지 -->
+      <div class="w-full h-[300px] cursor-pointer">
+        <img
+          :src="news.image_url"
+          class="w-full h-full object-cover rounded-[20px]"
+          @mouseover="hoverHandler"
+        />
       </div>
+      <!-- 뉴스 텍스트 -->
+      <div>
+        <div class="px-[10px] select-none">
+          <div
+            class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-1"
+          >
+            {{ props.news.title }}
+          </div>
+          <div class="text-[16px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
+            {{ props.news.description || '' }}
+          </div>
+          <!-- 좋아요 박스 -->
+          <div class="flex gap-2 text-[#A8A8A8] mb-16">
+            <div class="flex gap-1">
+              <ThumbsUp class="w-4" />
+              <span>23</span>
+            </div>
+            <div class="flex gap-1">
+              <Eye class="w-4" />
+              <span>300</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 스크랩 이미지 -->
+      <ScrapImg class="absolute right-[15px] top-[10px] z-25" />
     </div>
   </div>
 </template>
