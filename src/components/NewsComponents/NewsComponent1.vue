@@ -88,10 +88,11 @@ const summarizeHandler = async () => {
 
     if (error) {
       console.error('요약 저장 실패', error)
-      const { error } = await supabase
-        .from('summaries')
-        .select('*')
-        .eq('news_id', props.news.article_id)
+      // 요약 저장에 실패한 상태에서 불러오는거라 주석처리 했습니다.
+      // const { error } = await supabase
+      //   .from('summaries')
+      //   .select('*')
+      //   .eq('news_id', props.news.article_id)
     }
   } catch (err) {
     console.error('요약 중 요류', err)
@@ -116,6 +117,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex gap-4">
+    <!-- 스켈레톤 -->
     <section
       v-if="isNewsLoading"
       class="flex flex-shrink-0 w-[786px] h-[468px] bg-gray-400 animate-pulse rounded-[20px]"
@@ -125,6 +127,7 @@ onMounted(() => {
       class="relative w-[786px] h-[468px] group rounded-[20px] overflow-hidden cursor-pointer"
     >
       <template v-if="props.news">
+        <!-- 호버 했을때 -->
         <div
           v-if="!isOpen"
           class="absolute inset-0 bg-transparent hover:bg-black/30 z-10 flex items-center justify-center"
@@ -170,6 +173,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <!-- 뉴스 내용 -->
         <div class="relative w-full h-full rounded-[20px] overflow-hidden">
           <img
             :src="props.news.image_url"
