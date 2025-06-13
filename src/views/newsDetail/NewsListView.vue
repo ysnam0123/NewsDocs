@@ -35,11 +35,11 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-// swiper btn
+// swiper left
 const slidePrev = () => {
   swiperInstance.value?.slidePrev()
 }
-// swiper btn
+// swiper right
 const slideNext = () => {
   swiperInstance.value?.slideNext()
 }
@@ -78,7 +78,6 @@ const newsSavedHandler = async (news) => {
         category_id: news.category_id,
         title: news.title,
         link: news.link,
-        keywords: news.keywords,
         description: news.description,
         pub_date: news.pub_date,
         image_url: news.image_url,
@@ -130,23 +129,22 @@ onMounted(async () => {
           <NewsComponent1 :news-save-handler="newsSavedHandler" :news="randomNews" />
 
           <div class="flex flex-col gap-8.5">
-            <NewsComponent2 />
-            <NewsComponent2 />
-            <NewsComponent2 />
+            <NewsComponent2 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent2 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent2 :news-save-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
         <div class="mb-10">
           <h3 class="text-[30px] font-semibold mb-8 dark:text-white">최신뉴스</h3>
           <div class="flex justify-between">
-            <NewsComponent3 />
-            <NewsComponent3 />
-            <NewsComponent3 />
-            <NewsComponent3 />
-            <NewsComponent3 />
+            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
       </div>
-
       <!-- 섹션 3 : 슬라이드 카드뉴스 -->
       <div
         class="h-[524px] relative w-screen bg-[#F6F6F6] dark:bg-[#181818] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
@@ -189,7 +187,7 @@ onMounted(async () => {
               @swiper="onSwiper"
             >
               <swiper-slide v-for="n in 10" :key="n" class="!w-[300px]">
-                <SlideNewsComponent />
+                <SlideNewsComponent :news-save-handler="newsSavedHandler" :news="randomNews" />
               </swiper-slide>
             </swiper>
           </div>
@@ -212,11 +210,12 @@ onMounted(async () => {
               <span class="text-[26px] font-semibold dark:text-white">경제</span>
             </div>
             <div class="flex flex-col gap-4">
-              <NewsComponent5 />
-              <NewsComponent5 />
+              <NewsComponent5 :news-save-handler="newsSavedHandler" :news="randomNews" />
+              <NewsComponent5 :news-save-handler="newsSavedHandler" :news="randomNews" />
             </div>
           </div>
         </div>
+
         <div class="w-[608px] mt-19.5">
           <!-- 제목 -->
 
@@ -226,12 +225,13 @@ onMounted(async () => {
               <span class="text-[26px] font-semibold dark:text-white">문화</span>
             </div>
             <div class="flex flex-col gap-4">
-              <NewsComponent6 />
-              <NewsComponent6 />
+              <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
+              <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
             </div>
           </div>
         </div>
       </div>
+
       <div class="flex gap-[40px] my-12.5">
         <div class="flex flex-wrap">
           <div class="flex gap-2 mb-6">
@@ -239,8 +239,8 @@ onMounted(async () => {
             <span class="text-[26px] font-semibold dark:text-white">연예</span>
           </div>
           <div class="flex gap-4">
-            <NewsComponent10 />
-            <NewsComponent10 />
+            <NewsComponent10 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent10 :news-save-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
         <div class="w-[600px]">
@@ -254,12 +254,11 @@ onMounted(async () => {
             </div>
           </div>
           <div class="flex flex-col gap-[15px]">
-            <NewsComponent6 />
-            <NewsComponent6 />
+            <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
       </div>
-
       <div
         class="rounded-3xl bg-[#F8F8F8] dark:bg-[#1F1F1F] dark:text-white w-[1240px] h-[510px] px-[60px] py-[53px] mb-[100px]"
       >
