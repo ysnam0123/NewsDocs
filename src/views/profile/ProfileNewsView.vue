@@ -39,8 +39,9 @@ onMounted(async () => {
 const NewsList = computed(() => {
   const size = 3
   const result = []
-  for (let i = 0; i < userScrap.value.length; i += size) {
-    result.push(userScrap.value.slice(i, i + size))
+  if (!scrapNews.value) return result
+  for (let i = 0; i < scrapNews.value.length; i += size) {
+    result.push(scrapNews.value.slice(i, i + size))
   }
   return result
 })
@@ -86,7 +87,7 @@ const NewsList = computed(() => {
             class="flex space-x-[24px] pt-5"
           >
             <NewsComponent8
-              v-for="(item, itemIndex) in scrapNews"
+              v-for="(item, itemIndex) in row"
               :key="item.news_id + '-' + itemIndex"
               :newsObj="item"
               class="w-[229px]"
