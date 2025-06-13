@@ -116,21 +116,22 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
           </RouterLink>
         </div>
         <div>
-          <SleepDog
-            content="아직 저장한 뉴스가 없어요!"
-            btnText="뉴스 보러가기"
-            v-if="myNews.length === 0"
-          />
-          <div v-else-if="myNews.length !== 0" class="flex pt-12 space-x-[24px] w-full">
-            <News8Skel v-if="isLoading" />
-            <template v-else>
-              <NewsComponent8
-                v-for="(item, itemIndex) in scrapNews.slice(0, 3)"
-                :key="item.news_id + '-' + itemIndex"
-                :newsObj="item"
-                class="w-[229px]"
-              />
-            </template>
+          <News8Skel v-if="isLoading" class="pt-12" />
+          <div v-else>
+            <div v-if="myNews.length === 0">
+              <SleepDog content="아직 저장한 뉴스가 없어요!" btnText="뉴스 보러가기" />
+            </div>
+            <div v-else-if="myNews.length !== 0" class="flex pt-12 space-x-[24px] w-full">
+              <News8Skel v-if="isLoading" />
+              <template v-else>
+                <NewsComponent8
+                  v-for="(item, itemIndex) in scrapNews.slice(0, 3)"
+                  :key="item.news_id + '-' + itemIndex"
+                  :newsObj="item"
+                  class="w-[229px]"
+                />
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -144,17 +145,19 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
             </button>
           </RouterLink>
         </div>
-        <div>
-          <SleepDog
-            content="아직 작성한 글이 없어요!"
-            btnText="글 쓰러가기"
-            v-if="myPosts.length === 0"
-          />
-          <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px] pt-6">
+        <CommunityPostSkel v-if="isLoading" class="pt-12 mb-15" />
+        <div v-else>
+          <div v-if="myPosts.length === 0">
+            <SleepDog
+              content="아직 작성한 글이 없어요!"
+              btnText="글 쓰러가기"
+              class="mb-15"
+              :to="community"
+            />
+          </div>
+          <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px] pt-6 mb-15">
             <div v-for="post in myPosts.slice(0, 2)" :key="post.post_id">
-              <CommunityPostSkel v-if="isLoading" />
               <CommunityPost
-                v-else
                 :title="post.title"
                 :content="post.contents"
                 :image="post.content_image"
