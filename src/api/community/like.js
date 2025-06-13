@@ -10,7 +10,17 @@ export const fetchLike = async (postId) => {
   }
   return data
 }
-
+export const fetchLikes = async () => {
+  const { data: likeData, error: likeError } = await supabase
+    .from('like')
+    .select('post_id')
+    .order('like.length', { ascending: false })
+  if (likeError) {
+    console.error('좋아요 전체 불러오기 실패')
+    return []
+  }
+  return likeData
+}
 export const likeUpload = async (postId, userId) => {
   //   const user = await getCurrentUser()
 

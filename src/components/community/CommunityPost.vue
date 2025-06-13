@@ -6,7 +6,7 @@ import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import defaultImg from '../../assets/img/communityImg/newsdog4.svg'
 import defaultProfile from '../../assets/img/communityImg/profileDefault.svg'
-import { fetchLike } from '@/api/community/like'
+// import { fetchLike } from '@/api/community/like'
 import { fetchComment } from '@/api/community/comment'
 const props = defineProps({
   postid: Number,
@@ -15,8 +15,9 @@ const props = defineProps({
   image: String,
   categoryid: Number,
   userid: String,
+  like: Number,
 })
-const likeData = ref([])
+// const likeData = ref([])
 const categoryData = ref(null)
 const userData = ref(null)
 const commentData = ref('')
@@ -31,7 +32,7 @@ onMounted(async () => {
     userData.value = userres
   }
   try {
-    likeData.value = await fetchLike(props.postid)
+    // likeData.value = await fetchLike(props.postid)
     // console.log('좋아요개수:', likeData.value.length)
     commentData.value = await fetchComment(props.postid)
   } catch (err) {
@@ -48,7 +49,7 @@ onMounted(async () => {
       <img
         :src="props.image ? props.image : defaultImg"
         alt="게시글 이미지"
-        :class="props.image ? 'w-full h-full' : 'w-[144px] h-[93px] '"
+        :class="props.image ? 'w-full h-full rounded-[12px]' : 'w-[144px] h-[93px] rounded-[12px] '"
       />
     </div>
     <div class="flex flex-col flex-grow">
@@ -91,7 +92,7 @@ onMounted(async () => {
         <div class="flex items-center w-auto mt-auto h-[18px]">
           <ThumbsUp class="w-4 h-4 text-[#B7B7B7]" />
           <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
-            {{ likeData.length }}
+            {{ props.like }}
           </div>
 
           <MessageSquare class="w-4 h-4 ml-[11px] text-[#B7B7B7]" />

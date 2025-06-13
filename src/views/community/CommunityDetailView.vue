@@ -35,28 +35,28 @@ onMounted(async () => {
       authUserId.value = user?.id
       currentUser.value = await fetchUser(user?.id)
     }
-
-    const postData = await fetchPostDetail(postId)
+    const [postData, likeData, commentData] = await Promise.all([
+      fetchPostDetail(postId),
+      fetchLike(postId),
+      fetchComment(postId),
+    ])
     post.value = postData
+    likeCount.value = likeData.length //게시글 좋아요 리스트
+    comments.value = commentData
+    commentCount.value = commentData.length
 
-    const categoryData = await fetchCategory(postData.category_id)
+    const [categoryData, writerData] = await Promise.all([
+      fetchCategory(postData.category_id),
+      fetchUser(postData.user_id),
+    ])
     category.value = categoryData.title
-
-    const writerData = await fetchUser(postData.user_id)
     writer.value = writerData
-
-    //게시글 좋아요 리스트
-    const likeData = await fetchLike(postData.post_id)
-    likeCount.value = likeData.length
 
     //로그인 사용자의 좋아요여부
     if (currentUser.value) {
       const liked = await isLikedByUser(postData.post_id, currentUser.value.user_id)
       isLiked.value = liked
     }
-    const commentData = await fetchComment(postData.post_id)
-    comments.value = commentData
-    commentCount.value = commentData.length
   } catch (err) {
     console.error('상세페이지에서 불러오기 오류:', err)
   }

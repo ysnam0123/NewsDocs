@@ -34,7 +34,12 @@ const handleProfile = () => {
       <div class="flex text-[16px] text-[#7537E3]">#{{ props?.category }}</div>
     </div>
 
-    <img v-if="props.img" :src="props.img" alt="게시글 이미지" class="mt-6 w-[750px] h-[361px]" />
+    <img
+      v-if="props.img"
+      :src="props.img"
+      alt="게시글 이미지"
+      class="mt-6 w-[750px] h-[361px] rounded-[12px]"
+    />
     <!-- 제목 -->
     <div class="mt-8 text-2xl dark:text-[#FFFFFF]">{{ props?.title }}</div>
     <!-- 내용 -->

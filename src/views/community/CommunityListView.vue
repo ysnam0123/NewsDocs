@@ -1,30 +1,68 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileCard from '@/components/common/ProfileCard.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'
 import { useRouter } from 'vue-router'
+import { fetchLike } from '@/api/community/like'
 
 const posts = ref([])
+const postsWithLike = ref([])
 const router = useRouter()
 const selectCategory = ref('전체')
 const selectedSort = ref('최신순')
+//1,7 2,3 4,6 else
 const categories = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
+const cateGroupMap = {
+  '정치/경제': [1, 7],
+  '연예/스포츠': [2, 3],
+  '사회/문화': [4, 6],
+  '해외/기타': [5],
+}
 const handleCategory = (category) => {
   selectCategory.value = category
 }
 const handleSort = (sort) => {
   selectedSort.value = sort
 }
+
 const goToPostDetail = (post_id) => {
   router.push(`/community/${post_id}`)
 }
+
 onMounted(async () => {
   try {
     posts.value = await fetchPost()
+    postsWithLike.value = await Promise.all(
+      posts.value.map(async (post) => {
+        const like = (await fetchLike(post.post_id)).length
+        return { ...post, like }
+      }),
+    )
+
+    postsWithLike.value = postsWithLike.value.map((post) => {
+      for (const [group, id] of Object.entries(cateGroupMap)) {
+        if (id.includes(post.category_id)) {
+          return { ...post, cateGroup: group }
+        }
+      }
+      return { ...post, cateGroup: '해외/기타' }
+    })
   } catch (e) {
     alert(e.message)
   }
+})
+
+const displayPost = computed(() => {
+  const list = [...postsWithLike.value].sort((a, b) => {
+    if (selectedSort.value === '인기순') {
+      return b.like - a.like
+    } else {
+      return new Date(b.created_at) - new Date(a.created_at)
+    }
+  })
+  if (selectCategory.value === '전체') return list
+  return list.filter((post) => post.cateGroup === selectCategory.value)
 })
 </script>
 <template>
@@ -84,7 +122,7 @@ onMounted(async () => {
       </div>
       <!-- 게시글 -->
       <div class="flex flex-col w-[835px]">
-        <div v-for="post in posts" :key="post.post_id">
+        <div v-for="post in displayPost" :key="post.post_id">
           <CommunityPost
             @click="goToPostDetail(post.post_id)"
             :postid="post.post_id"
@@ -93,6 +131,7 @@ onMounted(async () => {
             :image="post.content_image"
             :categoryid="post.category_id"
             :userid="post.user_id"
+            :like="post.like"
             class="border-b border-b-gray-200 dark:border-b-gray-500"
           />
         </div>
