@@ -14,17 +14,16 @@ const summarizeHandler = () => {
   wantSummary.value = !wantSummary.value
 }
 const props = defineProps({
-  newsObj: {
-    type: Object,
-    required: true,
-  },
+  news: Object,
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 </script>
 <template>
-  <div class="relative flex gap-[22px] w-[600px] h-[184px] rounded-[16px]">
+  <div v-if="props.news" class="relative flex gap-[22px] w-[600px] h-[184px] rounded-[16px]">
     <div class="w-[200px] h-[184px]">
       <img
-        :src="newsObj.image_url"
+        :src="news.image_url"
         class="w-full h-full object-cover rounded-l-[16px]"
         @mouseover="hoverHandler"
       />
@@ -32,10 +31,10 @@ const props = defineProps({
 
     <div class="flex flex-col gap-[10px] py-[18px] h-[184px]">
       <div class="font-bold text-[18px] w-[272px] text-[var(--text-title)]">
-        {{ newsObj.title }}
+        {{ props.news.title }}
       </div>
       <span class="text-sm text-[var(--text-content)] w-[237px] line-clamp-2">
-        {{ newsObj.description || '' }}
+        {{ props.news.description || '' }}
       </span>
       <!-- 좋아요 박스 -->
       <div class="flex gap-[8px]">
