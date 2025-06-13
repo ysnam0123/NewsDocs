@@ -3,7 +3,7 @@ import CommunityCommentModal from './CommunityCommentModal.vue'
 import { fetchUser } from '@/api/fetchUser'
 import { onMounted, ref } from 'vue'
 import defaultImg from '@/assets/img/communityImg/profileDefault.svg'
-import { SquareCheck } from 'lucide-vue-next'
+import { Bone } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { userRelativeTime } from '@/composables/userRelativeTime'
 const props = defineProps({
@@ -80,9 +80,9 @@ onMounted(async () => {
             v-model="editContent"
             class="w-full focus:outline-none focus:bg-gray-50 border-b border-b-[#9A9A9A]"
           />
-          <SquareCheck type="editContent" class="mr-[10px] cursor-pointer text-[#191919]">
-            저장
-          </SquareCheck>
+          <Bone @click="saveEdit" type="editContent" class="mr-[10px] cursor-pointer text-[#191919]"
+            >수정하기</Bone
+          >
         </form>
         <template v-else>
           {{ props.contents }}

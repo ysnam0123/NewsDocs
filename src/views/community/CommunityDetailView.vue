@@ -3,7 +3,7 @@ import ProfileCard from '@/components/common/ProfileCard.vue'
 import CommunityPostDetail from '@/components/community/CommunityPostDetail.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ChevronLeft, MessageSquare, MessageSquarePlus, ThumbsUp } from 'lucide-vue-next'
+import { ChevronLeft, MessageSquare, PawPrint, ThumbsUp } from 'lucide-vue-next'
 import CommunityComment from '@/components/community/CommunityComment.vue'
 import { fetchPostDetail } from '@/api/community/fetchPostDetail'
 import { fetchCategory } from '@/api/community/fetchCategory'
@@ -212,7 +212,7 @@ const deleteCommentHandler = async (commentId) => {
             class="w-full h-[50px] px-5 text-[16px] text-[#191919] dark:text-[#FFFFFF] placeholder-[#CECECE] border border-gray-200 dark:border-[#4D4D4D] rounded-[8px] outline-none"
             placeholder="댓글을 입력해주세요"
           />
-          <MessageSquarePlus
+          <PawPrint
             @click="commentSubmitHandler"
             class="w-6 h-6 text-gray-400 dark:text-[#4D4D4D] hover:text-gray-300 dark:hover:text-[#CECECE] cursor-pointer absolute top-1/2 right-4 -translate-y-1/2"
           />
