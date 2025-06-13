@@ -107,7 +107,7 @@ async function onLogin() {
               v-model="password"
               placeholder=""
               required
-              class="peer w-[360px] h-[61px] text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
+              class="peer w-[360px] h-[61px] dark:text-white text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
             />
             <label
               class="absolute left-[16px] top-[12px] text-[#BDBDBD] text-[12px] transition-all duration-200 pointer-events-none origin-[0] peer-focus:top-[12px] peer-focus:text-[12px] peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-[20px]"
@@ -144,16 +144,6 @@ async function onLogin() {
             class="w-5 h-5 mr-2"
           />
           구글 로그인
-        </button>
-        <button
-          class="flex items-center justify-center border border-[#DFDFDF] dark:hover:bg-[#3a3a3a] dark:border-[#4D4D4D] dark:text-white rounded-[8px] py-2 hover:bg-[#F9F9F9] transition-colors duration-300 text-[16px] font-medium w-[360px] h-[50px] cursor-pointer"
-        >
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="naver"
-            class="w-5 h-5 mr-2"
-          />
-          네이버 로그인
         </button>
       </div>
       <div class="text-center font-semibold text-[16px] my-[40px] text-[#929292] w-full">

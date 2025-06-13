@@ -4,6 +4,7 @@ import SleepDog from '@/components/icon/sleepDog.vue'
 defineProps({
   content: String,
   btnText: String,
+  to: String,
 })
 </script>
 <template>
@@ -13,13 +14,14 @@ defineProps({
     <SleepDog />
     <div class="text-lg text-[#191919] dark:text-white">{{ content }}</div>
     <div class="relative">
-      <router-link to="/news">
+      <RouterLink :to="to">
         <button
+          v-if="btnText"
           class="w-[106px] h-[36px] bg-[#7537E3] text-center rounded-[8px] text-sm text-[#FFFFFF] cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
         >
           {{ btnText }}
         </button>
-      </router-link>
+      </RouterLink>
     </div>
   </div>
 </template>

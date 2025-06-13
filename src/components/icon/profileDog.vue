@@ -16,22 +16,24 @@ const isMyProfile = computed(() => {
   return currentUser.value?.user_id === profileUser.value?.user_id
 })
 
+const fetchProfileUser = async () => {
+  const user = await getCurrentUser()
+  currentUser.value = await fetchUser(user?.id)
+
+  if (nicknameParam) {
+    profileUser.value = await fetchUserByNickname(nicknameParam)
+  } else {
+    profileUser.value = currentUser.value
+  }
+}
+
 onMounted(async () => {
   try {
-    const user = await getCurrentUser()
-    currentUser.value = await fetchUser(user?.id)
-
-    if (nicknameParam) {
-      profileUser.value = await fetchUserByNickname(nicknameParam)
-    } else {
-      profileUser.value = currentUser.value
-    }
+    await fetchProfileUser()
   } catch (e) {
     alert(e.message)
   }
 })
-
-const previewImage = ref(defaultProfile)
 
 const fileInput = ref(null)
 
@@ -44,10 +46,9 @@ const handleFileChange = async (e) => {
   if (!fileObj) return
 
   try {
-    previewImage.value = URL.createObjectURL(fileObj)
     const result = await updateProfileImg(profileUser.value?.user_id, fileObj)
     // 임시로 새로고침 넣었습니다
-    window.location.reload()
+    await fetchProfileUser()
     if (result && result.length > 0) {
       profileUser.value.profile_img = result[0].profile_img
     }
@@ -68,6 +69,7 @@ const myProfile = computed(() => profileUser.value?.profile_img || defaultProfil
       @click="isMyProfile && triggerFileInput()"
     >
       <img
+        v-if="profileUser"
         :src="myProfile"
         :class="[isDefaultImage ? 'w-[86px] h-[86px]' : 'w-full h-full']"
         class="rounded-full object-cover"

@@ -8,14 +8,18 @@ import { fetchUser } from '@/api/fetchUser'
 import { useRoute } from 'vue-router'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 
-const activeTab = ref('전체')
-
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
-
+const tabsMap = {
+  '정치/경제': [1, 7],
+  '연예/스포츠': [2, 3],
+  '사회/문화': [4, 6],
+  '해외/기타': [5],
+}
 const posts = ref([])
 const currentUser = ref(null)
 const route = useRoute()
 const profileUser = ref(null)
+const activeTab = ref('전체')
 
 const nicknameParam = route.params.nickname
 const name = nicknameParam ? nicknameParam + '님이' : '내가'
@@ -36,9 +40,18 @@ onMounted(async () => {
   }
 })
 
-const myPosts = computed(() =>
-  profileUser.value ? posts.value.filter((post) => post.user_id === profileUser.value.user_id) : [],
-)
+const filteredPosts = computed(() => {
+  if (!profileUser.value) return []
+
+  const userPosts = posts.value.filter((post) => post.user_id === profileUser.value.user_id)
+
+  if (activeTab.value === '전체') {
+    return userPosts
+  }
+
+  const categoryIds = tabsMap[activeTab.value] || []
+  return userPosts.filter((post) => categoryIds.includes(post.category_id))
+})
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -79,7 +92,7 @@ const myPosts = computed(() =>
         </div>
       </div>
       <div class="flex flex-col w-[735px]">
-        <div v-for="post in myPosts" :key="post.post_id">
+        <div v-for="post in filteredPosts" :key="post.post_id">
           <CommunityPost
             :title="post.title"
             :content="post.contents"
