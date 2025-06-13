@@ -37,3 +37,4 @@ onMounted(async () => {
     <RouterView />
   </DefaultLayout>
 </template>
+<style scoped></style>
