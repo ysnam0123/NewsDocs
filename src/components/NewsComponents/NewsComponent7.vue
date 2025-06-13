@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
+// import { ThumbsUp } from 'lucide-vue-next'
+// import { Eye } from 'lucide-vue-next'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -15,34 +17,20 @@ const summarizeHandler = () => {
 }
 
 const props = defineProps({
-  newsObj: {
-    type: Object,
-    required: true,
-  },
+  news: Object,
 })
 </script>
 <template>
-  <div v-if="newsObj" class="relative" @mouseover="hoverHandler">
+  <div v-if="props.news" class="relative" @mouseover="hoverHandler">
     <div class="w-[600px] h-[118px] rounded-[16px] p-[20px] border-1 border-[#EBEBEB]">
       <div class="flex flex-col gap-[12px]">
         <h1 class="w-[425px] text-[18px] font-bold text-[var(--text-title)] line-clamp-1">
-          {{ newsObj.title }}
+          {{ props.news.title }}
         </h1>
         <div class="flex">
           <p class="text-[#8f8f8f] text-[14px] font-medium w-[425px] line-clamp-2">
-            {{ newsObj.description }}
+            {{ props.news.description || '' }}
           </p>
-          <!-- 좋아요 박스 -->
-          <div class="flex gap-[5px] ml-auto mt-auto">
-            <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-              <img src="@/assets/img/Thumbs-up-opacity.svg" alt="likes" class="w-[18px] h-[18px]" />
-              <p class="mt-[4px] text-[12px]">32</p>
-            </div>
-            <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-              <img src="@/assets/img/View-opacity.svg" alt="likes" class="w-[19px] h-[19px]" />
-              <p class="mt-[4px] text-[12px]">32</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
