@@ -4,7 +4,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import supabase from '@/utils/supabase'
-import { ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch, onMounted } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import Typed from 'typed.js'
@@ -73,6 +73,17 @@ const summarizeHandler = async () => {
     isLoading.value = false
   }
 }
+onMounted(async () => {
+  const { data, error } = await supabase
+    .from('news')
+    .select('view_count')
+    .eq('news_id', news.article_id)
+    .single()
+
+  if (!error && data) {
+    news.view_count = data.view_count
+  }
+})
 
 watch(isLoading, async (value) => {
   if (value === false && summaryStore.summaryNews) {
@@ -94,9 +105,9 @@ watch(isLoading, async (value) => {
         <span class="mr-2 text-sm text-[#A6A6A6]">{{ news.pubData }}</span>
         <span class="text-sm text-[#A6A6A6]">{{ news.source_name }}</span>
       </div>
-      <div class="flex justify-center items-center gap-3">
+      <div class="flex justify-center items-center gap-2">
         <ThumbsUp />
-        <Eye />
+        <Eye /><span class="mr-2">{{ news.view_count }}</span>
       </div>
     </div>
     <div class="bg-[#f5f5f5]/70 rounded-2xl">
