@@ -78,7 +78,6 @@ const newsSavedHandler = async (news) => {
         category_id: news.category_id,
         title: news.title,
         link: news.link,
-        keywords: news.keywords,
         description: news.description,
         pub_date: news.pub_date,
         image_url: news.image_url,
