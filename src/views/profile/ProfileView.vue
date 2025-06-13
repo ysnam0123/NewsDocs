@@ -4,6 +4,10 @@ import ProfileDog from '@/components/icon/profileDog.vue'
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import SleepDog from '@/components/profile/SleepDog.vue'
 import ProfileSkel from '@/components/NewsComponents/skeleton/ProfileSkel.vue'
+import ProfileTitleSkel from '@/components/NewsComponents/skeleton/ProfileTitleSkel.vue'
+import ProfileContentSkel from '@/components/NewsComponents/skeleton/ProfileContentSkel.vue'
+import News8Skel from '@/components/NewsComponents/skeleton/News8Skel.vue'
+import CommunityPostSkel from '@/components/NewsComponents/skeleton/CommunityPostSkel.vue'
 import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'
 import { getCurrentUser } from '@/api/getCurrentUser'
@@ -68,25 +72,36 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
           <ProfileDog v-else />
           <div class="flex flex-col justify-center ml-3">
             <div class="text-[24px] font-semibold mb-1 dark:text-white">
-              {{ profileUser?.nickname || '닉네임을 지어주세요' }}
-            </div>
-            <div class="flex space-x-2">
-              <div
-                v-for="category in categorys"
-                :key="category.category_id"
-                class="text-[#8F8F8F] text-sm"
-              >
-                # {{ categoryNames[category - 1] }}
+              <ProfileTitleSkel v-if="isLoading" class="w-3xs h-11 pb-2" />
+              <div v-else>
+                {{ profileUser?.nickname || '닉네임을 지어주세요' }}
               </div>
             </div>
-            <div class="mt-3">
-              <RouterLink v-if="isMyProfile" to="/profile/edit">
-                <button
-                  class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
+            <div class="flex space-x-2">
+              <template v-if="isLoading">
+                <ProfileContentSkel class="w-[200px] h-[24px]" />
+              </template>
+              <template v-else>
+                <div
+                  v-for="category in categorys"
+                  :key="category.category_id"
+                  class="text-[#8F8F8F] text-sm"
                 >
-                  내 정보 수정
-                </button>
-              </RouterLink>
+                  # {{ categoryNames[category - 1] }}
+                </div>
+              </template>
+            </div>
+            <div class="mt-3">
+              <ProfileContentSkel v-if="isLoading" class="w-[200px] h-[24px]" />
+              <div v-else>
+                <RouterLink v-if="isMyProfile" to="/profile/edit">
+                  <button
+                    class="w-[106px] h-[36px] bg-[#F6F6F6] text-center rounded-[8px] text-sm cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
+                  >
+                    내 정보 수정
+                  </button>
+                </RouterLink>
+              </div>
             </div>
           </div>
         </div>
@@ -107,12 +122,15 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
             v-if="myNews.length === 0"
           />
           <div v-else-if="myNews.length !== 0" class="flex pt-12 space-x-[24px] w-full">
-            <NewsComponent8
-              v-for="(item, itemIndex) in scrapNews"
-              :key="item.news_id + '-' + itemIndex"
-              :newsObj="item"
-              class="w-[229px]"
-            />
+            <News8Skel v-if="isLoading" />
+            <template v-else>
+              <NewsComponent8
+                v-for="(item, itemIndex) in scrapNews.slice(0, 3)"
+                :key="item.news_id + '-' + itemIndex"
+                :newsObj="item"
+                class="w-[229px]"
+              />
+            </template>
           </div>
         </div>
       </div>
@@ -132,9 +150,11 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
             btnText="글 쓰러가기"
             v-if="myPosts.length === 0"
           />
-          <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px]">
-            <div v-for="post in myPosts" :key="post.post_id">
+          <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px] pt-6">
+            <div v-for="post in myPosts.slice(0, 2)" :key="post.post_id">
+              <CommunityPostSkel v-if="isLoading" />
               <CommunityPost
+                v-else
                 :title="post.title"
                 :content="post.contents"
                 :image="post.content_image"

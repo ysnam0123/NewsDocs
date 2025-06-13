@@ -82,7 +82,7 @@ const NewsList = computed(() => {
         <div>
           <div
             v-for="(row, rowIndex) in NewsList"
-            :key="'row-' + rowIndex"
+            :key="row + rowIndex"
             class="flex space-x-[24px] pt-5"
           >
             <NewsComponent8
