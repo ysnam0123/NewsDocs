@@ -1,5 +1,5 @@
 <script setup>
-import NewsComponent8 from '@/components/NewsComponents/NewsComponent82.vue'
+import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import { computed, onMounted, ref } from 'vue'
 import BackButton from '@/components/common/BackButton.vue'
 import { useRoute } from 'vue-router'
@@ -103,7 +103,7 @@ const NewsList = computed(() => {
             <NewsComponent8
               v-for="(item, itemIndex) in row"
               :key="item.news_id + '-' + itemIndex"
-              :newsObj="item"
+              :news="item"
               class="w-[229px]"
             />
           </div>

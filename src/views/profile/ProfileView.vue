@@ -1,7 +1,7 @@
 <script setup>
 import CommunityPost from '@/components/community/CommunityPost.vue'
 import ProfileDog from '@/components/icon/profileDog.vue'
-import NewsComponent8 from '@/components/NewsComponents/NewsComponent82.vue'
+import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import SleepDog from '@/components/profile/SleepDog.vue'
 import ProfileSkel from '@/components/NewsComponents/skeleton/ProfileSkel.vue'
 import ProfileTitleSkel from '@/components/NewsComponents/skeleton/ProfileTitleSkel.vue'
@@ -134,7 +134,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
                 <NewsComponent8
                   v-for="(item, itemIndex) in scrapNews.slice(0, 3)"
                   :key="item.news_id + '-' + itemIndex"
-                  :newsObj="item"
+                  :news="item"
                   class="w-[229px]"
                 />
               </template>

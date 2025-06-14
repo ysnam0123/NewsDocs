@@ -131,11 +131,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div
-    v-if="props.news"
-    class="w-[383px] h-[470px] relative group select-none"
-    @click="handleClick"
-  >
+  <div v-if="props.news" class="h-[470px] relative group select-none" @click="handleClick">
     <!-- 호버했을때 나오는 창 -->
     <div
       v-if="summaryHover && !wantSummary"
