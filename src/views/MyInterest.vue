@@ -18,6 +18,7 @@ import { useInterestStore } from '@/stores/interestStore'
 import { useNewsStore } from '@/stores/newsStore'
 import { computed, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
+import { useRouter } from 'vue-router'
 
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
@@ -29,6 +30,8 @@ const scrollToTop = () => {
 
 const allNews = ref([])
 const loading = ref(true)
+const posts = ref([])
+const router = useRouter()
 
 const newsSavedHandler = async (news) => {
   newsStore.selectedNews = news
@@ -76,6 +79,14 @@ const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.le
 const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
 const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
+const getLikeCount = async (postId) => {
+  const { count } = await supabase
+    .from('like')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', postId)
+
+  return count || 0
+}
 onMounted(async () => {
   const checkToken = localStorage.getItem('accessToken')
   console.log(`로그인 토큰 : ${checkToken}`)
@@ -97,6 +108,39 @@ onMounted(async () => {
       console.error('Error fetching news:', error)
     }
   }
+
+  // post 불러오기
+  const { data, error } = await supabase
+    .from('post')
+    .select(
+      `
+    post_id,
+    title,
+    contents,
+    category_id,
+    profiles (
+    nickname,
+    profile_img
+    ),
+    comments!comments_post_id_fkey (
+      comments_id,
+      contents
+  )
+      `,
+    )
+    .order('created_at', { ascending: true })
+    .limit(3)
+
+  if (error) {
+    console.error('post 불러오기 실패', error)
+    return
+  }
+  for (const post of data) {
+    const likeCount = await getLikeCount(post.post_id)
+    post.like_count = likeCount
+  }
+
+  posts.value = data
 })
 </script>
 
@@ -113,12 +157,11 @@ onMounted(async () => {
         나의 관심사에 대해 사람들과 이야기해보세요!
       </h1>
       <div class="flex flex-row justify-between gap-[24px]">
-        <NewsComponentCommunity />
-        <NewsComponentCommunity />
-        <NewsComponentCommunity />
+        <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
       </div>
       <button
-        class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white font-bold text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#b394e7] active:scale-[0.98]"
+        @click="router.push('/community')"
+        class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
       >
         글쓰러 가기
       </button>
@@ -163,7 +206,7 @@ onMounted(async () => {
     <SixthSectionSkel v-else-if="loading" />
 
     <!-- 탑으로 이동 버튼 -->
-    <div>
+    <div class="mb-25">
       <img
         src="@/assets/icons/moveToTop.svg"
         alt="move to top Button"
@@ -172,10 +215,6 @@ onMounted(async () => {
       />
     </div>
   </div>
-  <br />
-  <br />
-  <br />
-  <br />
 </template>
 
 <style scoped></style>

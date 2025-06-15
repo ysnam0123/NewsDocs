@@ -7,6 +7,7 @@ import supabase from '@/utils/supabase'
 import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
+
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
