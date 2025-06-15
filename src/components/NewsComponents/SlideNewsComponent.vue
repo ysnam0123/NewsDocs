@@ -9,7 +9,7 @@ import Typed from 'typed.js'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
-
+import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 // 호버 상태
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -209,7 +209,10 @@ onMounted(() => {
       </template>
       <template v-else-if="summaryMessage">
         <!-- 요약할 내용 없음 메시지 표시 -->
-        <div class="text-white text-center text-[16px] px-4">
+        <div
+          class="flex flex-col items-center justify-center text-white text-center text-[16px] px-4"
+        >
+          <img :src="dogNotFound" alt="noDescribe" class="w-[200px]" />
           {{ summaryMessage }}
         </div>
       </template>

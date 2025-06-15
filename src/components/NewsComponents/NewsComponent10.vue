@@ -9,7 +9,7 @@ import Typed from 'typed.js'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
-
+import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 // 호버 상태
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -212,7 +212,7 @@ onMounted(() => {
         <div
           class="flex flex-col items-center justify-center text-white text-center text-[16px] px-4"
         >
-          <img src="@/assets/img/dog-notfound.png" alt="noDescribe" class="w-[150px]" />
+          <img :src="dogNotFound" alt="noDescribe" class="w-[150px]" />
           {{ summaryMessage }}
         </div>
       </template>
