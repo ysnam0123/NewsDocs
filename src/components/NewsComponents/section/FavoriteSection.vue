@@ -1,5 +1,5 @@
 <script setup>
-import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
+// import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
 import { useInterestStore } from '@/stores/interestStore'
@@ -44,18 +44,18 @@ onMounted(async () => {
     </div>
   </div>
 
-  <div class="mb-[44px]">
-    <div class="flex gap-[40px] mb-[50px]">
-      <div class="flex gap-[20px]">
-        <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[0]" :news="newsArr[0]" />
-        <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[1]" :news="newsArr[1]" />
-      </div>
-      <div class="flex flex-col gap-[24px]">
+  <div class="mb-[60px]">
+    <!-- <div class="flex gap-[40px] mb-[50px]"></div> -->
+    <div class="flex gap-[20px] justify-between mb-8">
+      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[0]" :news="newsArr[0]" />
+      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[1]" :news="newsArr[1]" />
+      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
+    </div>
+    <!-- <div class="flex flex-col gap-[24px]">
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[3]" :news="newsArr[3]" />
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[4]" :news="newsArr[4]" />
-      </div>
-    </div>
+      </div> -->
 
     <div class="flex justify-between">
       <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[5]" :news="newsArr[5]" />

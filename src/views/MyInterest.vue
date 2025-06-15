@@ -62,6 +62,9 @@ const newsSavedHandler = async (news) => {
     if (insertError) {
       console.error('뉴스 저장 실패함', insertError)
     }
+    console.log('뉴스가 저장되었습니다.')
+  } else {
+    console.log('이미 저장된 뉴스입니다:', news.title)
   }
 }
 
@@ -84,7 +87,7 @@ onMounted(async () => {
       for (const item of interestList.value) {
         const result = await fetchNewsData(item.id, 'ko')
         newsResults.push(result)
-        await new Promise((resolve) => setTimeout(resolve, 200)) // 200ms 쉬기
+        await new Promise((resolve) => setTimeout(resolve, 300)) // 200ms 쉬기
       }
       allNews.value = newsResults
       console.log(allNews.value)
