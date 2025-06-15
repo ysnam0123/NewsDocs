@@ -5,6 +5,7 @@ import { Bell, User } from 'lucide-vue-next'
 import DarkModeButton from './DarkModeButton.vue'
 import dog from '../../assets/img/dog-trans.svg'
 import { computed } from 'vue'
+import DropBox from './DropBox.vue'
 
 const themeStore = useThemeStore()
 const router = useRouter()
@@ -16,7 +17,7 @@ const movePage = (path) => router.push(path)
   <div
     class="max-w-[80%] mx-auto py-4 flex items-center md:h-[100px] h-[80px] bg-[var(--bg-color)] backdrop-blur-[28px]"
   >
-    <div class="flex items-center gap-[10px] cursor-pointer">
+    <div class="flex items-center gap-[10px] cursor-pointer" @click="movePage('/')">
       <div class="w-[46px] h-[46px] rounded-full flex justify-center items-center bg-[#7B42DF]">
         <img :src="dog" class="w-[28px] h-[26px]" />
       </div>
@@ -67,12 +68,16 @@ const movePage = (path) => router.push(path)
       </div>
 
       <!-- 프로필 -->
-      <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
-        @click="movePage('/profile')"
-      >
-        <User :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
-      </div>
+      <DropBox class="mt-[4px]">
+        <template #activator="{ toggle }">
+          <div
+            class="w-[40px] h-[40px] cursor-pointer rounded-full bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+            @click="toggle"
+          >
+            <User :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
+          </div>
+        </template>
+      </DropBox>
     </div>
   </div>
 </template>
