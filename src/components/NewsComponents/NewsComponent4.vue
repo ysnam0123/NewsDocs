@@ -10,7 +10,6 @@ import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
-
 // 호버 상태
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -29,9 +28,9 @@ const summarizeToggle = async () => {
 
   if (wantSummary.value) {
     console.log('요약 시작됨!')
-    await nextTick()
     // 저장된 요약이 없으면 handleClick() 함수 실행
     if (!summaryStore.getSummary(props.news.article_id)) {
+      await nextTick()
       await handleClick()
     } else {
       // 저장된 요약이 있으면 바로 보여주기
@@ -89,13 +88,6 @@ const handleClick = async () => {
 
 const summarizeHandler = async (articleId, description) => {
   try {
-    // if (!description) {
-    //   summaryMessage.value = '요약할 내용이 없습니다.'
-    //   await runTyped('요약할 내용이 없습니다.')
-    //   console.warn('❌ 요약할 내용이 없음')
-    //   return
-    // }
-
     summaryStore.isLoading = true
     isSummaryLoading.value = true
 
@@ -109,11 +101,13 @@ const summarizeHandler = async (articleId, description) => {
     if (savedSummary?.summaries_contents) {
       summaryStore.setSummary(articleId, savedSummary.summaries_contents)
       console.log('📦 Supabase에서 저장된 요약 로딩 완료')
+      // 임시 변경
+      // await runTyped(savedSummary.summaries_contents)
       await runTyped(savedSummary.summaries_contents)
       return
     }
 
-    // OpenAI로 요약 생성
+    // supabase에 저장이 안되어있으면 OpenAI로 요약 생성
     console.log('🤖 OpenAI 요약 요청 시작')
     const result = await fetchOpenAi(description)
     console.log('✅ OpenAI 요약 결과 수신:', result)
@@ -179,91 +173,96 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="w-[300px] h-[385px] relative select-none">
+  <div v-if="props.news" class="w-[420px] h-[468px] relative group select-none">
     <!-- 호버했을때 나오는 창 -->
     <div
       v-if="summaryHover && !wantSummary"
-      class="absolute w-[300px] h-[217px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      class="absolute w-full h-[350px] inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
       @click.stop="summarizeToggle"
       @mouseleave="hoverOut"
     >
-      <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
+      <p class="text-white font-medium text-[16px] z-20">요약보기</p>
     </div>
-
-    <!-- 클릭했을 때 나오는 창 -->
     <div
       v-if="wantSummary"
-      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center justify-center gap-4 rounded-[20px] z-20 backdrop-blur-lg"
-      @click="summarizeToggle"
+      class="h-full flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      @click.stop="summarizeToggle"
     >
       <template v-if="isSummaryLoading">
-        <div class="flex flex-col animate-pulse shrink-0">
-          <div class="mb-8 h-7 w-[80px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[250px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[230px] bg-[#626262]/70 rounded-md"></div>
-          <div class="h-8 w-[200px] bg-[#626262]/70 rounded-md"></div>
+        <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
+          <div class="mb-8 h-7 w-[90px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[330px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[300px] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[260px] bg-[#626262]/70 rounded-md"></div>
         </div>
       </template>
       <template v-else-if="summaryMessage">
         <!-- 요약할 내용 없음 메시지 표시 -->
-        <div
-          class="flex flex-col items-center justify-center text-white text-center font-semibold text-[16px] px-4"
-        >
-          <img :src="dogNotFound" alt="noDescribe" class="w-[150px]" />
-          {{ summaryMessage }}
+        <div class="flex justify-center items-center">
+          <div
+            class="flex flex-col items-center justify-center text-white text-center font-semibold text-[16px] px-4"
+          >
+            <img :src="dogNotFound" alt="noDescribe" class="w-[200px]" />
+            {{ summaryMessage }}
+          </div>
         </div>
       </template>
+
       <div
         v-show="summaryStore.getSummary(props.news.article_id)"
-        class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+        class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-scroll"
       >
+        <!-- 요약된 내용 -->
         <div class="flex flex-col relative z-30 h-full">
-          <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
+          <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
           <div class="flex flex-col">
-            <div class="max-h-[220px] overflow-y-auto pr-1">
-              <div class="text-white whitespace-pre-line leading-8">
-                <span ref="typedTarget" class="text-white"></span>
-              </div>
+            <div class="text-white whitespace-pre-line leading-8">
+              <span ref="typedTarget" class="text-white"></span>
             </div>
           </div>
         </div>
       </div>
 
       <button
-        class="absolute bottom-5 right-4 w-[81px] h-[33px] px-[16px] z-40 py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-        @click="toDetailHandler"
+        class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+        @click.stop="toDetailHandler"
       >
         원문보기
       </button>
     </div>
 
-    <div class="w-[300px] h-[217px] mb-[16px]">
-      <img
-        :src="news.image_url"
-        class="w-full h-full object-cover space-y-0.5 rounded-[20px]"
-        @mouseover="hoverHandler"
-      />
-    </div>
-    <div class="mb-[12px] px-[10px]">
-      <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px] line-clamp-2">
-        {{ props.news.title }}
+    <!-- 뉴스 내용 -->
+    <div>
+      <!-- 뉴스 이미지 -->
+      <div class="w-full h-[350px] cursor-pointer" @mouseover="hoverHandler">
+        <img :src="news.image_url" class="w-full h-full object-cover rounded-[20px]" />
       </div>
-      <div class="text-sm text-[#A8A8A8] min-h-[40px] line-clamp-2 mb-[12px]">
-        {{ props.news.description || '' }}
-      </div>
-      <!-- 좋아요 박스 -->
-      <div class="flex gap-2 text-[#A8A8A8] mb-16">
-        <div class="flex gap-1">
-          <ThumbsUp class="w-4" />
-          <span>23</span>
+      <!-- 뉴스 텍스트 -->
+      <div>
+        <div class="px-[10px] select-none">
+          <div
+            class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-1"
+          >
+            {{ props.news.title }}
+          </div>
+          <div class="text-[16px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
+            {{ props.news.description || '' }}
+          </div>
+          <!-- 좋아요 박스 -->
+          <div class="flex gap-2 text-[#A8A8A8] mb-16">
+            <div class="flex gap-1">
+              <ThumbsUp class="w-4" />
+              <span>23</span>
+            </div>
+            <div class="flex gap-1">
+              <Eye class="w-4" />
+              <span>300</span>
+            </div>
+          </div>
         </div>
-        <div class="flex gap-1">
-          <Eye class="w-4" />
-          <span>300</span>
-        </div>
       </div>
-    </div>
 
-    <ScrapImg class="absolute right-[8px] top-[10px] z-25" />
+      <ScrapImg class="absolute right-[15px] top-[10px] z-25" />
+    </div>
   </div>
 </template>
