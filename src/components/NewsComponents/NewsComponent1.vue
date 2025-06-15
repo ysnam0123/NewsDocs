@@ -2,7 +2,7 @@
 import { useSummaryStore } from '@/stores/summaryNews'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
-import { computed, onMounted, ref, nextTick } from 'vue'
+import { computed, onMounted, ref, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
@@ -14,6 +14,7 @@ const props = defineProps({
   news: Object,
   newsSavedHandler: Function,
   newsDetail: Function,
+  resetPoint: Number,
 })
 
 const router = useRouter()
@@ -42,7 +43,7 @@ const handleClick = async () => {
 
 // 타이핑 효과
 const runTyped = async (text) => {
-  await nextTick()
+  await new Promise((resolve) => setTimeout(resolve, 100))
 
   if (typedTarget.value) {
     if (typedInstance) {
@@ -114,6 +115,13 @@ onMounted(() => {
     isSummaryLoading.value = false
   }
 })
+
+watch(
+  () => props.resetPoint,
+  () => {
+    isOpen.value = false
+  },
+)
 </script>
 <template>
   <div class="flex gap-4">
@@ -123,6 +131,7 @@ onMounted(() => {
       class="flex flex-shrink-0 w-[786px] h-[468px] bg-gray-400 animate-pulse rounded-[20px]"
     ></section>
     <section
+      v-else
       @click="handleClick"
       class="relative w-[786px] h-[468px] group rounded-[20px] overflow-hidden cursor-pointer"
     >
@@ -156,7 +165,7 @@ onMounted(() => {
                 <template v-else-if="summaryStore.summaryNews">
                   <div>
                     <h2 class="text-xl mb-6 text-white font-semibold">세 줄 요약</h2>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col" v-show="isOpen">
                       <div class="flex flex-col whitespace-pre-line text-xl mr-16 leading-8">
                         <span ref="typedTarget" class="text-white"></span>
                       </div>
@@ -206,7 +215,7 @@ onMounted(() => {
               </div>
               <div class="flex gap-1">
                 <Eye class="w-4" />
-                <span>{{ viewCount }}</span>
+                <span>{{ props.news.view_count }}</span>
               </div>
             </div>
           </div>

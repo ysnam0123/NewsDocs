@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { fetchNewsData } from '@/api/fetchNews'
 
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
@@ -13,6 +13,7 @@ import economy from '@/assets/icons/communityDropdown/economy.svg'
 import culture from '@/assets/icons/communityDropdown/culture.svg'
 import celeb from '@/assets/icons/communityDropdown/celeb.svg'
 import global from '@/assets/icons/communityDropdown/global.svg'
+import moveTop from '@/assets/icons/moveToTop.svg'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -24,6 +25,7 @@ import supabase from '@/utils/supabase'
 
 import NewsComponent4 from '@/components/NewsComponents/NewsComponent4.vue'
 import NewsComponent0 from '@/components/NewsComponents/NewsComponent0.vue'
+import runDog from '@/assets/img/run_dog.png'
 
 const newsList = ref([])
 const randomNews = ref(null)
@@ -32,6 +34,18 @@ const categories = ref(['전체', '정치', '경제', '사회', '문화', '스�
 const activeCategory = ref('전체')
 const swiperInstance = ref(null)
 const newsStore = useNewsStore()
+const resetPoint = ref(0)
+const posts = ref([])
+const cateGroupMap = {
+  정치: [1],
+  스포츠: [2],
+  연예: [3],
+  문화: [4],
+  해외: [5],
+  사회: [6],
+  경제: [7],
+  전체: null,
+}
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -53,9 +67,19 @@ const onSwiper = (swiper) => {
 const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
-// category active
-const selectCategory = (category) => {
+// category active, 그리고 카테고리에 맞게 뉴스refetch
+const selectCategory = async (category) => {
   activeCategory.value = category
+
+  const fetchNews = await fetchNewsData(category === '전체' ? '' : category, 'ko')
+  newsList.value = fetchNews
+
+  if (fetchNews.length > 0) {
+    const randomIdx = Math.floor(Math.random() * fetchNews.length)
+    randomNews.value = fetchNews[randomIdx]
+  }
+
+  resetPoint.value++
 }
 
 // 뉴스를 전역과 동시에 supabase db에 저장
@@ -93,6 +117,15 @@ const newsSavedHandler = async (news) => {
   }
 }
 
+const getLikeCount = async (postId) => {
+  const { count } = await supabase
+    .from('like')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', postId)
+
+  return count || 0
+}
+
 onMounted(async () => {
   const fetchNews = await fetchNewsData('경제', 'ko')
   console.log('뉴스 데이터', fetchNews)
@@ -103,6 +136,46 @@ onMounted(async () => {
     randomNews.value = fetchNews[randomIdx]
   }
 })
+
+watch(
+  () => activeCategory.value,
+  async (newCategory) => {
+    const categoryId = cateGroupMap[newCategory]
+
+    let query = supabase.from('post').select(
+      `
+        post_id,
+        title,
+        contents,
+        category_id,
+        profiles (
+          nickname,
+          profile_img
+        )
+      `,
+    )
+
+    if (categoryId) {
+      query = query.in('category_id', categoryId)
+    }
+
+    const { data, error } = await query
+
+    if (error) {
+      console.error('post 불러오기 실패', error)
+      return
+    }
+
+    for (const post of data) {
+      const likeCount = await getLikeCount(post.post_id)
+      post.like_count = likeCount
+    }
+
+    posts.value = data
+    console.log('불러온 posts:', posts.value)
+  },
+  { immediate: true },
+)
 </script>
 <template>
   <section class="w-full mt-6">
@@ -134,11 +207,11 @@ onMounted(async () => {
         <div class="mb-10">
           <h3 class="text-[30px] font-semibold mb-8 dark:text-white">최신뉴스</h3>
           <div class="flex justify-between">
-            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent3 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent3 :news-saved-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
       </div>
@@ -184,7 +257,7 @@ onMounted(async () => {
               @swiper="onSwiper"
             >
               <swiper-slide v-for="n in 10" :key="n" class="!w-[300px]">
-                <SlideNewsComponent :news-save-handler="newsSavedHandler" :news="randomNews" />
+                <SlideNewsComponent :news-saved-handler="newsSavedHandler" :news="randomNews" />
               </swiper-slide>
             </swiper>
           </div>
@@ -207,8 +280,8 @@ onMounted(async () => {
               <span class="text-[26px] font-semibold dark:text-white">경제</span>
             </div>
             <div class="flex flex-col gap-4">
-              <NewsComponent5 :news-save-handler="newsSavedHandler" :news="randomNews" />
-              <NewsComponent5 :news-save-handler="newsSavedHandler" :news="randomNews" />
+              <NewsComponent5 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+              <NewsComponent5 :news-saved-handler="newsSavedHandler" :news="randomNews" />
             </div>
           </div>
         </div>
@@ -222,8 +295,8 @@ onMounted(async () => {
               <span class="text-[26px] font-semibold dark:text-white">문화</span>
             </div>
             <div class="flex flex-col gap-4">
-              <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
-              <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
+              <NewsComponent6 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+              <NewsComponent6 :news-saved-handler="newsSavedHandler" :news="randomNews" />
             </div>
           </div>
         </div>
@@ -236,8 +309,8 @@ onMounted(async () => {
             <span class="text-[26px] font-semibold dark:text-white">연예</span>
           </div>
           <div class="flex gap-4">
-            <NewsComponent10 :news-save-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent10 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent10 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent10 :news-saved-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
         <div class="w-[600px]">
@@ -251,8 +324,8 @@ onMounted(async () => {
             </div>
           </div>
           <div class="flex flex-col gap-[15px]">
-            <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent6 :news-save-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent6 :news-saved-handler="newsSavedHandler" :news="randomNews" />
+            <NewsComponent6 :news-saved-handler="newsSavedHandler" :news="randomNews" />
           </div>
         </div>
       </div>
@@ -262,11 +335,23 @@ onMounted(async () => {
         <h1 class="text-[30px] font-semibold mb-[32px]">
           나의 관심사에 대해 사람들과 이야기해보세요!
         </h1>
-        <div class="flex flex-row justify-between gap-[24px]">
-          <NewsComponentCommunity />
-          <NewsComponentCommunity />
-          <NewsComponentCommunity />
-        </div>
+        <template v-if="posts.length > 0">
+          <div class="flex justify-between gap-[24px]">
+            <NewsComponentCommunity
+              v-for="post in posts.slice(0, 3)"
+              :key="post.post_id"
+              :post="post"
+            />
+          </div>
+        </template>
+        <template v-else>
+          <div class="flex flex-col items-center justify-center mt-8">
+            <img :src="runDog" alt="강아지 이미지" class="w-[200px] h-[200px]" />
+            <span class="text-lg text-[#8F8F8F]"
+              >게시글을 등록하고 다양한 의견을 나누어보세요!</span
+            >
+          </div>
+        </template>
         <button
           @click="router.push('/community')"
           class="mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
@@ -277,7 +362,7 @@ onMounted(async () => {
     </div>
     <div>
       <img
-        src="@/assets/icons/moveToTop.svg"
+        :src="moveTop"
         alt="move to top Button"
         class="cursor-pointer fixed bottom-0 right-[30px]"
         @click="scrollToTop"
