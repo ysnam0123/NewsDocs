@@ -80,7 +80,7 @@ const adjectives = [
   '자상한',
   '담대한',
   '낙천적인',
-  '깊은',
+  '사나운',
   '현명한',
   '감성적인',
   '열정적인',
@@ -107,7 +107,7 @@ const animals = [
   '치타',
   '올빼미',
   '캥거루',
-  '라마',
+  '낙타',
   '족제비',
   '돼지',
   '말',
@@ -224,7 +224,7 @@ defineExpose({ errors, values, setFieldError })
         <div class="flex items-center relative">
           <button
             type="button"
-            class="absolute left-[-40px]"
+            class="absolute left-[-35px]"
             @click="nickname = generateRandomNickname()"
           >
             <Dices class="cursor-pointer" />
