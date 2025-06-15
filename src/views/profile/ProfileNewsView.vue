@@ -62,7 +62,7 @@ const NewsList = computed(() => {
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="max-w-[735px] mx-auto mt-10">
+    <div class="max-w-[735px] mx-auto my-10">
       <div class="mb-4">
         <BackButton />
       </div>
@@ -104,7 +104,7 @@ const NewsList = computed(() => {
               v-for="(item, itemIndex) in row"
               :key="item.news_id + '-' + itemIndex"
               :news="item"
-              class="w-[229px]"
+              class="w-[229px] h-[430px]"
             />
           </div>
         </div>
