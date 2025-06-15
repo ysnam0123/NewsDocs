@@ -223,13 +223,15 @@ onMounted(() => {
       </button>
     </div>
 
-    <div class="w-[600px] h-[118px] rounded-[16px] p-[20px] border-1 border-[#EBEBEB]">
+    <div
+      class="w-[600px] h-[118px] rounded-[16px] p-[20px] border-1 border-[#EBEBEB] dark:border-[#343434]"
+    >
       <div class="flex flex-col gap-[12px]">
-        <h1 class="w-[425px] text-[18px] font-bold text-[var(--text-title)] line-clamp-1">
+        <h1 class="w-[425px] text-[18px] font-semibold text-[var(--text-title)] line-clamp-1">
           {{ props.news.title }}
         </h1>
         <div class="flex">
-          <p class="text-[#8f8f8f] text-[14px] font-medium w-[425px] line-clamp-2">
+          <p class="text-[#8f8f8f] text-[14px] w-[425px] line-clamp-2">
             {{ props.news.description || '' }}
           </p>
         </div>

@@ -19,7 +19,7 @@ const cateGroupMap = {
 </script>
 <template>
   <div
-    class="flex flex-col w-[358px] h-[243px] rounded-[16px] px-[24px] py-[24px] bg-[var(--bg-color)] border border-[var(--section-community-border)]"
+    class="flex flex-col w-[358px] h-[243px] rounded-[16px] px-[24px] py-[24px] bg-[var(--bg-color)] border-1 border-[#343434]"
   >
     <div v-if="props.post?.profiles" class="flex mb-[20px]">
       <div class="flex items-center gap-[10px]">
@@ -41,10 +41,10 @@ const cateGroupMap = {
     </div>
     <div class="flex mt-auto gap-1">
       <div class="flex items-center justify-center text-[13px] text-[#B7B7B7]">
-        <ThumbsUp class="w-5 mr-1" />
-        <p class="text-[14px] mr-3 mt-0.5">{{ post?.like_count ?? 0 }}</p>
-        <MessageSquare class="w-5 mt-0.5 mr-1.5" />
-        <p class="text-[14px] mt-0.5">{{ post?.comments.length ?? 0 }}</p>
+        <ThumbsUp class="w-5 mr-1.5 dark:text-[#7A7A7A]" />
+        <p class="text-[14px] mr-3 mt-0.5 dark:text-[#7A7A7A]">{{ post?.like_count ?? 0 }}</p>
+        <MessageSquare class="w-5 mt-0.5 mr-1.5 dark:text-[#7A7A7A]" />
+        <p class="text-[14px] mt-0.5 dark:text-[#7A7A7A]">{{ post?.comments.length ?? 0 }}</p>
       </div>
     </div>
   </div>
