@@ -7,6 +7,7 @@ const props = defineProps({
   initialValues: { type: Object, default: () => ({}) },
   showEmail: { type: Boolean, default: true },
   showName: { type: Boolean, default: true },
+  showSignupBtn: { type: Boolean, default: true },
   showPasswordFields: { type: Boolean, default: true },
   onCheckEmail: { type: Function, default: null },
   onCheckNickname: { type: Function, default: null },
@@ -36,7 +37,7 @@ defineExpose({ errors, values, setFieldError })
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" class="flex flex-col items-center w-full">
+  <form @submit.prevent="onSubmit" id="edit-form" class="flex flex-col items-center w-full">
     <div v-if="showEmail" class="mb-5 w-full flex flex-col items-center">
       <label
         class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919] dark:text-white"
@@ -191,6 +192,7 @@ defineExpose({ errors, values, setFieldError })
       </div>
     </div>
     <button
+      v-if="showSignupBtn"
       type="submit"
       :disabled="$attrs.disabled"
       class="w-[360px] h-[50px] bg-[#7537e3] text-white text-[16px] font-semibold rounded-[8px] mt-[10px] mx-[40px] hover:bg-[#601ED5] cursor-pointer transition-colors duration-300 disabled:bg-[#F2F2F2] disabled:text-[#B3B3B3] dark:disabled:bg-[#363636] disabled:cursor-not-allowed"

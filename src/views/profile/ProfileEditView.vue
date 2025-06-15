@@ -143,28 +143,36 @@ const isDisabled = computed(() => {
   <div class="min-h-screen flex flex-col">
     <div class="mx-auto p-[30px]">
       <div class="flex justify-between">
-        <div class="flex flex-col justify-center space-y-4"></div>
-        <div class="sticky top-[40px] self-start">
-          <div class="flex flex-col items-end space-y-2 ml-[46px]">
+        <div class="flex flex-col justify-center space-y-4">
+          <div class="mb-5 w-full flex flex-col items-center">
+            <label
+              class="block text-[24px] font-bold w-[444px] text-left text-[#191919] mb-6 dark:text-white"
+              >내 정보 수정</label
+            >
             <UserForm
               ref="form"
               :schema="editProfileSchema"
               :show-email="false"
               :show-name="false"
+              :show-signup-btn="false"
               :on-check-nickname="checkNicknameDuplicate"
               :is-nickname-available="isNicknameAvailable"
               :disabled="isDisabled"
               @submit="onEdit"
             >
-              <template #submit>
-                <button
-                  class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
-                >
-                  변경사항 저장
-                </button></template
-              >
+              <template #submit> </template>
             </UserForm>
-
+          </div>
+        </div>
+        <div class="sticky top-[40px] self-start">
+          <div class="flex flex-col items-end space-y-2 ml-[46px]">
+            <button
+              form="edit-form"
+              type="submit"
+              class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
+            >
+              변경사항 저장
+            </button>
             <router-link to="/profile">
               <button
                 class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
