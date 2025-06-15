@@ -179,7 +179,7 @@ onMounted(() => {
 <template>
   <div
     v-if="props.news"
-    class="rounded-[16px] w-[292px] h-[384px] relative select-none"
+    class="rounded-[16px] w-[292px] h-[384px] relative select-none cursor-pointer"
     @mouseover="hoverHandler"
     @mouseleave="hoverOut"
   >
@@ -223,8 +223,8 @@ onMounted(() => {
       >
         <div class="flex flex-col relative z-30 h-full">
           <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
-          <div class="max-h-[220px] pr-1">
-            <div class="text-white whitespace-pre-line leading-8">
+          <div class="pr-1">
+            <div class="text-white whitespace-pre-line leading-8 overflow-scroll max-h-[220px]">
               <span ref="typedTarget" class="text-white"></span>
             </div>
           </div>

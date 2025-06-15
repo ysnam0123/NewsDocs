@@ -238,7 +238,4 @@ onMounted(() => {
 
     <!-- 클릭했을 때 나오는 창 -->
   </div>
-  <div v-else class="animate-pulse">
-    <div class="w-[600px] h-[118px] bg-gray-300 rounded-[20px]"></div>
-  </div>
 </template>

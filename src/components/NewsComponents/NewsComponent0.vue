@@ -196,11 +196,11 @@ onMounted(() => {
       <!-- 클릭했을 때 나오는 창 -->
       <template v-if="isSummaryLoading">
         <div class="w-full flex flex-col py-10 px-7 animate-pulse shrink-0">
-          <div class="mb-6 h-7 w-[84px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-4 h-8 w-[230px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-4 h-8 w-[210px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-4 h-8 w-[190px] bg-[#626262]/70 rounded-md"></div>
-          <div class="h-8 w-[170px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-6 h-7 w-[100px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-4 h-8 w-[530px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-4 h-8 w-[510px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-4 h-8 w-[460px] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
         </div>
       </template>
       <template v-else-if="summaryMessage">

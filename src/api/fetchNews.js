@@ -17,3 +17,36 @@ export const fetchNewsData = async (keywords, language) => {
     return []
   }
 }
+
+export const fetchRandomNews = async (language) => {
+  try {
+    const res = await axios.get('https://newsdata.io/api/1/latest', {
+      params: {
+        apikey: import.meta.env.VITE_NEWSDATA_API_KEY,
+        language,
+      },
+    })
+    const results = res.data?.results?.filter((news) => news?.image_url?.trim())
+    return results
+  } catch (e) {
+    console.error(e)
+    return []
+  }
+}
+
+export const fetchShortDocs = async (keywords, language) => {
+  try {
+    const res = await axios.get('https://newsdata.io/api/1/latest', {
+      params: {
+        apikey: import.meta.env.VITE_NEWSDATA_API_KEY,
+        q: keywords,
+        language,
+      },
+    })
+    const results = res.data?.results?.filter((news) => news?.image_url?.trim())
+    return results
+  } catch (e) {
+    console.error(e)
+    return []
+  }
+}
