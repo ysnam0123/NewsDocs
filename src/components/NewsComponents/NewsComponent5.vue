@@ -9,7 +9,8 @@ import Typed from 'typed.js'
 import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
-import notFound_dog from '@/assets/img/dog-notfound-v2.png'
+
+import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 
 // 호버 상태
 const summaryHover = ref(false)
@@ -207,7 +208,7 @@ onMounted(() => {
         <div
           class="flex flex-row gap-6 items-center text-white text-center text-[22px] font-bold px-4"
         >
-          <img :src="notFound_dog" alt="noDescribe" class="h-[200px]" />
+          <img :src="dogNotFound" alt="noDescribe" class="h-[200px]" />
           {{ summaryMessage }}
         </div>
       </template>

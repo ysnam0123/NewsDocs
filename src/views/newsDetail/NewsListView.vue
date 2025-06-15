@@ -2,8 +2,7 @@
 import { useRouter } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
 import { fetchNewsData } from '@/api/fetchNews'
-import NewsComponent1 from '@/components/NewsComponents/NewsComponent1.vue'
-import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
+
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
 import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
 import NewsComponent3 from '@/components/NewsComponents/NewsComponent3.vue'
@@ -23,6 +22,9 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { useNewsStore } from '@/stores/newsStore'
 import supabase from '@/utils/supabase'
+
+import NewsComponent4 from '@/components/NewsComponents/NewsComponent4.vue'
+import NewsComponent0 from '@/components/NewsComponents/NewsComponent0.vue'
 import runDog from '@/assets/img/run_dog.png'
 
 const newsList = ref([])
@@ -198,18 +200,9 @@ watch(
   <section>
     <div class="mx-auto max-w-[1240px] pt-8">
       <div class="section1">
-        <div class="flex gap-10 mb-20">
-          <NewsComponent1
-            :news-saved-handler="newsSavedHandler"
-            :news="randomNews"
-            reset-point="resetPoint"
-          />
-
-          <div class="flex flex-col gap-8.5">
-            <NewsComponent2 :news-saved-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent2 :news-saved-handler="newsSavedHandler" :news="randomNews" />
-            <NewsComponent2 :news-saved-handler="newsSavedHandler" :news="randomNews" />
-          </div>
+        <div class="flex gap-10 mb-20 items-center">
+          <NewsComponent0 :news-save-handler="newsSavedHandler" :news="randomNews" />
+          <NewsComponent4 :news-save-handler="newsSavedHandler" :news="randomNews" />
         </div>
         <div class="mb-10">
           <h3 class="text-[30px] font-semibold mb-8 dark:text-white">최신뉴스</h3>
