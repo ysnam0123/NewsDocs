@@ -98,12 +98,10 @@ onMounted(async () => {
       for (const item of interestList.value) {
         const result = await fetchNewsData(item.id, 'ko')
         newsResults.push(result)
-        await new Promise((resolve) => setTimeout(resolve, 300)) // 200ms 쉬기
+        await new Promise((resolve) => setTimeout(resolve, 300))
       }
       allNews.value = newsResults
       console.log(allNews.value)
-      console.log(allNews.value[0])
-      console.log(allNews.value[1])
       loading.value = false
       console.log(loading.value)
     } catch (error) {
