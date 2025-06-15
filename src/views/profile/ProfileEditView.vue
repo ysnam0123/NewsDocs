@@ -1,7 +1,7 @@
 <script setup>
 import { userAuthStore } from '@/stores/authStore'
 import supabase from '@/utils/supabase'
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import UserForm from '@/components/UserForm.vue'
@@ -28,7 +28,7 @@ onMounted(async () => {
   }
 })
 
-//입력 값 감지 변화 (이메일, 닉네임)
+//입력 값 감지 변화 (닉네임)
 
 watch(
   () => form.value?.values.nickname,
@@ -125,19 +125,6 @@ async function onEdit(values) {
     console.error('onEdit error:', error)
   }
 }
-
-//회원정보 수정 버튼 비활성화
-const isDisabled = computed(() => {
-  if (!form.value) return true
-  const { errors, values } = form.value
-  return (
-    !isNicknameAvailable.value ||
-    Object.keys(errors).length > 0 ||
-    !values.nickname ||
-    !values.password ||
-    !values.passwordCheck
-  )
-})
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
@@ -182,9 +169,6 @@ const isDisabled = computed(() => {
             </router-link>
           </div>
         </div>
-        <!-- <div>
-          <ProfileDog />
-        </div> -->
       </div>
     </div>
   </div>
