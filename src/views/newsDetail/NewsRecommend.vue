@@ -1,6 +1,4 @@
-<script setup>
-import dummy3 from '@/assets/img/news_image/dummy3.png'
-</script>
+<script setup></script>
 <template>
   <section class="mt-10 sticky top-[60px]">
     <div>
@@ -14,7 +12,7 @@ import dummy3 from '@/assets/img/news_image/dummy3.png'
             유강민 선수 최고기록 돌파...시속 620km로 압도적 우승
           </h3>
         </div>
-        <img :src="dummy3" class="rounded-lg" />
+        <img class="rounded-lg" />
       </div>
     </div>
   </section>
