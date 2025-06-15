@@ -62,6 +62,9 @@ const newsSavedHandler = async (news) => {
     if (insertError) {
       console.error('뉴스 저장 실패함', insertError)
     }
+    console.log('뉴스가 저장되었습니다.')
+  } else {
+    console.log('이미 저장된 뉴스입니다:', news.title)
   }
 }
 
