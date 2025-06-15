@@ -115,6 +115,15 @@ const newsSavedHandler = async (news) => {
   }
 }
 
+const getLikeCount = async (postId) => {
+  const { count } = await supabase
+    .from('like')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', postId)
+
+  return count || 0
+}
+
 onMounted(async () => {
   const fetchNews = await fetchNewsData('경제', 'ko')
   console.log('뉴스 데이터', fetchNews)
@@ -154,6 +163,13 @@ watch(
       console.error('post 불러오기 실패', error)
       return
     }
+
+    // 좋아요 수 주입 (순차적)
+    for (const post of data) {
+      const likeCount = await getLikeCount(post.post_id)
+      post.like_count = likeCount
+    }
+
     posts.value = data
     console.log('불러온 posts:', posts.value)
   },
@@ -339,7 +355,9 @@ watch(
         <template v-else>
           <div class="flex flex-col items-center justify-center mt-8">
             <img :src="runDog" alt="강아지 이미지" class="w-[200px] h-[200px]" />
-            <span class="text-lg">게시글을 등록하고 다양한 의견을 나누어보세요!</span>
+            <span class="text-lg text-[#8F8F8F]"
+              >게시글을 등록하고 다양한 의견을 나누어보세요!</span
+            >
           </div>
         </template>
         <button

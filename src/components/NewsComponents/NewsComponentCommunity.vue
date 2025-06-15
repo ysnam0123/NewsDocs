@@ -1,6 +1,7 @@
 <script setup>
 import { ThumbsUp } from 'lucide-vue-next'
 import defaultImg from '@/assets/img/profileDog.svg'
+import supabase from '@/utils/supabase'
 
 const props = defineProps({
   post: Object,
@@ -40,9 +41,9 @@ const cateGroupMap = {
       {{ props.post?.contents }}
     </div>
     <div class="flex gap-[8px] mt-auto">
-      <div class="flex gap-[2px] items-center text-[13px] text-[#939393]">
-        <ThumbsUp />
-        <p class="mt-[4px] text-[12px]">{{ props.post?.like_count ?? 0 }}</p>
+      <div class="flex gap-[2px] items-center justify-center text-[13px] text-[#B7B7B7]">
+        <ThumbsUp class="w-4 mr-1" />
+        <p class="text-[14px]">{{ post?.like_count ?? 0 }}</p>
       </div>
     </div>
   </div>
