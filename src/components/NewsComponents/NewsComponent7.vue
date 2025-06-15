@@ -7,6 +7,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
+import notFound_dog from '@/assets/img/dog-notfound-v2.png'
 
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -197,7 +198,7 @@ onMounted(() => {
         <div
           class="flex flex-row gap-8 items-center text-white text-center text-[22px] font-bold px-4"
         >
-          <img src="@/assets/img/dog-notfound.png" alt="noDescribe" class="h-[125px]" />
+          <img :src="notFound_dog" alt="noDescribe" class="h-[125px]" />
           {{ summaryMessage }}
         </div>
       </template>

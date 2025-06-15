@@ -7,6 +7,7 @@ import supabase from '@/utils/supabase'
 import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
+import notFound_dog from '@/assets/img/dog-notfound-v2.png'
 
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
@@ -206,7 +207,7 @@ onMounted(() => {
           <div
             class="flex flex-col items-center justify-center text-white text-center font-semibold text-[16px] px-4"
           >
-            <img src="@/assets/img/dog-notfound.png" alt="noDescribe" class="w-[200px]" />
+            <img :src="notFound_dog" alt="noDescribe" class="w-[200px]" />
             {{ summaryMessage }}
           </div>
         </div>
