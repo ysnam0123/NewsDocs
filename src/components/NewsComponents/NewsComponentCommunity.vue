@@ -1,5 +1,5 @@
 <script setup>
-import { ThumbsUp } from 'lucide-vue-next'
+import { MessageSquare, ThumbsUp } from 'lucide-vue-next'
 import defaultImg from '@/assets/img/profileDog.svg'
 
 const props = defineProps({
@@ -39,10 +39,12 @@ const cateGroupMap = {
     <div class="text-[var(--text-title)] text-[16px] max-w-[310px] max-h-[107] mb-[9px] truncate">
       {{ props.post?.contents }}
     </div>
-    <div class="flex gap-[8px] mt-auto">
-      <div class="flex gap-[2px] items-center justify-center text-[13px] text-[#B7B7B7]">
-        <ThumbsUp class="w-4 mr-1" />
-        <p class="text-[14px]">{{ post?.like_count ?? 0 }}</p>
+    <div class="flex mt-auto gap-1">
+      <div class="flex items-center justify-center text-[13px] text-[#B7B7B7]">
+        <ThumbsUp class="w-5 mr-1" />
+        <p class="text-[14px] mr-3 mt-0.5">{{ post?.like_count ?? 0 }}</p>
+        <MessageSquare class="w-5 mt-0.5 mr-1.5" />
+        <p class="text-[14px] mt-0.5">{{ post?.comments.length ?? 0 }}</p>
       </div>
     </div>
   </div>

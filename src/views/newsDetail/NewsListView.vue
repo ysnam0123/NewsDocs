@@ -151,7 +151,11 @@ watch(
         profiles (
           nickname,
           profile_img
-        )
+        ),
+        comments!comments_post_id_fkey (
+          comments_id,
+          contents
+    )
       `,
     )
 
