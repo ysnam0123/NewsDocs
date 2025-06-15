@@ -203,13 +203,11 @@ onMounted(() => {
       </template>
       <template v-else-if="summaryMessage">
         <!-- 요약할 내용 없음 등 메시지 표시 -->
-        <div class="flex justify-center items-center">
-          <div
-            class="flex flex-col items-center justify-center text-white text-center font-semibold text-[16px] px-4"
-          >
-            <img :src="dogNotFound" alt="noDescribe" class="w-[200px]" />
-            {{ summaryMessage }}
-          </div>
+        <div
+          class="flex flex-row gap-6 items-center text-white text-center text-[22px] font-bold px-4"
+        >
+          <img :src="dogNotFound" alt="noDescribe" class="h-[200px]" />
+          {{ summaryMessage }}
         </div>
       </template>
       <div
