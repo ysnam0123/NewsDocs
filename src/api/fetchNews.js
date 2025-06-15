@@ -14,5 +14,6 @@ export const fetchNewsData = async (keywords, language) => {
     return results
   } catch (e) {
     console.error(e)
+    return []
   }
 }

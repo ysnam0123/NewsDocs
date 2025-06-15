@@ -51,9 +51,7 @@
   --section-contents-bg: #eeeded;
   --section-contents-border: #343434;
   --show-more: #191919;
-
-  /* 모든 소식 */
-  --newsnav-bg: #f3f3f3;
+  --section-community-border: #e3e3e3 /* 모든 소식 */ --newsnav-bg: #f3f3f3;
   --newsnav-color: #191919;
   --newsnav-hover: #e0e0e0;
   --newsnav-selected: #191919;
