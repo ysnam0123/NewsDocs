@@ -10,7 +10,7 @@ export const fetchNewsData = async (keywords, language) => {
         language,
       },
     })
-    const results = res.data?.results.filter((news) => news.description !== null)
+    const results = res.data?.results
     return results
   } catch (e) {
     console.error(e)

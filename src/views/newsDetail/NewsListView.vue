@@ -164,7 +164,6 @@ watch(
       return
     }
 
-    // 좋아요 수 주입 (순차적)
     for (const post of data) {
       const likeCount = await getLikeCount(post.post_id)
       post.like_count = likeCount

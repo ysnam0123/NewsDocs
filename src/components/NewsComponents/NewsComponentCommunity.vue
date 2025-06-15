@@ -1,7 +1,6 @@
 <script setup>
 import { ThumbsUp } from 'lucide-vue-next'
 import defaultImg from '@/assets/img/profileDog.svg'
-import supabase from '@/utils/supabase'
 
 const props = defineProps({
   post: Object,
