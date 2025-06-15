@@ -9,6 +9,7 @@ import Typed from 'typed.js'
 import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
+
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 
 // 호버 상태

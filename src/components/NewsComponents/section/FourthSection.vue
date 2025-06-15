@@ -39,7 +39,9 @@ onMounted(async () => {
         <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
       </div>
       <div class="ml-auto cursor-pointer">
-        <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+        <h3
+          class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+        >
           더보기
         </h3>
       </div>

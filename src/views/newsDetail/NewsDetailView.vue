@@ -102,7 +102,7 @@ onMounted(async () => {
       </div>
       <div class="flex justify-center items-center gap-2">
         <ThumbsUp />
-        <Eye /><span class="mr-2">{{ news.view_count }}</span>
+        <Eye /><span class="mr-2">{{ news.view_count ?? 0 }}</span>
       </div>
     </div>
     <div class="bg-[#f5f5f5]/70 rounded-2xl">
