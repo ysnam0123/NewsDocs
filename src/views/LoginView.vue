@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useThemeStore } from '@/stores/useDarkmode'
 import supabase from '@/utils/supabase'
 import { useToast } from 'vue-toastification'
 //import { useRouter } from 'vue-router'
@@ -9,8 +8,6 @@ import router from '@/router'
 //구글 로그인
 import { useGoogleAuth } from '@/composables/useGoogleAuth'
 const { signInWithGoogle } = useGoogleAuth()
-
-const { toggleDark } = useThemeStore()
 
 const email = ref('')
 const password = ref('')
@@ -54,11 +51,8 @@ async function onLogin() {
   <div
     class="min-h-screen flex items-center justify-center bg-[#EDEBF1] dark:bg-[#1F1F1F] relative"
   >
-    <div
-      class="absolute top-10 right-10 w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] dark:bg-[#262626] hover:bg-white flex items-center justify-center z-50 transition-colors duration-300"
-      @click="toggleDark()"
-    >
-      <img src="@/assets/icons/toDarkMode.svg" alt="modeToggle" class="w-[24px] h-[24px]" />
+    <div class="absolute top-10 right-10 z-50">
+      <DarkModeButton />
     </div>
     <div
       class="bg-white dark:bg-[#262626] rounded-[16px] w-[464px] h-[696px] pt-[50px] flex flex-col items-center justify-center"
@@ -107,7 +101,7 @@ async function onLogin() {
               v-model="password"
               placeholder=""
               required
-              class="peer w-[360px] h-[61px] text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
+              class="peer w-[360px] h-[61px] dark:text-white text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
             />
             <label
               class="absolute left-[16px] top-[12px] text-[#BDBDBD] text-[12px] transition-all duration-200 pointer-events-none origin-[0] peer-focus:top-[12px] peer-focus:text-[12px] peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-[20px]"
@@ -144,16 +138,6 @@ async function onLogin() {
             class="w-5 h-5 mr-2"
           />
           구글 로그인
-        </button>
-        <button
-          class="flex items-center justify-center border border-[#DFDFDF] dark:hover:bg-[#3a3a3a] dark:border-[#4D4D4D] dark:text-white rounded-[8px] py-2 hover:bg-[#F9F9F9] transition-colors duration-300 text-[16px] font-medium w-[360px] h-[50px] cursor-pointer"
-        >
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="naver"
-            class="w-5 h-5 mr-2"
-          />
-          네이버 로그인
         </button>
       </div>
       <div class="text-center font-semibold text-[16px] my-[40px] text-[#929292] w-full">

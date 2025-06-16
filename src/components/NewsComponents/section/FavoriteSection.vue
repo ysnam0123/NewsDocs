@@ -1,5 +1,5 @@
 <script setup>
-import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
+// import NewsComponent2 from '@/components/NewsComponents/NewsComponent2.vue'
 import NewsComponent8 from '@/components/NewsComponents/NewsComponent8.vue'
 import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
 import { useInterestStore } from '@/stores/interestStore'
@@ -12,11 +12,12 @@ const interestList = computed(() => interestStore.interestList)
 const props = defineProps({
   newsArr: {
     type: Array,
-    required: true,
   },
   loading: {
     type: Boolean,
   },
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 
 // 안전하게 newsArr 변수 생성
@@ -39,28 +40,32 @@ onMounted(async () => {
       <h2 class="text-[var(--text-sub-purple)] text-[16px]">내가 가장 관심있는</h2>
     </div>
     <div class="ml-auto cursor-pointer">
-      <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">더보기</h3>
+      <h3
+        class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+      >
+        더보기
+      </h3>
     </div>
   </div>
 
-  <div class="mb-[44px]">
-    <div class="flex gap-[40px] mb-[50px]">
-      <div class="flex gap-[20px]">
-        <NewsComponent8 v-if="newsArr[0]" :newsObj="newsArr[0]" />
-        <NewsComponent8 v-if="newsArr[1]" :newsObj="newsArr[1]" />
-      </div>
-      <div class="flex flex-col gap-[24px]">
-        <NewsComponent2 v-if="newsArr[2]" :newsObj="newsArr[2]" />
-        <NewsComponent2 v-if="newsArr[3]" :newsObj="newsArr[3]" />
-        <NewsComponent2 v-if="newsArr[4]" :newsObj="newsArr[4]" />
-      </div>
+  <div class="mb-[60px]">
+    <!-- <div class="flex gap-[40px] mb-[50px]"></div> -->
+    <div class="flex gap-[20px] justify-between mb-8">
+      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[0]" :news="newsArr[0]" />
+      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[1]" :news="newsArr[1]" />
+      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
     </div>
+    <!-- <div class="flex flex-col gap-[24px]">
+        <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
+        <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[3]" :news="newsArr[3]" />
+        <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[4]" :news="newsArr[4]" />
+      </div> -->
 
     <div class="flex justify-between">
-      <NewsComponent9 v-if="newsArr[5]" :newsObj="newsArr[5]" />
-      <NewsComponent9 v-if="newsArr[6]" :newsObj="newsArr[6]" />
-      <NewsComponent9 v-if="newsArr[7]" :newsObj="newsArr[7]" />
-      <NewsComponent9 v-if="newsArr[8]" :newsObj="newsArr[8]" />
+      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[5]" :news="newsArr[5]" />
+      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[6]" :news="newsArr[6]" />
+      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[7]" :news="newsArr[7]" />
+      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[8]" :news="newsArr[8]" />
     </div>
   </div>
 </template>

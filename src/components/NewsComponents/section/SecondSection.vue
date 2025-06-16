@@ -10,8 +10,12 @@ const interestList = computed(() => interestStore.interestList)
 const props = defineProps({
   newsArr: {
     type: Array,
-    required: true,
   },
+  loading: {
+    type: Boolean,
+  },
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 
 // 안전하게 newsArr 변수 생성
@@ -36,17 +40,35 @@ onMounted(async () => {
         <h2 class="text-[var(--text-sub-purple)] text-[16px]">내가 가장 관심있는</h2>
       </div>
       <div class="ml-auto cursor-pointer">
-        <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+        <h3
+          class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+        >
           더보기
         </h3>
       </div>
     </div>
     <div class="flex gap-[24px] overflow-x-scroll">
       <!-- 슬라이드 아직 구현 안함 -->
-      <SlideNewsComponent v-if="newsArr[0]" :newsObj="newsArr[0]" />
-      <SlideNewsComponent v-if="newsArr[1]" :newsObj="newsArr[1]" />
-      <SlideNewsComponent v-if="newsArr[2]" :newsObj="newsArr[2]" />
-      <SlideNewsComponent v-if="newsArr[3]" :newsObj="newsArr[3]" />
+      <SlideNewsComponent
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[0]"
+        :news="newsArr[0]"
+      />
+      <SlideNewsComponent
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[1]"
+        :news="newsArr[1]"
+      />
+      <SlideNewsComponent
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[2]"
+        :news="newsArr[2]"
+      />
+      <SlideNewsComponent
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[3]"
+        :news="newsArr[3]"
+      />
     </div>
   </div>
 </template>

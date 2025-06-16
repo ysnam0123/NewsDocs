@@ -1,7 +1,18 @@
 <script setup>
-import { ref } from 'vue'
-import ScrapImg from './children/ScrapImg.vue'
+import { fetchOpenAi } from '@/api/fetchOpenAi'
+import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
+import { onMounted, ref, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import supabase from '@/utils/supabase'
+import { useNewsStore } from '@/stores/newsStore'
+import { useSummaryStore } from '@/stores/summaryNews2'
+import Typed from 'typed.js'
 
+import dogNotFound from '@/assets/img/dog-notfound-v2.png'
+import { ThumbsUp } from 'lucide-vue-next'
+import { Eye } from 'lucide-vue-next'
+
+// 호버 상태
 const summaryHover = ref(false)
 const hoverHandler = () => {
   summaryHover.value = true
@@ -9,110 +20,240 @@ const hoverHandler = () => {
 const hoverOut = () => {
   summaryHover.value = false
 }
+
+// 요약창 토글 상태
 const wantSummary = ref(false)
-const summarizeHandler = () => {
+
+const summarizeToggle = async () => {
   wantSummary.value = !wantSummary.value
+  console.log('🟢 요약 토글 상태:', wantSummary.value)
+
+  if (wantSummary.value) {
+    console.log('요약 시작됨!')
+    // 저장된 요약이 없으면 handleClick() 함수 실행
+    if (!summaryStore.getSummary(props.news.article_id)) {
+      await handleClick()
+    } else {
+      // 저장된 요약이 있으면 바로 보여주기
+      await runTyped(summaryStore.getSummary(props.news.article_id))
+    }
+  }
 }
 
+// props
 const props = defineProps({
   news: Object,
   newsSaveHandler: Function,
   newsDetail: Function,
 })
+
+// 상태
+const isLoading = ref(true)
+const isSummaryLoading = ref(true)
+const summaryMessage = ref('')
+const typedTarget = ref(null)
+let typedInstance = null
+
+const router = useRouter()
+const summaryStore = useSummaryStore()
+const newsStore = useNewsStore()
+
+const handleClick = async () => {
+  const articleId = props.news.article_id
+  console.log('🟢 뉴스 클릭됨:', props.news.title)
+
+  // 뉴스 선택
+  if (newsStore.selectedNews?.article_id !== articleId) {
+    console.log('💾 뉴스 저장 시도:', props.news.title)
+    await props.newsSaveHandler(props.news)
+  }
+
+  if (!props.news.description) {
+    console.log('❌ 요약할 description 없음')
+    summaryMessage.value = '이 뉴스는 원문에서 확인해주세요!'
+    return
+  }
+
+  // 저장된 요약 확인
+  const existingSummary = summaryStore.getSummary(articleId)
+
+  if (!existingSummary) {
+    console.log('📤 저장된 요약 없음 → 새로 요약 시작')
+    await summarizeHandler(articleId, props.news.description)
+  } else {
+    console.log('📥 저장된 요약 있음 → Typed 실행')
+    await runTyped(existingSummary)
+  }
+}
+
+const summarizeHandler = async (articleId, description) => {
+  try {
+    summaryStore.isLoading = true
+    isSummaryLoading.value = true
+
+    // Supabase에서 요약 불러오기
+    const { data: savedSummary } = await supabase
+      .from('summaries')
+      .select('summaries_contents')
+      .eq('news_id', articleId)
+      .maybeSingle()
+
+    if (savedSummary?.summaries_contents) {
+      summaryStore.setSummary(articleId, savedSummary.summaries_contents)
+      console.log('📦 Supabase에서 저장된 요약 로딩 완료')
+      await runTyped(savedSummary.summaries_contents)
+      return
+    }
+
+    // OpenAI로 요약 생성
+    console.log('🤖 OpenAI 요약 요청 시작')
+    const result = await fetchOpenAi(description)
+    console.log('✅ OpenAI 요약 결과 수신:', result)
+
+    // 상태에 저장
+    summaryStore.setSummary(articleId, result)
+    await runTyped(result)
+
+    // Supabase에 저장
+    const { error } = await supabase
+      .from('summaries')
+      .insert([{ news_id: articleId, summaries_contents: result }])
+      .select()
+
+    if (error) {
+      console.error('❌ Supabase 저장 실패', error)
+    } else {
+      console.log('💾 Supabase에 요약 저장 완료')
+    }
+  } catch (err) {
+    console.error('❌ 요약 중 오류 발생', err)
+  } finally {
+    summaryStore.isLoading = false
+    isSummaryLoading.value = false
+    console.log('🔚 요약 로딩 종료')
+  }
+}
+
+// Typed.js 애니메이션 실행
+const runTyped = async (text) => {
+  await nextTick()
+  await nextTick()
+
+  if (typedTarget.value) {
+    if (typedInstance) {
+      typedInstance.destroy()
+      console.log('🔄 이전 Typed 인스턴스 제거')
+    }
+    typedTarget.value.innerText = ''
+    console.log('▶️ Typed 애니메이션 시작')
+    typedInstance = new Typed(typedTarget.value, {
+      strings: [text],
+      typeSpeed: 20,
+      showCursor: false,
+    })
+  } else {
+    console.warn('⚠️ typedTarget is null')
+  }
+}
+
+// 상세 페이지로 이동
+const toDetailHandler = () => {
+  console.log('🔗 원문 상세보기 클릭:', props.news.article_id)
+  router.push(`/news/detail/${props.news.article_id}`)
+}
+
+// 마운트 후 상태 초기화
+onMounted(() => {
+  if (props.news) {
+    isLoading.value = false
+    isSummaryLoading.value = false
+    console.log('🟢 컴포넌트 Mounted → 로딩 상태 false')
+  }
+})
 </script>
 <template>
-  <div v-if="props.news" class="flex w-[600px] h-[184px] relative" @mouseover="hoverHandler">
-    <div class="w-[600px] h-[184px]">
-      <img :src="news.image_url" alt="dmz" class="rounded-[16px] w-full h-full object-cover" />
-    </div>
-    <div
-      v-show="!wantSummary"
-      class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] w-[600px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
-    >
-      <p class="font-bold text-[18px] text-[white]">
-        {{ props.news.title }}
-      </p>
-      <!-- 좋아요 상자 -->
-      <div class="flex gap-[8px]">
-        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
-          <img src="@/assets/img/Thumbs-up-white.svg" alt="likes" class="w-[20px] h-[20px]" />
-          <p class="mt-[4px] text-[15px]">32</p>
-        </div>
-
-        <div class="flex gap-[4px] items-center text-[13px] text-[#ffffff]">
-          <img src="@/assets/img/View-white.svg" alt="likes" class="w-[20px] h-[20px]" />
-          <p class="mt-[4px] text-[15px]">32</p>
-        </div>
-      </div>
-    </div>
-    <ScrapImg class="absolute right-[15px] top-[10px] z-15" />
+  <div
+    v-if="props.news"
+    class="flex w-[600px] h-[184px] relative"
+    @mouseover="hoverHandler"
+    @click="handleClick"
+  >
     <!-- 호버했을때 나오는 창 -->
     <div
-      v-show="!wantSummary"
-      v-if="summaryHover"
-      class="absolute w-[600px] h-[184px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
-      @click="summarizeHandler"
+      v-if="summaryHover && !wantSummary"
+      class="absolute w-full h-[184px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-12 cursor-pointer"
+      @click="summarizeToggle"
       @mouseleave="hoverOut"
     >
       <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
     </div>
-    <!-- 클릭했을 때 나오는 창 -->
-    <transition name="fade">
-      <div
-        v-if="wantSummary"
-        class="w-[600px] h-[184px] rounded-[20px] absolute top-0 overflow-hidden"
-      >
-        <!-- 배경용 블러 -->
-        <div class="absolute inset-0 bg-black/80 blur-xs rounded-[20px] z-30"></div>
 
+    <div
+      v-if="wantSummary"
+      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      @click="summarizeToggle"
+    >
+      <!-- 클릭했을 때 나오는 창 -->
+      <template v-if="isSummaryLoading">
+        <div class="flex flex-col animate-pulse shrink-0 px-6 py-6">
+          <div class="mb-8 h-7 w-[90px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[450px] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[430px] bg-[#626262]/70 rounded-md"></div>
+        </div>
+      </template>
+      <template v-else-if="summaryMessage">
+        <!-- 요약할 내용 없음 등 메시지 표시 -->
+        <div
+          class="flex flex-row gap-6 items-center text-white text-center text-[22px] font-bold px-4"
+        >
+          <img :src="dogNotFound" alt="noDescribe" class="h-[200px]" />
+          {{ summaryMessage }}
+        </div>
+      </template>
+      <div
+        v-show="summaryStore.getSummary(props.news.article_id)"
+        class="max-w-[500px] h-full rounded-[20px] z-30 absolute top-0 overflow-scroll"
+      >
         <!-- 요약된 내용 -->
-        <div class="flex flex-row relative z-30 h-full px-[28px] py-[25px]">
-          <div>
-            <h1 class="text-[20px] font-semibold text-white mb-[16px]">세줄 요약</h1>
-            <div class="ml-[16px]">
-              <ul class="text-white leading-8 list-disc">
-                <li>해일의 높이는 2,000m</li>
-                <li>박은서, 기네스 기록 돒파</li>
-                <li>박은서, 세계대회 우승</li>
-              </ul>
+        <div class="flex flex-col relative h-full">
+          <div class="flex flex-col">
+            <div class="px-4 py-2 text-white whitespace-pre-line leading-8">
+              <span ref="typedTarget" class="text-white"></span>
             </div>
           </div>
-          <button
-            class="w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-auto ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-            @click="summarizeHandler"
-          >
-            원문보기
-          </button>
         </div>
       </div>
-    </transition>
+
+      <button
+        class="absolute bottom-5 right-4 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+        @click.stop="toDetailHandler"
+      >
+        원문보기
+      </button>
+    </div>
+
+    <div class="w-[600px] h-[184px]">
+      <img :src="news.image_url" alt="dmz" class="rounded-[16px] w-full h-full object-cover" />
+    </div>
+    <div
+      class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] bg-linear-to-t from-black to-transparent w-[600px] bottom-0 z-10 rounded-[16px]"
+    >
+      <p class="font-bold w-[400px] text-[18px] text-[white] line-clamp-2">
+        {{ props.news.title }}
+      </p>
+      <!-- 좋아요 박스 -->
+      <div class="flex gap-2 text-[#A8A8A8]">
+        <div class="flex gap-1">
+          <ThumbsUp class="w-4" />
+          <span>23</span>
+        </div>
+        <div class="flex gap-1">
+          <Eye class="w-4" />
+          <span>300</span>
+        </div>
+      </div>
+    </div>
+
+    <ScrapNotOnImg class="absolute right-[15px] top-[10px] z-15" />
   </div>
 </template>
-<style scoped>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-}
-.fade-enter-active {
-  animation: fadeIn 0.5s ease forwards;
-}
-.fade-leave-active {
-  animation: fadeOut 0.3s ease forwards;
-}
-</style>

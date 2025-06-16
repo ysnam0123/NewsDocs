@@ -2,17 +2,19 @@
 import { useSummaryStore } from '@/stores/summaryNews'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
-import { computed, onMounted, ref, nextTick } from 'vue'
+import { computed, onMounted, ref, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
 import Typed from 'typed.js'
+import { updateViewCount } from '@/utils/updateViewCount'
 
 const props = defineProps({
   news: Object,
-  newsSaveHandler: Function,
+  newsSavedHandler: Function,
   newsDetail: Function,
+  resetPoint: Number,
 })
 
 const router = useRouter()
@@ -28,7 +30,7 @@ const isSummaryLoading = ref(true)
 // 클릭 했을 때 요약,
 const handleClick = async () => {
   if (newsStore.selectedNews?.article_id !== props.news.article_id) {
-    await props.newsSaveHandler(props.news)
+    await props.newsSavedHandler(props.news)
   }
   if (!props.news.description) return
   isOpen.value = !isOpen.value
@@ -39,8 +41,9 @@ const handleClick = async () => {
   }
 }
 
+// 타이핑 효과
 const runTyped = async (text) => {
-  await nextTick()
+  await new Promise((resolve) => setTimeout(resolve, 100))
 
   if (typedTarget.value) {
     if (typedInstance) {
@@ -57,6 +60,7 @@ const runTyped = async (text) => {
   }
 }
 
+// 요약 핸들러
 const summarizeHandler = async () => {
   try {
     if (!props.news.description) return
@@ -85,10 +89,11 @@ const summarizeHandler = async () => {
 
     if (error) {
       console.error('요약 저장 실패', error)
-      const { error } = await supabase
-        .from('summaries')
-        .select('*')
-        .eq('news_id', props.news.article_id)
+      // 요약 저장에 실패한 상태에서 불러오는거라 주석처리 했습니다.
+      // const { error } = await supabase
+      //   .from('summaries')
+      //   .select('*')
+      //   .eq('news_id', props.news.article_id)
     }
   } catch (err) {
     console.error('요약 중 요류', err)
@@ -98,27 +103,40 @@ const summarizeHandler = async () => {
   }
 }
 
-const toDetailHandler = () => {
+// 클릭 시 디테일 페이지로 이동, 조회수 +1
+const toDetailHandler = async () => {
+  await updateViewCount(props.news.article_id)
   router.push(`/news/detail/${props.news.article_id}`)
 }
+
 onMounted(() => {
   if (props.news) {
     isLoading.value = false
     isSummaryLoading.value = false
   }
 })
+
+watch(
+  () => props.resetPoint,
+  () => {
+    isOpen.value = false
+  },
+)
 </script>
 <template>
   <div class="flex gap-4">
+    <!-- 스켈레톤 -->
     <section
       v-if="isNewsLoading"
       class="flex flex-shrink-0 w-[786px] h-[468px] bg-gray-400 animate-pulse rounded-[20px]"
     ></section>
     <section
+      v-else
       @click="handleClick"
       class="relative w-[786px] h-[468px] group rounded-[20px] overflow-hidden cursor-pointer"
     >
       <template v-if="props.news">
+        <!-- 호버 했을때 -->
         <div
           v-if="!isOpen"
           class="absolute inset-0 bg-transparent hover:bg-black/30 z-10 flex items-center justify-center"
@@ -147,7 +165,7 @@ onMounted(() => {
                 <template v-else-if="summaryStore.summaryNews">
                   <div>
                     <h2 class="text-xl mb-6 text-white font-semibold">세 줄 요약</h2>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col" v-show="isOpen">
                       <div class="flex flex-col whitespace-pre-line text-xl mr-16 leading-8">
                         <span ref="typedTarget" class="text-white"></span>
                       </div>
@@ -164,6 +182,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <!-- 뉴스 내용 -->
         <div class="relative w-full h-full rounded-[20px] overflow-hidden">
           <img
             :src="props.news.image_url"
@@ -196,7 +215,7 @@ onMounted(() => {
               </div>
               <div class="flex gap-1">
                 <Eye class="w-4" />
-                <span>300</span>
+                <span>{{ props.news.view_count }}</span>
               </div>
             </div>
           </div>

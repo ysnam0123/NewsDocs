@@ -10,8 +10,12 @@ const interestList = computed(() => interestStore.interestList)
 const props = defineProps({
   newsArr: {
     type: Array,
-    required: true,
   },
+  loading: {
+    type: Boolean,
+  },
+  newsSaveHandler: Function,
+  newsDetail: Function,
 })
 
 // 안전하게 newsArr 변수 생성
@@ -35,17 +39,35 @@ onMounted(async () => {
         <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
       </div>
       <div class="ml-auto cursor-pointer">
-        <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">
+        <h3
+          class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+        >
           더보기
         </h3>
       </div>
     </div>
     <div class="w-[608px]">
       <div class="flex flex-wrap gap-[24px] h-[792px]">
-        <NewsComponent10 v-if="newsArr[0]" :newsObj="newsArr[0]" />
-        <NewsComponent10 v-if="newsArr[1]" :newsObj="newsArr[1]" />
-        <NewsComponent10 v-if="newsArr[2]" :newsObj="newsArr[2]" />
-        <NewsComponent10 v-if="newsArr[3]" :newsObj="newsArr[3]" />
+        <NewsComponent10
+          :news-save-handler="newsSaveHandler"
+          v-if="newsArr[0]"
+          :news="newsArr[0]"
+        />
+        <NewsComponent10
+          :news-save-handler="newsSaveHandler"
+          v-if="newsArr[1]"
+          :news="newsArr[1]"
+        />
+        <NewsComponent10
+          :news-save-handler="newsSaveHandler"
+          v-if="newsArr[2]"
+          :news="newsArr[2]"
+        />
+        <NewsComponent10
+          :news-save-handler="newsSaveHandler"
+          v-if="newsArr[3]"
+          :news="newsArr[3]"
+        />
       </div>
     </div>
   </div>

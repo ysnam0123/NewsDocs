@@ -4,7 +4,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import supabase from '@/utils/supabase'
-import { ref, nextTick, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import Typed from 'typed.js'
@@ -18,8 +18,7 @@ const typedTarget = ref(null)
 let typedInstance = null
 
 const runTyped = async (text) => {
-  await nextTick()
-  await new Promise((resolve) => setTimeout(resolve, 10))
+  await new Promise((resolve) => setTimeout(resolve, 50))
   if (typedTarget.value) {
     if (typedInstance) {
       typedInstance.destroy()
@@ -54,11 +53,14 @@ const summarizeHandler = async () => {
     }
     if (savedSummary && savedSummary?.summaries_contents) {
       summaryStore.summaryNews = savedSummary.summaries_contents
+      runTyped(summaryStore.summaryNews)
       console.log('기존 요약')
       return
     }
     const result = await fetchOpenAi(news.description)
     summaryStore.summaryNews = result
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
     await runTyped(result)
     const { error: insertError } = await supabase
       .from('summaries')
@@ -73,11 +75,15 @@ const summarizeHandler = async () => {
     isLoading.value = false
   }
 }
+onMounted(async () => {
+  const { data, error } = await supabase
+    .from('news')
+    .select('view_count')
+    .eq('news_id', news.article_id)
+    .maybeSingle()
 
-watch(isLoading, async (value) => {
-  if (value === false && summaryStore.summaryNews) {
-    await nextTick()
-    runTyped(summaryStore.summaryNews)
+  if (!error && data) {
+    news.view_count = data.view_count
   }
 })
 </script>
@@ -94,9 +100,9 @@ watch(isLoading, async (value) => {
         <span class="mr-2 text-sm text-[#A6A6A6]">{{ news.pubData }}</span>
         <span class="text-sm text-[#A6A6A6]">{{ news.source_name }}</span>
       </div>
-      <div class="flex justify-center items-center gap-3">
+      <div class="flex justify-center items-center gap-2">
         <ThumbsUp />
-        <Eye />
+        <Eye /><span class="mr-2">{{ news.view_count ?? 0 }}</span>
       </div>
     </div>
     <div class="bg-[#f5f5f5]/70 rounded-2xl">
