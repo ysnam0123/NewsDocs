@@ -4,8 +4,10 @@ import { SquareUserRound, LogOut } from 'lucide-vue-next'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { userAuthStore } from '@/stores/authStore'
 import supabase from '@/utils/supabase'
+import { useNotiStore } from '@/stores/useNotiStore'
 
 const authStore = userAuthStore() // 인증 상태 스토어
+const notiStore = useNotiStore() // 알림 스토어
 
 const isOpen = ref(false)
 const dropdownRef = ref(null)
@@ -28,6 +30,10 @@ const goToMypage = () => {
 
 const logoutHandler = async () => {
   try {
+    //로그아웃시 해당 사용자 알림 렌더링 지우기
+    await notiStore.removeChannel()
+    notiStore.clearNoti()
+
     const { error } = await supabase.auth.signOut()
     if (error) throw error
 
