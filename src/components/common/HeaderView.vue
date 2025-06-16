@@ -61,7 +61,7 @@ const notiHandler = () => {
         </li>
       </ul>
     </div>
-    <div class="flex items-center gap-[10px] ml-auto">
+    <div class="flex items-center sm:gap-[20px] ml-auto">
       <!-- 관심사 변경 -->
       <div class="cursor-pointer ml-[14px] sm:mr-[20px] mr-[10px]">
         <button
@@ -74,11 +74,11 @@ const notiHandler = () => {
 
       <DarkModeButton />
 
-      <div class="hidden sm:flex">
+      <div class="hidden sm:flex items-center sm:gap-5 justify-center">
         <!-- 알림 -->
         <div
           @click="notiHandler"
-          class="relative w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+          class="relative w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px] sm:ml-auto"
         >
           <Bell :size="24" :color="isDark ? '#f6f6f6' : '#363636'" class="relative" />
           <!-- 읽지 않은 알림이 있을 때 빨간 점 표시 -->
@@ -91,10 +91,10 @@ const notiHandler = () => {
         </div>
 
         <!-- 프로필 -->
-        <DropBox class="mt-[4px]">
+        <DropBox>
           <template #activator="{ toggle }">
             <div
-              class="w-[40px] h-[40px] cursor-pointer rounded-full bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+              class="w-[40px] h-[40px] cursor-pointer rounded-full bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px] sm:ml-auto"
               @click="toggle"
             >
               <User :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
