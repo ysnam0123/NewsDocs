@@ -87,7 +87,7 @@ const summarizeHandler = async () => {
       console.error('요약 저장 실패', error)
     }
   } catch (err) {
-    console.error('에러 발생', err)
+    console.error('요약 에러 발생', err)
   } finally {
     isLoading.value = false
   }
@@ -173,7 +173,7 @@ onMounted(async () => {
       <a :href="news.link" target="_blank">원문보기</a>
     </button>
     <hr class="text-gray-200 dark:text-[#282828]" />
-    <CommunityRecommend />
+    <CommunityRecommend :catetory-id="news.category_id" :category-label="categoryLabel" />
   </section>
 </template>
 <style scoped>

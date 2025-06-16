@@ -22,7 +22,7 @@ export const useNewsActions = () => {
     abroad: 5, // 해외
     society: 6, // 사회
     economy: 7, // 경제
-    etc: 8, // 기타
+    etc: 8, // 그 외
   }
 
   const router = useRouter()
