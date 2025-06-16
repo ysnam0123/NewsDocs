@@ -1,35 +1,39 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import DefaultLayout from './layout/DefaultLayout.vue'
-import { userAuthStore } from '@/stores/authStore'
-//현재 로그인한 사용자 정보를 콘솔로 출력하고 싶으시면 아래 주석 풀어주시면 됩니다.
-//import supabase from './utils/supabase'
-const auth = userAuthStore()
-// const fetchProfile = async (userId) => {
-//   const { data, error } = await supabase
-//     .from('profiles')
-//     .select('user_id, email, name, nickname, profile_img')
-//     .eq('user_id', userId)
-//     .single()
-//   if (error) {
-//     console.error('프로필 정보 불러오기 실패:', error)
-//     return null
-//   }
-//   return data
-// }
-
+import supabase from './utils/supabase'
+import { realTimeAlarm } from './api/community/realTimeAlarm'
+import { useNotiStore } from './stores/useNotiStore'
+import { fetchNoti } from './api/community/notification'
+//import { userAuthStore } from './stores/authStore'
+//const auth = userAuthStore()
+const notiChannel = ref(null) //알림/
+const notiStore = useNotiStore()
+const user = ref(null)
 onMounted(async () => {
-  await auth.fetchUser()
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser()
-  // if (!user) {
-  //   console.log('로그인된 사용자가 없습니다.')
-  //   return
-  // }
-  // // profiles 테이블에서 프로필 정보 가져오기
-  // const profile = await fetchProfile(user.id)
-  // console.log('현재 로그인한 사용자의 프로필 정보:', profile)
+  const {
+    data: { user: supaUser },
+  } = await supabase.auth.getUser()
+  user.value = supaUser
+  console.log('App.vue 마운트 | 현재 로그인한 사용자:', user.value)
+
+  if (user.value?.id) {
+    // 알림 데이터 불러오기
+    const notiData = await fetchNoti(user.value.id)
+    notiStore.setNotis(notiData)
+
+    // 실시간 알림 구독
+    const { latestNoti, notiChannel: channel } = await realTimeAlarm(user.value.id)
+    notiChannel.value = channel // 해제용
+
+    // 새로운 알림이 오면 notiStore에 저장
+    watch(latestNoti, (newNoti) => {
+      if (newNoti && newNoti.actor_id !== user.value.id) {
+        notiStore.addNoti(newNoti)
+        console.log('새로운 알림 도착')
+      }
+    })
+  }
 })
 </script>
 <template>

@@ -4,9 +4,9 @@ import supabase from '@/utils/supabase'
 import { useToast } from 'vue-toastification'
 //import { useRouter } from 'vue-router'
 import router from '@/router'
-
 //구글 로그인
 import { useGoogleAuth } from '@/composables/useGoogleAuth'
+import DarkModeButton from '@/components/common/DarkModeButton.vue'
 const { signInWithGoogle } = useGoogleAuth()
 
 const email = ref('')
@@ -41,9 +41,7 @@ async function onLogin() {
     } else {
       toast('로그인에 실패했습니다.', { icon: false })
     }
-    return
   }
-
   router.push('/')
 }
 </script>

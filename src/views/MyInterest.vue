@@ -22,12 +22,15 @@ import { useRouter } from 'vue-router'
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
 
+const user = ref(null)
+const loading = ref(true)
+const isLoggedIn = ref(false)
+
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const allNews = ref([])
-const loading = ref(true)
 const posts = ref([])
 const router = useRouter()
 
@@ -47,12 +50,15 @@ const getLikeCount = async (postId) => {
 
   return count || 0
 }
+
 onMounted(async () => {
-  const checkToken = localStorage.getItem('accessToken')
-  console.log(`로그인 토큰 : ${checkToken}`)
+  const {
+    data: { user: supaUser },
+  } = await supabase.auth.getUser()
+  user.value = supaUser
+  isLoggedIn.value = !!supaUser
 
   const newsResults = []
-
   if (interestList.value.length > 0) {
     try {
       for (const item of interestList.value) {
@@ -68,7 +74,7 @@ onMounted(async () => {
       console.error('Error fetching news:', error)
     }
   }
-
+  loading.value = false
   // post 불러오기
   const { data, error } = await supabase
     .from('post')
@@ -90,7 +96,6 @@ onMounted(async () => {
     )
     .order('created_at', { ascending: true })
     .limit(3)
-
   if (error) {
     console.error('post 불러오기 실패', error)
     return
@@ -99,63 +104,94 @@ onMounted(async () => {
     const likeCount = await getLikeCount(post.post_id)
     post.like_count = likeCount
   }
-
   posts.value = data
 })
 </script>
 
 <template>
   <div class="mx-auto max-w-[1240px] pt-[50px]">
-    <!-- 섹션 1: 스포츠 -->
-    <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
-    <FavoriteSectionSkel v-else-if="loading" />
-    <!-- 섹션 2 : 커뮤니티로 접근 -->
-    <div
-      class="rounded-[24px] bg-[var(--section-contents-bg)] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]"
-    >
-      <h1 class="text-[30px] text-[var(--text-title)] font-bold mb-[32px] select-none">
-        나의 관심사에 대해 사람들과 이야기해보세요!
-      </h1>
-      <div>
-        <div class="flex flex-row justify-between gap-[24px]">
-          <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
-        </div>
-        <div v-if="loading" class="flex gap-6">
-          <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-          <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-          <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-        </div>
-      </div>
-      <button
-        @click="router.push('/community')"
-        class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
-      >
-        글쓰러 가기
-      </button>
-    </div>
+    <!-- 로그인 된 상태 -->
+    <div v-if="isLoggedIn">
+      <!-- 관심사 있는 상태 -->
+      <!-- 섹션 1: 스포츠 -->
+      <div v-if="interestList.length > 0">
+        <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
 
-    <!-- 섹션 3 : 슬라이드 카드뉴스 -->
-    <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
-    <SecondSectionSkel v-else-if="loading" />
-
-    <!-- 섹션 4,5 연예, 핫독스 -->
-    <div class="flex gap-[72px] mb-[50px]">
-      <!-- 섹션 4 : 연예 -->
-      <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
-      <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
-      <!-- 섹션 5 : 오늘의 핫 독스 -->
-      <div class="w-[560px]">
-        <!-- 제목 -->
-        <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-          <h1 class="flex gap-[10px] items-center">
-            <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
-            <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
+        <FavoriteSectionSkel v-else-if="loading" />
+        <!-- 섹션 2 : 커뮤니티로 접근 -->
+        <div
+          class="rounded-[24px] bg-[var(--section-contents-bg)] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]"
+        >
+          <h1 class="text-[30px] text-[var(--text-title)] font-bold mb-[32px] select-none">
+            나의 관심사에 대해 사람들과 이야기해보세요!
           </h1>
-          <div class="flex">
-            <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
+          <div>
+            <div class="flex flex-row justify-between gap-[24px]">
+              <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
+            </div>
+            <div v-if="loading" class="flex gap-6">
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+            </div>
+          </div>
+          <button
+            @click="router.push('/community')"
+            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
+          >
+            글쓰러 가기
+          </button>
+        </div>
+        <!-- 섹션 3 : 슬라이드 카드뉴스 -->
+        <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
+        <SecondSectionSkel v-else-if="loading" />
+
+        <!-- 섹션 4,5 연예, 핫독스 -->
+        <div class="flex gap-[72px] mb-[50px]">
+          <!-- 섹션 4 : 연예 -->
+          <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
+          <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
+          <!-- 섹션 5 : 오늘의 핫 독스 -->
+          <div class="w-[560px]">
+            <!-- 제목 -->
+            <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
+              <h1 class="flex gap-[10px] items-center">
+                <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
+                <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
+              </h1>
+              <div class="flex">
+                <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
+              </div>
+            </div>
+            <HotDocsComponent />
           </div>
         </div>
-        <HotDocsComponent />
+        <!-- 섹션 6, 7 -->
+        <div class="flex gap-[40px] mb-[50px]">
+          <!-- 섹션 6: 경제 -->
+          <FourthSection
+            :news-save-handler="newsSavedHandler"
+            v-if="hasNews3"
+            :newsArr="allNews[3]"
+          />
+          <FourthSectionSkel v-else-if="loading" />
+          <!-- 섹션 7 : 문화 -->
+          <FifthSection
+            :news-save-handler="newsSavedHandler"
+            v-if="hasNews4"
+            :newsArr="allNews[4]"
+          />
+          <FifthSecionSkel v-else-if="loading" />
+        </div>
+
+        <!-- 섹션 8: 해외 -->
+        <SixthSection :news-save-handler="newsSavedHandler" v-if="hasNews5" :newsArr="allNews[5]" />
+        <SixthSectionSkel v-else-if="loading" />
+      </div>
+      <!-- 관심사 없는 상태 -->
+      <div v-else>
+        <h2 class="text-[24px] text-center">관심사를 설정해주세요!</h2>
+        <p class="text-center mb-[20px]">관심사를 추가하면 맞춤 뉴스를 볼 수 있습니다.</p>
       </div>
     </div>
     <!-- 섹션 6, 7 -->
@@ -171,6 +207,19 @@ onMounted(async () => {
     <!-- 섹션 8: 해외 -->
     <SixthSection v-if="hasNews5" :newsArr="allNews[5]" />
     <SixthSectionSkel v-else-if="loading" />
+
+    <!-- 로그인 안 된 상태 -->
+    <!-- 임시 예시 페이지 -->
+    <div v-else>
+      <h2 class="text-[24px] text-center">로그인해주세요</h2>
+      <p class="text-center mb-[20px]">로그인 후 맞춤 뉴스와 커뮤니티를 이용할 수 있습니다.</p>
+      <button
+        @click="router.push('/login')"
+        class="mx-auto flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5] transition duration-300"
+      >
+        로그인
+      </button>
+    </div>
 
     <!-- 탑으로 이동 버튼 -->
     <div class="mb-25">
