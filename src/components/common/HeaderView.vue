@@ -15,17 +15,21 @@ const movePage = (path) => router.push(path)
 </script>
 <template class="fixed top-0 left-0">
   <div
-    class="max-w-[80%] mx-auto py-4 flex items-center md:h-[100px] h-[80px] bg-[var(--bg-color)] backdrop-blur-[28px]"
+    class="md:max-w-[80%] sm:mx-auto flex items-center md:h-[100px] bg-[var(--bg-color)] backdrop-blur-[28px] sm:px-6 sm:py-4 sm:h-20 max-w h-[62px] mx-5"
   >
     <div class="flex items-center gap-[10px] cursor-pointer" @click="movePage('/')">
-      <div class="w-[46px] h-[46px] rounded-full flex justify-center items-center bg-[#7B42DF]">
-        <img :src="dog" class="w-[28px] h-[26px]" />
+      <div
+        class="sm:w-[46px] sm:h-[46px] w-[30px] h-[30px] rounded-full flex justify-center items-center bg-[#7B42DF]"
+      >
+        <img :src="dog" class="sm:w-[28px] sm:h-[26px] w-[19px] h-[17px]" />
       </div>
-      <h1 class="text-[40px] dark:text-white text-center font-extrabold luckiest-guy-regular">
+      <h1
+        class="sm:text-[40px] text-[21px] dark:text-white text-center font-extrabold luckiest-guy-regular"
+      >
         newsDocs
       </h1>
     </div>
-    <div class="ml-[56px]">
+    <div class="ml-[56px] hidden sm:flex">
       <ul class="flex gap-[32px] select-none">
         <li
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
@@ -49,9 +53,9 @@ const movePage = (path) => router.push(path)
     </div>
     <div class="flex items-center gap-[10px] ml-auto">
       <!-- 관심사 변경 -->
-      <div class="cursor-pointer ml-[14px] mr-[20px]">
+      <div class="cursor-pointer ml-[14px] sm:mr-[20px] mr-[10px]">
         <button
-          class="cursor-pointer rounded-[8px] w-[96px] h-[42px] font-semibold bg-[var(--GP-button-bg)] text-[var(--GP-button-text)] hover:bg-[var(--GP-button-hover)]"
+          class="cursor-pointer rounded-[8px] sm:w-[96px] text-[13px] text-[#7A42DF] dark:text-white sm:h-[42px] w-[84px] h-[30px] font-semibold bg-[var(--GP-button-bg)] sm:text-[var(--GP-button-text)] hover:bg-[var(--GP-button-hover)]"
           @click="movePage('/interest')"
         >
           관심사 수정
@@ -61,23 +65,25 @@ const movePage = (path) => router.push(path)
       <DarkModeButton />
 
       <!-- 알림 -->
-      <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
-      >
-        <Bell :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
-      </div>
+      <div class="hidden sm:flex">
+        <div
+          class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+        >
+          <Bell :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
+        </div>
 
-      <!-- 프로필 -->
-      <DropBox class="mt-[4px]">
-        <template #activator="{ toggle }">
-          <div
-            class="w-[40px] h-[40px] cursor-pointer rounded-full bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
-            @click="toggle"
-          >
-            <User :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
-          </div>
-        </template>
-      </DropBox>
+        <!-- 프로필 -->
+        <DropBox class="mt-[4px]">
+          <template #activator="{ toggle }">
+            <div
+              class="w-[40px] h-[40px] cursor-pointer rounded-full bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+              @click="toggle"
+            >
+              <User :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
+            </div>
+          </template>
+        </DropBox>
+      </div>
     </div>
   </div>
 </template>
