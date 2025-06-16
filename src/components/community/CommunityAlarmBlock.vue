@@ -57,20 +57,24 @@ onMounted(async () => {
   <div
     v-if="localNoti && writer"
     @click="goToPostDetail"
-    class="flex items-center w-full h-[70px] border-t border-t-gray-300 px-[6px] cursor-pointer"
-    :class="localNoti.is_read === true ? ' bg-[#F6F6F6]' : 'bg-[#FFFFFF] hover:bg-[#F6F6F6]'"
+    class="flex items-center w-full h-[70px] hover:bg-[#F6F6F6] dark:hover:bg-[#585858] border-t border-t-gray-300 px-[6px] cursor-pointer"
+    :class="
+      localNoti.is_read === true
+        ? 'bg-[#F6F6F6] dark:bg-[#585858]'
+        : 'bg-[#FFFFFF] dark:bg-[#343434]'
+    "
   >
     <img
       :src="writer.profile_img ? writer.profile_img : profileDefault"
       alt="발신인 프로필이미지"
       class="w-[45px] h-[45px] rounded-full"
     />
-    <p v-if="localNoti.type === 'like'" class="ml-[10px] text-[14px]">
+    <p v-if="localNoti.type === 'like'" class="ml-[10px] text-[14px] dark:text-[#D7D7D7]">
       {{ writer.nickname }}님이 좋아요를 남겼습니다
     </p>
-    <div v-else-if="localNoti.type === 'comment'" class="ml-[10px] text-[14px]">
+    <div v-else-if="localNoti.type === 'comment'" class="ml-[10px] text-[14px] dark:text-[#D7D7D7]">
       <p>{{ writer.nickname }}님이 댓글을 남겼습니다</p>
-      <p class="text-[10px] mt-[3px]">{{ comment?.contents }}</p>
+      <p class="text-[10px] dark:text-[#D7D7D7] mt-[3px]">{{ comment?.contents }}</p>
     </div>
   </div>
 </template>

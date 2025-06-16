@@ -5,7 +5,7 @@ import { onMounted, ref } from 'vue'
 import CommunityAlarmBlock from './CommunityAlarmBlock.vue'
 import { useToast } from 'vue-toastification'
 import { useNotiStore } from '@/stores/useNotiStore'
-// const emit = defineEmits(['all-read'])
+import { AlarmClock } from 'lucide-vue-next'
 const toast = useToast()
 // const notification = ref([])
 const currentUser = ref(null)
@@ -73,26 +73,50 @@ const markAllRead = async () => {
 // })
 </script>
 <template>
-  <div
-    class="absolute top-[50px] right-[-5px] w-[300px] h-[380px] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] z-30"
-  >
-    <p class="flex items-center w-full ml-[20px] h-[50px] text-[18px]">알림</p>
-    <!-- 알림 내용 -->
-    <div class="h-[280px] overflow-y-auto">
-      <div v-for="noti in allNoti" :key="noti.noti_id" class="max-h-[300px]">
-        <CommunityAlarmBlock :noti="noti" />
+  <div class="relative">
+    <div
+      class="absolute top-[50px] right-[-5px] w-[300px] h-[380px] z-[100] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] dark:bg-[#343434]"
+    >
+      <div class="flex items-center w-full ml-[20px] h-[50px] text-[18px] dark:text-[#D7D7D7]">
+        <AlarmClock class="w-5 h-5 mr-5" />
+        알림
       </div>
-    </div>
-    <div class="w-full flex items-center justify-end h-[50px] border-t border-t-gray-300">
-      <div class="flex items-center">
-        <button
-          @click="markAllRead"
-          class="flex justify-center items-center w-[60px] h-[25px] cursor-pointer text-[12px] hover:text-[#601ED5]"
-        >
-          모두 읽음
-        </button>
+      <!-- 알림 내용 -->
+      <div class="h-[280px] overflow-y-auto relative z-[100] scrollbar">
+        <div v-for="noti in allNoti" :key="noti.noti_id" class="max-h-[300px]">
+          <CommunityAlarmBlock :noti="noti" />
+        </div>
+      </div>
+      <div
+        class="w-full flex items-center justify-end h-[50px] border-t border-t-gray-200 dark:border-[#4D4D4D]"
+      >
+        <div class="flex items-center">
+          <button
+            @click="markAllRead"
+            class="flex justify-center items-center w-[60px] h-[25px] cursor-pointer text-[12px] dark:text-[#D7D7D7] hover:text-[#601ED5] dark:hover:text-[#6524D9]"
+          >
+            모두 읽음
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d4d4d4;
+  border-radius: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark .scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4d4d4d;
+}
+</style>

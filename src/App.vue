@@ -38,7 +38,7 @@ onMounted(async () => {
 
     //새로운 알림 추가되면 notiStore에 저장
     watch(latestNoti, (newNoti) => {
-      if (newNoti) {
+      if (newNoti && newNoti.actor_id !== user.id) {
         notiStore.addNoti(newNoti)
         console.log('새로운 알림 도착')
       }
