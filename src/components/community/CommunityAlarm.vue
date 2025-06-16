@@ -10,29 +10,6 @@ const toast = useToast()
 // const notification = ref([])
 const currentUser = ref(null)
 const { allNoti, markAllAsRead } = useNotiStore()
-// const handleAllRead = async () => {
-//   const success = await setAllRead(currentUser.value.id)
-//   if (success) {
-//     notification.value.forEach((n) => (n.is_read = true))
-//     checkAllRead()
-//   }
-// }
-// const checkAllRead = () => {
-//   console.log('모든 알림 확인중')
-//   const allRead = notification.value.every((n) => n.is_read)
-//   if (allRead) {
-//     console.log('모든알림 읽음!emit실행하쇼')
-//     emit('all-read')
-//   }
-// }
-// const handleSingleRead = (notiId) => {
-//   const target = notification.value.find((n) => n.noti_id === notiId)
-//   if (target && !target.is_read) {
-//     console.log('handleSingleRead읽음처리', target)
-//     target.is_read = true
-//     checkAllRead()
-//   }
-//}
 
 onMounted(async () => {
   try {
@@ -54,23 +31,6 @@ const markAllRead = async () => {
     console.error('DB 업데이트 에러:', err)
   }
 }
-// onMounted(async () => {
-//   try {
-//     const userData = await getCurrentUser()
-//     currentUser.value = userData
-//     if (!userData || !userData.id) {
-//       toast.warn('로그인이 필요합니다.')
-//       console.warn('로그인 정보 없음,알림중단')
-//       return
-//     }
-//     if (userData) {
-//       notification.value = await fetchNoti(userData.id)
-//     }
-//   } catch (err) {
-//     toast.error('알림 불러오기에 실패했습니다.')
-//     console.error('알림 로딩 에러:', err)
-//   }
-// })
 </script>
 <template>
   <div class="relative">

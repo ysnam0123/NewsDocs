@@ -6,27 +6,19 @@ import { useRouter } from 'vue-router'
 import profileDefault from '../../assets/img/communityImg/profileDefault.svg'
 import { fetchSingleComment } from '@/api/community/comment'
 import { setRead } from '@/api/community/notification'
-//알림+발신인 닉네임+발신인 프로필이미지
-const props = defineProps({ noti: Object })
-// const emit = defineEmits(['read'])
 
-// const notification = ref(null)
+const props = defineProps({ noti: Object })
 const writer = ref(null)
 const comment = ref(null)
 const router = useRouter()
 const localNoti = ref({ ...props.noti })
+
 const goToPostDetail = async () => {
   try {
     if (!localNoti.value.is_read) {
       await setRead(localNoti.value.noti_id)
       localNoti.value.is_read = true
     }
-    // await setRead(props.notiId)
-    // console.log('알림읽음성공')
-    // notification.value.is_read = true
-    //   emit('read', props.notiId)
-    //   console.log('alarmblockemit:', props.notiId)
-
     router.push(`/community/${localNoti.value.post_id}`)
   } catch (err) {
     console.error('알림읽음처리실패:', err)
@@ -35,14 +27,6 @@ const goToPostDetail = async () => {
 
 onMounted(async () => {
   try {
-    // const notiData = await fetchSingleNoti(props.notiId)
-    // notification.value = notiData
-
-    // writer.value = await fetchUser(notiData.actor_id)
-
-    // if (notiData?.comments_id) {
-    //   comment.value = await fetchSingleComment(notiData.comments_id)
-
     writer.value = await fetchUser(localNoti.value.actor_id)
 
     if (localNoti.value?.comments_id) {

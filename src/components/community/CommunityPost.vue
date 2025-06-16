@@ -6,7 +6,7 @@ import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import defaultImg from '../../assets/img/communityImg/newsdog4.svg'
 import defaultProfile from '../../assets/img/communityImg/profileDefault.svg'
-// import { fetchLike } from '@/api/community/like'
+
 import { fetchComment } from '@/api/community/comment'
 const props = defineProps({
   postid: Number,
@@ -17,7 +17,7 @@ const props = defineProps({
   userid: String,
   like: Number,
 })
-// const likeData = ref([])
+
 const categoryData = ref(null)
 const userData = ref(null)
 const commentData = ref('')
@@ -32,8 +32,6 @@ onMounted(async () => {
     userData.value = userres
   }
   try {
-    // likeData.value = await fetchLike(props.postid)
-    // console.log('좋아요개수:', likeData.value.length)
     commentData.value = await fetchComment(props.postid)
   } catch (err) {
     console.log('post렌더링에러:', err.message)

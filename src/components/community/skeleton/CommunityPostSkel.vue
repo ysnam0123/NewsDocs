@@ -16,12 +16,13 @@
           <div class="w-[52px] h-[21px] rounded-[8px] bg-gray-300"></div>
         </div>
         <!-- 내용 -->
-        <div class="w-[126px] h-7 mt-5 rounded-[8px] bg-gray-300"></div>
-        <div class="mt-[6px] w-[400px] h-8 rounded-[6px] bg-gray-300"></div>
+        <div class="w-[250px] h-7 mt-5 rounded-[8px] bg-gray-300"></div>
+        <div class="mt-[6px] w-[200px] h-4 rounded-[6px] bg-gray-300"></div>
+        <div class="mt-[4px] w-[200px] h-4 rounded-[6px] bg-gray-300"></div>
       </div>
 
       <!-- 좋아요,댓글 -->
-      <div class="flex items-center w-[87px] h-[18px] mt-5 gap-[11px]">
+      <div class="flex items-center w-[87px] h-[18px] gap-[11px]">
         <div class="w-[35px] h-full rounded-[6px] bg-gray-300"></div>
         <div class="w-[41px] h-full rounded-[6px] bg-gray-300"></div>
       </div>

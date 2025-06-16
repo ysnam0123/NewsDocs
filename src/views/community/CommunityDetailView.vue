@@ -131,23 +131,7 @@ const commentSubmitHandler = async () => {
       content: saveContent,
     })
 
-    // if (commentUploaded?.comments_id) {
-    //   try {
-    //     await notiUpload(
-    //       currentUser.value.user_id,
-    //       writer.value.user_id,
-    //       postId,
-    //       commentUploaded.comments_id,
-    //       'comment',
-    //     )
-    //   } catch (notiErr) {
-    //     console.warn('알림 등록 실패:', notiErr)
-    //   }
-
     toast.success('댓글이 등록되었습니다.')
-    // } else {
-    //   throw new Error('댓글 업로드 되었지만 id가 없습니다.')
-    // }
   } catch (err) {
     console.error('댓글 등록 에러', err)
     comments.value = comments.value.filter((c) => c.comments_id !== tempComment.comments_id)
