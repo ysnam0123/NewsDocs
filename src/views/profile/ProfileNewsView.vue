@@ -113,7 +113,7 @@ const NewsList = computed(() => {
                 v-for="(item, itemIndex) in row"
                 :key="item.news_id + '-' + itemIndex"
                 :news="item"
-                class="w-[229px] h-[430px]"
+                class="w-[229px]"
               />
             </div>
           </div>

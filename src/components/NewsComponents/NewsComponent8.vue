@@ -7,7 +7,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 import ScrapImg from './children/ScrapImg.vue'
-import { ThumbsUp } from 'lucide-vue-next'
+import { ThumbsUp, Eye } from 'lucide-vue-next'
 
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 // 호버 상태

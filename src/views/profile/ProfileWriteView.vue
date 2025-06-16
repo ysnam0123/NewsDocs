@@ -9,6 +9,7 @@ import { useRoute } from 'vue-router'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import SleepDog from '@/components/profile/SleepDog.vue'
 import CommunityPostSkel from '@/components/NewsComponents/skeleton/CommunityPostSkel.vue'
+import { useRouter } from 'vue-router'
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 const tabsMap = {
@@ -23,9 +24,14 @@ const route = useRoute()
 const profileUser = ref(null)
 const activeTab = ref('전체')
 const isLoading = ref(true)
+const router = useRouter()
 
 const nicknameParam = route.params.nickname
 const name = nicknameParam ? nicknameParam + '님이' : '내가'
+
+const goToPostDetail = (post_id) => {
+  router.push(`/community/${post_id}`)
+}
 
 onMounted(async () => {
   try {
@@ -101,12 +107,15 @@ const filteredPosts = computed(() => {
           <div v-else>
             <div v-for="post in filteredPosts" :key="post.post_id">
               <CommunityPost
+                @click="goToPostDetail(post.post_id)"
+                :postid="post.post_id"
                 :title="post.title"
                 :content="post.contents"
                 :image="post.content_image"
                 :categoryid="post.category_id"
                 :userid="post.user_id"
-                class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+                :like="post.like"
+                class="border-b border-b-gray-200 dark:border-b-gray-500"
               />
             </div>
           </div>
