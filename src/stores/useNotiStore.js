@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 export const useNotiStore = defineStore('notis', () => {
   const latestNoti = ref(null) //
   const allNoti = ref([]) //알림목록
+  const notiChannel = ref(null)
 
   const setNotis = (notiData) => {
     allNoti.value = [...notiData]
@@ -28,16 +29,36 @@ export const useNotiStore = defineStore('notis', () => {
     }
   }
 
+  const clearNoti = () => {
+    allNoti.value = []
+  }
+
+  const setChannel = (channel) => {
+    notiChannel.value = channel
+  }
+  const removeChannel = async () => {
+    if (notiChannel.value) {
+      await import('@/utils/supabase').then(({ default: supabase }) =>
+        supabase.removeChannel(notiChannel.value),
+      )
+      notiChannel.value = null
+      console.log('알림 채널 해제 완료')
+    }
+  }
   const hasUnread = computed(() => {
     return allNoti.value.some((noti) => !noti.is_read)
   })
   return {
     latestNoti,
     allNoti,
+    notiChannel,
     setNotis,
     addNoti,
     markAllAsRead,
     updateNoti,
     hasUnread,
+    clearNoti,
+    setChannel,
+    removeChannel,
   }
 })
