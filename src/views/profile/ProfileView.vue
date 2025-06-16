@@ -123,6 +123,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
           <div v-else>
             <div v-if="myNews.length === 0">
               <SleepDog
+                class="border-[1px] border-gray-200 rounded-[12px] dark:border-[#4D4D4D]"
                 :content="name + ' 스크랩한 뉴스가 없습니다.'"
                 :btnText="isMyProfile ? '뉴스 보러가기' : null"
                 to="/news"
@@ -159,9 +160,9 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
         <div v-else>
           <div v-if="myPosts.length === 0">
             <SleepDog
+              class="border-[1px] border-gray-200 rounded-[12px] dark:border-[#4D4D4D] mb-15"
               :content="name + ' 작성한 글이 없습니다.'"
               :btnText="isMyProfile ? '글 쓰러가기' : null"
-              class="mb-15"
               to="/community"
             />
           </div>
