@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import profileDefault from '../../assets/img/communityImg/profileDefault.svg'
+import CommunityPostModal from './CommunityPostModal.vue'
 const props = defineProps({
   postId: String,
   img: String,
@@ -12,7 +13,8 @@ const props = defineProps({
   userImg: String,
   currentUserId: String,
 })
-// console.log('유저아이디:', props.userId)
+console.log('유저아이디:', props.userId)
+console.log('currentUser:', props.currentUserId)
 const router = useRouter()
 const handleProfile = () => {
   router.push(`/profile/${props.userId}`)
@@ -32,12 +34,12 @@ const handleProfile = () => {
         />
         <p class="ml-[10px] text-lg text-[#191919] dark:text-[#FFFFFF]">{{ userName }}</p>
       </div>
-      <div class="flex flex-col">
+      <div class="flex items-center">
         <!-- 게시글 수정,삭제 -->
-        <!-- <div v-if="props.currentUserId === props.userId">
+        <span class="text-[16px] text-[#7537E3]">#{{ props?.category }}</span>
+        <span v-if="props.currentUserId == props.userId">
           <CommunityPostModal :postId="props.postId" @delete="deleteHandler" @edit="editHandler" />
-        </div> -->
-        <div class="text-[16px] text-[#7537E3]">#{{ props?.category }}</div>
+        </span>
       </div>
     </div>
 

@@ -2,7 +2,7 @@
 <script setup>
 import { ref } from 'vue'
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-vue-next'
-const props = defineProps({ commentId: Number })
+const props = defineProps({ postId: Number })
 const emit = defineEmits(['delete', 'edit'])
 const isPostModalOpen = ref(false)
 const togglePostModal = () => {
@@ -13,7 +13,7 @@ const editHandler = () => {
   isPostModalOpen.value = false
 }
 const deleteHandler = () => {
-  emit('delete', props.commentId)
+  emit('delete', props.postId)
   isPostModalOpen.value = false
 }
 </script>
