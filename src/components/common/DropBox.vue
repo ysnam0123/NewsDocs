@@ -5,6 +5,8 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { userAuthStore } from '@/stores/authStore'
 import supabase from '@/utils/supabase'
 
+const authStore = userAuthStore() // 인증 상태 스토어
+
 const isOpen = ref(false)
 const dropdownRef = ref(null)
 const router = useRouter()
@@ -22,7 +24,6 @@ const toggle = () => {
 const goToMypage = () => {
   router.push('/profile')
   close()
-  window.location.href = '/'
 }
 
 const logoutHandler = async () => {
@@ -30,10 +31,8 @@ const logoutHandler = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
 
-    const authStore = userAuthStore() // Pinia auth 스토어
-    authStore.logout()
-
     close()
+    router.push('/')
   } catch (error) {
     console.error('로그아웃 실패:', error.message)
   }
@@ -44,7 +43,18 @@ const handleClickOutside = (event) => {
     close()
   }
 }
+
+const handleProfileClick = () => {
+  if (!authStore.isLoggedIn) {
+    router.push('/login') // 로그인되지 않은 경우 로그인 페이지로 이동
+  } else {
+    toggle() // 로그인된 경우 드롭다운 열기
+  }
+}
+
 onMounted(() => {
+  authStore.initialize()
+  console.log('Initial isLoggedIn:', authStore.isLoggedIn)
   document.addEventListener('mousedown', handleClickOutside)
 })
 onBeforeUnmount(() => {
@@ -55,11 +65,11 @@ defineExpose({ open, close, toggle, isOpen })
 </script>
 
 <template>
-  <div class="relative inline-block" ref="dropdownRef">
-    <slot name="activator" :toggle="toggle" :isOpen="isOpen" />
+  <div class="relative inline-block z-[1000]" ref="dropdownRef">
+    <slot name="activator" :toggle="handleProfileClick" :isOpen="isOpen" />
     <div
       v-if="isOpen"
-      class="absolute top-[44px] right-0 w-[157px] min-h-[128px] bg-[#FFFFFF] dark:bg-[#363636] rounded-[8px] z-40 shadow-[0_4px_10px_rgba(0,0,0,0.16)]"
+      class="absolute top-[44px] right-0 w-[157px] min-h-[128px] bg-[#FFFFFF] dark:bg-[#363636] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.16)]"
     >
       <ul class="w-full text-[12px] text-[#C9C9C9] dark:text-[#7A7A7A]">
         <span class="ml-3 mt-3 block">내 계정</span>
