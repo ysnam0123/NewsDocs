@@ -30,7 +30,7 @@ const categoryIdMap = {
   abroad: 5, // 해외
   society: 6, // 사회
   economy: 7, // 경제
-  etc: 8, // 임시 ID// etc는 DB에 없음 -> 뭐로 지정할 지 추후 논의
+  etc: 8, //그 외
 }
 
 const addFavorite = (item) => {
@@ -65,12 +65,10 @@ const saveInterests = async () => {
 
     const dataToSave = {
       user_id: userId,
-      interests: store.interest
-        .filter((interest) => interest.id !== 'etc') // etc 제외 (논의 필요 시 주석 해제)
-        .map((interest) => ({
-          category_id: categoryIdMap[interest.id],
-          is_highest: interest.id === store.favoriteInterest,
-        })),
+      interests: store.interest.map((interest) => ({
+        category_id: categoryIdMap[interest.id],
+        is_highest: interest.id === store.favoriteInterest,
+      })),
     }
 
     const { error } = await supabase.from('user_interests').insert(
