@@ -144,14 +144,13 @@ async function onEdit(values) {
               :show-signup-btn="false"
               :on-check-nickname="checkNicknameDuplicate"
               :is-nickname-available="isNicknameAvailable"
-              :disabled="isDisabled"
               @submit="onEdit"
             >
               <template #submit> </template>
             </UserForm>
           </div>
         </div>
-        <div class="sticky top-[40px] self-start">
+        <div class="sticky top-[40px] self-start hidden sm:flex">
           <div class="flex flex-col items-end space-y-2 ml-[46px]">
             <button
               form="edit-form"
@@ -170,6 +169,24 @@ async function onEdit(values) {
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 모바일용 버튼 -->
+    <div class="flex sm:hidden justify-center gap-3 px-[30px]">
+      <router-link to="/profile" class="flex-1">
+        <button
+          class="w-full h-[50px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
+        >
+          취소하기
+        </button>
+      </router-link>
+      <button
+        form="edit-form"
+        type="submit"
+        class="flex-1 h-[50px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
+      >
+        변경사항 저장
+      </button>
     </div>
   </div>
 </template>

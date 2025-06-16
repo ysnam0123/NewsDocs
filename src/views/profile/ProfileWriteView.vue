@@ -16,7 +16,7 @@ const tabsMap = {
   '정치/경제': [1, 7],
   '연예/스포츠': [2, 3],
   '사회/문화': [4, 6],
-  '해외/기타': [5],
+  '해외/기타': [5, 8],
 }
 const posts = ref([])
 const currentUser = ref(null)
@@ -115,7 +115,7 @@ const filteredPosts = computed(() => {
                 :categoryid="post.category_id"
                 :userid="post.user_id"
                 :like="post.like"
-                class="border-b border-b-gray-200 dark:border-b-gray-500"
+                class="border-b border-b-gray-200 dark:border-b-gray-500 w-[735px]"
               />
             </div>
           </div>
