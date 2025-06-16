@@ -10,6 +10,7 @@ const props = defineProps({
   userId: String,
   userName: String,
   userImg: String,
+  currentUserId: String,
 })
 // console.log('유저아이디:', props.userId)
 const router = useRouter()
@@ -31,14 +32,20 @@ const handleProfile = () => {
         />
         <p class="ml-[10px] text-lg text-[#191919] dark:text-[#FFFFFF]">{{ userName }}</p>
       </div>
-      <div class="flex text-[16px] text-[#7537E3]">#{{ props?.category }}</div>
+      <div class="flex flex-col">
+        <!-- 게시글 수정,삭제 -->
+        <!-- <div v-if="props.currentUserId === props.userId">
+          <CommunityPostModal :postId="props.postId" @delete="deleteHandler" @edit="editHandler" />
+        </div> -->
+        <div class="text-[16px] text-[#7537E3]">#{{ props?.category }}</div>
+      </div>
     </div>
 
     <img
       v-if="props.img"
       :src="props.img"
       alt="게시글 이미지"
-      class="mt-6 w-[750px] h-[361px] rounded-[12px]"
+      class="mt-6 w-auto h-auto max-w-[750px] max-h-[361px] object-contain rounded-[12px]"
     />
     <!-- 제목 -->
     <div class="mt-8 text-2xl dark:text-[#FFFFFF]">{{ props?.title }}</div>

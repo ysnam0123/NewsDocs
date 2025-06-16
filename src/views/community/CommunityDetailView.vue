@@ -13,9 +13,17 @@ import { isLikedByUser, likeUpload, unlikeUpload } from '@/api/community/like'
 import { commentUpload, deleteComment, fetchComment, updateComment } from '@/api/community/comment'
 import CommunityMyComment from '@/components/community/CommunityMyComment.vue'
 import { getCurrentUser } from '@/api/getCurrentUser'
+// import { notiUpload } from '@/api/community/notification'
+import { useToast } from 'vue-toastification'
+import CommunityDetailSkel from '@/components/community/skeleton/CommunityDetailSkel.vue'
+import ProfileCardSkel from '@/components/community/skeleton/ProfileCardSkel.vue'
+import CommunityCommentSkel from '@/components/community/skeleton/CommunityCommentSkel.vue'
+
+const isLoading = ref(true)
 const isLiked = ref(false)
 const router = useRouter()
 const route = useRoute()
+const toast = useToast()
 const postId = route.params.id
 const post = ref('')
 const category = ref('')
@@ -25,8 +33,8 @@ const comments = ref('')
 const inputContent = ref('') //작성한 댓글내용
 const commentCount = ref('')
 const authUserId = ref(null)
-
 const currentUser = ref(null)
+
 onMounted(async () => {
   if (!postId) return
   try {
@@ -58,7 +66,10 @@ onMounted(async () => {
       isLiked.value = liked
     }
   } catch (err) {
+    toast.error('상세페이지 불러오는데 실패했습니다.')
     console.error('상세페이지에서 불러오기 오류:', err)
+  } finally {
+    isLoading.value = false
   }
 })
 
@@ -69,7 +80,7 @@ const goToCommunity = () => {
 //좋아요 추가,삭제
 const toggleLike = async () => {
   if (!currentUser.value) {
-    alert('로그인이 필요합니다')
+    toast.warn('로그인이 필요합니다.')
     return
   }
   isLiked.value = !isLiked.value
@@ -78,6 +89,12 @@ const toggleLike = async () => {
   try {
     if (isLiked.value) {
       await likeUpload(post.value.post_id, currentUser.value.user_id)
+      try {
+        // await notiUpload(currentUser.value.user_id, writer.value.user_id, postId, null, 'like')
+      } catch (notiErr) {
+        console.warn('좋아요 알림 전송 실패:', notiErr)
+      }
+      console.log('좋아요 성공!')
     } else {
       await unlikeUpload(post.value.post_id, currentUser.value.user_id)
     }
@@ -91,9 +108,10 @@ const toggleLike = async () => {
 const commentSubmitHandler = async () => {
   // console.log('댓글 업로드 준비완료')
   if (!currentUser.value) {
-    alert('로그인이 필요합니다')
+    toast.warn('로그인이 필요합니다.')
     return
   } else if (!inputContent.value.trim()) return
+
   const tempComment = {
     post_id: post.value.post_id,
     user_id: currentUser.value.user_id,
@@ -104,17 +122,21 @@ const commentSubmitHandler = async () => {
   commentCount.value += 1
   const saveContent = inputContent.value // 댓글 전송하자마자 input창 비우기 위함
   inputContent.value = ''
+
   try {
+    // const commentUploaded = await commentUpload({
     await commentUpload({
       postId: post.value.post_id,
       userId: currentUser.value.user_id,
       content: saveContent,
     })
+
+    toast.success('댓글이 등록되었습니다.')
   } catch (err) {
     console.error('댓글 등록 에러', err)
     comments.value = comments.value.filter((c) => c.comments_id !== tempComment.comments_id)
     commentCount.value -= 1
-    alert('댓글 등록에 실패했습니다.')
+    toast.error('댓글 등록에 실패했습니다.')
   }
 }
 //댓글 수정
@@ -123,8 +145,9 @@ const editCommentHandler = async ({ commentId, newContent }) => {
     await updateComment(commentId, newContent)
     const target = comments.value.find((c) => c.comments_id === commentId)
     if (target) target.contents = newContent
+    toast.success('댓글이 수정되었습니다.')
   } catch (err) {
-    alert('댓글 수정 실패')
+    toast.error('댓글 수정에 실패했습니다.')
     console.error(err)
   }
 }
@@ -142,7 +165,9 @@ const deleteCommentHandler = async (commentId) => {
     await deleteComment(commentId)
     comments.value = comments.value.filter((c) => c.comments_id !== commentId)
     commentCount.value -= 1
+    toast.success('댓글이 삭제되었습니다.')
   } catch (err) {
+    toast.error('댓글 삭제에 실패했습니다.')
     console.error('댓글 삭제 실패', err)
   }
 }
@@ -153,7 +178,8 @@ const deleteCommentHandler = async (commentId) => {
     <div class="w-[328px] pl-[100px] mt-[40px]">
       <div class="sticky top-[40px] w-full">
         <!-- 프로필 & 태그 -->
-        <ProfileCard />
+        <ProfileCardSkel v-if="isLoading" />
+        <ProfileCard v-else />
       </div>
     </div>
 
@@ -165,7 +191,7 @@ const deleteCommentHandler = async (commentId) => {
           class="w-40 h-10 gap-[10px] flex items-center cursor-pointer"
         >
           <div
-            class="w-10 h-10 rounded-full flex items-center justify-center bg-[#F6F6F6] dark:bg-[#363636] dark:hover:bg-[#4A4A4A]"
+            class="w-10 h-10 rounded-full flex items-center justify-center bg-[#ffffff] hover:bg-[#F6F6F6] dark:bg-[#363636] dark:hover:bg-[#4A4A4A]"
           >
             <ChevronLeft class="w-[18px] h-[18px] text-[#191919] dark:text-[#FFFFFF]" />
           </div>
@@ -173,20 +199,31 @@ const deleteCommentHandler = async (commentId) => {
         </button>
 
         <!-- 게시글 -->
-        <CommunityPostDetail
-          v-if="writer && post"
-          :postId="postId"
-          :img="post.content_image"
-          :title="post.title"
-          :content="post.contents"
-          :category="category"
-          :userId="writer.user_id"
-          :userName="writer.nickname"
-          :userImg="writer.profile_img"
-          class="mt-5"
-        />
+        <CommunityDetailSkel v-if="isLoading" />
+        <div v-else>
+          <CommunityPostDetail
+            v-if="writer && post"
+            :postId="postId"
+            :img="post.content_image"
+            :title="post.title"
+            :content="post.contents"
+            :category="category"
+            :userId="writer.user_id"
+            :userName="writer.nickname"
+            :userImg="writer.profile_img"
+            :currentUserId="currentUser.user_id"
+            class="mt-5"
+          />
+        </div>
         <!-- 좋아요,댓글 개수 -->
-        <div class="flex items-center mt-[30px] w-auto h-[22px]">
+
+        <div v-if="isLoading" class="flex items-center mt-[30px] gap-4 w-[109px] h-[22px]">
+          <!-- 스켈레톤 -->
+          <div class="w-[43px] h-[22px] rounded-[8px] bg-gray-300 animate-pulse"></div>
+          <div class="w-[43px] h-[22px] rounded-[8px] bg-gray-300 animate-pulse"></div>
+        </div>
+
+        <div v-else class="flex items-center mt-[30px] w-auto h-[22px]">
           <div
             @click="toggleLike"
             class="flex cursor-pointer items-center"
@@ -209,7 +246,7 @@ const deleteCommentHandler = async (commentId) => {
           <input
             v-model="inputContent"
             @keyup.enter="commentSubmitHandler"
-            class="w-full h-[50px] px-5 text-[16px] text-[#191919] dark:text-[#FFFFFF] placeholder-[#CECECE] border border-gray-200 dark:border-[#4D4D4D] rounded-[8px] outline-none"
+            class="w-full h-[50px] px-5 text-[16px] text-[#191919] dark:text-[#FFFFFF] placeholder-[#CECECE] border border-gray-200 dark:border-[#4D4D4D] rounded-[8px] focus:border-gray-400 focus:outline-none"
             placeholder="댓글을 입력해주세요"
           />
           <PawPrint
@@ -218,33 +255,38 @@ const deleteCommentHandler = async (commentId) => {
           />
         </label>
         <!-- 댓글 내용  -->
-        <div
-          v-if="comments.length === 0"
-          class="w-full h-[200px] flex items-center justify-center text-[#CECECE]"
-        >
-          아직 댓글이 없습니다.
+        <div v-if="isLoading">
+          <CommunityCommentSkel />
         </div>
         <div v-else>
-          <template v-for="comment in comments" :key="comment.comments_id">
-            <!-- 댓글 -->
-            <CommunityMyComment
-              v-if="comment.user_id === currentUser?.user_id"
-              :commentId="comment.comments_id"
-              :userId="comment.user_id"
-              :contents="comment.contents"
-              :createdAt="comment.created_at"
-              @delete="deleteCommentHandler"
-              @edit="editCommentHandler"
-            />
-            <CommunityComment
-              v-else
-              :commentId="comment.comments_id"
-              :userId="comment.user_id"
-              :contents="comment.contents"
-              :createdAt="comment.created_at"
-            />
-          </template>
-          <div class="w-full h-[64px]"></div>
+          <div
+            v-if="comments.length === 0"
+            class="w-full h-[200px] flex items-center justify-center text-[#CECECE]"
+          >
+            아직 댓글이 없습니다.
+          </div>
+          <div v-else>
+            <template v-for="comment in comments" :key="comment.comments_id">
+              <!-- 댓글 -->
+              <CommunityMyComment
+                v-if="comment.user_id === currentUser?.user_id"
+                :commentId="comment.comments_id"
+                :userId="comment.user_id"
+                :contents="comment.contents"
+                :createdAt="comment.created_at"
+                @delete="deleteCommentHandler"
+                @edit="editCommentHandler"
+              />
+              <CommunityComment
+                v-else
+                :commentId="comment.comments_id"
+                :userId="comment.user_id"
+                :contents="comment.contents"
+                :createdAt="comment.created_at"
+              />
+            </template>
+            <div class="w-full h-[64px]"></div>
+          </div>
         </div>
       </div>
     </div>

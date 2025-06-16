@@ -11,11 +11,11 @@ import icon7 from '@/assets/icons/communityDropdown/economy.svg'
 import { ArrowUpToLine, Trash2, ChevronDown, Image } from 'lucide-vue-next'
 import { postUpload } from '@/api/community/post'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+
 const router = useRouter()
+const toast = useToast()
 const modalStore = useModalStore()
-const handleModal = () => {
-  modalStore.closeModal()
-}
 const isSortOpen = ref(false)
 const selectedCategory = ref('카테고리 선택')
 const selectedCategoryIcon = ref(null)
@@ -33,6 +33,10 @@ const categories = [
   { name: '사회', icon: icon6 },
   { name: '경제', icon: icon7 },
 ]
+
+const handleModal = () => {
+  modalStore.closeModal()
+}
 const categoryId = computed(() =>
   categories.findIndex((category) => category.name === selectedCategory.value),
 )
@@ -73,10 +77,10 @@ const handleImgUpload = async (e) => {
 
 const handleFinalUpload = async () => {
   if (!file.value && !content.value.trim()) {
-    alert('내용 또는 이미지를 작성해주세요.')
+    toast.warn('내용 또는 이미지를 작성해주세요.')
     return
   } else if (selectedCategory.value === '카테고리 선택') {
-    alert('카테고리를 선택해주세요')
+    toast.warn('카테고리를 선택해주세요')
     return
   }
   try {
@@ -85,7 +89,7 @@ const handleFinalUpload = async () => {
       title: title.value,
       content: content.value,
     })
-    alert('게시글 업로드 성공!')
+    toast.success('게시글이 업로드 되었습니다')
     content.value = ''
     title.value = ''
     imageUrl.value = ''
@@ -93,7 +97,7 @@ const handleFinalUpload = async () => {
     modalStore.closeModal()
     router.push(`/community/${newPost.post_id}`)
   } catch (err) {
-    alert(err.message || '업로드 중 오류 발생')
+    toast.error(err.message || '업로드 중 오류 발생')
     console.error(err)
   }
 }
@@ -153,7 +157,9 @@ const handleFinalUpload = async () => {
         @click="handleUploadClick"
         :class="[
           'flex flex-col items-center justify-center w-[416px] min-h-[197px] mt-6 border border-[#EAEAEA] dark:border-[#343434] rounded-[12px] bg-[#F6F6F6] dark:bg-[#2C2C2C] hover:bg-[#ECECEC] dark:hover:bg-[#1F1F1F] cursor-pointer overflow-hidden',
-          isUploading ? 'pointer-events-none opacity-50 cursor-not-allowed' : '',
+          isUploading
+            ? 'pointer-events-none opacity-50 cursor-not-allowed bg-gray-300 animate-pulse'
+            : '',
         ]"
       >
         <input

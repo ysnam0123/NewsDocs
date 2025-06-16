@@ -5,12 +5,15 @@ import { computed, onMounted, ref } from 'vue'
 import { fetchPost } from '@/api/fetchPost'
 import { useRouter } from 'vue-router'
 import { fetchLike } from '@/api/community/like'
+import CommunityPostSkel from '@/components/community/skeleton/CommunityPostSkel.vue'
+import ProfileCardSkel from '@/components/community/skeleton/ProfileCardSkel.vue'
 
 const posts = ref([])
 const postsWithLike = ref([])
 const router = useRouter()
 const selectCategory = ref('전체')
 const selectedSort = ref('최신순')
+const isLoading = ref(true)
 //1,7 2,3 4,6 else
 const categories = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 const cateGroupMap = {
@@ -50,6 +53,8 @@ onMounted(async () => {
     })
   } catch (e) {
     alert(e.message)
+  } finally {
+    isLoading.value = false
   }
 })
 
@@ -71,7 +76,8 @@ const displayPost = computed(() => {
     <div class="w-[330px] pl-[100px] mt-[40px]">
       <div class="sticky top-[70px] w-full">
         <!-- 프로필 & 태그 -->
-        <ProfileCard />
+        <ProfileCardSkel v-if="isLoading" />
+        <ProfileCard v-else />
       </div>
     </div>
 
@@ -122,18 +128,23 @@ const displayPost = computed(() => {
       </div>
       <!-- 게시글 -->
       <div class="flex flex-col w-[835px]">
-        <div v-for="post in displayPost" :key="post.post_id">
-          <CommunityPost
-            @click="goToPostDetail(post.post_id)"
-            :postid="post.post_id"
-            :title="post.title"
-            :content="post.contents"
-            :image="post.content_image"
-            :categoryid="post.category_id"
-            :userid="post.user_id"
-            :like="post.like"
-            class="border-b border-b-gray-200 dark:border-b-gray-500"
-          />
+        <div v-if="isLoading" class="flex flex-col py-[5px] px-[5px] items-center justify-center">
+          <CommunityPostSkel v-for="i in 4" :key="i" />
+        </div>
+        <div v-else>
+          <div v-for="post in displayPost" :key="post.post_id">
+            <CommunityPost
+              @click="goToPostDetail(post.post_id)"
+              :postid="post.post_id"
+              :title="post.title"
+              :content="post.contents"
+              :image="post.content_image"
+              :categoryid="post.category_id"
+              :userid="post.user_id"
+              :like="post.like"
+              class="border-b border-b-gray-200 dark:border-b-gray-500"
+            />
+          </div>
         </div>
       </div>
     </div>
