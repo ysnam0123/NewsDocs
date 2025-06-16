@@ -32,21 +32,6 @@ const setupNoti = async (userId) => {
     })
     notiStore.setChannel(notiChannel)
     console.log('채널명:', notiChannel)
-    //새로운 알림이 오면 notiStore에 저장
-    // watch(
-    //   latestNoti,
-    //   (newNoti) => {
-    //     const currentUserId = user.value?.id
-    //     console.log(newNoti.user_id)
-    //     if (newNoti && newNoti.user_id === currentUserId) {
-    //       console.log('add호출전', notiStore.allNoti.length)
-    //       notiStore.addNoti(newNoti)
-    //       console.log('add호출후', notiStore.allNoti.length)
-    //       console.log('새로운 알림 도착', newNoti)
-    //     }
-    //   },
-    //   { flush: 'post' }, // 혹시 몰라 명시
-    // )
   } catch (err) {
     console.error('setupNoti오류', err)
   }
