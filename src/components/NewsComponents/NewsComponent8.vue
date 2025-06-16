@@ -8,7 +8,7 @@ import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
-import { Eye } from 'lucide-vue-next'
+
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 // 호버 상태
 const summaryHover = ref(false)

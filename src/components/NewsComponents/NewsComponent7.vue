@@ -7,6 +7,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
+
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -222,13 +223,15 @@ onMounted(() => {
       </button>
     </div>
 
-    <div class="w-[600px] h-[118px] rounded-[16px] p-[20px] border-1 border-[#EBEBEB]">
+    <div
+      class="w-[600px] h-[118px] rounded-[16px] p-[20px] border-1 border-[#EBEBEB] dark:border-[#343434]"
+    >
       <div class="flex flex-col gap-[12px]">
-        <h1 class="w-[425px] text-[18px] font-bold text-[var(--text-title)] line-clamp-1">
+        <h1 class="w-[425px] text-[18px] font-semibold text-[var(--text-title)] line-clamp-1">
           {{ props.news.title }}
         </h1>
         <div class="flex">
-          <p class="text-[#8f8f8f] text-[14px] font-medium w-[425px] line-clamp-2">
+          <p class="text-[#8f8f8f] text-[14px] w-[425px] line-clamp-2">
             {{ props.news.description || '' }}
           </p>
         </div>
@@ -237,8 +240,5 @@ onMounted(() => {
     <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-15" />
 
     <!-- 클릭했을 때 나오는 창 -->
-  </div>
-  <div v-else class="animate-pulse">
-    <div class="w-[600px] h-[118px] bg-gray-300 rounded-[20px]"></div>
   </div>
 </template>
