@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const moreViewHandler = (post) => {
-  router.push(`/community/${post.id}`)
+  router.push(`/community/${post.post_id}`)
 }
 </script>
 <template>

@@ -16,8 +16,6 @@ const props = defineProps({
   loading: {
     type: Boolean,
   },
-  newsSaveHandler: Function,
-  newsDetail: Function,
 })
 
 // 안전하게 newsArr 변수 생성
@@ -51,9 +49,9 @@ onMounted(async () => {
   <div class="mb-[60px]">
     <!-- <div class="flex gap-[40px] mb-[50px]"></div> -->
     <div class="flex gap-[20px] justify-between mb-8">
-      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[0]" :news="newsArr[0]" />
-      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[1]" :news="newsArr[1]" />
-      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
+      <NewsComponent8 v-if="newsArr[0]" :news="newsArr[0]" />
+      <NewsComponent8 v-if="newsArr[1]" :news="newsArr[1]" />
+      <NewsComponent8 v-if="newsArr[2]" :news="newsArr[2]" />
     </div>
     <!-- <div class="flex flex-col gap-[24px]">
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
@@ -62,10 +60,10 @@ onMounted(async () => {
       </div> -->
 
     <div class="flex justify-between">
-      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[5]" :news="newsArr[5]" />
-      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[6]" :news="newsArr[6]" />
-      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[7]" :news="newsArr[7]" />
-      <NewsComponent9 :news-save-handler="newsSaveHandler" v-if="newsArr[8]" :news="newsArr[8]" />
+      <NewsComponent9 v-if="newsArr[5]" :news="newsArr[5]" />
+      <NewsComponent9 v-if="newsArr[7]" :news="newsArr[7]" />
+      <NewsComponent9 v-if="newsArr[6]" :news="newsArr[6]" />
+      <NewsComponent9 v-if="newsArr[8]" :news="newsArr[8]" />
     </div>
   </div>
 </template>
