@@ -12,10 +12,13 @@ import 'vue-toastification/dist/index.css'
 import supabase from './utils/supabase'
 import { userAuthStore } from './stores/authStore'
 
+import { VueQueryPlugin } from '@tanstack/vue-query'
+
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(VueQueryPlugin)
 
 app.use(Toast, {
   position: 'top-center',
