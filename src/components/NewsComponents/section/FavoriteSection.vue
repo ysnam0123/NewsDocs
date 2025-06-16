@@ -51,9 +51,24 @@ onMounted(async () => {
   <div class="mb-[60px]">
     <!-- <div class="flex gap-[40px] mb-[50px]"></div> -->
     <div class="flex gap-[20px] justify-between mb-8">
-      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[0]" :news="newsArr[0]" />
-      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[1]" :news="newsArr[1]" />
-      <NewsComponent8 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
+      <NewsComponent8
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[0]"
+        :news="newsArr[0]"
+        class="w-[383px]"
+      />
+      <NewsComponent8
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[1]"
+        :news="newsArr[1]"
+        class="w-[383px]"
+      />
+      <NewsComponent8
+        :news-save-handler="newsSaveHandler"
+        v-if="newsArr[2]"
+        :news="newsArr[2]"
+        class="w-[383px]"
+      />
     </div>
     <!-- <div class="flex flex-col gap-[24px]">
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
