@@ -20,6 +20,9 @@ const goToMyPost = () => {
 const goToLogin = () => {
   router.push('/login')
 }
+const goToProfile = () => {
+  router.push('/profile')
+}
 const postHandler = () => {
   modalStore.openModal()
 }
@@ -36,7 +39,7 @@ onMounted(async () => {
         interestArr.value = await Promise.all(
           interests.value.map((interest) => fetchCategory(interest.category_id)),
         )
-        console.log(interestArr.value)
+        // console.log(interestArr.value)
       }
     }
   } catch (e) {
@@ -49,24 +52,16 @@ onMounted(async () => {
     <!-- 프로필 -->
     <div class="w-full flex flex-col items-center">
       <img
+        @click="goToProfile"
         :src="currentUser && currentUser.profile_img ? currentUser.profile_img : defaultImg"
         alt="프로필이미지"
-        class="w-[146px] h-[146px] mt-[15px] rounded-full"
+        class="w-[146px] h-[146px] mt-[15px] rounded-full object-cover cursor-pointer"
       />
       <p class="mt-4 text-xl dark:text-[#ffffff]">{{ currentUser?.nickname }}</p>
       <p class="mt-[6px] text-[14px] text-[#8F8F8F]">
         {{ interestArr.map((i) => i.title).join(', ') }}
       </p>
     </div>
-    <!-- <div class="w-full flex flex-col items-center">
-      <img
-        :src="profileImg ? profileImg : defaultImg"
-        alt="프로필이미지"
-        class="w-[146px] h-[146px] mt-[15px] rounded-full"
-      />
-      <p class="mt-4 text-xl dark:text-[#ffffff]">{{ user?.nickname }}</p>
-      <p class="mt-[6px] text-[14px] text-[#8F8F8F]">스포츠, 정치, 문화</p>
-    </div> -->
 
     <!-- 버튼 -->
     <button
@@ -81,8 +76,6 @@ onMounted(async () => {
     >
       내가 작성한 글
     </button>
-    <!-- <div v-if="!currentUser">로그인 안되어있습니다</div>
-    <div v-else>로그인 되어있습니다</div> -->
 
     <!-- 비로그인시 로그인 하러가기 버튼-->
     <div
