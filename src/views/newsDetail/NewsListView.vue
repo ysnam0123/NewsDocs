@@ -137,43 +137,6 @@ const getLikeCount = async (postId) => {
   return count || 0
 }
 
-// onMounted(async () => {
-//   const randomNewsResults = []
-//   const shorDocsResults = []
-//   try {
-//     const newsResults = []
-//     for (const item of interestList.value) {
-//       const result = await fetchNewsData(item.id, 'ko')
-//       newsResults.push(result)
-//       await new Promise((resolve) => setTimeout(resolve, 300))
-//     }
-//     allNews.value = newsResults
-//     console.log(allNews.value)
-//     loading.value = false
-//     console.log(loading.value)
-//   } catch (error) {
-//     console.error('Error fetching news:', error)
-//   }
-//   try {
-//     const result = await fetchRandomNews('ko')
-//     randomNewsResults.push(result)
-//     allRandomNews.value = randomNewsResults
-//     console.log('랜덤뉴스', allRandomNews.value)
-//     console.log('첫번째 랜덤뉴스', allRandomNews.value[0])
-//   } catch (error) {
-//     console.error('Error fetching randomNews:', error)
-//   }
-
-//   try {
-//     const result = await fetchShortDocs('new', 'ko')
-//     shorDocsResults.push(result)
-//     shortDocs.value = shorDocsResults
-//     console.log('숏독스 :', shortDocs.value)
-//   } catch (error) {
-//     console.error('shortDocs fetch error:', error)
-//   }
-// })
-
 onMounted(async () => {
   loading.value = true
 

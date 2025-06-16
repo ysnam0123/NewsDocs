@@ -1,22 +1,18 @@
 <script setup>
 import CommunityRecommend from './CommunityRecommend.vue'
 import { useNewsStore } from '@/stores/newsStore'
-import { useSummaryStore } from '@/stores/summaryNews'
-import { fetchOpenAi } from '@/api/fetchOpenAi'
 import supabase from '@/utils/supabase'
 import { ref, onMounted, computed } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
-import Typed from 'typed.js'
 import { useRoute } from 'vue-router'
+import { summarizeHandler } from '@/composables/useSummary'
 
 const newsStore = useNewsStore()
-const summaryStore = useSummaryStore()
 const news = newsStore.selectedNews
 const isOpen = ref(false)
 const isLoading = ref(true)
-const typedTarget = ref(null)
-let typedInstance = null
+
 const route = useRoute()
 
 const categoryMap = {
@@ -34,64 +30,6 @@ const categoryLabel = computed(() => {
   return categoryMap[news.category_id] || '기타'
 })
 
-const runTyped = async (text) => {
-  await new Promise((resolve) => setTimeout(resolve, 50))
-  if (typedTarget.value) {
-    if (typedInstance) {
-      typedInstance.destroy()
-    }
-    typedTarget.value.innerText = ''
-    typedInstance = new Typed(typedTarget.value, {
-      strings: [text],
-      typeSpeed: 20,
-      showCursor: false,
-    })
-  } else {
-    console.warn('value is null')
-  }
-}
-
-// 클릭하면 요약
-const summarizeHandler = async () => {
-  try {
-    isOpen.value = true
-    isLoading.value = true
-    if (!news.description) return
-
-    const { data: savedSummary, error } = await supabase
-      .from('summaries')
-      .select('summaries_contents')
-      .eq('news_id', news.article_id)
-      .maybeSingle()
-
-    if (error) {
-      console.error('요약 조회 실패', error)
-      return
-    }
-    if (savedSummary && savedSummary?.summaries_contents) {
-      summaryStore.summaryNews = savedSummary.summaries_contents
-      runTyped(summaryStore.summaryNews)
-      console.log('기존 요약')
-      return
-    }
-    const result = await fetchOpenAi(news.description)
-    summaryStore.summaryNews = result
-    await new Promise((resolve) => setTimeout(resolve, 50))
-
-    await runTyped(result)
-    const { error: insertError } = await supabase
-      .from('summaries')
-      .insert([{ news_id: news.article_id, summaries_contents: result }])
-
-    if (insertError) {
-      console.error('요약 저장 실패', error)
-    }
-  } catch (err) {
-    console.error('요약 에러 발생', err)
-  } finally {
-    isLoading.value = false
-  }
-}
 onMounted(async () => {
   const { data, error } = await supabase
     .from('news')
@@ -129,7 +67,7 @@ onMounted(async () => {
     </div>
     <div class="text-left flex gap-4 h-10 mb-5">
       <button
-        @click="summarizeHandler"
+        @click="summarizeHandler(news)"
         class="cursor-pointer px-4 rounded-lg bg-[#7537E3] hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300 text-white items-center justify-center"
       >
         요약보기
