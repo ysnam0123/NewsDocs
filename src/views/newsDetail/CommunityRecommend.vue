@@ -3,6 +3,7 @@ import supabase from '@/utils/supabase'
 import { ThumbsUp, MessageSquare } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import sleepDog from '@/components/icon/sleepDog.vue'
 
 const props = defineProps({
   categoryId: Number,
@@ -70,8 +71,11 @@ const moreViewHandler = (post) => {
         </div>
       </div>
     </div>
-    <div v-else>
-      <span>추천할 게시글이 없습니다.</span>
+    <div v-else class="mb-20">
+      <div class="flex flex-col items-center justify-center">
+        <sleepDog />
+        <span class="mt-5">추천할 게시글이 없습니다.</span>
+      </div>
     </div>
   </div>
 </template>
