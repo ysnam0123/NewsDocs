@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
@@ -11,7 +10,9 @@ import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
+import { useNewsActions } from '@/composables/useNewsActions'
 
+const { toDetailHandler, saveNews } = useNewsActions()
 // 호버 상태
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -43,8 +44,6 @@ const summarizeToggle = async () => {
 // props
 const props = defineProps({
   news: Object,
-  newsSaveHandler: Function,
-  newsDetail: Function,
 })
 
 // 상태
@@ -54,7 +53,6 @@ const summaryMessage = ref('')
 const typedTarget = ref(null)
 let typedInstance = null
 
-const router = useRouter()
 const summaryStore = useSummaryStore()
 const newsStore = useNewsStore()
 
@@ -65,7 +63,7 @@ const handleClick = async () => {
   // 뉴스 선택
   if (newsStore.selectedNews?.article_id !== articleId) {
     console.log('💾 뉴스 저장 시도:', props.news.title)
-    await props.newsSaveHandler(props.news)
+    await saveNews(props.news)
   }
 
   if (!props.news.description) {
@@ -163,12 +161,6 @@ const runTyped = async (text) => {
   }
 }
 
-// 상세 페이지로 이동
-const toDetailHandler = () => {
-  console.log('🔗 원문 상세보기 클릭:', props.news.article_id)
-  router.push(`/news/detail/${props.news.article_id}`)
-}
-
 // 마운트 후 상태 초기화
 onMounted(() => {
   if (props.news) {
@@ -230,7 +222,7 @@ onMounted(() => {
 
       <button
         class="absolute bottom-5 right-4 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-        @click="toDetailHandler"
+        @click="toDetailHandler(news)"
       >
         원문보기
       </button>

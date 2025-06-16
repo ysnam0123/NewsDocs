@@ -14,8 +14,6 @@ const props = defineProps({
   loading: {
     type: Boolean,
   },
-  newsSaveHandler: Function,
-  newsDetail: Function,
 })
 
 // 안전하게 newsArr 변수 생성
@@ -49,26 +47,10 @@ onMounted(async () => {
     </div>
     <div class="flex gap-[24px] overflow-x-scroll">
       <!-- 슬라이드 아직 구현 안함 -->
-      <SlideNewsComponent
-        :news-save-handler="newsSaveHandler"
-        v-if="newsArr[0]"
-        :news="newsArr[0]"
-      />
-      <SlideNewsComponent
-        :news-save-handler="newsSaveHandler"
-        v-if="newsArr[1]"
-        :news="newsArr[1]"
-      />
-      <SlideNewsComponent
-        :news-save-handler="newsSaveHandler"
-        v-if="newsArr[2]"
-        :news="newsArr[2]"
-      />
-      <SlideNewsComponent
-        :news-save-handler="newsSaveHandler"
-        v-if="newsArr[3]"
-        :news="newsArr[3]"
-      />
+      <SlideNewsComponent v-if="newsArr[0]" :news="newsArr[0]" />
+      <SlideNewsComponent v-if="newsArr[1]" :news="newsArr[1]" />
+      <SlideNewsComponent v-if="newsArr[2]" :news="newsArr[2]" />
+      <SlideNewsComponent v-if="newsArr[3]" :news="newsArr[3]" />
     </div>
   </div>
 </template>
