@@ -1,6 +1,9 @@
 <script setup>
 import { useThemeStore } from '@/stores/useDarkmode'
 import { useRouter } from 'vue-router'
+import CommunityAlarm from '../community/CommunityAlarm.vue'
+import { ref } from 'vue'
+import { useNotiStore } from '@/stores/useNotiStore'
 import { Bell, User } from 'lucide-vue-next'
 import DarkModeButton from './DarkModeButton.vue'
 import dog from '../../assets/img/dog-trans.svg'
@@ -10,7 +13,14 @@ const themeStore = useThemeStore()
 const router = useRouter()
 const isDark = computed(() => themeStore.isDark)
 
+const isNotiOpen = ref(false)
+const notiStore = useNotiStore()
+
 const movePage = (path) => router.push(path)
+
+const notiHandler = () => {
+  isNotiOpen.value = !isNotiOpen.value
+}
 </script>
 <template>
   <div
@@ -61,9 +71,15 @@ const movePage = (path) => router.push(path)
 
       <!-- 알림 -->
       <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+        @click="notiHandler"
+        class="relative w-[40px] h-[40px] rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
       >
-        <Bell :size="24" :color="isDark ? '#f6f6f6' : '#363636'" />
+        <Bell :size="24" :color="isDark ? '#f6f6f6' : '#363636'" class="relative cursor-pointer" />
+        <div
+          v-if="notiStore.hasUnread === true"
+          class="absolute top-[8px] right-[9px] w-[7px] h-[7px] rounded-full bg-[#FF0000]"
+        ></div>
+        <CommunityAlarm v-if="isNotiOpen" />
       </div>
 
       <!-- 프로필 -->

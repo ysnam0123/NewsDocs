@@ -41,6 +41,18 @@ export const fetchComment = async (postId) => {
   return data
 }
 
+export const fetchSingleComment = async (commentId) => {
+  const { data, error } = await supabase
+    .from('comments')
+    .select()
+    .eq('comments_id', commentId)
+    .single()
+  if (error) {
+    console.error('해당 댓글 찾아오기 실패:', error)
+    return
+  }
+  return data
+}
 export const updateComment = async (commentId, newContent) => {
   const { error } = await supabase
     .from('comments')
