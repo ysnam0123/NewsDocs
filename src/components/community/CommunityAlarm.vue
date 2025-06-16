@@ -5,7 +5,6 @@ import { onMounted, ref } from 'vue'
 import CommunityAlarmBlock from './CommunityAlarmBlock.vue'
 import { useToast } from 'vue-toastification'
 import { useNotiStore } from '@/stores/useNotiStore'
-import { AlarmClock } from 'lucide-vue-next'
 const toast = useToast()
 // const notification = ref([])
 const currentUser = ref(null)
@@ -38,7 +37,6 @@ const markAllRead = async () => {
       class="absolute top-[50px] right-[-5px] w-[300px] h-[380px] z-[100] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] dark:bg-[#343434]"
     >
       <div class="flex items-center w-full ml-[20px] h-[50px] text-[18px] dark:text-[#D7D7D7]">
-        <AlarmClock class="w-5 h-5 mr-5" />
         알림
       </div>
       <!-- 알림 내용 -->

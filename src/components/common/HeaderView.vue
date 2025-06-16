@@ -77,7 +77,7 @@ const notiHandler = () => {
         <Bell :size="24" :color="isDark ? '#f6f6f6' : '#363636'" class="relative cursor-pointer" />
         <div
           v-if="notiStore.hasUnread === true"
-          class="absolute top-[8px] right-[9px] w-[7px] h-[7px] rounded-full bg-[#FF0000]"
+          class="absolute top-[1px] right-[3px] w-[9px] h-[9px] rounded-full bg-[#FF0000]"
         ></div>
         <CommunityAlarm v-if="isNotiOpen" />
       </div>
