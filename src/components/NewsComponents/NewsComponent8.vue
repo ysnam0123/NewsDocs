@@ -6,7 +6,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 import ScrapImg from './children/ScrapImg.vue'
-import { ThumbsUp } from 'lucide-vue-next'
+import { ThumbsUp, Eye } from 'lucide-vue-next'
 
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useNewsActions } from '@/composables/useNewsActions'
@@ -164,7 +164,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="w-[383px] h-[430px] relative group select-none">
+  <div v-if="props.news" class="h-[430px] relative group select-none">
     <!-- 호버했을때 나오는 창 -->
     <div
       v-if="summaryHover && !wantSummary"

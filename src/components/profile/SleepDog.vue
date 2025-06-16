@@ -8,9 +8,7 @@ defineProps({
 })
 </script>
 <template>
-  <div
-    class="flex flex-col items-center justify-center space-y-4 h-[344px] border-[1px] border-gray-200 rounded-[12px] mt-5 dark:border-[#4D4D4D]"
-  >
+  <div class="flex flex-col items-center justify-center space-y-4 h-[344px] mt-5">
     <SleepDog />
     <div class="text-lg text-[#191919] dark:text-white">{{ content }}</div>
     <div class="relative">

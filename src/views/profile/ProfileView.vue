@@ -15,11 +15,13 @@ import { fetchUser } from '@/api/fetchUser'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchInterest } from '@/api/fetchInterest'
 import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { fetchUserScrap } from '@/api/fetchUserScrap'
 import { fetchScrapNews } from '@/api/fetchScrapNews'
 
 const posts = ref([])
 const route = useRoute()
+const router = useRouter()
 const profileUser = ref(null)
 const currentUser = ref(null)
 const interest = ref(null)
@@ -32,6 +34,10 @@ const nicknameParam = route.params.nickname
 const isMyProfile = computed(() => {
   return currentUser.value?.user_id === profileUser.value?.user_id
 })
+
+const goToPostDetail = (post_id) => {
+  router.push(`/community/${post_id}`)
+}
 
 onMounted(async () => {
   try {
@@ -123,6 +129,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
           <div v-else>
             <div v-if="myNews.length === 0">
               <SleepDog
+                class="border-[1px] border-gray-200 rounded-[12px] dark:border-[#4D4D4D]"
                 :content="name + ' 스크랩한 뉴스가 없습니다.'"
                 :btnText="isMyProfile ? '뉴스 보러가기' : null"
                 to="/news"
@@ -134,7 +141,7 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
                 <NewsComponent8
                   v-for="(item, itemIndex) in scrapNews.slice(0, 3)"
                   :key="item.news_id + '-' + itemIndex"
-                  :newsObj="item"
+                  :news="item"
                   class="w-[229px]"
                 />
               </template>
@@ -159,21 +166,24 @@ const categoryNames = ['정치', '스포츠', '연예', '문화', '해외', '사
         <div v-else>
           <div v-if="myPosts.length === 0">
             <SleepDog
+              class="border-[1px] border-gray-200 rounded-[12px] dark:border-[#4D4D4D] mb-15"
               :content="name + ' 작성한 글이 없습니다.'"
               :btnText="isMyProfile ? '글 쓰러가기' : null"
-              class="mb-15"
               to="/community"
             />
           </div>
           <div v-else-if="myPosts.length !== 0" class="flex flex-col w-[735px] pt-6 mb-15">
             <div v-for="post in myPosts.slice(0, 2)" :key="post.post_id">
               <CommunityPost
+                @click="goToPostDetail(post.post_id)"
+                :postid="post.post_id"
                 :title="post.title"
                 :content="post.contents"
                 :image="post.content_image"
                 :categoryid="post.category_id"
                 :userid="post.user_id"
-                class="border-b border-b-gray-200 dark:border-b-gray-500 last:border-b-0"
+                :like="post.like"
+                class="border-b-0 border-b-gray-200 dark:border-b-gray-500"
               />
             </div>
           </div>

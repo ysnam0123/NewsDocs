@@ -8,6 +8,8 @@ import { fetchUser } from '@/api/fetchUser'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchUserScrap } from '@/api/fetchUserScrap'
 import { fetchScrapNews } from '@/api/fetchScrapNews'
+import SleepDog from '@/components/profile/SleepDog.vue'
+import News8Skel from '@/components/NewsComponents/skeleton/News8Skel.vue'
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 const tabsMap = {
@@ -22,6 +24,7 @@ const profileUser = ref(null)
 const scrapNews = ref(null)
 const userScrap = ref([])
 const activeTab = ref('전체')
+const isLoading = ref(true)
 
 const nicknameParam = route.params.nickname
 const name = nicknameParam ? nicknameParam + '님이' : '내가'
@@ -36,6 +39,7 @@ onMounted(async () => {
 
     const scrapNewsId = userScrap.value.map((item) => item.news_id)
     scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
+    isLoading.value = false
   } catch (e) {
     alert(e.message)
   }
@@ -62,20 +66,20 @@ const NewsList = computed(() => {
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="max-w-[735px] mx-auto mt-10">
+    <div class="max-w-[735px] mx-auto my-10">
       <div class="mb-4">
         <BackButton />
       </div>
       <div class="text-[28px] font-bold dark:text-white mb-8">{{ name }} 저장한 뉴스</div>
       <div class="relative">
         <div
-          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center space-x-4 mb-5 relative dark:border-[#3C3C3C]"
+          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center mb-5 relative dark:border-[#3C3C3C]"
         >
           <div
             v-for="tab in tabs"
             :key="tab"
             @click="activeTab = tab"
-            class="flex items-center justify-center w-[103px] h-full text-base cursor-pointer relative transition-all duration-300 dark:hover:text-[#A878FD] hover:text-[#7537E3]"
+            class="flex items-center justify-center w-[147px] h-full text-base cursor-pointer relative transition-all duration-300 dark:hover:text-[#A878FD] hover:text-[#7537E3]"
             :class="{
               'text-[#7537E3] dark:text-[#A878FD] font-semibold': activeTab === tab,
               'text-[#9D9D9D] dark:text-[#8F8F8F]': activeTab !== tab,
@@ -87,25 +91,31 @@ const NewsList = computed(() => {
           <div
             class="absolute bottom-[-1px] h-[2px] bg-[#7537E3] dark:bg-[#A878FD] transition-all duration-300"
             :style="{
-              left: `${tabs.indexOf(activeTab) * 119}px`,
-              width: '103px',
+              left: `${tabs.indexOf(activeTab) * 147}px`,
+              width: '147px',
             }"
           />
         </div>
       </div>
-      <div class="flex flex-col">
-        <div>
-          <div
-            v-for="(row, rowIndex) in NewsList"
-            :key="row + rowIndex"
-            class="flex space-x-[24px] pt-5"
-          >
-            <NewsComponent8
-              v-for="(item, itemIndex) in row"
-              :key="item.news_id + '-' + itemIndex"
-              :newsObj="item"
-              class="w-[229px]"
-            />
+      <div class="flex flex-col w-[735px]">
+        <News8Skel v-if="isLoading" class="pt-12" />
+        <div v-else>
+          <div v-if="filteredScrapNews.length === 0" class="pt-10">
+            <SleepDog :content="name + ' 저장한 뉴스가 없습니다.'" class="mb-15 border-0" />
+          </div>
+          <div v-else>
+            <div
+              v-for="(row, rowIndex) in NewsList"
+              :key="row + rowIndex"
+              class="flex space-x-[24px] pt-5"
+            >
+              <NewsComponent8
+                v-for="(item, itemIndex) in row"
+                :key="item.news_id + '-' + itemIndex"
+                :news="item"
+                class="w-[229px]"
+              />
+            </div>
           </div>
         </div>
       </div>
