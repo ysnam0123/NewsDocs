@@ -9,9 +9,15 @@ import notification from '@/assets/icons/notification.svg'
 import notificationWhite from '@/assets/icons/notification-white.svg'
 import profile from '@/assets/icons/profile.svg'
 import profileWhite from '@/assets/icons/profile-white.svg'
+import CommunityAlarm from '../community/CommunityAlarm.vue'
+import { ref } from 'vue'
+import { useNotiStore } from '@/stores/useNotiStore'
 
 const themeStore = useThemeStore()
 const route = useRouter()
+
+const isNotiOpen = ref(false)
+const notiStore = useNotiStore()
 
 const movePage = (path) => {
   route.push(path)
@@ -27,6 +33,10 @@ const gotohome = () => {
 
 const seeNews = () => {
   route.push('/news')
+}
+
+const notiHandler = () => {
+  isNotiOpen.value = !isNotiOpen.value
 }
 </script>
 <template>
@@ -100,13 +110,20 @@ const seeNews = () => {
 
       <!-- 알림 -->
       <div
-        class="w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
+        @click="notiHandler"
+        class="relative w-[40px] h-[40px] rounded-[100%] bg-[var(--element-background)] hover:bg-[var(--element-background-hover)] flex items-center justify-center ml-[12px]"
       >
         <img
           :src="themeStore.isDark ? notificationWhite : notification"
           alt="notification"
-          class="w-[22px] h-[22px]"
+          class="relative w-[22px] h-[22px] cursor-pointer"
         />
+
+        <div
+          v-if="notiStore.hasUnread === true"
+          class="absolute top-[8px] right-[9px] w-[7px] h-[7px] rounded-full bg-[#FF0000]"
+        ></div>
+        <CommunityAlarm v-if="isNotiOpen" />
       </div>
 
       <!-- 프로필 -->

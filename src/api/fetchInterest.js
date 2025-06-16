@@ -1,7 +1,7 @@
 import supabase from '@/utils/supabase'
 
 export const fetchInterest = async (userId) => {
-  console.log(userId)
+  // console.log(userId)
   const { data, error } = await supabase.from('user_interests').select().eq('user_id', userId)
 
   if (error) {

@@ -41,17 +41,18 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
+  <div class="flex items-center gap-[24px] w-[830px] h-[237px] group cursor-pointer">
     <!-- 이미지 -->
     <div
-      class="flex items-center justify-center w-[232px] h-[171px] rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
+      class="w-[232px] h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
     >
       <img
         :src="props.image ? props.image : defaultImg"
         alt="게시글 이미지"
-        :class="props.image ? 'w-full h-full rounded-[12px]' : 'w-[144px] h-[93px] rounded-[12px] '"
+        :class="props.image ? 'w-full h-full object-cover' : 'w-[172px] h-[91px]'"
       />
     </div>
+
     <div class="flex flex-col flex-grow">
       <!-- 게시글 내용 -->
       <div class="flex flex-col justify-center w-full h-[172px]">
@@ -74,15 +75,16 @@ onMounted(async () => {
             #{{ categoryData.title }}
           </p>
         </div>
+
         <!-- 내용 -->
-        <div class="mt-5">
+        <div class="mt-5 max-w-[574px]">
           <div
-            class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
+            class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300 truncate overflow-hidden whitespace-nowrap"
           >
             {{ props.title }}
           </div>
           <div
-            class="mt-[6px] text-[14px] group-hover:text-[#515151] text-[#191919] dark:text-[#8F8F8F] transition-all duration-300"
+            class="mt-[6px] text-[14px] group-hover:text-[#515151] text-[#191919] dark:text-[#8F8F8F] transition-all duration-300 line-clamp-2 overflow-hidden"
           >
             {{ props.content }}
           </div>
