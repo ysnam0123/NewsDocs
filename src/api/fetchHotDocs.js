@@ -7,7 +7,7 @@ export const fetchHotDocs = async () => {
       `news_id, view_count, description, title, image_url,
           like!like_news_id_fkey (like_id)`,
     )
-    .order('view_count')
+    .order('view_count', { ascending: false })
     .limit(5)
 
   if (error) {

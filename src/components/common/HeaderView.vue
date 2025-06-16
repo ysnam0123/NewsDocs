@@ -84,7 +84,7 @@ const notiHandler = () => {
           <!-- 읽지 않은 알림이 있을 때 빨간 점 표시 -->
           <div
             v-if="notiStore.hasUnread === true"
-            class="absolute top-[8px] right-[9px] w-[7px] h-[7px] rounded-full bg-[#FF0000]"
+            class="absolute top-[2px] right-[3px] w-[8px] h-[8px] rounded-full bg-[#FF0000]"
           ></div>
           <!-- 알림 드롭다운/모달 -->
           <CommunityAlarm v-if="isNotiOpen" />
