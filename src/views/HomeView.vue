@@ -1,59 +1,35 @@
 <script setup>
-import { ref } from 'vue'
-import BeforeLogin from './BeforeLogin.vue'
+import { useAuthStore } from '@/stores/auth'
+import supabase from '@/utils/supabase'
+import { onMounted } from 'vue'
 
-const nextSection = ref(null)
+const authStore = useAuthStore()
 
-const windowScroll = () => {
-  nextSection.value.scrollIntoView({ behavior: 'smooth' })
-}
-import { useRouter } from 'vue-router'
-
-const route = useRouter()
-const logIn = () => {
-  route.push('/login')
-}
+// 컴포넌트 마운트 시 사용자 상태 확인
+onMounted(async () => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (user) {
+    authStore.setAuth(user, null) // 프로필은 필요 시 추가 로직
+  } else {
+    authStore.clearAuth()
+  }
+})
 </script>
 
 <template>
-  <div class="wrapper">
-    <div class="relative min-h-[calc(100vh-100px)] bg-[var(--light-purple)] px-[130px] py-[60px]">
-      <h1 class="text-[50px] font-bold mb-[150px]">NewsDocs에 오신것을 환영합니다</h1>
-      <div class="flex flex-col justify-center items-center">
-        <div class="flex justify-between gap-[200px] mb-[200px]"></div>
-        <div>
-          <button
-            class="bg-[var(--main-color)] text-[var(--main-text)] w-[480px] h-[60px] text-[25px] font-bold rounded-[10px] cursor-pointer"
-            @click="logIn"
-          >
-            로그인
-          </button>
-        </div>
-      </div>
-      <div
-        class="scrollArrow absolute bottom-0 left-[46%] flex flex-col justify-center items-center cursor-pointer"
-        @click="windowScroll"
-      >
-        <p class="text-[20px] font-bold">클릭해서 둘러보기</p>
-        <img src="../assets/icons/scrollDown.svg" alt="arrow" class="h-[50px]" />
-      </div>
+  <div>
+    <h1>HomeView Vue가 될 곳...</h1>
+    <!-- 로그인 상태에 따라 조건부 렌더링 -->
+    <div v-if="authStore.user">
+      <h2>환영합니다, {{ authStore.user.email }}!</h2>
+      <p>로그인된 사용자 전용 콘텐츠입니다.</p>
     </div>
-    <div ref="nextSection">
-      <BeforeLogin />
+    <div v-else>
+      <h2>로그인해주세요</h2>
+      <p>로그인 후 더 많은 기능을 이용할 수 있습니다.</p>
+      <button @click="$router.push('/login')">로그인</button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.scrollArrow {
-  animation: 0.4s linear 0s infinite alternate bounce;
-}
-@keyframes bounce {
-  from {
-    transform: translateY(-1vh);
-  }
-  to {
-    transform: translateY(0vh);
-  }
-}
-</style>
