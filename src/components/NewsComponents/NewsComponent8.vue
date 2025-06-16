@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
@@ -49,8 +49,10 @@ const props = defineProps({
 // 상태
 const isLoading = ref(true)
 const isSummaryLoading = ref(true)
-const summaryMessage = ref('')
+//const summaryMessage = ref('')
 const typedTarget = ref(null)
+const summary = computed(() => summaryStore.getSummary(props.news.article_id))
+
 let typedInstance = null
 
 const router = useRouter()
@@ -209,7 +211,7 @@ onMounted(() => {
       </template>
 
       <div
-        v-show="summaryStore.getSummary(props.news.article_id)"
+        v-show="summary"
         class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-scroll"
       >
         <!-- 요약된 내용 -->
