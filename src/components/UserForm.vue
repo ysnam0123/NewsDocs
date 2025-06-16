@@ -227,7 +227,7 @@ defineExpose({ errors, values, setFieldError })
             class="absolute left-[-35px]"
             @click="nickname = generateRandomNickname()"
           >
-            <Dices class="cursor-pointer" />
+            <Dices class="cursor-pointer dark:text-white" />
           </button>
           <input
             type="text"
