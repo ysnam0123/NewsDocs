@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useNotiStore = defineStore('notis', () => {
-  const latestNoti = ref(null) //
   const allNoti = ref([]) //알림목록
   const notiChannel = ref(null)
 
@@ -11,7 +10,7 @@ export const useNotiStore = defineStore('notis', () => {
   }
   const addNoti = (newNoti) => {
     //새알림을 알림목록에 추가
-    latestNoti.value = newNoti
+    // const latestNoti = newNoti
     allNoti.value.unshift(newNoti)
   }
   const markAllAsRead = () => {
@@ -58,8 +57,8 @@ export const useNotiStore = defineStore('notis', () => {
   const hasUnread = computed(() => {
     return allNoti.value.some((noti) => !noti.is_read)
   })
+
   return {
-    latestNoti,
     allNoti,
     notiChannel,
     setNotis,

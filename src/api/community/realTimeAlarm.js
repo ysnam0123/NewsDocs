@@ -5,7 +5,7 @@ export const realTimeAlarm = async (userId, onInsert) => {
   const notiStore = useNotiStore()
 
   const notiChannel = supabase.channel('notiChanges')
-
+  //알림 업로드,읽음처리에 대한 리얼타임
   notiChannel
     .on(
       'postgres_changes',

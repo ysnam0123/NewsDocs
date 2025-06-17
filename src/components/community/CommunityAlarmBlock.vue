@@ -29,7 +29,7 @@ const goToPostDetail = async () => {
 onMounted(async () => {
   try {
     writer.value = await fetchUser(localNoti.value.actor_id)
-
+    //comment_id가 존재하면 댓글 내용 받아오기(좋아요는 null)
     if (localNoti.value?.comments_id) {
       comment.value = await fetchSingleComment(localNoti.value.comments_id)
     }
