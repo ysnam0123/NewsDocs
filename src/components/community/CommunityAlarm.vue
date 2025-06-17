@@ -24,23 +24,23 @@ const markAllRead = async () => {
     if (!currentUser.value?.id) return
     await setAllRead(currentUser.value.id) // Supabase에 업데이트
     markAllAsRead() //notiStore에서 allNoti처리
-    toast.success('모든 알림을 읽음 처리했습니다.')
+    toast.success('모든 알림을 읽었습니다.')
   } catch (err) {
-    toast.error('모두 읽음 처리 실패')
-    console.error('DB 업데이트 에러:', err)
+    console.error('알림 읽음 업데이트 에러:', err)
   }
 }
 </script>
 <template>
-  <div class="relative">
+  <Teleport to="body">
+    <!-- <div class="relative"> -->
     <div
-      class="absolute top-[50px] right-[-5px] w-[300px] h-[380px] z-[100] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] dark:bg-[#343434]"
+      class="absolute top-[80px] right-[180px] w-[300px] h-[380px] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] dark:bg-[#343434]"
     >
       <div class="flex items-center w-full ml-[20px] h-[50px] text-[18px] dark:text-[#D7D7D7]">
         알림
       </div>
       <!-- 알림 내용 -->
-      <div class="h-[280px] overflow-y-auto relative z-[100] scrollbar">
+      <div class="h-[280px] overflow-y-auto relative scrollbar">
         <div v-for="noti in allNoti" :key="noti.noti_id" class="max-h-[300px]">
           <CommunityAlarmBlock :noti="noti" />
         </div>
@@ -58,7 +58,8 @@ const markAllRead = async () => {
         </div>
       </div>
     </div>
-  </div>
+    <!-- </div> -->
+  </Teleport>
 </template>
 <style scoped>
 .scrollbar::-webkit-scrollbar {

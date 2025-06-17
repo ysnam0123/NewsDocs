@@ -30,7 +30,7 @@ const deleteHandler = () => {
       class="absolute top-[44px] right-[0px] w-[157px] min-h-[128px] bg-[#FFFFFF] dark:bg-[#363636] shadow-[0_4px_10px_rgba(0,0,0,0.16)] rounded-[8px] z-40"
     >
       <ul class="w-full text-[12px] text-[#C9C9C9] dark:text-[#7A7A7A]">
-        <span class="ml-3 mt-3 block">내 댓글</span>
+        <span class="ml-3 mt-3 block">내 게시글</span>
         <li
           @click="editHandler"
           class="flex items-center gap-[6px] w-full h-[46px] mt-[7px] px-3 py-[13px] cursor-pointer text-[14px] text-[#191919] dark:text-[#FFFFFF] hover:bg-gray-100 dark:hover:bg-[#404040] transition-all duration-300"
