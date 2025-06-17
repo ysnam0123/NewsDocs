@@ -272,7 +272,7 @@ onMounted(async () => {
               @slideChange="onSlideChange"
               @swiper="onSwiper"
             >
-              <swiper-slide v-for="(news, index) in shortDocs" :key="index" class="!w-[300px]">
+              <swiper-slide v-for="(news, index) in shortDocs" :key="index" class="!w-[292x]">
                 <SlideNewsComponent v-if="hasShortDocs" :news="news" />
               </swiper-slide>
             </swiper>

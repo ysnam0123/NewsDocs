@@ -87,13 +87,6 @@ const handleClick = async () => {
 
 const summarizeHandler = async (articleId, description) => {
   try {
-    // if (!description) {
-    //   summaryMessage.value = '요약할 내용이 없습니다.'
-    //   await runTyped('요약할 내용이 없습니다.')
-    //   console.warn('❌ 요약할 내용이 없음')
-    //   return
-    // }
-
     summaryStore.isLoading = true
     isSummaryLoading.value = true
 
@@ -207,12 +200,12 @@ onMounted(() => {
       </template>
       <div
         v-show="summaryStore.getSummary(props.news.article_id)"
-        class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+        class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]"
       >
         <div class="flex flex-col relative z-30 h-full">
           <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
           <div class="flex flex-col">
-            <div class="max-h-[220px] overflow-y-auto pr-1">
+            <div class="max-h-[220px] overflow-y-auto scrollbar-hide pr-1">
               <div class="text-white whitespace-pre-line leading-8">
                 <span ref="typedTarget" class="text-white"></span>
               </div>
