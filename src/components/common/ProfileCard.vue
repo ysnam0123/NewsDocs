@@ -48,7 +48,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="relative flex flex-col items-center w-[170px] min-h-[260px]">
+  <div
+    class="relative flex flex-col items-center justify-center min-w-[203px] min-h-[260px] bg-[#FFFFFF] dark:bg-[#262626]"
+  >
     <!-- 프로필 -->
     <div class="w-full flex flex-col items-center">
       <img
@@ -57,7 +59,9 @@ onMounted(async () => {
         alt="프로필이미지"
         class="w-[146px] h-[146px] mt-[15px] rounded-full object-cover cursor-pointer"
       />
-      <p class="mt-4 text-xl dark:text-[#ffffff]">{{ currentUser?.nickname }}</p>
+      <p class="mt-4 ml-4 text-xl dark:text-[#ffffff]">
+        {{ currentUser?.nickname }}
+      </p>
       <p class="mt-[6px] text-[14px] text-[#8F8F8F]">
         {{ interestArr.map((i) => i.title).join(', ') }}
       </p>
@@ -80,9 +84,9 @@ onMounted(async () => {
     <!-- 비로그인시 로그인 하러가기 버튼-->
     <div
       v-if="!currentUser"
-      class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/70 dark:bg-black/30 text-center"
+      class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/70 dark:bg-[#262626]/70 text-center"
     >
-      <p class="text-[14px] font-medium text-[#7537E3] dark:text-[#C2A5FF]">로그인이 필요합니다</p>
+      <p class="text-[14px] font-medium text-[#7537E3] dark:text-[#A878FD]">로그인이 필요합니다</p>
       <button
         @click="goToLogin"
         class="mt-3 px-3 py-1.5 bg-[#7537E3] text-white text-sm rounded-md hover:bg-[#5E2BC0] transition cursor-pointer"
