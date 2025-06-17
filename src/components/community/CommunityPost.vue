@@ -39,7 +39,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="flex items-center gap-[24px] w-[830px] h-[237px] group cursor-pointer">
+  <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
     <!-- 이미지 -->
     <div
       class="w-[232px] h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"

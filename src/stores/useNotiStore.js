@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useNotiStore = defineStore('notis', () => {
-  const latestNoti = ref(null) //
   const allNoti = ref([]) //알림목록
   const notiChannel = ref(null)
 
@@ -11,7 +10,7 @@ export const useNotiStore = defineStore('notis', () => {
   }
   const addNoti = (newNoti) => {
     //새알림을 알림목록에 추가
-    latestNoti.value = newNoti
+    // const latestNoti = newNoti
     allNoti.value.unshift(newNoti)
   }
   const markAllAsRead = () => {
@@ -36,20 +35,30 @@ export const useNotiStore = defineStore('notis', () => {
   const setChannel = (channel) => {
     notiChannel.value = channel
   }
+
   const removeChannel = async () => {
     if (notiChannel.value) {
-      await import('@/utils/supabase').then(({ default: supabase }) =>
-        supabase.removeChannel(notiChannel.value),
-      )
-      notiChannel.value = null
-      console.log('알림 채널 해제 완료')
+      try {
+        const currentChannel = notiChannel.value
+
+        const { error } = await currentChannel.unsubscribe()
+        if (error) console.warn('unsubscribe 중 오류:', error)
+        // else console.log('채널 unsubscribe 성공')
+
+        // await supabase.removeChannel(currentChannel)
+        notiChannel.value = null
+        // console.log('알림 채널 해제 완료')
+      } catch (err) {
+        console.warn('채널 제거 중 오류', err)
+      }
     }
   }
+
   const hasUnread = computed(() => {
     return allNoti.value.some((noti) => !noti.is_read)
   })
+
   return {
-    latestNoti,
     allNoti,
     notiChannel,
     setNotis,
