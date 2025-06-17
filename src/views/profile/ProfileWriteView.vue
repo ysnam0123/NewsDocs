@@ -10,13 +10,15 @@ import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import SleepDog from '@/components/profile/SleepDog.vue'
 import CommunityPostSkel from '@/components/NewsComponents/skeleton/CommunityPostSkel.vue'
 import { useRouter } from 'vue-router'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 const tabsMap = {
   '정치/경제': [1, 7],
   '연예/스포츠': [2, 3],
   '사회/문화': [4, 6],
-  '해외/기타': [5],
+  '해외/기타': [5, 8],
 }
 const posts = ref([])
 const currentUser = ref(null)
@@ -62,43 +64,32 @@ const filteredPosts = computed(() => {
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="max-w-[735px] mx-auto mt-10">
-      <div class="mb-4">
+    <div class="max-w-full sm:max-w-[735px] mx-auto mt-10">
+      <div class="mb-4 ml-5 sm:ml-0">
         <BackButton />
       </div>
-      <div class="text-[28px] font-bold dark:text-white mb-8">{{ name }} 작성한 글</div>
+      <div class="text-[28px] font-bold dark:text-white mb-8 ml-5 sm:ml-0">
+        {{ name }} 작성한 글
+      </div>
       <div class="relative">
-        <div
-          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center mb-5 relative dark:border-[#3C3C3C]"
-        >
-          <div
-            v-for="tab in tabs"
-            :key="tab"
-            @click="
-              () => {
-                activeTab = tab
-              }
-            "
-            class="flex items-center justify-center w-[147px] h-full text-base cursor-pointer relative transition-all duration-300 dark:hover:text-[#A878FD] hover:text-[#7537E3]"
-            :class="{
-              'text-[#7537E3] dark:text-[#A878FD] font-semibold': activeTab === tab,
-              'text-[#9D9D9D] dark:text-[#8F8F8F]': activeTab !== tab,
-            }"
-          >
-            {{ tab }}
-          </div>
-
-          <div
-            class="absolute bottom-[-1px] h-[2px] bg-[#7537E3] dark:bg-[#A878FD] transition-all duration-300"
-            :style="{
-              left: `${tabs.indexOf(activeTab) * 147}px`,
-              width: '147px',
-            }"
-          />
-        </div>
+        <Swiper :slides-per-view="'auto'" space-between="0" class="w-full sm:w-[735px]">
+          <SwiperSlide v-for="tab in tabs" :key="tab" class="!w-auto">
+            <div
+              @click="activeTab = tab"
+              class="flex items-center justify-center min-w-[147px] h-[52px] border-b-[1px] text-base cursor-pointer relative dark:border-[#3C3C3C] border-[#9A9A9A]"
+              :class="{
+                'text-[#7537E3] dark:text-[#A878FD] font-semibold border-b-2 border-[#7537E3] dark:border-[#A878FD]':
+                  activeTab === tab,
+                'text-[#9D9D9D] dark:text-[#8F8F8F]': activeTab !== tab,
+              }"
+            >
+              {{ tab }}
+            </div>
+          </SwiperSlide>
+        </Swiper>
       </div>
 
-      <div class="flex flex-col w-[735px]">
+      <div class="flex flex-col w-full sm:w-[735px] sm:pt-6 mb-15 px-5">
         <CommunityPostSkel v-if="isLoading" />
         <div v-else>
           <div v-if="filteredPosts.length === 0">

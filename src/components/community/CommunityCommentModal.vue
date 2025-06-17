@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-vue-next'
 const props = defineProps({ commentId: Number })
 const emit = defineEmits(['delete', 'edit'])
+const commentRef = ref(null)
 const isCommentModalOpen = ref(false)
 const toggleCommentModal = () => {
   isCommentModalOpen.value = !isCommentModalOpen.value
@@ -15,6 +16,19 @@ const deleteHandler = () => {
   emit('delete', props.commentId)
   isCommentModalOpen.value = false
 }
+
+const handleClickOutside = (e) => {
+  if (commentRef.value && !commentRef.value.contains(e.target)) {
+    //알림창이 클릭한 위치를 포함하지않을때 닫기
+    isCommentModalOpen.value = false
+  }
+}
+onMounted(() => {
+  document.addEventListener('mousedown', handleClickOutside)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleClickOutside)
+})
 </script>
 <template>
   <div class="relative">
@@ -25,6 +39,7 @@ const deleteHandler = () => {
       <EllipsisVertical class="w-[20px] h-[20px] text-[#161616] dark:text-[#FFFFFF]" />
     </button>
     <div
+      ref="commentRef"
       v-if="isCommentModalOpen"
       class="absolute top-[44px] right-[0px] w-[157px] min-h-[128px] bg-[#FFFFFF] dark:bg-[#363636] shadow-[0_4px_10px_rgba(0,0,0,0.16)] rounded-[8px] z-40"
     >

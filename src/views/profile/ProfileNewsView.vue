@@ -10,13 +10,15 @@ import { fetchUserScrap } from '@/api/fetchUserScrap'
 import { fetchScrapNews } from '@/api/fetchScrapNews'
 import SleepDog from '@/components/profile/SleepDog.vue'
 import News8Skel from '@/components/NewsComponents/skeleton/News8Skel.vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
 
 const tabs = ['전체', '정치/경제', '연예/스포츠', '사회/문화', '해외/기타']
 const tabsMap = {
   '정치/경제': [1, 7],
   '연예/스포츠': [2, 3],
   '사회/문화': [4, 6],
-  '해외/기타': [5],
+  '해외/기타': [5, 8],
 }
 const currentUser = ref(null)
 const route = useRoute()
@@ -63,58 +65,72 @@ const NewsList = computed(() => {
   }
   return result
 })
+
+const MobNewsList = computed(() => {
+  const size = 2
+  const result = []
+  if (!filteredScrapNews.value) return result
+  for (let i = 0; i < filteredScrapNews.value.length; i += size) {
+    result.push(filteredScrapNews.value.slice(i, i + size))
+  }
+  return result
+})
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="max-w-[735px] mx-auto my-10">
-      <div class="mb-4">
+    <div class="max-w-full sm:max-w-[735px] mx-auto my-10">
+      <div class="mb-4 ml-5 sm:ml-0">
         <BackButton />
       </div>
-      <div class="text-[28px] font-bold dark:text-white mb-8">{{ name }} 저장한 뉴스</div>
-      <div class="relative">
-        <div
-          class="flex border-[#9A9A9A] border-b-[0.5px] h-[52px] items-center text-center mb-5 relative dark:border-[#3C3C3C]"
-        >
-          <div
-            v-for="tab in tabs"
-            :key="tab"
-            @click="activeTab = tab"
-            class="flex items-center justify-center w-[147px] h-full text-base cursor-pointer relative transition-all duration-300 dark:hover:text-[#A878FD] hover:text-[#7537E3]"
-            :class="{
-              'text-[#7537E3] dark:text-[#A878FD] font-semibold': activeTab === tab,
-              'text-[#9D9D9D] dark:text-[#8F8F8F]': activeTab !== tab,
-            }"
-          >
-            {{ tab }}
-          </div>
-
-          <div
-            class="absolute bottom-[-1px] h-[2px] bg-[#7537E3] dark:bg-[#A878FD] transition-all duration-300"
-            :style="{
-              left: `${tabs.indexOf(activeTab) * 147}px`,
-              width: '147px',
-            }"
-          />
-        </div>
+      <div class="text-[28px] font-bold dark:text-white mb-8 ml-5 sm:ml-0">
+        {{ name }} 저장한 뉴스
       </div>
-      <div class="flex flex-col w-[735px]">
+      <div class="relative">
+        <Swiper :slides-per-view="'auto'" space-between="0" class="w-full sm:w-[735px]">
+          <SwiperSlide v-for="tab in tabs" :key="tab" class="!w-auto">
+            <div
+              @click="activeTab = tab"
+              class="flex items-center justify-center min-w-[147px] h-[52px] border-b-[1px] text-base cursor-pointer relative dark:border-[#3C3C3C] border-[#9A9A9A]"
+              :class="{
+                'text-[#7537E3] dark:text-[#A878FD] font-semibold border-b-2 border-[#7537E3] dark:border-[#A878FD]':
+                  activeTab === tab,
+                'text-[#9D9D9D] dark:text-[#8F8F8F]': activeTab !== tab,
+              }"
+            >
+              {{ tab }}
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+
+      <div class="flex flex-col w-full max-w-[735px] px-5 sm:px-0">
         <News8Skel v-if="isLoading" class="pt-12" />
         <div v-else>
           <div v-if="filteredScrapNews.length === 0" class="pt-10">
             <SleepDog :content="name + ' 저장한 뉴스가 없습니다.'" class="mb-15 border-0" />
           </div>
           <div v-else>
-            <div
-              v-for="(row, rowIndex) in NewsList"
-              :key="row + rowIndex"
-              class="flex space-x-[24px] pt-5"
-            >
-              <NewsComponent8
-                v-for="(item, itemIndex) in row"
-                :key="item.news_id + '-' + itemIndex"
-                :news="item"
-                class="w-[229px]"
-              />
+            <!-- 2개 -->
+            <div v-for="(row, rowIndex) in MobNewsList" :key="row + rowIndex">
+              <div class="sm:hidden flex gap-[10px] py-5 w-full">
+                <NewsComponent8
+                  v-for="(item, itemIndex) in row"
+                  :key="item.news_id + '-' + itemIndex"
+                  :news="item"
+                  class="mx-auto w-full"
+                />
+              </div>
+            </div>
+            <!-- 3개 -->
+            <div v-for="(row, rowIndex) in NewsList" :key="row + rowIndex">
+              <div class="hidden sm:flex gap-[20px] py-5 w-full">
+                <NewsComponent8
+                  v-for="(item, itemIndex) in row"
+                  :key="item.news_id + '-' + itemIndex"
+                  :news="item"
+                  class="w-[229px]"
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -67,3 +67,18 @@ export const postUpload = () => {
     uploadPost,
   }
 }
+
+export const updatePost = async (id, updateInfo) => {
+  const { error } = await supabase.from('post').update(updateInfo).eq('post_id', id)
+  if (error) throw new Error('게시글 수정 실패:' + error.message)
+}
+export const deletePost = async (postId) => {
+  if (postId) {
+    const { error } = await supabase.from('post').delete().eq('post_id', postId)
+    if (error) {
+      console.error('게시글 삭제 실패', error)
+    } else {
+      console.log('게시글 삭제 완료')
+    }
+  }
+}
