@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import { useInterestStore } from '@/stores/interestStore'
 import MyInterest from '../views/MyInterest.vue'
+import NewsLayout from '@/layout/NewsLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,32 +108,18 @@ const router = createRouter({
     },
     {
       path: '/news',
-      name: 'newsLayout',
-      component: () => import('../layout/NewsLayout.vue'),
-      meta: {
-        hideHeader: false,
-        hideFooter: true,
-        hideHeaderBasic: true,
-      },
+      name: 'news',
+      component: NewsLayout,
       children: [
         {
           path: '',
-          name: 'newsList',
+          name: 'allNews',
           component: () => import('../views/newsDetail/NewsListView.vue'),
-          meta: {
-            hideHeaderBasic: true,
-            hideHeader: false,
-          },
         },
         {
-          path: 'detail/:id',
-          name: 'newsDetail',
-          component: () => import('../views/newsDetail/NewsDetailView.vue'),
-          props: true,
-          meta: {
-            hideHeaderBasic: true,
-            hideHeader: false,
-          },
+          path: ':categoryName',
+          name: 'Category',
+          component: () => import('../views/newsDetail/CategoryView.vue'),
         },
       ],
     },

@@ -7,7 +7,7 @@ import cultureIcon from '@/assets/icons/cultureIcon.svg'
 import worldIcon from '@/assets/icons/worldIcon.svg'
 import societyIcon from '@/assets/icons/societyIcon.svg'
 import economyIcon from '@/assets/icons/economyIcon.svg'
-import etcIcon from '@/assets/icons/etcIcon.svg'
+// import etcIcon from '@/assets/icons/etcIcon.svg'
 
 export const useInterestStore = defineStore('interest', () => {
   const interestList = ref([
@@ -18,7 +18,7 @@ export const useInterestStore = defineStore('interest', () => {
     { id: 'sports', label: '스포츠', icon: sportsIcon },
     { id: 'entertainment', label: '연예', icon: entertainmentIcon },
     { id: 'world', label: '해외', icon: worldIcon },
-    { id: 'etc', label: '그 외', icon: etcIcon },
+    // { id: 'etc', label: '그 외', icon: etcIcon },
   ])
   const interest = ref([])
   const favoriteInterest = ref('')
