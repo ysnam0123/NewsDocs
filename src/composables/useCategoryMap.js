@@ -1,4 +1,3 @@
-// utils/categoryMap.js
 export const categoryNameMap = {
   politics: '정치',
   sports: '스포츠',
