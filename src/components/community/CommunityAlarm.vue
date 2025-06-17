@@ -6,9 +6,10 @@ import CommunityAlarmBlock from './CommunityAlarmBlock.vue'
 import { useToast } from 'vue-toastification'
 import { useNotiStore } from '@/stores/useNotiStore'
 import sleepDog from '@/assets/img/sleepDog.svg'
+import CommunityALarmSkel from './skeleton/CommunityALarmSkel.vue'
 
 const props = defineProps({ close: Function })
-
+const isLoading = ref(true)
 const toast = useToast()
 const currentUser = ref(null)
 const { allNoti, markAllAsRead } = useNotiStore()
@@ -27,6 +28,7 @@ onMounted(async () => {
   } catch (err) {
     console.error('알림:현재 사용자 찾기 실패', err)
   }
+  isLoading.value = false
 })
 
 onBeforeUnmount(() => {
@@ -53,21 +55,28 @@ const markAllRead = async () => {
       <div class="flex items-center w-full ml-[20px] h-[50px] text-[18px] dark:text-[#D7D7D7]">
         알림
       </div>
+
       <!-- 알림 내용 -->
       <div class="h-[280px] overflow-y-auto relative scrollbar">
-        <div v-if="allNoti.length === 0" class="flex items-center justify-center h-full">
+        <div v-if="isLoading">
+          <div v-for="i in [0, 1, 2, 3]" :key="i">
+            <CommunityALarmSkel />
+          </div>
+        </div>
+
+        <div v-else-if="allNoti.length === 0" class="flex items-center justify-center h-full">
           <div class="flex flex-col items-center justify-center">
             <img :src="sleepDog" alt="알림없음" class="w-[60px] h-[42px]" />
             <p>알림이 없습니다.</p>
           </div>
         </div>
-
         <div v-else>
           <div v-for="noti in allNoti" :key="noti.noti_id" class="max-h-[300px]">
             <CommunityAlarmBlock :noti="noti" @closeModal="props.close" />
           </div>
         </div>
       </div>
+
       <div
         class="w-full flex items-center justify-end h-[50px] border-t border-t-gray-200 dark:border-[#4D4D4D]"
       >
