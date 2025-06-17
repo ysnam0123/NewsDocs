@@ -77,35 +77,16 @@ async function onEdit(values) {
   }
 
   try {
-    // 현재 로그인 유저 정보 새로 받아오기
+    // 현재 로그인 유저 정보 받아오기
     const user = await getCurrentUser()
     console.log('user:', user)
     if (!user?.id) throw new Error('로그인된 유저 정보를 찾을 수 없습니다.')
+    console.log(user)
     const profileUser = await fetchUser(user.id)
     if (!profileUser?.user_id) throw new Error('프로필 정보를 찾을 수 없습니다.')
     const now = new Date().toISOString()
 
-    if (values.password) {
-      const { error: pwError } = await supabase.auth.updateUser({
-        password: values.password,
-      })
-
-      if (pwError) {
-        toast.error('비밀번호 변경 중 오류 발생: ' + pwError.message)
-        return
-      }
-    }
-
-    const { error: dateError } = await supabase.auth.updateUser({
-      updated_at: Date.now(),
-    })
-
-    if (dateError) {
-      toast.error('업데이트 날짜 변경 중 오류 발생: ' + dateError.message)
-      return
-    }
-
-    // 프로필 닉네임 업데이트
+    // 프로필 닉네임과 업데이트 시간 업데이트
     const { error: profileError } = await supabase
       .from('profiles')
       .update({ nickname: values.nickname, updated_at: now })
@@ -116,11 +97,27 @@ async function onEdit(values) {
       return
     }
 
-    await authStore.fetchUser()
-    toast.success('회원정보 수정이 완료되었습니다.')
-    setTimeout(() => {
-      router.push('/profile')
-    }, 1200)
+    // 비밀번호 변경 처리
+    if (values.password) {
+      const { error: pwError } = await supabase.auth.updateUser({
+        password: values.password,
+      })
+
+      if (pwError && pwError.message.includes('New password should be different')) {
+        toast.error('기존 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다.')
+        return
+      }
+    }
+
+    try {
+      await authStore.fetchUser()
+      toast.success('회원정보 수정이 완료되었습니다.')
+      setTimeout(() => {
+        router.push('/profile')
+      }, 1200)
+    } catch (e) {
+      console.warn('authStore.fetchUser 실패:', e)
+    }
   } catch (error) {
     toast.error('회원정보 수정 중 알 수 없는 오류가 발생했습니다.')
     console.error('onEdit error:', error)
@@ -145,14 +142,13 @@ async function onEdit(values) {
               :show-signup-btn="false"
               :on-check-nickname="checkNicknameDuplicate"
               :is-nickname-available="isNicknameAvailable"
-              :disabled="isDisabled"
               @submit="onEdit"
             >
-              <template #submit> </template>
+              <template #submit></template>
             </UserForm>
           </div>
         </div>
-        <div class="sticky top-[40px] self-start">
+        <div class="sticky top-[40px] self-start hidden sm:flex">
           <div class="flex flex-col items-end space-y-2 ml-[46px]">
             <button
               form="edit-form"
@@ -161,16 +157,34 @@ async function onEdit(values) {
             >
               변경사항 저장
             </button>
-            <router-link to="/profile">
+            <RouterLink to="/profile">
               <button
                 class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
               >
                 취소하기
               </button>
-            </router-link>
+            </RouterLink>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 모바일용 버튼 -->
+    <div class="flex sm:hidden justify-center gap-3 px-[30px]">
+      <RouterLink to="/profile" class="flex-1">
+        <button
+          class="w-full h-[50px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
+        >
+          취소하기
+        </button>
+      </RouterLink>
+      <button
+        form="edit-form"
+        type="submit"
+        class="flex-1 h-[50px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
+      >
+        변경사항 저장
+      </button>
     </div>
   </div>
 </template>
