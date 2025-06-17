@@ -1,4 +1,8 @@
 <script setup>
+<<<<<<< HEAD
+=======
+//import { fetchNewsData } from '@/api/fetchNews'
+>>>>>>> dev
 import FavoriteSectionSkel from '@/components/NewsComponents/skeleton/FavoriteSectionSkel.vue'
 import FifthSecionSkel from '@/components/NewsComponents/skeleton/FifthSecionSkel.vue'
 import FourthSectionSkel from '@/components/NewsComponents/skeleton/FourthSectionSkel.vue'
@@ -18,6 +22,7 @@ import { computed, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 import { getFreshNews } from '@/composables/newsCache'
+import { categoryIdMap, categoryNameMap } from '@/composables/useCategoryMap'
 
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
@@ -59,23 +64,63 @@ onMounted(async () => {
   isLoggedIn.value = !!supaUser
 
   const newsResults = []
-  if (interestList.value.length > 0) {
+  // 원하는 카테고리 순서 (한글)
+  const desiredCategories = ['정치', '경제', '사회', '문화', '스포츠', '연예', '해외']
+  if (isLoggedIn.value && interestList.value.length > 0) {
     try {
-      for (const item of interestList.value) {
-        // 기존 fetchNewsData → getFreshNews로 변경
-        const result = await getFreshNews(item.id, 'ko')
+      // 사용자의 관심사에 포함된 카테고리만 필터링, 순서 유지
+      const userCategories = desiredCategories.filter((koreanCategory) =>
+        interestList.value.some((item) => {
+          // item.name이 한글 또는 영어일 경우 처리
+          const itemCategory =
+            item.name && categoryNameMap[item.name.toLowerCase()]
+              ? categoryNameMap[item.name.toLowerCase()]
+              : Object.values(categoryNameMap).find(
+                  (korean) =>
+                    categoryIdMap[
+                      Object.keys(categoryNameMap).find((key) => categoryNameMap[key] === korean)
+                    ] === item.id,
+                )
+          return itemCategory === koreanCategory
+        }),
+      )
+
+      // 관심사가 없으면 전체 desiredCategories 사용
+      const categoriesToFetch = userCategories.length > 0 ? userCategories : desiredCategories
+
+      // 각 카테고리에 대해 뉴스 가져오기
+      for (const koreanCategory of categoriesToFetch) {
+        console.log(`뉴스 가져오기: ${koreanCategory}`)
+        const result = await getFreshNews(koreanCategory, 'ko')
         newsResults.push(result)
+        console.log(
+          `뉴스 결과 (${koreanCategory}):`,
+          result.map((news) => ({
+            title: news.title,
+            category_id: news.category_id,
+            category: news.category,
+          })),
+        )
         await new Promise((resolve) => setTimeout(resolve, 300))
       }
       allNews.value = newsResults
-      console.log(allNews.value)
+      console.log(
+        'allNews:',
+        allNews.value.map((arr, index) => ({
+          index,
+          category: categoriesToFetch[index],
+          category_id: arr[0]?.category_id,
+          titles: arr.map((news) => news.title),
+        })),
+      )
       loading.value = false
-      console.log(loading.value)
     } catch (error) {
       console.error('Error fetching news:', error)
+      loading.value = false
     }
+  } else {
+    loading.value = false
   }
-  loading.value = false
   // post 불러오기
   const { data, error } = await supabase
     .from('post')

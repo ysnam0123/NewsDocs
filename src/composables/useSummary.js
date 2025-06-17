@@ -57,8 +57,8 @@ export const useSummary = () => {
       // open ai 요약 생성
       const result = await fetchOpenAi(description)
       summaryStore.setSummary(articleId, result)
-      console.log('🧠 요약 결과:', result)
-      console.log('📦 저장된 요약:', summaryStore.getSummary(articleId))
+      console.log('요약 결과:', result)
+      console.log('저장된 요약:', summaryStore.getSummary(articleId))
       await new Promise((resolve) => setTimeout(resolve, 50))
       await runTyped(result)
       const { data: existingNews } = await supabase

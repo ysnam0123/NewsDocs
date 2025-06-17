@@ -7,7 +7,6 @@ export const useNewsActions = () => {
 
   const searchNews = async (newsId) => {
     console.log('0번 컴포넌트에서 뉴스를 찾는다 ', newsId)
-    console.log('newsId 타입:', typeof newsId, newsId)
     const { data: newsData, error } = await supabase
       .from('news')
       .select('*')
