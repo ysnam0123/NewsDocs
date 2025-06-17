@@ -98,23 +98,16 @@ async function onEdit(values) {
 
     // 비밀번호 변경 처리
     if (values.password) {
-      console.log('zzzzzzzzzzzzz')
       const { error: pwError } = await supabase.auth.updateUser({
         password: values.password,
       })
-      console.log('zzz')
-      toast.success('회원정보 수정이 완료되었습니다.')
-      setTimeout(() => {
-        router.push('/profile')
-      }, 1200)
 
-      if (pwError.message.includes('New password should be different')) {
+      if (pwError && pwError.message.includes('New password should be different')) {
         toast.error('기존 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다.')
         return
       }
     }
 
-    // 비밀번호 변경 없으면 기존대로 진행
     try {
       await authStore.fetchUser()
       toast.success('회원정보 수정이 완료되었습니다.')
