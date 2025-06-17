@@ -34,6 +34,7 @@ export const useSummary = () => {
       //   console.warn('news테이블에 해당 뉴스가 존재하지 않음 요약 저장 실패')
       //   return result
       // }
+
       // 새로 만든 summary insert
       const { error: insertError } = await supabase
         .from('summaries')

@@ -1,12 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
 const { getOrCreateSummary } = useSummary()
-const { runTyped } = useTyping()
+const { runTyped, typedTarget } = useTyping()
 // 호버 상태
 const summaryHover = ref(false)
 const isSummaryLoading = ref(true)
@@ -25,15 +25,11 @@ const hoverOut = () => {
 }
 
 const handleSummary = async () => {
-  if (isOpen.value) {
-    isOpen.value = false
-    return
-  }
+  isOpen.value = !isOpen.value
+  console.log('요약창 열림 상태:', isOpen.value)
 
-  if (summary.value) {
-    isOpen.value = true
-    return
-  }
+  await nextTick()
+  if (summary.value) return
 
   isLoading.value = true
 
@@ -41,6 +37,7 @@ const handleSummary = async () => {
   if (result) {
     summary.value = result
     await runTyped(result)
+    console.log('저장된요약', result)
   }
 
   isLoading.value = false

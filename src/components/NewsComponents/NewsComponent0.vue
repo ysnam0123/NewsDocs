@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
@@ -18,7 +18,7 @@ const props = defineProps({
 
 const handleSummary = async () => {
   isOpen.value = !isOpen.value
-
+  await nextTick()
   if (summary.value) return
 
   isLoading.value = true
