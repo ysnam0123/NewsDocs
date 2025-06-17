@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
@@ -10,6 +9,9 @@ import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
+import { useNewsActions } from '@/composables/useNewsActions'
+
+const { toDetailHandler, saveNews } = useNewsActions()
 // 호버 상태
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -42,8 +44,6 @@ const summarizeToggle = async () => {
 // props
 const props = defineProps({
   news: Object,
-  newsSaveHandler: Function,
-  newsDetail: Function,
 })
 
 // 상태
@@ -53,7 +53,6 @@ const summaryMessage = ref('')
 const typedTarget = ref(null)
 let typedInstance = null
 
-const router = useRouter()
 const summaryStore = useSummaryStore()
 const newsStore = useNewsStore()
 
@@ -63,8 +62,8 @@ const handleClick = async () => {
 
   // 뉴스 선택
   if (newsStore.selectedNews?.article_id !== articleId) {
+    await saveNews(props.news)
     console.log('💾 뉴스 저장 시도:', props.news.title)
-    await props.newsSaveHandler(props.news)
   }
 
   if (!props.news.description) {
@@ -157,12 +156,6 @@ const runTyped = async (text) => {
   }
 }
 
-// 상세 페이지로 이동
-const toDetailHandler = () => {
-  console.log('🔗 원문 상세보기 클릭:', props.news.article_id)
-  router.push(`/news/detail/${props.news.article_id}`)
-}
-
 // 마운트 후 상태 초기화
 onMounted(() => {
   if (props.news) {
@@ -185,7 +178,7 @@ onMounted(() => {
     </div>
     <div
       v-if="wantSummary"
-      class="h-full flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      class="h-[472px] flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
       @click.stop="summarizeToggle"
     >
       <template v-if="isSummaryLoading">
@@ -225,7 +218,7 @@ onMounted(() => {
 
       <button
         class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-        @click.stop="toDetailHandler"
+        @click.stop="toDetailHandler(news)"
       >
         원문보기
       </button>
@@ -245,7 +238,7 @@ onMounted(() => {
           >
             {{ props.news.title }}
           </div>
-          <div class="text-[16px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
+          <div class="text-[16px] text-[#A8A8A8] min-h-[40px] mb-[5px] line-clamp-2">
             {{ props.news.description || '' }}
           </div>
           <!-- 좋아요 박스 -->

@@ -20,7 +20,6 @@ import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { useNewsStore } from '@/stores/newsStore'
 import supabase from '@/utils/supabase'
 
 import NewsComponent4 from '@/components/NewsComponents/NewsComponent4.vue'
@@ -28,26 +27,6 @@ import NewsComponent0 from '@/components/NewsComponents/NewsComponent0.vue'
 import runDog from '@/assets/img/run_dog.png'
 import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
 import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
-
-const newsList = ref([])
-const randomNews = ref(null)
-const router = useRouter()
-const categories = ref(['전체', '정치', '경제', '사회', '문화', '스포츠', '연예', '해외'])
-const activeCategory = ref('전체')
-const swiperInstance = ref(null)
-const newsStore = useNewsStore()
-const resetPoint = ref(0)
-const posts = ref([])
-const cateGroupMap = {
-  정치: [1],
-  스포츠: [2],
-  연예: [3],
-  문화: [4],
-  해외: [5],
-  사회: [6],
-  경제: [7],
-  전체: null,
-}
 
 import { useInterestStore } from '@/stores/interestStore'
 import NCSkel9 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel9.vue'
@@ -58,6 +37,26 @@ import NCSkel5 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSk
 import NCSkel6 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel6.vue'
 import NCSkel10 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel10.vue'
 import NCSkel7 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel7.vue'
+
+// const newsList = ref([])
+// const randomNews = ref(null)
+const router = useRouter()
+// const categories = ref(['전체', '정치', '경제', '사회', '문화', '스포츠', '연예', '해외'])
+// const activeCategory = ref('전체')
+const swiperInstance = ref(null)
+// const resetPoint = ref(0)
+const posts = ref([])
+// const cateGroupMap = {
+//   전체: 0,
+//   정치: 1,
+//   스포츠: 2,
+//   연예: 3,
+//   문화: 4,
+//   해외: 5,
+//   사회: 6,
+//   경제: 7,
+// }
+
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
 const allNews = ref([])
@@ -69,26 +68,10 @@ const shortDocs = ref([])
 // 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
 
 const hasShortDocs = computed(() => Array.isArray(shortDocs.value) && shortDocs.value.length > 0)
-const hasRanNews0 = computed(
+const hasRanNews = computed(
   () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
 )
-const hasRanNews1 = computed(
-  () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
-)
-const hasRanNews2 = computed(
-  () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
-)
-const hasRanNews3 = computed(
-  () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
-)
-const hasRanNews4 = computed(
-  () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
-)
-const hasRanNews5 = computed(
-  () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
-)
-// const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
-// const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
+
 const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 1)
 const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
 const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
@@ -116,54 +99,19 @@ const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
 // category active, 그리고 카테고리에 맞게 뉴스refetch
-const selectCategory = async (category) => {
-  activeCategory.value = category
+// const selectCategory = async (category) => {
+//   activeCategory.value = category
 
-  const fetchNews = await fetchNewsData(category === '전체' ? '' : category, 'ko')
-  newsList.value = fetchNews
+//   const fetchNews = await fetchNewsData(category === '전체' ? '' : category, 'ko')
+//   newsList.value = fetchNews
 
-  if (fetchNews.length > 0) {
-    const randomIdx = Math.floor(Math.random() * fetchNews.length)
-    randomNews.value = fetchNews[randomIdx]
-  }
+//   if (fetchNews.length > 0) {
+//     const randomIdx = Math.floor(Math.random() * fetchNews.length)
+//     randomNews.value = fetchNews[randomIdx]
+//   }
 
-  resetPoint.value++
-}
-
-// 뉴스를 전역과 동시에 supabase db에 저장
-const newsSavedHandler = async (news) => {
-  newsStore.selectedNews = news
-
-  const { data: savedNews, error } = await supabase
-    .from('news')
-    .select('news_id')
-    .eq('news_id', news.article_id)
-    .maybeSingle()
-
-  if (error) {
-    console.error('뉴스 저장 실패', error)
-    return
-  }
-
-  if (!savedNews) {
-    const { error: insertError } = await supabase.from('news').insert([
-      {
-        news_id: news.article_id,
-        category_id: news.category_id,
-        title: news.title,
-        link: news.link,
-        description: news.description,
-        pub_date: news.pub_date,
-        image_url: news.image_url,
-        source_name: news.source_name,
-        category: news.category,
-      },
-    ])
-    if (insertError) {
-      console.error('뉴스 저장 실패함', insertError)
-    }
-  }
-}
+//   resetPoint.value++
+// }
 
 const getLikeCount = async (postId) => {
   const { count } = await supabase
@@ -174,48 +122,53 @@ const getLikeCount = async (postId) => {
   return count || 0
 }
 
-// onMounted(async () => {
-//   const randomNewsResults = []
-//   const shorDocsResults = []
-//   try {
-//     const newsResults = []
-//     for (const item of interestList.value) {
-//       const result = await fetchNewsData(item.id, 'ko')
-//       newsResults.push(result)
-//       await new Promise((resolve) => setTimeout(resolve, 300))
+// watch(
+//   () => activeCategory.value,
+//   async (newCategory) => {
+//     const categoryId = cateGroupMap[newCategory]
+
+//     let query = supabase.from('post').select(
+//       `
+//         post_id,
+//         title,
+//         contents,
+//         category_id,
+//         profiles (
+//           nickname,
+//           profile_img
+//         ),
+//         comments!comments_post_id_fkey (
+//           comments_id,
+//           contents
+//     )
+//       `,
+//     )
+
+//     if (categoryId) {
+//       query = query.in('category_id', categoryId)
 //     }
-//     allNews.value = newsResults
-//     console.log(allNews.value)
-//     loading.value = false
-//     console.log(loading.value)
-//   } catch (error) {
-//     console.error('Error fetching news:', error)
-//   }
-//   try {
-//     const result = await fetchRandomNews('ko')
-//     randomNewsResults.push(result)
-//     allRandomNews.value = randomNewsResults
-//     console.log('랜덤뉴스', allRandomNews.value)
-//     console.log('첫번째 랜덤뉴스', allRandomNews.value[0])
-//   } catch (error) {
-//     console.error('Error fetching randomNews:', error)
-//   }
 
-//   try {
-//     const result = await fetchShortDocs('new', 'ko')
-//     shorDocsResults.push(result)
-//     shortDocs.value = shorDocsResults
-//     console.log('숏독스 :', shortDocs.value)
-//   } catch (error) {
-//     console.error('shortDocs fetch error:', error)
-//   }
-// })
+//     const { data, error } = await query
 
-onMounted(async () => {
-  loading.value = true
+//     if (error) {
+//       console.error('post 불러오기 실패', error)
+//       return
+//     }
 
+//     for (const post of data) {
+//       const likeCount = await getLikeCount(post.post_id)
+//       post.like_count = likeCount
+//     }
+
+//     posts.value = data
+//     console.log('불러온 posts:', posts.value)
+//   },
+//   { immediate: true },
+// )
+
+// 1. 다른카테고리 뉴스 순차 로딩 (with delay)
+const loadInterestNews = async () => {
   try {
-    // 1. 관심 뉴스 순차 로딩 (with delay)
     const newsResults = []
     for (const item of interestList.value) {
       const result = await fetchNewsData(item.id, 'ko')
@@ -227,8 +180,10 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching news:', error)
   }
+}
 
-  // 2. 랜덤 뉴스와 숏독스는 병렬 처리
+// 2. 랜덤 뉴스, 숏독스 병렬처리
+const loadRandomAndShorDocs = async () => {
   try {
     const [randomResult, shortDocsResult] = await Promise.all([
       fetchRandomNews('ko'),
@@ -241,89 +196,24 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error in random/shortDocs fetch:', error)
   }
+}
 
+onMounted(async () => {
+  loading.value = true
+  await loadInterestNews()
+  await loadRandomAndShorDocs()
   loading.value = false
   console.log('로딩 종료:', loading.value)
 })
-
-watch(
-  () => activeCategory.value,
-  async (newCategory) => {
-    const categoryId = cateGroupMap[newCategory]
-
-    let query = supabase.from('post').select(
-      `
-        post_id,
-        title,
-        contents,
-        category_id,
-        profiles (
-          nickname,
-          profile_img
-        ),
-        comments!comments_post_id_fkey (
-          comments_id,
-          contents
-    )
-      `,
-    )
-
-    if (categoryId) {
-      query = query.in('category_id', categoryId)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      console.error('post 불러오기 실패', error)
-      return
-    }
-
-    for (const post of data) {
-      const likeCount = await getLikeCount(post.post_id)
-      post.like_count = likeCount
-    }
-
-    posts.value = data
-    console.log('불러온 posts:', posts.value)
-  },
-  { immediate: true },
-)
 </script>
+
 <template>
-  <section class="w-full mt-6">
-    <div class="w-full">
-      <ul class="flex items-center">
-        <li
-          v-for="category in categories"
-          :key="category"
-          class="text-black px-4 py-2 rounded-lg mr-3 cursor-pointer transition duration-300"
-          :class="[
-            activeCategory === category
-              ? 'bg-black text-white  dark:bg-[#7846D2] '
-              : 'bg-[#F3F3F3]  dark:bg-[#363636] dark:text-white',
-          ]"
-          @click="selectCategory(category)"
-        >
-          {{ category }}
-        </li>
-      </ul>
-    </div>
-  </section>
   <section>
     <div class="mx-auto max-w-[1240px] pt-8">
       <div class="section1">
         <div v-if="!loading" class="flex gap-10 mb-20 items-center">
-          <NewsComponent0
-            v-if="hasRanNews0"
-            :news-save-handler="newsSavedHandler"
-            :news="allRandomNews[0][0]"
-          />
-          <NewsComponent4
-            v-if="hasRanNews1"
-            :news-save-handler="newsSavedHandler"
-            :news="allRandomNews[0][1]"
-          />
+          <NewsComponent0 v-if="hasRanNews" :news="allRandomNews[0][0]" />
+          <NewsComponent4 v-if="hasRanNews" :news="allRandomNews[0][1]" />
         </div>
         <div v-else class="flex gap-10 mb-20 items-center">
           <NCSkel0 />
@@ -332,26 +222,10 @@ watch(
         <div class="mb-10">
           <h3 class="text-[30px] font-semibold mb-8 dark:text-white">최신뉴스</h3>
           <div v-if="!loading" class="flex justify-between">
-            <NewsComponent9
-              v-if="hasRanNews2"
-              :news-save-handler="newsSavedHandler"
-              :news="allRandomNews[0][2]"
-            />
-            <NewsComponent9
-              v-if="hasRanNews3"
-              :news-save-handler="newsSavedHandler"
-              :news="allRandomNews[0][3]"
-            />
-            <NewsComponent9
-              v-if="hasRanNews4"
-              :news-save-handler="newsSavedHandler"
-              :news="allRandomNews[0][4]"
-            />
-            <NewsComponent9
-              v-if="hasRanNews5"
-              :news-save-handler="newsSavedHandler"
-              :news="allRandomNews[0][5]"
-            />
+            <NewsComponent9 v-if="hasRanNews" :news="allRandomNews[0][2]" />
+            <NewsComponent9 v-if="hasRanNews" :news="allRandomNews[0][3]" />
+            <NewsComponent9 v-if="hasRanNews" :news="allRandomNews[0][4]" />
+            <NewsComponent9 v-if="hasRanNews" :news="allRandomNews[0][5]" />
           </div>
           <NCSkel9 v-else />
         </div>
@@ -389,7 +263,7 @@ watch(
             <swiper
               v-if="!loading"
               ref="swiperRef"
-              :slides-per-view="5"
+              :slides-per-view="4"
               :centered-slides="false"
               :space-between="20"
               :pagination="false"
@@ -399,11 +273,7 @@ watch(
               @swiper="onSwiper"
             >
               <swiper-slide v-for="(news, index) in shortDocs" :key="index" class="!w-[300px]">
-                <SlideNewsComponent
-                  v-if="hasShortDocs"
-                  :news-save-handler="newsSavedHandler"
-                  :news="news"
-                />
+                <SlideNewsComponent v-if="hasShortDocs" :news="news" />
               </swiper-slide>
             </swiper>
             <SNCSkel v-else />
@@ -429,16 +299,8 @@ watch(
               <span class="text-[26px] font-semibold dark:text-white">경제</span>
             </div>
             <div v-if="!loading" class="flex flex-col gap-4">
-              <NewsComponent5
-                v-if="hasNews1"
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[1][0]"
-              />
-              <NewsComponent5
-                v-if="hasNews1"
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[1][1]"
-              />
+              <NewsComponent5 v-if="hasNews1" :news="allNews[1][0]" />
+              <NewsComponent5 v-if="hasNews1" :news="allNews[1][1]" />
             </div>
             <NCSkel5 v-else />
           </div>
@@ -452,16 +314,8 @@ watch(
               <span class="text-[26px] font-semibold dark:text-white">문화</span>
             </div>
             <div v-if="!loading" class="flex flex-col gap-4">
-              <NewsComponent6
-                v-if="hasNews3"
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[3][0]"
-              />
-              <NewsComponent6
-                v-if="hasNews3"
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[3][1]"
-              />
+              <NewsComponent6 v-if="hasNews3" :news="allNews[3][0]" />
+              <NewsComponent6 v-if="hasNews3" :news="allNews[3][1]" />
             </div>
             <NCSkel6 v-else />
           </div>
@@ -475,16 +329,8 @@ watch(
             <span class="text-[26px] font-semibold dark:text-white">연예</span>
           </div>
           <div v-if="!loading" class="w-[600px] flex gap-4">
-            <NewsComponent10
-              v-if="hasNews5"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[5][0]"
-            />
-            <NewsComponent10
-              v-if="hasNews5"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[5][1]"
-            />
+            <NewsComponent10 v-if="hasNews5" :news="allNews[5][0]" />
+            <NewsComponent10 v-if="hasNews5" :news="allNews[5][1]" />
           </div>
           <NCSkel10 v-else />
         </div>
@@ -496,23 +342,15 @@ watch(
             </h1>
           </div>
           <div v-if="!loading" class="flex flex-col gap-[15px]">
-            <NewsComponent6
-              v-if="hasNews6"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[6][0]"
-            />
-            <NewsComponent6
-              v-if="hasNews6"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[6][1]"
-            />
+            <NewsComponent6 v-if="hasNews6" :news="allNews[6][0]" />
+            <NewsComponent6 v-if="hasNews6" :news="allNews[6][1]" />
           </div>
           <NCSkel6 v-else />
         </div>
       </div>
 
       <!-- 사회 -->
-      <div class="w-full">
+      <div class="w-full mb-10">
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
             <img :src="global" alt="global" class="w-8 h-8 mt-0.5" />
@@ -521,30 +359,14 @@ watch(
         </div>
         <div v-if="!loading" class="flex gap-[30px]">
           <div class="flex flex-col gap-[15px]">
-            <NewsComponent7
-              v-if="hasNews2"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[2][0]"
-            />
+            <NewsComponent7 v-if="hasNews2" :news="allNews[2][0]" />
 
-            <NewsComponent7
-              v-if="hasNews2"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[2][1]"
-            />
+            <NewsComponent7 v-if="hasNews2" :news="allNews[2][1]" />
           </div>
           <div class="flex flex-col gap-[15px]">
-            <NewsComponent7
-              v-if="hasNews2"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[2][2]"
-            />
+            <NewsComponent7 v-if="hasNews2" :news="allNews[2][2]" />
 
-            <NewsComponent7
-              v-if="hasNews2"
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[2][3]"
-            />
+            <NewsComponent7 v-if="hasNews2" :news="allNews[2][3]" />
           </div>
         </div>
         <NCSkel7 v-else />

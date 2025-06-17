@@ -15,14 +15,14 @@ import SecondSection from '@/components/NewsComponents/section/SecondSection.vue
 import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
 import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
 import { useInterestStore } from '@/stores/interestStore'
-import { useNewsStore } from '@/stores/newsStore'
 import { computed, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
+import { getFreshNews } from '@/composables/newsCache'
 
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
-const newsStore = useNewsStore()
+
 const user = ref(null)
 const loading = ref(true)
 const isLoggedIn = ref(false)
@@ -34,44 +34,6 @@ const scrollToTop = () => {
 const allNews = ref([])
 const posts = ref([])
 const router = useRouter()
-
-const newsSavedHandler = async (news) => {
-  newsStore.selectedNews = news
-
-  const { data: savedNews, error } = await supabase
-    .from('news')
-    .select('news_id')
-    .eq('news_id', news.article_id)
-    .maybeSingle()
-
-  if (error) {
-    console.error('뉴스 저장 실패', error)
-    return
-  }
-
-  if (!savedNews) {
-    const { error: insertError } = await supabase.from('news').insert([
-      {
-        news_id: news.article_id,
-        category_id: news.category_id,
-        title: news.title,
-        link: news.link,
-        keywords: news.keywords,
-        description: news.description,
-        pub_date: news.pub_date,
-        image_url: news.image_url,
-        source_name: news.source_name,
-        category: news.category,
-      },
-    ])
-    if (insertError) {
-      console.error('뉴스 저장 실패함', insertError)
-    }
-    console.log('뉴스가 저장되었습니다.')
-  } else {
-    console.log('이미 저장된 뉴스입니다:', news.title)
-  }
-}
 
 // 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
 const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
@@ -101,7 +63,8 @@ onMounted(async () => {
   if (interestList.value.length > 0) {
     try {
       for (const item of interestList.value) {
-        const result = await fetchNewsData(item.id, 'ko')
+        // 기존 fetchNewsData → getFreshNews로 변경
+        const result = await getFreshNews(item.id, 'ko')
         newsResults.push(result)
         await new Promise((resolve) => setTimeout(resolve, 300))
       }
@@ -154,11 +117,8 @@ onMounted(async () => {
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
       <div v-if="interestList.length > 0">
-        <FavoriteSection
-          v-if="hasNews0"
-          :news-save-handler="newsSavedHandler"
-          :newsArr="allNews[0]"
-        />
+        <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
+
         <FavoriteSectionSkel v-else-if="loading" />
         <!-- 섹션 2 : 커뮤니티로 접근 -->
         <div
@@ -167,8 +127,15 @@ onMounted(async () => {
           <h1 class="text-[30px] text-[var(--text-title)] font-bold mb-[32px] select-none">
             나의 관심사에 대해 사람들과 이야기해보세요!
           </h1>
-          <div class="flex flex-row justify-between gap-[24px]">
-            <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
+          <div>
+            <div class="flex flex-row justify-between gap-[24px]">
+              <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
+            </div>
+            <div v-if="loading" class="flex gap-6">
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+            </div>
           </div>
           <button
             @click="router.push('/community')"
@@ -178,21 +145,13 @@ onMounted(async () => {
           </button>
         </div>
         <!-- 섹션 3 : 슬라이드 카드뉴스 -->
-        <SecondSection
-          :news-save-handler="newsSavedHandler"
-          v-if="hasNews1"
-          :newsArr="allNews[1]"
-        />
+        <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
         <SecondSectionSkel v-else-if="loading" />
 
         <!-- 섹션 4,5 연예, 핫독스 -->
         <div class="flex gap-[72px] mb-[50px]">
           <!-- 섹션 4 : 연예 -->
-          <ThirdSection
-            :news-save-handler="newsSavedHandler"
-            v-if="hasNews2"
-            :newsArr="allNews[2]"
-          />
+          <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
           <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
           <!-- 섹션 5 : 오늘의 핫 독스 -->
           <div class="w-[560px]">
@@ -237,6 +196,20 @@ onMounted(async () => {
         <p class="text-center mb-[20px]">관심사를 추가하면 맞춤 뉴스를 볼 수 있습니다.</p>
       </div>
     </div>
+    <!-- 섹션 6, 7 -->
+    <div class="flex gap-[40px] mb-[50px]">
+      <!-- 섹션 6: 경제 -->
+      <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
+      <FourthSectionSkel v-else-if="loading" />
+      <!-- 섹션 7 : 문화 -->
+      <FifthSection v-if="hasNews4" :newsArr="allNews[4]" />
+      <FifthSecionSkel v-else-if="loading" />
+    </div>
+
+    <!-- 섹션 8: 해외 -->
+    <SixthSection v-if="hasNews5" :newsArr="allNews[5]" />
+    <SixthSectionSkel v-else-if="loading" />
+
     <!-- 로그인 안 된 상태 -->
     <!-- 임시 예시 페이지 -->
     <div v-else>
