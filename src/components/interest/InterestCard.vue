@@ -10,7 +10,7 @@ const props = defineProps({
 
 const cardClass = computed(() =>
   props.isSelected
-    ? 'bg-[#f5f2fa] border border-[#7537e3] hover:bg-[#ede4fd]'
+    ? 'bg-[#f5f2fa] dark:text-[#000000] border border-[#7537e3] hover:bg-[#ede4fd]'
     : 'border border-[#efefef] hover:bg-[#F5F2FA] hover:border-[#EDE8F6]',
 )
 </script>
@@ -24,7 +24,7 @@ const cardClass = computed(() =>
   >
     <img :src="icon" :alt="id" class="w-[40px] h-[40px] mb-[21px]" />
     <div class="flex flex-col gap-[4px] text-center">
-      <h1 class="text-center text-[15px]">{{ label }}</h1>
+      <h1 class="text-center text-[15px] dark:text-[#ffffff]">{{ label }}</h1>
       <p class="text-[14px] text-[#929292]">{{ id }}</p>
     </div>
   </div>

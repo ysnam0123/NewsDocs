@@ -3,30 +3,13 @@ import InterestCard from '@/components/interest/InterestCard.vue'
 import { useInterestStore } from '@/stores/interestStore'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-import politicsIcon from '@/assets/icons/politicsIcon.svg'
-import sportsIcon from '@/assets/icons/sportsIcon.svg'
-import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
-import cultureIcon from '@/assets/icons/cultureIcon.svg'
-import worldIcon from '@/assets/icons/worldIcon.svg'
-import societyIcon from '@/assets/icons/societyIcon.svg'
-import economyIcon from '@/assets/icons/economyIcon.svg'
-import etcIcon from '@/assets/icons/etcIcon.svg'
 import { userAuthStore } from '@/stores/authStore'
+import { interestMap } from '@/composables/useInterestMap'
 
 const store = useInterestStore()
 const auth = userAuthStore()
 const name = ref(auth.user?.name || '사용자')
-const interests = [
-  { id: 'politics', label: '정치', icon: politicsIcon },
-  { id: 'sports', label: '스포츠', icon: sportsIcon },
-  { id: 'entertain', label: '연예', icon: entertainmentIcon },
-  { id: 'culture', label: '문화', icon: cultureIcon },
-  { id: 'abroad', label: '해외', icon: worldIcon },
-  { id: 'society', label: '사회', icon: societyIcon },
-  { id: 'economy', label: '경제', icon: economyIcon },
-  { id: 'etc', label: '그 외', icon: etcIcon },
-]
+const interests = interestMap
 
 //관심사 추가
 const addInterest = (item) => {
@@ -61,7 +44,7 @@ onMounted(() => {
     <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
       <div class="flex flex-col w-[500px] min-h-[400px]">
         <div class="flex gap-[50px] mb-[24px]">
-          <h1 class="text-[18px] font-bold">
+          <h1 class="text-[18px] dark:text-[#dcdcdc] font-bold">
             {{ name }}님의 <span class="text-[#7537E3]">관심사</span>를 선택해주세요
             <span class="text-[#8b8b8b] text-[14px] font-medium">(최소 3개)</span>
           </h1>
