@@ -9,7 +9,7 @@ import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useNewsActions } from '@/composables/useNewsActions'
 import { useSummary } from '@/composables/useSummary'
 const { toDetailHandler, saveNews } = useNewsActions()
-const { summarizeToggle, typedTarget, wantSummary, isOpen, isLoading } = useSummary()
+const { summarizeToggle, typedTarget, wantSummary } = useSummary()
 // 호버 상태
 const summaryHover = ref(false)
 const isSummaryLoading = ref(true)
@@ -65,7 +65,7 @@ onMounted(() => {
     <div
       v-if="wantSummary"
       class="h-full flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
-      @click.stop="summarizeToggle(news)"
+      @click.stop="summarizeToggle(props.news)"
     >
       <template v-if="isSummaryLoading">
         <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
@@ -104,7 +104,7 @@ onMounted(() => {
 
       <button
         class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-        @click.stop="toDetailHandler(news)"
+        @click.stop="toDetailHandler(props.news)"
       >
         원문보기
       </button>

@@ -178,7 +178,7 @@ onMounted(() => {
     </div>
     <div
       v-if="wantSummary"
-      class="h-full flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      class="h-[472px] flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
       @click.stop="summarizeToggle"
     >
       <template v-if="isSummaryLoading">
@@ -238,7 +238,7 @@ onMounted(() => {
           >
             {{ props.news.title }}
           </div>
-          <div class="text-[16px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
+          <div class="text-[16px] text-[#A8A8A8] min-h-[40px] mb-[5px] line-clamp-2">
             {{ props.news.description || '' }}
           </div>
           <!-- 좋아요 박스 -->

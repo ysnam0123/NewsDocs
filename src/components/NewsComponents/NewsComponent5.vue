@@ -184,7 +184,7 @@ onMounted(() => {
     </div>
     <div
       v-if="wantSummary"
-      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col justify-center gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col justify-center gap-4 rounded-[16px] z-20 backdrop-blur-lg"
       @click="summarizeToggle"
     >
       <!-- 클릭했을 때 나오는 창 -->
