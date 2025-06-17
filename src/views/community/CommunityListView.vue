@@ -80,6 +80,11 @@ const displayPost = computed(() => {
         <ProfileCard v-else />
       </div>
     </div>
+    <!-- 모바일 -->
+    <div class="w-full h-[110px] block sm:hidden">
+      <ProfileCardSkel v-if="isLoading" />
+      <ProfileCard v-else />
+    </div>
 
     <!-- 오른쪽 화면 -->
     <div class="flex flex-col mt-5 w-[1110px] pl-[60px] pr-[220px]">
