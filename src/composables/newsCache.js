@@ -6,7 +6,7 @@ import { fetchNewsData } from '@/api/fetchNews'
 const NEWS_TTL_MINUTES = 10
 
 export async function getFreshNews(keywords, language) {
-  const { data: newsArr } = await supabase
+  const { data: newsArr, error } = await supabase
     .from('news')
     .select('*')
     .order('created_at', { ascending: false })
@@ -28,6 +28,7 @@ export async function getFreshNews(keywords, language) {
         freshNews.map((news) => ({
           news_id: news.article_id,
           category_id: news.category_id ?? null,
+          view_count: news.view_count,
           title: news.title,
           link: news.link,
           keywords: news.keywords ?? [],
@@ -38,6 +39,12 @@ export async function getFreshNews(keywords, language) {
           category: news.category,
         })),
       )
+
+      if (error) {
+        console.error('뉴우스 저장 실패:', error)
+      } else {
+        console.log('supabase 저장 성공!')
+      }
     }
     return freshNews
   }

@@ -121,6 +121,11 @@ const router = createRouter({
           name: 'Category',
           component: () => import('../views/newsDetail/CategoryView.vue'),
         },
+        {
+          path: '/detail/:id',
+          name: 'newsDetail',
+          component: () => import('../views/newsDetail/NewsDetailView.vue'),
+        },
       ],
     },
     {

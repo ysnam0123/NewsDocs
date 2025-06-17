@@ -1,5 +1,5 @@
 import supabase from '@/utils/supabase'
-import { useSummaryStore } from '@/stores/summaryNews'
+import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 import { nextTick, ref } from 'vue'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
@@ -10,11 +10,12 @@ export const useSummary = () => {
   let typedInstance = null
   const wantSummary = ref(false)
   const isOpen = ref(false)
-  const isLoading = ref(true)
+  const isSummaryLoading = ref(true)
 
   // 타이핑 효과
   const runTyped = async (text) => {
     await nextTick()
+    console.log('▶️ runTyped 호출됨. text:', text)
     if (typedTarget.value) {
       if (typedInstance) {
         typedInstance.destroy()
@@ -30,11 +31,11 @@ export const useSummary = () => {
     }
   }
 
-  // 클릭하면 뉴스 정보로 요약 불러오기, 없으면 저장
+  // 클릭하면 뉴스 정보로 요약 불러오기, 없으면 생성
   const getOrCreateSummary = async (articleId, description) => {
     try {
       isOpen.value = true
-      isLoading.value = true
+      isSummaryLoading.value = true
       if (!description) return
 
       const { data: savedSummary, error } = await supabase
@@ -48,16 +49,30 @@ export const useSummary = () => {
         return null
       }
       if (savedSummary?.summaries_contents) {
-        summaryStore.summaryNews(articleId, savedSummary.summaries_contents)
-        runTyped(summaryStore.summaries_contents)
+        summaryStore.setSummary(articleId, savedSummary.summaries_contents)
+        await runTyped(savedSummary.summaries_contents)
         console.log('기존 요약')
         return savedSummary.summaries_contents
       }
+      // open ai 요약 생성
       const result = await fetchOpenAi(description)
       summaryStore.setSummary(articleId, result)
+      console.log('🧠 요약 결과:', result)
+      console.log('📦 저장된 요약:', summaryStore.getSummary(articleId))
       await new Promise((resolve) => setTimeout(resolve, 50))
       await runTyped(result)
+      const { data: existingNews } = await supabase
+        .from('news')
+        .select('news_id')
+        .eq('news_id', articleId)
+        .maybeSingle()
 
+      if (!existingNews) {
+        console.warn('❗ news 테이블에 해당 뉴스가 존재하지 않음, 요약 저장 실패')
+        isSummaryLoading.value = false
+        return result
+      }
+      // summary insert
       const { error: insertError } = await supabase
         .from('summaries')
         .insert([{ news_id: articleId, summaries_contents: result }])
@@ -70,16 +85,19 @@ export const useSummary = () => {
     } catch (err) {
       console.error('요약 에러 발생', err)
     } finally {
-      isLoading.value = false
+      isSummaryLoading.value = false
     }
   }
   const summarizeToggle = async (articleId, description) => {
     wantSummary.value = !wantSummary.value
 
+    if (!wantSummary.value) {
+      typedTarget.value.innerText = ''
+      return
+    }
     const existing = summaryStore.getSummary(articleId)
     if (!existing) {
-      const result = await getOrCreateSummary(articleId, description)
-      if (result) await runTyped(result)
+      await getOrCreateSummary(articleId, description)
     } else {
       await runTyped(existing)
     }
@@ -91,6 +109,6 @@ export const useSummary = () => {
     typedTarget,
     wantSummary,
     isOpen,
-    isLoading,
+    isSummaryLoading,
   }
 }
