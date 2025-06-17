@@ -130,8 +130,6 @@ const commentSubmitHandler = async () => {
       userId: currentUser.value.user_id,
       content: saveContent,
     })
-
-    toast.success('댓글이 등록되었습니다.')
   } catch (err) {
     console.error('댓글 등록 에러', err)
     comments.value = comments.value.filter((c) => c.comments_id !== tempComment.comments_id)

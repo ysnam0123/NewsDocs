@@ -3,7 +3,7 @@ import supabase from '@/utils/supabase'
 export const fetchNoti = async (userId) => {
   const { data: notiData, error: notiError } = await supabase
     .from('notifications')
-    .select()
+    .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
   if (notiError) {

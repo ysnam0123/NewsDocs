@@ -20,7 +20,7 @@ const cateGroupMap = {
   '정치/경제': [1, 7],
   '연예/스포츠': [2, 3],
   '사회/문화': [4, 6],
-  '해외/기타': [5],
+  '해외/기타': [5, 8],
 }
 const handleCategory = (category) => {
   selectCategory.value = category
