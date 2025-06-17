@@ -1,5 +1,4 @@
 <script setup>
-// import { fetchSingleNoti, setRead } from '@/api/community/notification'
 import { fetchUser } from '@/api/fetchUser'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -8,6 +7,7 @@ import { fetchSingleComment } from '@/api/community/comment'
 import { setRead } from '@/api/community/notification'
 
 const props = defineProps({ noti: Object })
+const emit = defineEmits(['closeModal'])
 const writer = ref(null)
 const comment = ref(null)
 const router = useRouter()
@@ -19,6 +19,7 @@ const goToPostDetail = async () => {
       await setRead(localNoti.value.noti_id)
       localNoti.value.is_read = true
     }
+    emit('closeModal')
     router.push(`/community/${localNoti.value.post_id}`)
   } catch (err) {
     console.error('알림읽음처리실패:', err)
@@ -41,7 +42,7 @@ onMounted(async () => {
   <div
     v-if="localNoti && writer"
     @click="goToPostDetail"
-    class="flex items-center w-full h-[70px] hover:bg-[#F6F6F6] dark:hover:bg-[#585858] border-t border-t-gray-300 px-[6px] cursor-pointer"
+    class="flex items-center w-full h-[70px] hover:bg-[#F6F6F6] dark:hover:bg-[#585858] border-t border-t-gray-300 dark:border-t-[#4D4D4D] px-[6px] cursor-pointer"
     :class="
       localNoti.is_read === true
         ? 'bg-[#F6F6F6] dark:bg-[#585858]'

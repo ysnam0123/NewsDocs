@@ -1,9 +1,9 @@
-<!-- 게시글 수정,삭제 아직 미완료입니다! -->
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-vue-next'
-const props = defineProps({ postId: Number })
+const props = defineProps({ postId: String })
 const emit = defineEmits(['delete', 'edit'])
+const postRef = ref(null)
 const isPostModalOpen = ref(false)
 const togglePostModal = () => {
   isPostModalOpen.value = !isPostModalOpen.value
@@ -16,6 +16,18 @@ const deleteHandler = () => {
   emit('delete', props.postId)
   isPostModalOpen.value = false
 }
+const handleClickOutside = (e) => {
+  if (postRef.value && !postRef.value.contains(e.target)) {
+    isPostModalOpen(false)
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('mousedown', handleClickOutside)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleClickOutside)
+})
 </script>
 <template>
   <div class="relative">
@@ -26,6 +38,7 @@ const deleteHandler = () => {
       <EllipsisVertical class="w-[20px] h-[20px] text-[#161616] dark:text-[#FFFFFF]" />
     </button>
     <div
+      ref="postRef"
       v-if="isPostModalOpen"
       class="absolute top-[44px] right-[0px] w-[157px] min-h-[128px] bg-[#FFFFFF] dark:bg-[#363636] shadow-[0_4px_10px_rgba(0,0,0,0.16)] rounded-[8px] z-40"
     >

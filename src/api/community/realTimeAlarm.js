@@ -1,12 +1,12 @@
 import { useNotiStore } from '@/stores/useNotiStore'
 import supabase from '@/utils/supabase'
 
-export const realTimeAlarm = (userId, onInsert) => {
-  // const latestNoti = ref(null)
+export const realTimeAlarm = async (userId, onInsert) => {
   const notiStore = useNotiStore()
 
-  const notiChannel = supabase
-    .channel('notiChanges')
+  const notiChannel = supabase.channel('notiChanges')
+
+  notiChannel
     .on(
       'postgres_changes',
       {
@@ -15,11 +15,9 @@ export const realTimeAlarm = (userId, onInsert) => {
         table: 'notifications',
         filter: `user_id=eq.${userId}`,
       },
-
       (payload) => {
-        const newNoti = payload.new //최근 업로드된 알림 하나 받아오기
-        // notiStore.addNoti(latestNoti.value)
-        console.log('새 알림 도착:', newNoti)
+        const newNoti = payload.new
+        // console.log('새 알림 도착:', newNoti)
         if (onInsert) onInsert(newNoti)
       },
     )
@@ -33,10 +31,17 @@ export const realTimeAlarm = (userId, onInsert) => {
       },
       (payload) => {
         const updatedNoti = payload.new
-        console.log('알림읽음처리감지:', updatedNoti)
+        // console.log('알림 읽음 처리 감지:', updatedNoti)
         notiStore.updateNoti(updatedNoti)
       },
     )
-    .subscribe()
+
+  const { error } = await notiChannel.subscribe()
+  if (error) {
+    console.error('알림 채널 구독 실패:', error)
+  } else {
+    // console.log('알림 채널 구독 완료')
+  }
+
   return { notiChannel }
 }
