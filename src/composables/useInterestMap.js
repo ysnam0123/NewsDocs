@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // constants/interests.ts
+=======
+>>>>>>> 3b16310a843bac939641552081d5691f65d09404
 import politicsIcon from '@/assets/icons/politicsIcon.svg'
 import sportsIcon from '@/assets/icons/sportsIcon.svg'
 import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
