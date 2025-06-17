@@ -23,7 +23,6 @@ const addInterest = (item) => {
     //전역 상태 저장
     store.interest.push(item)
   }
-  //console.log(store.interest)
 }
 
 const router = useRouter()
