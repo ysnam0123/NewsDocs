@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { fetchNewsData, fetchRandomNews, fetchShortDocs } from '@/api/fetchNews'
 
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
@@ -38,35 +38,18 @@ import NCSkel6 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSk
 import NCSkel10 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel10.vue'
 import NCSkel7 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel7.vue'
 
-// const newsList = ref([])
-// const randomNews = ref(null)
 const router = useRouter()
-// const categories = ref(['전체', '정치', '경제', '사회', '문화', '스포츠', '연예', '해외'])
-// const activeCategory = ref('전체')
 const swiperInstance = ref(null)
-// const resetPoint = ref(0)
 const posts = ref([])
-// const cateGroupMap = {
-//   전체: 0,
-//   정치: 1,
-//   스포츠: 2,
-//   연예: 3,
-//   문화: 4,
-//   해외: 5,
-//   사회: 6,
-//   경제: 7,
-// }
 
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
 const allNews = ref([])
 const loading = ref(true)
-// const loading = true
 const allRandomNews = ref([])
 const shortDocs = ref([])
 
 // 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
-
 const hasShortDocs = computed(() => Array.isArray(shortDocs.value) && shortDocs.value.length > 0)
 const hasRanNews = computed(
   () => Array.isArray(allRandomNews.value) && allRandomNews.value.length > 0,
@@ -98,20 +81,6 @@ const onSwiper = (swiper) => {
 const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
-// category active, 그리고 카테고리에 맞게 뉴스refetch
-// const selectCategory = async (category) => {
-//   activeCategory.value = category
-
-//   const fetchNews = await fetchNewsData(category === '전체' ? '' : category, 'ko')
-//   newsList.value = fetchNews
-
-//   if (fetchNews.length > 0) {
-//     const randomIdx = Math.floor(Math.random() * fetchNews.length)
-//     randomNews.value = fetchNews[randomIdx]
-//   }
-
-//   resetPoint.value++
-// }
 
 const getLikeCount = async (postId) => {
   const { count } = await supabase
@@ -121,50 +90,6 @@ const getLikeCount = async (postId) => {
 
   return count || 0
 }
-
-// watch(
-//   () => activeCategory.value,
-//   async (newCategory) => {
-//     const categoryId = cateGroupMap[newCategory]
-
-//     let query = supabase.from('post').select(
-//       `
-//         post_id,
-//         title,
-//         contents,
-//         category_id,
-//         profiles (
-//           nickname,
-//           profile_img
-//         ),
-//         comments!comments_post_id_fkey (
-//           comments_id,
-//           contents
-//     )
-//       `,
-//     )
-
-//     if (categoryId) {
-//       query = query.in('category_id', categoryId)
-//     }
-
-//     const { data, error } = await query
-
-//     if (error) {
-//       console.error('post 불러오기 실패', error)
-//       return
-//     }
-
-//     for (const post of data) {
-//       const likeCount = await getLikeCount(post.post_id)
-//       post.like_count = likeCount
-//     }
-
-//     posts.value = data
-//     console.log('불러온 posts:', posts.value)
-//   },
-//   { immediate: true },
-// )
 
 // 1. 다른카테고리 뉴스 순차 로딩 (with delay)
 const loadInterestNews = async () => {

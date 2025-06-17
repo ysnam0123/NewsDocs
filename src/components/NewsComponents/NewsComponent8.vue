@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, nextTick, computed } from 'vue'
-import { useRouter } from 'vue-router'
+
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
