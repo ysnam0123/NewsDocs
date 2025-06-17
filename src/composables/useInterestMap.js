@@ -1,4 +1,3 @@
-// constants/interests.ts
 import politicsIcon from '@/assets/icons/politicsIcon.svg'
 import sportsIcon from '@/assets/icons/sportsIcon.svg'
 import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
