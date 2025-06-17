@@ -88,7 +88,7 @@ onMounted(async () => {
 
   const userInterestArr = interestData.map((item) => item.category_id)
   // 나중엔 Arr1 로 바꿔주기
-  const userInterestArr2 = [2, 3, 4, 5, 6, 7]
+  // const userInterestArr2 = [2, 3, 4, 5, 6, 7]
   if (interestError) {
     console.error('유저관심사 가져오기 실패:', interestError.message)
   } else {
@@ -96,7 +96,7 @@ onMounted(async () => {
   }
 
   //
-  matchedCategories.value = userInterestArr2.map((num) =>
+  matchedCategories.value = userInterestArr.map((num) =>
     allCategegoryMap.find((item) => item.num === num),
   )
 
@@ -112,7 +112,7 @@ onMounted(async () => {
 
   const newsResults = []
 
-  if (isLoggedIn.value && userInterestArr2.length > 0) {
+  if (isLoggedIn.value && userInterestArr.length > 0) {
     try {
       // 관심사가 없으면 관심사 수정하러 가라
       // 각 카테고리에 대해 뉴스 가져오기
@@ -171,7 +171,7 @@ onMounted(async () => {
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
-      <div v-if="userInterestLoading">
+      <div v-if="userInterestLoading && userInterestArr">
         <div>
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
