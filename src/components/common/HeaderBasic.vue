@@ -1,17 +1,13 @@
 <script setup>
-import { useThemeStore } from '@/stores/useDarkmode'
 import { useRouter } from 'vue-router'
 import DarkModeButton from './DarkModeButton.vue'
 import dog from '../../assets/img/dog-trans.svg'
-import { computed } from 'vue'
 
-const themeStore = useThemeStore()
 const router = useRouter()
-const isDark = computed(() => themeStore.isDark)
 
 const movePage = (path) => router.push(path)
 </script>
-<template class="fixed top-0 left-0">
+<template class="top-0 left-0">
   <div
     class="max-w-[80%] mx-auto py-4 flex items-center md:h-[100px] h-[80px] bg-[var(--bg-color)] backdrop-blur-[28px]"
   >
