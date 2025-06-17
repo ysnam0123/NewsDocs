@@ -1,12 +1,12 @@
 // constants/interests.ts
-import politicsIcon from '@/assets/icons/politics.svg'
-import sportsIcon from '@/assets/icons/sports.svg'
-import entertainmentIcon from '@/assets/icons/entertainment.svg'
-import cultureIcon from '@/assets/icons/culture.svg'
-import worldIcon from '@/assets/icons/world.svg'
-import societyIcon from '@/assets/icons/society.svg'
-import economyIcon from '@/assets/icons/economy.svg'
-import etcIcon from '@/assets/icons/etc.svg'
+import politicsIcon from '@/assets/icons/politicsIcon.svg'
+import sportsIcon from '@/assets/icons/sportsIcon.svg'
+import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
+import cultureIcon from '@/assets/icons/cultureIcon.svg'
+import worldIcon from '@/assets/icons/worldIcon.svg'
+import societyIcon from '@/assets/icons/societyIcon.svg'
+import economyIcon from '@/assets/icons/economyIcon.svg'
+import etcIcon from '@/assets/icons/etcIcon.svg'
 
 export const interestMap = [
   { id: 'politics', label: '정치', icon: politicsIcon },

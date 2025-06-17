@@ -215,7 +215,7 @@ defineExpose({ errors, values, setFieldError })
         </p>
       </div>
     </div>
-    <div class="mb-5 w-full flex flex-col items-center">
+    <div class="mb-5 w-full flex flex-col sm:items-center">
       <label
         class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919] dark:text-white"
         >닉네임</label
@@ -236,7 +236,7 @@ defineExpose({ errors, values, setFieldError })
             placeholder="특수문자, 공백 제외 2-8글자"
             required
             :class="[
-              'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
+              'w-full sm:w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
               errors.nickname
                 ? 'border-[#F34040]'
                 : isNicknameAvailable
@@ -264,7 +264,7 @@ defineExpose({ errors, values, setFieldError })
         </p>
       </div>
     </div>
-    <div v-if="showPasswordFields" class="mb-5 w-full flex flex-col items-center">
+    <div v-if="showPasswordFields" class="mb-5 w-full flex flex-col sm:items-center">
       <label
         class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919] dark:text-white"
         >비밀번호</label
@@ -277,7 +277,7 @@ defineExpose({ errors, values, setFieldError })
           placeholder="비밀번호 입력"
           :required="!!password"
           :class="[
-            'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
+            'w-full sm:w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
             errors.password ? 'border-[#F34040]' : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
           ]"
         />
@@ -286,7 +286,7 @@ defineExpose({ errors, values, setFieldError })
         </p>
       </div>
     </div>
-    <div v-if="showPasswordFields" class="mb-5 w-full flex flex-col items-center">
+    <div v-if="showPasswordFields" class="mb-5 w-full flex flex-col sm:items-center">
       <label
         class="block text-[14px] font-semibold mb-2 w-[364px] text-left text-[#191919] dark:text-white"
         >비밀번호 확인</label
@@ -299,7 +299,7 @@ defineExpose({ errors, values, setFieldError })
           placeholder="비밀번호 확인"
           :required="!!password"
           :class="[
-            'w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
+            'w-full sm:w-[364px] h-[50px] text-[16px] border rounded-[8px] px-3 py-2 focus:outline-none dark:text-white',
             errors.passwordCheck ? 'border-[#F34040]' : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
           ]"
         />

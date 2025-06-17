@@ -79,16 +79,18 @@ const MobNewsList = computed(() => {
 <template>
   <div class="min-h-screen flex flex-col">
     <div class="max-w-full sm:max-w-[735px] mx-auto my-10">
-      <div class="mb-4">
+      <div class="mb-4 ml-5 sm:ml-0">
         <BackButton />
       </div>
-      <div class="text-[28px] font-bold dark:text-white mb-8">{{ name }} 저장한 뉴스</div>
+      <div class="text-[28px] font-bold dark:text-white mb-8 ml-5 sm:ml-0">
+        {{ name }} 저장한 뉴스
+      </div>
       <div class="relative">
         <Swiper :slides-per-view="'auto'" space-between="0" class="w-full sm:w-[735px]">
           <SwiperSlide v-for="tab in tabs" :key="tab" class="!w-auto">
             <div
               @click="activeTab = tab"
-              class="flex items-center justify-center min-w-[147px] h-[52px] border-b-[0.5px] text-base cursor-pointer relative dark:border-[#3C3C3C] border-[#9A9A9A]"
+              class="flex items-center justify-center min-w-[147px] h-[52px] border-b-[1px] text-base cursor-pointer relative dark:border-[#3C3C3C] border-[#9A9A9A]"
               :class="{
                 'text-[#7537E3] dark:text-[#A878FD] font-semibold border-b-2 border-[#7537E3] dark:border-[#A878FD]':
                   activeTab === tab,
