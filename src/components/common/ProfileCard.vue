@@ -49,34 +49,36 @@ onMounted(async () => {
 </script>
 <template>
   <div
-    class="relative flex flex-col items-center justify-center min-w-[203px] min-h-[260px] bg-[#FFFFFF] dark:bg-[#262626]"
+    class="relative flex items-center sm:flex-col sm:items-center sm:w-[170px] min-w-[203px] whitespace-nowrap sm:h-auto h-[78px] bg-[#FFFFFF] dark:bg-[#262626]"
   >
     <!-- 프로필 -->
-    <div class="w-full flex flex-col items-center">
+    <div class="flex sm:flex-col sm:items-center">
       <img
         @click="goToProfile"
         :src="currentUser && currentUser.profile_img ? currentUser.profile_img : defaultImg"
         alt="프로필이미지"
-        class="w-[146px] h-[146px] mt-[15px] rounded-full object-cover cursor-pointer"
+        class="sm:w-[146px] sm:h-[146px] w-[78px] h-[78px] sm:mt-[15px] rounded-full object-cover cursor-pointer"
       />
-      <p class="mt-4 ml-4 text-xl dark:text-[#ffffff]">
-        {{ currentUser?.nickname }}
-      </p>
-      <p class="mt-[6px] text-[14px] text-[#8F8F8F]">
-        {{ interestArr.map((i) => i.title).join(', ') }}
-      </p>
+      <div class="flex flex-col items-center justify-center">
+        <p class="sm:mt-4 ml-4 sm:text-xl sm:text-[18px] text-[] dark:text-[#ffffff]">
+          {{ currentUser?.nickname }}
+        </p>
+        <p class="mt-[6px] sm:text-[14px] text-[13px] text-[#8F8F8F]">
+          {{ interestArr.map((i) => i.title).join(', ') }}
+        </p>
+      </div>
     </div>
 
     <!-- 버튼 -->
     <button
-      class="mt-8 w-[170px] h-[50px] rounded-lg bg-[#7537E3] dark:bg-[#7846D2] hover:bg-[#601ED5] dark:hover:bg-[#6524D9] text-[#ffffff] text-[16px] transition-all duration-300 cursor-pointer"
+      class="sm:block hidden mt-8 w-[170px] h-[50px] rounded-lg bg-[#7537E3] dark:bg-[#7846D2] hover:bg-[#601ED5] dark:hover:bg-[#6524D9] text-[#ffffff] text-[16px] transition-all duration-300 cursor-pointer"
       @click="postHandler"
     >
       새 글 작성
     </button>
     <button
       @click="goToMyPost"
-      class="mt-[10px] w-[170px] h-[50px] rounded-lg border border-[#7537E3] dark:border-[#7846D2] bg-[#ffffff] dark:bg-transparent hover:bg-[#F3ECFF] dark:hover:bg-[#2C204A] text-[#7537E3] dark:text-[#B185FF] text-[16px] transition-all duration-300 cursor-pointer"
+      class="sm:block hidden mt-[10px] w-[170px] h-[50px] rounded-lg border border-[#7537E3] dark:border-[#7846D2] bg-[#ffffff] dark:bg-transparent hover:bg-[#F3ECFF] dark:hover:bg-[#2C204A] text-[#7537E3] dark:text-[#B185FF] text-[16px] transition-all duration-300 cursor-pointer"
     >
       내가 작성한 글
     </button>
