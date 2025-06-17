@@ -1,108 +1,94 @@
 <script setup>
 import InterestCard from '@/components/interest/InterestCard.vue'
-import { userAuthStore } from '@/stores/authStore'
+import { categoryIdMap } from '@/composables/useCategoryMap'
 import { useInterestStore } from '@/stores/interestStore'
 import supabase from '@/utils/supabase'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
 import { useToast } from 'vue-toastification'
+
 const toast = useToast()
 const store = useInterestStore()
-const auth = userAuthStore()
-const userId = auth.user?.id
-const name = ref(auth.user?.name || '사용자')
 const router = useRouter()
-
+const name = ref('사용자')
 const pageMounted = ref(false)
-onMounted(() => {
-  setTimeout(() => {
-    pageMounted.value = true
-  }, 500)
+
+onMounted(async () => {
+  const { data } = await supabase.auth.getUser()
+  const user = data?.user
+  if (user) {
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('name')
+      .eq('user_id', user.id)
+      .single()
+    if (!profileError && profile) {
+      name.value = profile.name || '사용자'
+    }
+  }
+  setTimeout(() => (pageMounted.value = true), 500)
 })
 
-//카테고리 id랑 맵핑
-const categoryIdMap = {
-  politics: 1, // 정치
-  sports: 2, // 스포츠
-  entertain: 3, // 연예
-  culture: 4, // 문화
-  abroad: 5, // 해외
-  society: 6, // 사회
-  economy: 7, // 경제
-  etc: 8, //그 외
-}
-
+// 최대 관심사 토글
 const addFavorite = (item) => {
-  const selectedId = item.id
-  if (store.favoriteInterest !== '') {
-    if (store.favoriteInterest === selectedId) {
-      store.favoriteInterest = ''
-    } else {
-      //console.log(`이미 선택됨!: ${store.favoriteInterest}`)
-      return
-    }
-  } else {
-    store.favoriteInterest = selectedId
-  }
-
-  //console.log('현재 선택:', store.favoriteInterest)
+  store.favoriteInterest = store.favoriteInterest === item.id ? '' : item.id
 }
 
 const saveInterests = async () => {
-  if (!userId) {
-    toast('로그인이 필요합니다.')
-    router.push('/login')
+  if (!store.favoriteInterest) return
+
+  // 인증 유저 확인
+  const { data, error: authError } = await supabase.auth.getUser()
+  if (authError || !data?.user) {
+    toast.error('로그인이 필요합니다.')
     return
   }
-  if (store.favoriteInterest === '') {
-    alert('최대 관심사를 선택해주세요!')
-    return
-  }
+  const userId = data.user.id
+
+  // 선택한 관심사 category_id 배열
+  const selectedCategoryIds = store.interest.map((i) => categoryIdMap[i.id]).filter(Boolean)
+  const highestCategoryId = categoryIdMap[store.favoriteInterest]
+
   try {
-    //기존 관심사 삭제
-    await supabase.from('user_interests').delete().eq('user_id', userId)
-
-    const dataToSave = {
-      user_id: userId,
-      interests: store.interest.map((interest) => ({
-        category_id: categoryIdMap[interest.id],
-        is_highest: interest.id === store.favoriteInterest,
-      })),
-    }
-
-    const { error } = await supabase.from('user_interests').insert(
-      dataToSave.interests.map((interest) => ({
-        user_id: userId,
-        category_id: interest.category_id,
-        is_highest: interest.is_highest,
-      })),
-    )
-
-    if (error) throw error
-
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .update({ set_interest: true })
+    //기존에 선택하지 않은 관심사 삭제
+    await supabase
+      .from('user_interests')
+      .delete()
       .eq('user_id', userId)
+      .not('category_id', 'in', `(${selectedCategoryIds.join(',')})`)
 
-    if (profileError) throw profileError
+    //선택한 관심사 upsert (최대 관심사만 is_highest true)
+    const interestRows = selectedCategoryIds.map((categoryId) => ({
+      user_id: userId,
+      category_id: categoryId,
+      is_highest: categoryId === highestCategoryId,
+    }))
 
-    //console.log('관심사 저장 완료!', dataToSave)
-    toast('저장되었습니다.')
+    const { error: interestError } = await supabase
+      .from('user_interests')
+      .upsert(interestRows, { onConflict: ['user_id', 'category_id'] })
+
+    if (interestError) throw interestError
+
+    // 3. 프로필 상태 업데이트
+    await supabase.from('profiles').update({ set_interest: true }).eq('user_id', userId)
+
+    toast.success('저장되었습니다!')
+    store.clear()
     router.push('/')
-  } catch (error) {
-    console.error('관심사 저장 오류:', error)
-    toast('관심사 저장에 실패했습니다.')
+  } catch (e) {
+    toast.error('관심사 저장에 실패했습니다.')
+    console.error(e)
   }
 }
 </script>
+
 <template>
   <transition name="fade">
     <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
       <div class="w-[530px] h-[284px]">
         <!-- 제목 -->
-        <h1 class="text-[18px] font-semibold mb-[22px]">
+        <h1 class="text-[18px] font-semibold mb-[22px] dark:text-white">
           마지막으로 {{ name }}님의 <br />
           <span class="text-[#7537E3]">최대 관심사</span>를 1개 선택해주세요
         </h1>

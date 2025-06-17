@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
-import LoginView from '../views/LoginView.vue'
-import SignUpView from '@/views/SignUpView.vue'
+
 import { useInterestStore } from '@/stores/interestStore'
 import MyInterest from '../views/MyInterest.vue'
 import NewsLayout from '@/layout/NewsLayout.vue'
@@ -19,7 +18,8 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+
+      component: () => import('../views/LoginView.vue'),
       meta: {
         hideHeader: true,
         hideFooter: true,
@@ -29,23 +29,15 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: SignUpView,
-      meta: { hideHeader: true, hideFooter: true },
+      component: () => import('../views/SignUpView.vue'),
+      meta: { hideHeader: true, hideFooter: true, hideHeaderBasic: true },
     },
-    // {
-    //   path: '/practicePage',
-    //   name: 'practice',
-    //   component: () => import('../components/NewsComponents/PracticePage.vue'),
-    //   meta: {
-    //     hideHeaderBasic: true,
-    //   },
-    // },
     {
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/ProfileView.vue'),
       meta: {
-        hideHeaderBasic: true,
+        hideHeaderBasic: false,
       },
     },
     {

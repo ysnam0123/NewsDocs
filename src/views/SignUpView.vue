@@ -12,7 +12,6 @@ import DarkModeButton from '@/components/common/DarkModeButton.vue'
 const toast = useToast()
 const router = useRouter()
 const authStore = userAuthStore()
-const { toggleDark } = useThemeStore()
 
 //중복 체크 결과
 const isEmailAvailable = ref(false)
@@ -44,8 +43,8 @@ async function checkEmailDuplicate() {
     toast.error('폼이 초기화되지 않았습니다. 다시 시도해주세요.')
     return
   }
-  const { errors, values } = form.value
-  if (errors.email) return
+  const { values, setFieldError } = form.value
+  if (!values.email) return
   isCheckingEmail.value = true
   try {
     const { data } = await supabase
@@ -54,11 +53,11 @@ async function checkEmailDuplicate() {
       .eq('email', values.email)
       .maybeSingle()
     if (data) {
-      errors.email = '이미 등록된 이메일입니다.'
+      setFieldError('email', '이미 등록된 이메일입니다.')
       isEmailAvailable.value = false
     } else {
-      errors.email = ''
-      isEmailAvailable.value = true
+      setFieldError('email', '')
+      isNicknameAvailable.value = true
     }
   } catch (error) {
     toast.error('이메일 확인 중 오류가 발생했습니다.')
