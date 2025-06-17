@@ -1,8 +1,5 @@
 <script setup>
-<<<<<<< HEAD
-=======
 //import { fetchNewsData } from '@/api/fetchNews'
->>>>>>> dev
 import FavoriteSectionSkel from '@/components/NewsComponents/skeleton/FavoriteSectionSkel.vue'
 import FifthSecionSkel from '@/components/NewsComponents/skeleton/FifthSecionSkel.vue'
 import FourthSectionSkel from '@/components/NewsComponents/skeleton/FourthSectionSkel.vue'

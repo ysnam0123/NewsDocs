@@ -6,7 +6,6 @@ export const useNewsActions = () => {
   const router = useRouter()
 
   const searchNews = async (newsId) => {
-    console.log('0번 컴포넌트에서 뉴스를 찾는다 ', newsId)
     const { data: newsData, error } = await supabase
       .from('news')
       .select('*')
@@ -33,11 +32,11 @@ export const useNewsActions = () => {
       console.error('조회수 증가 에러', error)
     }
   }
-  // 뉴스 클릭 시 저장 -> 조회수 증가 -> 디테일 페이지 이동
+  // 뉴스 클릭 시 조회수 증가 -> 디테일 페이지 이동
   const toDetailHandler = async (news) => {
     await updateViewCount(news.article_id)
-    router.push(`/news/detail/${news.article_id}`)
-    console.log('뉴스 아이디', news.article_id)
+    router.push(`news/detail/${news.article_id}`)
+    console.log('이동할 뉴스 아이디', news.article_id)
   }
 
   return {

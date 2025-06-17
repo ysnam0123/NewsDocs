@@ -1,53 +1,50 @@
 <script setup>
-import CommunityRecommend from './CommunityRecommend.vue'
-import { useNewsStore } from '@/stores/newsStore'
+// import CommunityRecommend from './CommunityRecommend.vue'
 import supabase from '@/utils/supabase'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
-import { summarizeHandler } from '@/composables/useSummary'
+import { useSummary } from '@/composables/useSummary'
+import { useTyping } from '@/composables/useTyping'
 
-const newsStore = useNewsStore()
-const news = newsStore.selectedNews
+const { getOrCreateSummary } = useSummary()
+const { runTyped, typedTarget } = useTyping()
 const isOpen = ref(false)
 const isLoading = ref(true)
-
 const route = useRoute()
+const news = ref(null)
 
-const categoryMap = {
-  1: '정치',
-  2: '스포츠',
-  3: '연예',
-  4: '문화',
-  5: '해외',
-  6: '사회',
-  7: '경제',
-  8: '그 외',
+const handleSummary = async () => {
+  isOpen.value = true
+  isLoading.value = true
+  const result = await getOrCreateSummary(news.value.article_id, news.value.description)
+  if (result) {
+    await runTyped(result)
+  }
+  isLoading.value = false
 }
-
-const categoryLabel = computed(() => {
-  return categoryMap[news.category_id] || '기타'
-})
-
 onMounted(async () => {
   const { data, error } = await supabase
     .from('news')
-    .select('view_count')
+    .select(
+      `*, 
+    category:category_id (
+    title
+    )
+    `,
+    )
     .eq('news_id', route.params.id)
     .maybeSingle()
-
-  if (!error && data) {
-    if (news && news?.value) {
-      news.view_count = data.view_count
-    }
+  if (data && !error) {
+    news.value = data
   }
 })
 </script>
 <template>
   <section v-if="news" class="my-10 justify-center rounded-xl max-w-[707px]">
     <div class="text-md text-[#7537E3] dark:text-[#A878FD] font-medium">
-      <span># {{ categoryLabel }}</span>
+      <span># {{ news.category.title }}</span>
     </div>
     <h1 class="text-[32px] my-4 font-semibold dark:text-white">
       {{ news.title }}
@@ -67,7 +64,7 @@ onMounted(async () => {
     </div>
     <div class="text-left flex gap-4 h-10 mb-5">
       <button
-        @click="summarizeHandler(news)"
+        @click="handleSummary"
         class="cursor-pointer px-4 rounded-lg bg-[#7537E3] hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300 text-white items-center justify-center"
       >
         요약보기
@@ -111,7 +108,7 @@ onMounted(async () => {
       <a :href="news.link" target="_blank">원문보기</a>
     </button>
     <hr class="text-gray-200 dark:text-[#282828]" />
-    <CommunityRecommend :catetory-id="news.category_id" :category-label="categoryLabel" />
+    <!-- <CommunityRecommend :catetory-id="news.category_id" :category-label="categoryLabel" /> -->
   </section>
 </template>
 <style scoped>

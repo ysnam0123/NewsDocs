@@ -97,6 +97,7 @@ export async function getFreshNews(koreanCategory, language) {
           }
         }),
       )
+      console.log('저장됨')
     }
     return freshNews || []
   }
