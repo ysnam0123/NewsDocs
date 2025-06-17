@@ -48,7 +48,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="relative flex flex-col items-center w-[170px] min-h-[260px]">
+  <div
+    class="relative flex flex-col items-center justify-center w-[170px] min-w-[203px] min-h-[260px] h-[78px]"
+  >
     <!-- 프로필 -->
     <div class="w-full flex flex-col items-center">
       <img
@@ -57,7 +59,9 @@ onMounted(async () => {
         alt="프로필이미지"
         class="w-[146px] h-[146px] mt-[15px] rounded-full object-cover cursor-pointer"
       />
-      <p class="mt-4 text-xl dark:text-[#ffffff]">{{ currentUser?.nickname }}</p>
+      <p class="mt-4 ml-4 text-xl dark:text-[#ffffff]">
+        {{ currentUser?.nickname }}
+      </p>
       <p class="mt-[6px] text-[14px] text-[#8F8F8F]">
         {{ interestArr.map((i) => i.title).join(', ') }}
       </p>
