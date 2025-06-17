@@ -1,21 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useNewsStore } from '@/stores/newsStore'
-import { useSummaryStore } from '@/stores/summaryNews2'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
-
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
-import { useNewsActions } from '@/composables/useNewsActions'
 import { useSummary } from '@/composables/useSummary'
-const { toDetailHandler, saveNews } = useNewsActions()
-const { summarizeToggle, typedTarget, wantSummary } = useSummary()
+import { useTyping } from '@/composables/useTyping'
+const { getOrCreateSummary } = useSummary()
+const { runTyped } = useTyping()
 // 호버 상태
 const summaryHover = ref(false)
 const isSummaryLoading = ref(true)
 const summaryMessage = ref('')
-const summaryStore = useSummaryStore()
-const newsStore = useNewsStore()
+const isLoading = ref(true)
+const isOpen = ref(false)
+const summary = ref('')
 const props = defineProps({
   news: Object,
 })
@@ -26,21 +24,26 @@ const hoverOut = () => {
   summaryHover.value = false
 }
 
-const handleClick = async () => {
-  const { article_id, description, title } = props.news
-
-  if (newsStore.selectedNews?.article_id !== article_id) {
-    console.log('뉴스 저장 시도', title)
-    await saveNews(props.news)
-  }
-  // description이 없을 때
-  if (!description) {
-    console.log('description X')
-    summaryMessage.value = '이 뉴스는 원문에서 확인해주세요!'
+const handleSummary = async () => {
+  if (isOpen.value) {
+    isOpen.value = false
     return
   }
-  // 요약하고 저장
-  await summarizeToggle(article_id, description)
+
+  if (summary.value) {
+    isOpen.value = true
+    return
+  }
+
+  isLoading.value = true
+
+  const result = await getOrCreateSummary(props.news.article_id, props.news.description)
+  if (result) {
+    summary.value = result
+    await runTyped(result)
+  }
+
+  isLoading.value = false
 }
 
 // 마운트 후 상태 초기화
@@ -52,27 +55,25 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="h-[430px] relative group select-none">
+  <div v-if="props.news" class="h-[430px] relative select-none">
     <!-- 호버했을때 나오는 창 -->
     <div
-      v-if="summaryHover && !wantSummary"
-      class="absolute w-full h-[300px] inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
-      @click.stop="handleClick"
+      class="absolute w-full h-[300px] group inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      @click.stop="handleSummary"
       @mouseleave="hoverOut"
     >
-      <p class="text-white font-medium text-[16px] z-20">요약보기</p>
+      <p class="text-white hidden group-hover:flex text-[16px] z-20">요약보기</p>
     </div>
     <div
-      v-if="wantSummary"
+      v-if="isOpen"
       class="h-full flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
-      @click.stop="summarizeToggle(props.news)"
     >
-      <template v-if="isSummaryLoading">
+      <template v-if="isLoading">
         <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
-          <div class="mb-8 h-7 w-[90px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[330px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[300px] bg-[#626262]/70 rounded-md"></div>
-          <div class="h-8 w-[260px] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-8 h-7 w-[30%] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[70%] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[50%] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[50%] bg-[#626262]/70 rounded-md"></div>
         </div>
       </template>
       <template v-else-if="summaryMessage">
@@ -88,7 +89,6 @@ onMounted(() => {
       </template>
 
       <div
-        v-show="summaryStore.getSummary(props.news.article_id)"
         class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-scroll"
       >
         <!-- 요약된 내용 -->
@@ -96,18 +96,18 @@ onMounted(() => {
           <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
           <div class="flex flex-col">
             <div class="text-white whitespace-pre-line leading-8">
-              <span ref="typedTarget" class="text-white"></span>
+              <span v-show="!isLoading" ref="typedTarget" class="text-white"></span>
             </div>
           </div>
         </div>
       </div>
 
-      <button
+      <router-link
+        :to="`/news/detail/${props.news.article_id}`"
         class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-        @click.stop="toDetailHandler(props.news)"
       >
         원문보기
-      </button>
+      </router-link>
     </div>
 
     <!-- 뉴스 내용 -->

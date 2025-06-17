@@ -24,16 +24,16 @@ export const useSummary = () => {
       // open ai 요약 생성
       const result = await fetchOpenAi(description)
       console.log('요약 결과:', result)
-      const { data: existingNews } = await supabase
-        .from('news')
-        .select('news_id')
-        .eq('news_id', articleId)
-        .maybeSingle()
+      // const { data } = await supabase
+      //   .from('news')
+      //   .select('news_id')
+      //   .eq('news_id', articleId)
+      //   .maybeSingle()
 
-      if (!existingNews) {
-        console.warn('news테이블에 해당 뉴스가 존재하지 않음 요약 저장 실패')
-        return result
-      }
+      // if (!data) {
+      //   console.warn('news테이블에 해당 뉴스가 존재하지 않음 요약 저장 실패')
+      //   return result
+      // }
       // 새로 만든 summary insert
       const { error: insertError } = await supabase
         .from('summaries')

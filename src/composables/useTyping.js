@@ -7,10 +7,12 @@ export const useTyping = () => {
   const runTyped = async (text) => {
     console.log('nextTick 전:', typedTarget.value)
     await nextTick()
+
     console.log('nextTick 후:', typedTarget.value)
     if (typedTarget.value) {
       if (typedInstance) {
         typedInstance.destroy()
+        console.log(typedInstance)
       }
       typedTarget.value.innerText = ''
       typedInstance = new Typed(typedTarget.value, {
