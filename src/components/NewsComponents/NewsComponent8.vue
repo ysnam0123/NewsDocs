@@ -25,21 +25,22 @@ const hoverOut = () => {
 }
 
 const handleSummary = async () => {
-  isOpen.value = !isOpen.value
-  console.log('요약창 열림 상태:', isOpen.value)
-
-  await nextTick()
-  if (summary.value) return
-
-  isLoading.value = true
-
-  const result = await getOrCreateSummary(props.news.article_id, props.news.description)
-  if (result) {
-    summary.value = result
-    await runTyped(result)
-    console.log('저장된요약', result)
+  if (isOpen.value) {
+    isOpen.value = false
+    return
   }
-
+  isLoading.value = true
+  isOpen.value = true
+  await nextTick()
+  if (summary.value) {
+    await runTyped(summary.value)
+  } else {
+    const result = await getOrCreateSummary(props.news.news_id, props.news.description)
+    if (result) {
+      summary.value = result
+      await runTyped(result)
+    }
+  }
   isLoading.value = false
 }
 
@@ -64,6 +65,7 @@ onMounted(() => {
     <div
       v-if="isOpen"
       class="h-full flex flex-col cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 gap-4 rounded-[20px] z-20 backdrop-blur-lg"
+      @click="isOpen = false"
     >
       <template v-if="isLoading">
         <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
