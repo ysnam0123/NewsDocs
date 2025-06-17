@@ -7,6 +7,7 @@ import router from '@/router'
 //구글 로그인
 import { useGoogleAuth } from '@/composables/useGoogleAuth'
 import DarkModeButton from '@/components/common/DarkModeButton.vue'
+import { setupNoti } from '@/composables/useSetupNoti'
 const { signInWithGoogle } = useGoogleAuth()
 
 const email = ref('')
@@ -28,7 +29,7 @@ function onGoogleLogin() {
 }
 
 async function onLogin() {
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value,
   })
@@ -41,8 +42,15 @@ async function onLogin() {
     } else {
       toast('로그인에 실패했습니다.', { icon: false })
     }
+    //알림 수정한 부분
+  } else {
+    try {
+      await setupNoti(data.user.id)
+    } catch (err) {
+      console.warn('알림 setup 실패:', err)
+    }
+    router.push('/')
   }
-  router.push('/')
 }
 </script>
 <template>
