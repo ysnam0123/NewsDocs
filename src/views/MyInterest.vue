@@ -18,6 +18,7 @@ import { useInterestStore } from '@/stores/interestStore'
 import { computed, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
+import { getFreshNews } from '@/composables/newsCache'
 
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
@@ -62,7 +63,8 @@ onMounted(async () => {
   if (interestList.value.length > 0) {
     try {
       for (const item of interestList.value) {
-        const result = await fetchNewsData(item.id, 'ko')
+        // 기존 fetchNewsData → getFreshNews로 변경
+        const result = await getFreshNews(item.id, 'ko')
         newsResults.push(result)
         await new Promise((resolve) => setTimeout(resolve, 300))
       }

@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
@@ -48,8 +49,10 @@ const props = defineProps({
 // 상태
 const isLoading = ref(true)
 const isSummaryLoading = ref(true)
-const summaryMessage = ref('')
+//const summaryMessage = ref('')
 const typedTarget = ref(null)
+const summary = computed(() => summaryStore.getSummary(props.news.article_id))
+
 let typedInstance = null
 const summaryStore = useSummaryStore()
 const newsStore = useNewsStore()
