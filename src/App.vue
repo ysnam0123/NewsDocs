@@ -12,7 +12,6 @@ const notiStore = useNotiStore()
 const user = ref(null)
 
 const setupNoti = async (userId) => {
-  console.log('setupNoti')
   if (!userId) {
     console.warn('userId없음')
     return
@@ -20,18 +19,15 @@ const setupNoti = async (userId) => {
   try {
     //이전 채널 해제
     await notiStore.removeChannel()
-
     //알림 데이터 불러오기
     const notiData = await fetchNoti(userId)
-    notiStore.setNotis(notiData)
+    notiStore.setNotis(notiData) //notiStore에 supabase로부터 가져온 알림 데이터 저장해두고 꺼내 사용
 
     //실시간 알림 구독 시작
-    const { notiChannel } = realTimeAlarm(userId, (newNoti) => {
-      console.log('새로운 알림 도착', newNoti)
+    const { notiChannel } = await realTimeAlarm(userId, (newNoti) => {
       notiStore.addNoti(newNoti)
     })
     notiStore.setChannel(notiChannel)
-    console.log('채널명:', notiChannel)
   } catch (err) {
     console.error('setupNoti오류', err)
   }
@@ -43,11 +39,11 @@ const getLoginUser = async () => {
   } = await supabase.auth.getUser()
   user.value = supaUser
   console.log('App.vue 마운트 | 현재 로그인한 사용자:', user.value)
-
   if (user.value?.id) await setupNoti(user.value.id)
 }
 
 onMounted(async () => {
+  //현재 로그인중인 사용자 정보
   await getLoginUser()
 
   //마운트된 상태에서 새롭게 로그인했을 때에도 알림 데이터 새롭게 불러오기
@@ -57,6 +53,7 @@ onMounted(async () => {
     // console.log(`auth 상태 변경:${event}`, supaUser)
 
     if (supaUser?.id) {
+      //사용자가있으면 알림불러오기
       await setupNoti(supaUser.id)
     } else {
       await notiStore.removeChannel()
