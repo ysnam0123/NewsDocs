@@ -18,7 +18,8 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/profile/ProfileView.vue'),
+
+      component: () => import('../views/LoginView.vue'),
       meta: {
         hideHeader: true,
         hideFooter: true,
@@ -34,7 +35,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'Profile',
-      component: () => import('../views/LoginView.vue'),
+      component: () => import('../views/profile/ProfileView.vue'),
       meta: {
         hideHeaderBasic: false,
       },
