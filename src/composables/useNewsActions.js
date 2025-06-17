@@ -1,36 +1,12 @@
 import { useNewsStore } from '@/stores/newsStore'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
+import { categoryIdMap } from './useCategoryMap'
+import { interestMap } from '@/composables/useInterestMap'
+const interests = interestMap.map(({ id, label }) => ({ id, label }))
 
 // news component에서 사용할 함수들을 지정
 export const useNewsActions = () => {
-  const interests = [
-    { id: 'politics', label: '정치' },
-    { id: 'sports', label: '스포츠' },
-    { id: 'entertain', label: '연예' },
-    { id: 'entertainment', label: '연예' },
-    { id: 'culture', label: '문화' },
-    { id: 'abroad', label: '해외' },
-    { id: 'world', label: '해외' },
-    { id: 'society', label: '사회' },
-    { id: 'economy', label: '경제' },
-    { id: 'business', label: '경제' },
-    { id: 'etc', label: '그 외' },
-  ]
-  const categoryIdMap = {
-    politics: 1, // 정치
-    sports: 2, // 스포츠
-    entertainment: 3, // 연예
-    entertain: 3,
-    culture: 4, // 문화
-    abroad: 5, // 해외
-    world: 5,
-    society: 6, // 사회
-    economy: 7, // 경제
-    business: 7,
-    etc: 8, // 그 외
-  }
-
   const router = useRouter()
   const newsStore = useNewsStore()
   newsStore.selectedNews
