@@ -85,7 +85,11 @@ const saveInterests = async () => {
 
 <template>
   <transition name="fade">
-    <div v-if="pageMounted" class="fixed inset-0 flex justify-center items-center">
+    <div
+      v-if="pageMounted"
+      class="flex justify-center items-center"
+      :style="{ minHeight: 'calc(100vh - 100px)' }"
+    >
       <div class="w-[530px] h-[284px]">
         <!-- 제목 -->
         <h1 class="text-[18px] font-semibold mb-[22px] dark:text-white">
