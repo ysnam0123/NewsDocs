@@ -5,8 +5,7 @@ import App from './App.vue'
 import router from './router'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import supabase from './utils/supabase'
-import { userAuthStore } from './stores/authStore'
+
 
 import '@/assets/main.css'
 import '@/assets/root.css'

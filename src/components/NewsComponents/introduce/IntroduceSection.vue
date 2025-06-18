@@ -1,5 +1,5 @@
 <script setup>
-import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
+import SlideNewsComponent from '@/components/NewsComponents/SlideNewsComponent.vue'
 import { computed, onMounted, ref } from 'vue'
 
 const randomIndex = ref(0)
@@ -22,15 +22,14 @@ onMounted(async () => {
   }
 })
 </script>
+
 <template>
-  <div>
-    <div class="w-[608px]">
-      <div class="flex flex-wrap gap-[24px] h-[792px]">
-        <NewsComponent10 v-if="newsArr[0]" :news="newsArr[0]" />
-        <NewsComponent10 v-if="newsArr[1]" :news="newsArr[1]" />
-        <NewsComponent10 v-if="newsArr[2]" :news="newsArr[2]" />
-        <NewsComponent10 v-if="newsArr[3]" :news="newsArr[3]" />
-      </div>
+  <div class="h-[480px]">
+    <div class="flex gap-[24px] overflow-x-scroll">
+      <SlideNewsComponent :news="newsArr[0]" />
+      <SlideNewsComponent :news="newsArr[1]" />
+      <SlideNewsComponent :news="newsArr[2]" />
+      <SlideNewsComponent :news="newsArr[3]" />
     </div>
   </div>
 </template>
