@@ -27,7 +27,7 @@ onMounted(async () => {
 })
 
 const moreViewHandler = (post) => {
-  router.push(`/community/${post.post_id}`)
+  router.push(`/community/${post.categoryId}`)
 }
 </script>
 <template>

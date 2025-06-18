@@ -2,17 +2,14 @@
 import { fetchHotDocs } from '@/api/fetchHotDocs'
 import { Eye, ThumbsUp } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const hotDocs = ref([])
-const route = useRoute()
-const props = defineProps({
-  news: Object,
-})
+const router = useRouter()
 
-const handleClick = () => {
-  console.log(props.news.news_id)
-  route.push(`/news/detail/${props.news.article_id}`)
+const handleClick = (news) => {
+  console.log(news)
+  router.push(`/news/detail/${news.news_id}`)
 }
 onMounted(async () => {
   hotDocs.value = await fetchHotDocs()

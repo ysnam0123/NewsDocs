@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref } from 'vue'
+import { nextTick, ref, onMounted } from 'vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
@@ -9,6 +9,7 @@ import NewsScrapButton from '../common/NewsScrapButton.vue'
 const { getOrCreateSummary } = useSummary()
 const { typedTarget, runTyped } = useTyping()
 const summaryMessage = ref('')
+const isSummaryLoading = ref(true)
 const isLoading = ref(true)
 const isOpen = ref(false)
 const summary = ref('')
@@ -17,37 +18,46 @@ const props = defineProps({
 })
 
 const handleSummary = async () => {
-  isOpen.value = !isOpen.value
-  await nextTick()
-  if (summary.value) return
-
+  if (isOpen.value) {
+    isOpen.value = false
+    return
+  }
   isLoading.value = true
+  isOpen.value = true
+  await nextTick()
 
-  const result = await getOrCreateSummary(props.news.news_id, props.news.description)
-  if (result) {
-    summary.value = result
-    await runTyped(result)
+  if (summary.value) {
+    await runTyped(summary.value)
+    console.log(summary.value)
+  } else {
+    const result = await getOrCreateSummary(props.news.news_id, props.news.description)
+    if (result) {
+      summary.value = result
+      await runTyped(result)
+    }
   }
 
   isLoading.value = false
 }
+
+onMounted(() => {
+  if (props.news) {
+    isSummaryLoading.value = false
+  }
+})
 </script>
 <template>
-  <div
-    v-if="props.news"
-    class="relative rounded-[16px] h-[468px] select-none group"
-    @click.stop="handleSummary"
-  >
+  <div v-if="props.news" class="relative rounded-[16px] h-[468px] w-[75%] select-none group">
     <!-- 호버했을때 나오는 창 -->
     <div
-      v-if="isOpen"
-      @click="isOpen = false"
-      class="absolute w-full h-full inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center text-center z-12 cursor-pointer"
+      @click.stop="handleSummary"
+      class="absolute h-full inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center text-center z-12 cursor-pointer"
     >
       <p class="hidden group-hover:flex text-white text-[16px] hover:z-20">요약보기</p>
     </div>
     <div
-      v-if="isLoading"
+      v-if="isOpen"
+      @click="isOpen = false"
       class="absolute cursor-pointer inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center gap-4 rounded-[16px] z-20 backdrop-blur-lg"
     >
       <!-- 클릭했을 때 나오는 창 -->
@@ -60,7 +70,7 @@ const handleSummary = async () => {
         </div>
       </template>
       <!-- 요약할 내용 없음 메시지 표시 -->
-      <template v-if="summaryMessage">
+      <template v-else-if="summaryMessage">
         <div
           class="flex flex-col items-center justify-center text-white text-center text-[16px] px-4"
         >
@@ -69,24 +79,29 @@ const handleSummary = async () => {
         </div>
       </template>
 
-      <div v-show="!isLoading">
-        <div class="w-full h-[468px] rounded-[20px] pt-[40px] pb-[32px] px-[30px]">
-          <div class="flex flex-col z-30 h-full text-white">
-            <h1 class="text-[20px] font-semibold mb-[24px]">세 줄 요약</h1>
-            <div class="max-h-[220px] pr-1 w-full">
-              <div class="whitespace-pre-line leading-8 w-full text-left">
-                <span ref="typedTarget" class="text-[20px] w-full text-left"></span>
-              </div>
+      <div
+        v-show="!isLoading"
+        class="w-full h-[468px] rounded-[20px] pt-[40px] pb-[32px] px-[30px]"
+      >
+        <div class="flex flex-col z-30 h-full text-white">
+          <h1 class="text-[20px] font-semibold mb-[24px]">세 줄 요약</h1>
+          <div class="max-h-[220px] pr-1 w-full">
+            <div class="whitespace-pre-line leading-8 w-full text-left">
+              <span
+                v-show="!isLoading"
+                ref="typedTarget"
+                class="text-[20px] w-full text-left"
+              ></span>
             </div>
           </div>
         </div>
-        <router-link
-          :to="`/news/detail/${props.news.article_id}`"
-          class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-[16px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-        >
-          원문보기
-        </router-link>
       </div>
+      <router-link
+        :to="`/news/detail/${props.news.news_id}`"
+        class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-[16px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+      >
+        원문보기
+      </router-link>
     </div>
 
     <img :src="news.image_url" alt="slide" class="w-full h-full object-cover rounded-[16px]" />

@@ -16,8 +16,6 @@ import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCom
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { useNewsStore } from '@/stores/newsStore'
-import supabase from '@/utils/supabase'
 import runDog from '@/assets/img/run_dog.png'
 
 // const newsList = ref([])
@@ -25,7 +23,6 @@ import runDog from '@/assets/img/run_dog.png'
 const router = useRouter()
 const route = useRoute()
 
-const newsStore = useNewsStore()
 const posts = ref([])
 const interestStore = useInterestStore()
 const interests = computed(() => interestStore.interestList)
@@ -46,41 +43,6 @@ const categoryNews = ref([])
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-// 뉴스를 전역과 동시에 supabase db에 저장
-const newsSavedHandler = async (news) => {
-  newsStore.selectedNews = news
-
-  const { data: savedNews, error } = await supabase
-    .from('news')
-    .select('news_id')
-    .eq('news_id', news.article_id)
-    .maybeSingle()
-
-  if (error) {
-    console.error('뉴스 저장 실패', error)
-    return
-  }
-
-  if (!savedNews) {
-    const { error: insertError } = await supabase.from('news').insert([
-      {
-        news_id: news.article_id,
-        category_id: news.category_id,
-        title: news.title,
-        link: news.link,
-        description: news.description,
-        pub_date: news.pub_date,
-        image_url: news.image_url,
-        source_name: news.source_name,
-        category: news.category,
-      },
-    ])
-    if (insertError) {
-      console.error('뉴스 저장 실패함', insertError)
-    }
-  }
 }
 
 const loadCategoryNews = async () => {

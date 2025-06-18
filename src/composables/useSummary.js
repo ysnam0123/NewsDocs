@@ -2,10 +2,15 @@ import supabase from '@/utils/supabase'
 import { fetchOpenAi } from '@/api/fetchOpenAi'
 
 export const useSummary = () => {
+  const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅 
+원문으로 안내해줄게 📰✨`
+
   // 클릭하면 뉴스 정보로 요약 불러오기, 없으면 생성
   const getOrCreateSummary = async (articleId, description) => {
     try {
-      if (!description) return null
+      if (!description) {
+        return defaultMessage
+      }
 
       const { data: savedSummary, error } = await supabase
         .from('summaries')

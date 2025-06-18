@@ -107,6 +107,11 @@ const router = createRouter({
       component: NewsLayout,
       children: [
         {
+          path: 'detail/:id',
+          name: 'newsDetail',
+          component: () => import('../views/newsDetail/NewsDetailView.vue'),
+        },
+        {
           path: '',
           name: 'allNews',
           component: () => import('../views/newsDetail/NewsListView.vue'),
@@ -115,11 +120,6 @@ const router = createRouter({
           path: ':categoryName',
           name: 'Category',
           component: () => import('../views/newsDetail/CategoryView.vue'),
-        },
-        {
-          path: 'detail/:id',
-          name: 'newsDetail',
-          component: () => import('../views/newsDetail/NewsDetailView.vue'),
         },
       ],
     },

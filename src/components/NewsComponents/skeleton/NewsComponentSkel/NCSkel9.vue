@@ -1,8 +1,8 @@
 <script setup></script>
 <template>
   <!-- NewsComponent9 스켈레톤 -->
-  <div class="flex justify-between animate-pulse">
-    <div class="w-[300px] h-[385px] flex flex-col gap-2">
+  <div class="flex justify-between animate-pulse gap-4">
+    <div class="w-[300px] h-[385px] flex flex-col sm:gap-2">
       <!-- 이미지 -->
       <div class="w-[300px] h-[217px] bg-gray-300 rounded"></div>
       <div class="flex flex-col gap-2">

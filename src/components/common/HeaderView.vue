@@ -35,7 +35,7 @@ const notiHandler = () => {
         <img :src="dog" class="sm:w-[28px] sm:h-[26px] w-[19px] h-[17px]" />
       </div>
       <h1
-        class="sm:text-[40px] text-[21px] dark:text-white text-center font-extrabold luckiest-guy-regular"
+        class="sm:text-[40px] mt-3 text-[21px] dark:text-white text-center font-extrabold luckiest-guy-regular"
       >
         newsDocs
       </h1>

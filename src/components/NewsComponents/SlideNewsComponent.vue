@@ -27,7 +27,6 @@ const handleSummary = async () => {
   isOpen.value = true
   await nextTick()
 
-  console.log('✅ summary에 들어간 값:', summary.value)
   if (summary.value) {
     await runTyped(summary.value)
     console.log('summary', summary.value)
@@ -54,7 +53,7 @@ onMounted(() => {
   <div v-if="props.news" class="rounded-[16px] h-[384px] relative select-none cursor-pointer">
     <!-- 호버했을때 나오는 창 -->
     <div
-      class="absolute w-full h-full group inset-0 hover:bg-black/50 rounded-[20px] flex items-center justify-center z-12 cursor-pointer"
+      class="absolute w-full h-full group inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center z-12 cursor-pointer"
       @click.stop="handleSummary"
     >
       <p class="text-white hidden group-hover:flex text-[16px] z-20">요약보기</p>

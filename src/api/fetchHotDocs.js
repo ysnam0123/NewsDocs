@@ -4,7 +4,7 @@ export const fetchHotDocs = async () => {
   const { data, error } = await supabase
     .from('news')
     .select(
-      `news_id, view_count, description, title, image_url,
+      `news_id, category_id (title), view_count, description, title, image_url,
           like!like_news_id_fkey (like_id)`,
     )
     .order('view_count', { ascending: false })

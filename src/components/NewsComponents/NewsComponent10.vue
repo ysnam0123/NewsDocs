@@ -96,7 +96,7 @@ onMounted(() => {
         </div>
       </div>
       <router-link
-        :to="`/news/detail/${props.news.article_id}`"
+        :to="`/news/detail/${props.news.news_id}`"
         class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-[16px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
       >
         원문보기
