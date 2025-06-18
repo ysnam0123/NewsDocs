@@ -44,14 +44,14 @@ onMounted(async () => {
   >
     <!-- 이미지 -->
     <div
-      class="w-full sm:w-[232px] h-[270px] sm:h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
+      class="w-full sm:w-[232px] h-[270px] sm:h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] px-5 sm:px-0 bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
     >
       <img
         :src="props.image ? props.image : defaultImg"
         alt="게시글 이미지"
         :class="
           props.image
-            ? 'w-full h-full object-cover sm:rounded-[12px]'
+            ? 'w-full h-full object-cover rounded-[12px]'
             : 'w-[90px] sm:w-[172px] h-[48px] sm:h-[91px]'
         "
       />
