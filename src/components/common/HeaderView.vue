@@ -43,7 +43,7 @@ const notiHandler = () => {
       <ul class="flex gap-[32px] select-none">
         <li
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
-          @click="movePage('/myinterest')"
+          @click="movePage('/')"
         >
           맞춤 소식
         </li>
@@ -74,7 +74,7 @@ const notiHandler = () => {
 
       <DarkModeButton />
 
-      <div class="hidden sm:flex items-center sm:gap-5 justify-center">
+      <div class="relative hidden sm:flex items-center sm:gap-5 justify-center">
         <!-- 알림 -->
         <div
           @click="notiHandler"
@@ -86,10 +86,7 @@ const notiHandler = () => {
             v-if="notiStore.hasUnread === true"
             class="absolute top-[2px] right-[3px] w-[8px] h-[8px] rounded-full bg-[#FF0000]"
           ></div>
-          <!-- 알림 드롭다운/모달 -->
-          <CommunityAlarm v-if="isNotiOpen" />
         </div>
-
         <!-- 프로필 -->
         <DropBox>
           <template #activator="{ toggle }">
@@ -102,6 +99,8 @@ const notiHandler = () => {
           </template>
         </DropBox>
       </div>
+      <!-- 알림 드롭다운/모달 -->
+      <CommunityAlarm v-if="isNotiOpen" :close="() => (isNotiOpen = false)" />
     </div>
   </div>
 </template>

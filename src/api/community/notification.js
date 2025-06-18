@@ -3,9 +3,10 @@ import supabase from '@/utils/supabase'
 export const fetchNoti = async (userId) => {
   const { data: notiData, error: notiError } = await supabase
     .from('notifications')
-    .select()
+    .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
+  // .execute()
   if (notiError) {
     console.error('알림 불러오기 실패', notiError)
     return []

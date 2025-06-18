@@ -12,7 +12,7 @@ defineProps({
     <SleepDog />
     <div class="text-lg text-[#191919] dark:text-white">{{ content }}</div>
     <div class="relative">
-      <RouterLink :to="to">
+      <RouterLink v-if="to && btnText" :to="to">
         <button
           v-if="btnText"
           class="w-[106px] h-[36px] bg-[#7537E3] text-center rounded-[8px] text-sm text-[#FFFFFF] cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
