@@ -58,9 +58,9 @@ onMounted(async () => {
 <template>
   <section class="flex">
     <div>
-      <BackButton />
+      <BackButton class="sm:flex hidden" />
     </div>
-    <section v-if="news" class="my-10 justify-center rounded-xl max-w-[707px]">
+    <section v-if="news" class="sm:my-10 justify-center rounded-xl sm:max-w-[707px] mx-10">
       <div class="text-md text-[#7537E3] dark:text-[#A878FD] font-medium">
         <span># {{ news.category.title }}</span>
       </div>
@@ -130,7 +130,7 @@ onMounted(async () => {
       <hr class="text-gray-200 dark:text-[#282828]" />
     </section>
     <div class="mr-2">
-      <NewsRecommend />
+      <NewsRecommend class="sm:flex hidden" />
     </div>
   </section>
   <section>

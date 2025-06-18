@@ -302,7 +302,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="section3 flex sm:hidden gap-10 mt-12.5">
+      <div class="section3 flex sm:hidden gap-10 mt-12.5 ml-4">
         <div class="w-[608px]">
           <div class="select-none flex items-center gap-5 mb-7.5">
             <h3 class="flex gap-2.5 font-semibold text-[32px] dark:text-white">분야별 뉴스</h3>

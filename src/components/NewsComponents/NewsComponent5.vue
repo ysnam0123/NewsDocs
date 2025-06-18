@@ -51,7 +51,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="props.news" class="relative flex gap-[22px] w-[600px] h-[184px] rounded-[16px]">
+  <div
+    v-if="props.news"
+    class="relative flex gap-[22px] w-full sm:w-[600px] h-[184px] rounded-[16px]"
+  >
     <!-- 호버했을때 나오는 창 -->
     <div
       class="absolute w-[200px] h-[184px] group inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center z-12 cursor-pointer"

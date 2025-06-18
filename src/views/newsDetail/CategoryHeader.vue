@@ -18,7 +18,7 @@ function goToCategory(category) {
 }
 </script>
 <template>
-  <section class="sm:hidden w-full mt-6">
+  <section class="hidden w-full mt-6">
     <div class="w-full">
       <ul class="flex items-center">
         <li
