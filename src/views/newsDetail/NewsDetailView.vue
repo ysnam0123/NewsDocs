@@ -9,20 +9,21 @@ import { useTyping } from '@/composables/useTyping'
 import BackButton from '@/components/common/BackButton.vue'
 import NewsRecommend from './NewsRecommend.vue'
 import CommunityRecommend from './CommunityRecommend.vue'
+import { fetchCrawledText } from '@/api/fetchCrawledText'
 
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
 const isOpen = ref(false)
 const isLoading = ref(true)
 const news = ref(null)
-const categoryLabel = ref(null)
 const summary = ref('')
-const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅 
-원문으로 안내해줄게 📰✨`
 const route = useRoute()
-console.log('너의 이름은', route.params)
-const newsId = route.params.id
-console.log('detail page newsId', newsId)
+const hasLiked = ref(false)
+//console.log('너의 이름은', route.params)
+
+const crawledText = ref('')
+const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅
+원문으로 안내해줄게 📰✨`
 const handleSummary = async () => {
   if (isOpen.value) {
     isOpen.value = false
@@ -43,16 +44,65 @@ const handleSummary = async () => {
   }
   isLoading.value = false
 }
+
+//말줄임표 확인
+const isShortOrEllipsis = (desc) => {
+  if (!desc) return true
+  if (desc.length < 30) return true
+  // 말줄임표 정규식 체크
+  return /(\.\.\.|…|\.{2,3})\s*$/.test(desc)
+}
+
+const handleLikeToggle = async () => {
+  if (!news.value) return
+  const currentLike = news.value.like_count ?? 0
+
+  if (!hasLiked.value) {
+    // 좋아요 추가
+    const { data, error } = await supabase
+      .from('news')
+      .update({ like_count: currentLike + 1 })
+      .eq('news_id', news.value.news_id)
+      .select('like_count')
+      .single()
+    if (!error) {
+      news.value.like_count = data.like_count
+      hasLiked.value = true
+    }
+  } else {
+    // 좋아요 취소
+    const { data, error } = await supabase
+      .from('news')
+      .update({ like_count: Math.max(currentLike - 1, 0) })
+      .eq('news_id', news.value.news_id)
+      .select('like_count')
+      .single()
+    if (!error) {
+      news.value.like_count = data.like_count
+      hasLiked.value = false
+    }
+  }
+}
+
 onMounted(async () => {
   const newsId = route.params.id
+
   const { data, error } = await supabase
     .from('news')
     .select(`*, category:category_id (title)`)
     .eq('news_id', newsId)
     .maybeSingle()
+
   if (data && !error) {
-    console.log('찾았다', data)
     news.value = data
+    console.log(news.value.source_name)
+    const text = await fetchCrawledText(news.value.source_name, news.value.link)
+
+    crawledText.value = text
+    if (isShortOrEllipsis(news.value.description)) {
+      console.log('크롤링 필요:', news.value.source_name, news.value.link)
+      crawledText.value = await fetchCrawledText(news.value.source_name, news.value.link)
+    }
   }
 })
 </script>
@@ -74,8 +124,24 @@ onMounted(async () => {
           <span class="text-sm text-[#A6A6A6]">{{ news.source_name }}</span>
         </div>
         <div class="flex justify-center items-center gap-2">
-          <ThumbsUp class="cursor-pointer" />
-          <Eye /><span class="mr-2">{{ news.view_count ?? 0 }}</span>
+          <ThumbsUp
+            :class="[
+              'cursor-pointer hover:text-[#191919]',
+              hasLiked ? 'text-[#7A42DF]' : 'text-[#6A6A6A]',
+            ]"
+            @click="handleLikeToggle"
+          />
+          <span
+            :class="[
+              'mr-2 font-medium text-[#6A6A6A]',
+              hasLiked ? 'text-[#7A42DF]' : 'text-[#6A6A6A]',
+            ]"
+          >
+            {{ news.like_count ?? 0 }}</span
+          >
+          <Eye class="text-[#6A6A6A] font-medium" /><span class="mr-2 text-[#6A6A6A]">{{
+            news.view_count ?? 0
+          }}</span>
         </div>
       </div>
       <div class="bg-[#f5f5f5]/70 rounded-2xl">
@@ -123,7 +189,11 @@ onMounted(async () => {
         </div>
       </div>
       <span class="leading-[29px] text-lg text-left dark:text-white font-extralight line-clamp-10">
-        {{ news.description || defaultMessage }}
+        {{
+          news.description && !isShortOrEllipsis(news.description)
+            ? news.description
+            : crawledText || defaultMessage
+        }}
       </span>
       <button class="cursor-pointer mb-10 text-[#AEAEAE] hover:underline underline-offset-2">
         <a :href="news.link" target="_blank">원문보기</a>
