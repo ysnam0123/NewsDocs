@@ -5,10 +5,10 @@ import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
-import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useNewsActions } from '@/composables/useNewsActions'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 const { toDetailHandler, saveNews } = useNewsActions()
 const summaryHover = ref(false)
 const hoverHandler = () => {
@@ -229,7 +229,12 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-15" />
+    <!-- <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-15" /> -->
+    <NewsScrapButton
+      :news-id="props.news.news_id"
+      :show-bg="false"
+      class="absolute right-[8px] top-[10px] z-15"
+    />
 
     <!-- 클릭했을 때 나오는 창 -->
   </div>

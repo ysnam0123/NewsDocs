@@ -5,11 +5,11 @@ import { fetchOpenAi } from '@/api/fetchOpenAi'
 import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
-import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useNewsActions } from '@/composables/useNewsActions'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 
 const { toDetailHandler, saveNews } = useNewsActions()
 // 호버 상태
@@ -255,7 +255,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <ScrapImg class="absolute right-[15px] top-[10px] z-25" />
+      <!-- <ScrapImg class="absolute right-[15px] top-[10px] z-25" /> -->
+      <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-15" />
     </div>
   </div>
 </template>
