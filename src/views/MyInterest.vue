@@ -14,17 +14,13 @@ import FourthSection from '@/components/NewsComponents/section/FourthSection.vue
 import SecondSection from '@/components/NewsComponents/section/SecondSection.vue'
 import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
 import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 import { getFreshNews } from '@/composables/newsCache'
 import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
-
-// import { useInterestStore } from '@/stores/interestStore'
-// const interestStore = useInterestStore()
-// const interestList = computed(() => interestStore.interestList)
 
 const user = ref(null)
 const loading = ref(true)
@@ -46,16 +42,8 @@ const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.le
 const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
 const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
-const getLikeCount = async (postId) => {
-  const { count } = await supabase
-    .from('like')
-    .select('*', { count: 'exact', head: true })
-    .eq('post_id', postId)
-
-  return count || 0
-}
 const matchedCategories = ref([])
-const userInterestLoading = ref(false)
+const userInterestLoading = ref(true)
 const introduceData = ref([])
 const introduceLoading = ref(true)
 
@@ -66,7 +54,9 @@ onMounted(async () => {
   user.value = supaUser
   isLoggedIn.value = !!supaUser
   console.log('사용자 정보:', user.value)
-
+  console.log('isLoggedIn:', isLoggedIn.value)
+  console.log('userInterestLoading:', userInterestLoading.value)
+  // 로그인 전
   if (!isLoggedIn.value) {
     const { data: beforeLoginData, error: introduceError } = await supabase
       .from('for_introduce')
@@ -81,19 +71,24 @@ onMounted(async () => {
     return
   }
 
+  // 로그인 후
+
+  console.log('관심사 로드 시작:', userInterestLoading.value)
   // user 최대 관심사
   const { data: favoriteInterest, error: favoriteError } = await supabase
     .from('user_interests')
     .select('category_id')
     .eq('user_id', user.value.id)
     .eq('is_highest', true)
+
+  // id 값만 추출
+  const favoriteCategoryId = favoriteInterest?.[0]?.category_id
+
   if (favoriteError) {
     console.error('최대관심사 에러:', favoriteError)
   } else {
-    favoriteInterest
+    console.log('최대관심사의 카테고리 id:', favoriteCategoryId)
   }
-  const favoriteCategoryId = favoriteInterest?.[0]?.category_id
-  console.log('최대관심사의 카테고리 id:', favoriteCategoryId)
 
   // user_interests 에서 유저가 선택한 관심사 가져오기
   const { data: interestData, error: interestError } = await supabase
@@ -114,21 +109,19 @@ onMounted(async () => {
   ]
   console.log('finalInterestArr:', finalInterestArr)
 
-  //
   matchedCategories.value = finalInterestArr.map((num) =>
     allCategoryMap.find((item) => item.num === num),
   )
-
-  // 원하는 카테고리 순서 (한글)
-  const matchedCategoriesLabel = matchedCategories.value.map((item) => item.label)
   // 영어 카테고리
   const matchedEnglishlabel = matchedCategories.value.map((item) => item.id)
-  userInterestLoading.value = true
 
   console.log('유저가 선택한 카테고리 객체배열:', matchedCategories)
   console.log(matchedCategories.value[0].icon)
-  console.log('유저 카테고리 한국어배열:', matchedCategoriesLabel)
   console.log('유저 카테고리 영어배열:', matchedEnglishlabel)
+
+  userInterestLoading.value = false
+  console.log('관심사 로딩 종료', userInterestLoading.value)
+  nextTick()
 
   const newsResults = []
 
@@ -182,7 +175,6 @@ onMounted(async () => {
     post.like_count = likeCount
   }
   posts.value = data
-  userInterestLoading.value = false
 })
 </script>
 
@@ -192,16 +184,12 @@ onMounted(async () => {
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
-      <div v-if="!userInterestLoading">
+      <div v-if="!userInterestLoading && matchedCategories">
         <div>
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img
-                v-if="matchedCategories.value[0]"
-                :src="matchedCategories.value[0].icon"
-                alt="firstLabel"
-              />
+              <img v-if="matchedCategories[0]" :src="matchedCategories[0].icon" alt="firstLabel" />
               <p class="text-[30px] text-[var(--text-title)] font-bold">
                 {{ matchedCategories[0].label }}
               </p>
@@ -336,13 +324,13 @@ onMounted(async () => {
             <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
             <FourthSectionSkel v-else-if="loading" />
           </div>
-          <div>
+          <div v-if="matchedCategories.length > 4">
             <!-- 제목 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[4].icon" alt="fifthsLabel" />
+                <!-- <img :src="matchedCategories[4].icon" alt="fifthsLabel" /> -->
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[4].label }}
+                  <!-- {{ matchedCategories[4].label }} -->
                 </p>
               </h1>
               <div class="flex">
@@ -366,13 +354,13 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div>
+        <div v-if="matchedCategories.length > 5">
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
+              <!-- <img :src="matchedCategories[5].icon" alt="fifthsLabel" /> -->
               <p class="text-[30px] text-[var(--text-title)] font-bold">
-                {{ matchedCategories[5].label }}
+                <!-- {{ matchedCategories[5].label }} -->
               </p>
             </h1>
             <div class="flex">
@@ -395,6 +383,7 @@ onMounted(async () => {
           <SixthSectionSkel v-else-if="loading" />
         </div>
       </div>
+
       <!-- 관심사 없는 상태 -->
       <div v-else>
         <h2 class="text-[24px] text-center">관심사를 설정해주세요!</h2>

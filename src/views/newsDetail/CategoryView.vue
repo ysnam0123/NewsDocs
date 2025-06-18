@@ -1,18 +1,23 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { fetchNewsData } from '@/api/fetchNews'
 
+import NewsComponent0 from '@/components/NewsComponents/NewsComponent0.vue'
+import NewsComponent4 from '@/components/NewsComponents/NewsComponent4.vue'
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
 import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
-// import NewsComponent3 from '@/components/NewsComponents/NewsComponent3.vue'
+import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
 import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
 import SlideNewsComponent from '@/components/NewsComponents/SlideNewsComponent.vue'
-
-import economy from '@/assets/icons/communityDropdown/economy.svg'
-import culture from '@/assets/icons/communityDropdown/culture.svg'
-import celeb from '@/assets/icons/communityDropdown/celeb.svg'
-import global from '@/assets/icons/communityDropdown/global.svg'
+import politicsIcon from '@/assets/icons/politicsIcon.svg'
+import sportsIcon from '@/assets/icons/sportsIcon.svg'
+import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
+import cultureIcon from '@/assets/icons/cultureIcon.svg'
+import worldIcon from '@/assets/icons/worldIcon.svg'
+import societyIcon from '@/assets/icons/societyIcon.svg'
+import economyIcon from '@/assets/icons/economyIcon.svg'
+import etcIcon from '@/assets/icons/etcIcon.svg'
 import moveTop from '@/assets/icons/moveToTop.svg'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
 
@@ -21,19 +26,12 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { useNewsStore } from '@/stores/newsStore'
 import supabase from '@/utils/supabase'
-
-import NewsComponent4 from '@/components/NewsComponents/NewsComponent4.vue'
-import NewsComponent0 from '@/components/NewsComponents/NewsComponent0.vue'
 import runDog from '@/assets/img/run_dog.png'
-// import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
-import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
 
 // const newsList = ref([])
 // const randomNews = ref(null)
-// const resetPoint = ref(null)
 const router = useRouter()
 const route = useRoute()
-// const activeCategory = ref('전체')
 
 const newsStore = useNewsStore()
 const posts = ref([])
