@@ -3,7 +3,7 @@ import CategoryHeader from '@/views/newsDetail/CategoryHeader.vue'
 </script>
 <template>
   <div class="mx-auto max-w-[1240px] flex flex-col justify-between">
-    <CategoryHeader />
+    <CategoryHeader class="w-full min-w-[320px]" />
     <router-view></router-view>
   </div>
 </template>

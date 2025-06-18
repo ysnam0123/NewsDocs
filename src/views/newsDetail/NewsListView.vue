@@ -132,18 +132,18 @@ onMounted(async () => {
 <template>
   <section>
     <div class="mx-auto max-w-[1240px] pt-8">
-      <div class="section1">
+      <div class="sm:flex sm:flex-col hidden">
         <div v-if="!loading && randomResult" class="flex gap-10 mb-20 items-center">
           <NewsComponent0 :news="randomResult[0]" class="w-[786px]" />
           <NewsComponent4 :news="randomResult[1]" />
         </div>
-        <div v-else class="flex gap-10 mb-20 items-center">
+        <div v-else class="flex gap-10 mb-15 items-center">
           <NCSkel0 />
           <NCSkel4 />
         </div>
         <div class="mb-10">
           <h3 class="text-[30px] font-semibold mb-8 dark:text-white">최신뉴스</h3>
-          <div v-if="!loading" class="flex justify-between">
+          <div v-if="!loading" class="flex justify-between overflow-x-auto">
             <NewsComponent9 :news="randomResult[2]" />
             <NewsComponent9 :news="randomResult[3]" />
             <NewsComponent9 :news="randomResult[4]" />
@@ -152,9 +152,23 @@ onMounted(async () => {
           <NCSkel9 v-else />
         </div>
       </div>
+      <div class="section1 sm:hidden block ml-4 gap-4 overflow-x-auto">
+        <h3 class="text-2xl font-semibold mb-4 dark:text-white">최신뉴스</h3>
 
+        <div v-if="!loading && randomResult" class="flex gap-4 mb-20 items-center">
+          <NewsComponent9 :news="randomResult[0]" />
+          <NewsComponent9 :news="randomResult[1]" />
+          <NewsComponent9 :news="randomResult[2]" />
+          <NewsComponent9 :news="randomResult[3]" />
+          <NewsComponent9 :news="randomResult[4]" />
+          <NewsComponent9 :news="randomResult[5]" />
+        </div>
+        <div v-else>
+          <NCSkel9 />
+        </div>
+      </div>
       <div
-        class="h-[524px] relative w-screen bg-[#F6F6F6] dark:bg-[#181818] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
+        class="section2 hidden sm:flex h-[524px] relative w-screen bg-[#F6F6F6] dark:bg-[#181818] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
       >
         <div class="max-w-[1240px] mx-auto h-[524px] mb-15">
           <div class="flex items-center pt-10 justify-between">
@@ -205,8 +219,58 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+      <div class="section2 flex sm:hidden w-screen bg-[#F6F6F6]">
+        <div class="mx-auto h-[524px] ml-4 mb-15">
+          <div class="flex items-center pt-15 justify-between">
+            <div class="flex items-center">
+              <h3 class="flex text-[30px] font-semibold dark:text-white">Shorts Docs</h3>
+              <span class="text-[#7A42DF] dark:text-[#A878FD] text-md ml-4 justify-center"
+                >3초만에 확인해요
+              </span>
+            </div>
 
-      <div class="flex gap-10 mt-12.5">
+            <section class="flex right-0 gap-2">
+              <div
+                @click="slidePrev"
+                class="w-10 h-10 bg-white dark:bg-[#3C3C3C] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#E0E0E0] dark:hover:bg-[#4A4A4A] transition duration-300"
+              >
+                <ChevronLeft class="dark:stroke-white" stroke-width="1" />
+              </div>
+              <div
+                @click="slideNext"
+                class="w-10 h-10 bg-white dark:bg-[#3C3C3C] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#E0E0E0] dark:hover:bg-[#4A4A4A] transition duration-300"
+              >
+                <ChevronRight class="dark:stroke-white" stroke-width="1" />
+              </div>
+            </section>
+          </div>
+          <div class="flex w-full mt-4">
+            <swiper
+              v-if="!loading"
+              ref="swiperRef"
+              :slides-per-view="4"
+              :centered-slides="false"
+              :space-between="20"
+              :pagination="false"
+              :navigation="false"
+              :modules="[Navigation, Pagination]"
+              @slideChange="onSlideChange"
+              @swiper="onSwiper"
+            >
+              <swiper-slide
+                v-for="(news, index) in randomResult.slice(6)"
+                :key="index"
+                class="!w-[292px]"
+              >
+                <SlideNewsComponent :news="news" />
+              </swiper-slide>
+            </swiper>
+            <SNCSkel v-else />
+          </div>
+        </div>
+      </div>
+
+      <div class="section3 sm:flex hidden gap-10 mt-12.5">
         <div class="w-[608px]">
           <div class="select-none flex items-center gap-5 mb-7.5">
             <h3 class="flex gap-2.5 font-semibold text-[32px] dark:text-white">분야별 뉴스</h3>
@@ -245,7 +309,47 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="flex gap-[40px] my-12.5">
+      <div class="section3 flex sm:hidden gap-10 mt-12.5">
+        <div class="w-[608px]">
+          <div class="select-none flex items-center gap-5 mb-7.5">
+            <h3 class="flex gap-2.5 font-semibold text-[32px] dark:text-white">분야별 뉴스</h3>
+            <div class="flex">
+              <h2 class="text-[#7A4EdF] dark:text-[#A878FD] text-[16px]">
+                관심이 생기면 관심사로 등록해요
+              </h2>
+            </div>
+          </div>
+          <div class="sm:flex sm:flex-col">
+            <div class="flex-wrap">
+              <div class="flex gap-2 mb-6">
+                <img :src="politicsIcon" class="w-8 h-8 mt-0.5" />
+                <span class="text-[26px] font-semibold dark:text-white">정치</span>
+              </div>
+              <div v-if="!loading" class="flex flex-col gap-4">
+                <NewsComponent5 :news="allNews[0][0]" />
+                <NewsComponent5 :news="allNews[0][1]" />
+              </div>
+              <NCSkel5 v-else />
+            </div>
+          </div>
+
+          <div class="w-[608px] mt-19.5">
+            <div class="flex flex-wrap">
+              <div class="flex gap-2 mb-6">
+                <img :src="sportsIcon" class="w-8 h-8 mt-0.5" />
+                <span class="text-[26px] font-semibold dark:text-white">스포츠</span>
+              </div>
+              <div v-if="!loading" class="flex flex-col gap-4">
+                <NewsComponent6 :news="allNews[1][0]" />
+                <NewsComponent6 :news="allNews[1][1]" />
+              </div>
+              <NCSkel6 v-else />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sm:flex block gap-[40px] my-12.5">
         <div class="flex flex-wrap">
           <div class="flex gap-2 mb-6">
             <img :src="entertainmentIcon" class="w-8 h-8 mt-0.5" />
@@ -279,13 +383,13 @@ onMounted(async () => {
             <p class="text-[26px] font-semibold dark:text-white">해외</p>
           </h1>
         </div>
-        <div v-if="!loading" class="flex gap-[30px]">
+        <div v-if="!loading" class="flex gap-10">
           <div class="flex flex-col gap-[15px]">
             <NewsComponent7 :news="allNews[4][0]" />
 
             <NewsComponent7 :news="allNews[4][1]" />
           </div>
-          <div class="flex flex-col gap-[15px]">
+          <div class="flex flex-col gap-[15x]">
             <NewsComponent7 :news="allNews[4][2]" />
 
             <NewsComponent7 :news="allNews[4][3]" />
@@ -295,7 +399,7 @@ onMounted(async () => {
       </div>
 
       <div
-        class="rounded-3xl bg-[#F8F8F8] dark:bg-[#1F1F1F] dark:text-white w-[1240px] h-[510px] px-[60px] py-[53px] mb-[100px]"
+        class="sm:rounded-3xl bg-[#F8F8F8] dark:bg-[#1F1F1F] dark:text-white w-full sm:w-[1240px] rounded-none h-[510px] px-[60px] py-[53px] mb-[100px]"
       >
         <h1 class="text-[30px] font-semibold mb-[32px]">
           나의 관심사에 대해 사람들과 이야기해보세요!

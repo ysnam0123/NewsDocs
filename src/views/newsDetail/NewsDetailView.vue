@@ -1,7 +1,6 @@
 <script setup>
-// import CommunityRecommend from './CommunityRecommend.vue'
 import supabase from '@/utils/supabase'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
@@ -15,31 +14,43 @@ const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
 const isOpen = ref(false)
 const isLoading = ref(true)
-const route = useRoute()
 const news = ref(null)
-
+const categoryLabel = ref(null)
+const summary = ref('')
+const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅 
+원문으로 안내해줄게 📰✨`
+const route = useRoute()
+console.log('너의 이름은', route.params)
+const newsId = route.params.id
+console.log('detail page newsId', newsId)
 const handleSummary = async () => {
-  isOpen.value = true
+  if (isOpen.value) {
+    isOpen.value = false
+    return
+  }
+
   isLoading.value = true
-  const result = await getOrCreateSummary(news.value.article_id, news.value.description)
-  if (result) {
-    await runTyped(result)
+  isOpen.value = true
+  await nextTick()
+  if (summary.value) {
+    await runTyped(summary.value)
+  } else {
+    const result = await getOrCreateSummary(news.value.news_id, news.value.description)
+    if (result) {
+      summary.value = result
+      await runTyped(result)
+    }
   }
   isLoading.value = false
 }
 onMounted(async () => {
   const { data, error } = await supabase
     .from('news')
-    .select(
-      `*, 
-    category:category_id (
-    title
-    )
-    `,
-    )
-    .eq('news_id', route.params.id)
+    .select(`*, category:category_id (title)`)
+    .eq('news_id', newsId)
     .maybeSingle()
   if (data && !error) {
+    console.log('찾았다', data)
     news.value = data
   }
 })
@@ -51,7 +62,7 @@ onMounted(async () => {
     </div>
     <section v-if="news" class="my-10 justify-center rounded-xl max-w-[707px]">
       <div class="text-md text-[#7537E3] dark:text-[#A878FD] font-medium">
-        <span># {{ news.category }}</span>
+        <span># {{ news.category.title }}</span>
       </div>
       <h1 class="text-[32px] my-4 font-semibold dark:text-white">
         {{ news.title }}
@@ -62,7 +73,7 @@ onMounted(async () => {
           <span class="text-sm text-[#A6A6A6]">{{ news.source_name }}</span>
         </div>
         <div class="flex justify-center items-center gap-2">
-          <ThumbsUp />
+          <ThumbsUp class="cursor-pointer" />
           <Eye /><span class="mr-2">{{ news.view_count ?? 0 }}</span>
         </div>
       </div>
@@ -111,20 +122,23 @@ onMounted(async () => {
         </div>
       </div>
       <span class="leading-[29px] text-lg text-left dark:text-white font-extralight line-clamp-10">
-        {{ news.description }}
+        {{ news.description || defaultMessage }}
       </span>
-      <button class="cursor-pointer mb-10 text-[#AEAEAE] ml-2 hover:underline underline-offset-2">
+      <button class="cursor-pointer mb-10 text-[#AEAEAE] hover:underline underline-offset-2">
         <a :href="news.link" target="_blank">원문보기</a>
       </button>
       <hr class="text-gray-200 dark:text-[#282828]" />
-      <!-- <CommunityRecommend :catetory-id="news.category_id" :category-label="categoryLabel" /> -->
     </section>
     <div class="mr-2">
       <NewsRecommend />
     </div>
   </section>
   <section>
-    <CommunityRecommend />
+    <CommunityRecommend
+      v-if="news"
+      :category-id="news.category_id"
+      :category-label="categoryLabel"
+    />
   </section>
 </template>
 <style scoped>

@@ -12,7 +12,6 @@ export const useTyping = () => {
     if (typedTarget.value) {
       if (typedInstance) {
         typedInstance.destroy()
-        console.log(typedInstance)
       }
       typedTarget.value.innerText = ''
       typedInstance = new Typed(typedTarget.value, {

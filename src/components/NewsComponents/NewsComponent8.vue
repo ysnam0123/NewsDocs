@@ -7,6 +7,8 @@ import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
+// 호버 상태
+const summaryHover = ref(false)
 const isSummaryLoading = ref(true)
 const summaryMessage = ref('')
 const isLoading = ref(true)
@@ -15,6 +17,12 @@ const summary = ref('')
 const props = defineProps({
   news: Object,
 })
+const hoverHandler = () => {
+  summaryHover.value = true
+}
+const hoverOut = () => {
+  summaryHover.value = false
+}
 
 const handleSummary = async () => {
   if (isOpen.value) {
@@ -43,6 +51,7 @@ const handleSummary = async () => {
 onMounted(() => {
   if (props.news) {
     isSummaryLoading.value = false
+    console.log('🟢 컴포넌트 Mounted → 로딩 상태 false')
   }
 })
 </script>
@@ -50,8 +59,9 @@ onMounted(() => {
   <div v-if="props.news" class="h-[430px] relative select-none">
     <!-- 호버했을때 나오는 창 -->
     <div
-      class="absolute w-full h-full group inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      class="absolute w-full h-[300px] group inset-0 bg-transparent hover:bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
       @click.stop="handleSummary"
+      @mouseleave="hoverOut"
     >
       <p class="text-white hidden group-hover:flex text-[16px] z-20">요약보기</p>
     </div>
@@ -61,9 +71,9 @@ onMounted(() => {
       @click="isOpen = false"
     >
       <template v-if="isLoading">
-        <div class="flex flex-col animate-pulse shrink-0 px-6 py-10">
+        <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
           <div class="mb-8 h-7 w-[30%] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[80%] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-8 w-[70%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[50%] bg-[#626262]/70 rounded-md"></div>
           <div class="h-8 w-[50%] bg-[#626262]/70 rounded-md"></div>
         </div>
@@ -81,7 +91,6 @@ onMounted(() => {
       </template>
 
       <div
-        v-show="!isLoading"
         class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-scroll"
       >
         <!-- 요약된 내용 -->
@@ -89,7 +98,7 @@ onMounted(() => {
           <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
           <div class="flex flex-col">
             <div class="text-white whitespace-pre-line leading-8">
-              <span v-show="!isLoading" ref="typedTarget" class="text-white text-lg"></span>
+              <span v-show="!isLoading" ref="typedTarget" class="text-white"></span>
             </div>
           </div>
         </div>
@@ -128,7 +137,7 @@ onMounted(() => {
             </div>
             <div class="flex gap-1">
               <Eye class="w-4" />
-              <span>{{ props.news.view_count }}</span>
+              <span>300</span>
             </div>
           </div>
         </div>

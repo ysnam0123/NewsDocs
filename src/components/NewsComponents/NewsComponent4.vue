@@ -49,7 +49,7 @@ onMounted(() => {
   <div v-if="props.news" class="h-[468px] w-[35%] relative select-none">
     <!-- 호버했을때 나오는 창 -->
     <div
-      class="absolute w-full h-full group inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      class="absolute w-full h-[350px] group inset-0 bg-transparent hover:bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
       @click.stop="handleSummary"
     >
       <p class="text-white hidden group-hover:flex font-medium text-[16px] z-20">요약보기</p>
