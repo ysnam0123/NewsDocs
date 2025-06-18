@@ -22,10 +22,6 @@ import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
 
-// import { useInterestStore } from '@/stores/interestStore'
-// const interestStore = useInterestStore()
-// const interestList = computed(() => interestStore.interestList)
-
 const user = ref(null)
 const loading = ref(true)
 const isLoggedIn = ref(false)
@@ -124,10 +120,6 @@ onMounted(async () => {
   matchedCategories.value = finalInterestArr.map((num) =>
     allCategoryMap.find((item) => item.num === num),
   )
-  // 원하는 카테고리 순서 (한글)
-  // const matchedCategoriesLabel = matchedCategories.value.map((item) => item.label)
-  // console.log('유저 카테고리 한국어배열:', matchedCategoriesLabel)
-
   // 영어 카테고리
   const matchedEnglishlabel = matchedCategories.value.map((item) => item.id)
 
@@ -200,16 +192,12 @@ onMounted(async () => {
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
-      <div v-if="!userInterestLoading">
+      <div v-if="!userInterestLoading && matchedCategories">
         <div>
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img
-                v-show="matchedCategories[0]"
-                :src="matchedCategories[0].icon"
-                alt="firstLabel"
-              />
+              <img v-if="matchedCategories[0]" :src="matchedCategories[0].icon" alt="firstLabel" />
               <p class="text-[30px] text-[var(--text-title)] font-bold">
                 {{ matchedCategories[0].label }}
               </p>
@@ -303,19 +291,21 @@ onMounted(async () => {
             <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
             <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
           </div>
-          <!-- 섹션 5 : 오늘의 핫 독스 -->
-          <div class="w-[560px]">
-            <!-- 제목 -->
-            <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-              <h1 class="flex gap-[10px] items-center">
-                <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
-                <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
-              </h1>
-              <div class="flex">
-                <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
+          <div>
+            <!-- 섹션 5 : 오늘의 핫 독스 -->
+            <div class="w-[560px]">
+              <!-- 제목 -->
+              <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
+                <h1 class="flex gap-[10px] items-center">
+                  <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
+                  <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
+                </h1>
+                <div class="flex">
+                  <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
+                </div>
               </div>
+              <HotDocsComponent />
             </div>
-            <HotDocsComponent />
           </div>
         </div>
         <!-- 섹션 6, 7 -->
