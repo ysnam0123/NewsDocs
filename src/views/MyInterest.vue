@@ -22,10 +22,6 @@ import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
 
-// import { useInterestStore } from '@/stores/interestStore'
-// const interestStore = useInterestStore()
-// const interestList = computed(() => interestStore.interestList)
-
 const user = ref(null)
 const loading = ref(true)
 const isLoggedIn = ref(false)
@@ -46,14 +42,6 @@ const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.le
 const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
 const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
-const getLikeCount = async (postId) => {
-  const { count } = await supabase
-    .from('like')
-    .select('*', { count: 'exact', head: true })
-    .eq('post_id', postId)
-
-  return count || 0
-}
 const matchedCategories = ref([])
 const userInterestLoading = ref(true)
 const introduceData = ref([])
@@ -124,10 +112,6 @@ onMounted(async () => {
   matchedCategories.value = finalInterestArr.map((num) =>
     allCategoryMap.find((item) => item.num === num),
   )
-  // 원하는 카테고리 순서 (한글)
-  // const matchedCategoriesLabel = matchedCategories.value.map((item) => item.label)
-  // console.log('유저 카테고리 한국어배열:', matchedCategoriesLabel)
-
   // 영어 카테고리
   const matchedEnglishlabel = matchedCategories.value.map((item) => item.id)
 
@@ -200,16 +184,12 @@ onMounted(async () => {
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
-      <div v-if="!userInterestLoading">
+      <div v-if="!userInterestLoading && matchedCategories">
         <div>
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img
-                v-show="matchedCategories[0]"
-                :src="matchedCategories[0].icon"
-                alt="firstLabel"
-              />
+              <img v-if="matchedCategories[0]" :src="matchedCategories[0].icon" alt="firstLabel" />
               <p class="text-[30px] text-[var(--text-title)] font-bold">
                 {{ matchedCategories[0].label }}
               </p>
@@ -344,13 +324,13 @@ onMounted(async () => {
             <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
             <FourthSectionSkel v-else-if="loading" />
           </div>
-          <div>
+          <div v-if="matchedCategories.length > 4">
             <!-- 제목 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[4].icon" alt="fifthsLabel" />
+                <!-- <img :src="matchedCategories[4].icon" alt="fifthsLabel" /> -->
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[4].label }}
+                  <!-- {{ matchedCategories[4].label }} -->
                 </p>
               </h1>
               <div class="flex">
@@ -374,13 +354,13 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div>
+        <div v-if="matchedCategories.length > 5">
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
+              <!-- <img :src="matchedCategories[5].icon" alt="fifthsLabel" /> -->
               <p class="text-[30px] text-[var(--text-title)] font-bold">
-                {{ matchedCategories[5].label }}
+                <!-- {{ matchedCategories[5].label }} -->
               </p>
             </h1>
             <div class="flex">
