@@ -29,7 +29,7 @@ const isLoggedIn = ref(false)
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-
+//
 const allNews = ref([])
 const posts = ref([])
 const router = useRouter()
