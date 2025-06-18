@@ -215,14 +215,8 @@ watch(
               }}</span>
             </div>
             <div v-if="!loading" class="flex flex-col gap-4">
-              <NewsComponent5
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[otherIndexArr[0]][0]"
-              />
-              <NewsComponent5
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[otherIndexArr[0]][1]"
-              />
+              <NewsComponent5 :news="allNews[otherIndexArr[0]][0]" />
+              <NewsComponent5 :news="allNews[otherIndexArr[0]][1]" />
             </div>
             <NCSkel5 v-else />
           </div>
@@ -238,14 +232,8 @@ watch(
               }}</span>
             </div>
             <div v-if="!loading" class="flex flex-col gap-4">
-              <NewsComponent6
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[otherIndexArr[1]][0]"
-              />
-              <NewsComponent6
-                :news-save-handler="newsSavedHandler"
-                :news="allNews[otherIndexArr[1]][1]"
-              />
+              <NewsComponent6 :news="allNews[otherIndexArr[1]][0]" />
+              <NewsComponent6 :news="allNews[otherIndexArr[1]][1]" />
             </div>
             <NCSkel6 v-else />
           </div>
@@ -261,14 +249,8 @@ watch(
             }}</span>
           </div>
           <div v-if="!loading" class="w-[600px] flex gap-4">
-            <NewsComponent10
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[2]][0]"
-            />
-            <NewsComponent10
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[2]][1]"
-            />
+            <NewsComponent10 :news="allNews[otherIndexArr[2]][0]" />
+            <NewsComponent10 :news="allNews[otherIndexArr[2]][1]" />
           </div>
           <NCSkel10 v-else />
         </div>
@@ -280,14 +262,8 @@ watch(
             }}</span>
           </div>
           <div v-if="!loading" class="flex flex-col gap-[15px]">
-            <NewsComponent6
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[3]][0]"
-            />
-            <NewsComponent6
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[3]][1]"
-            />
+            <NewsComponent6 :news="allNews[otherIndexArr[3]][0]" />
+            <NewsComponent6 :news="allNews[otherIndexArr[3]][1]" />
           </div>
           <NCSkel6 v-else />
         </div>
@@ -303,26 +279,14 @@ watch(
         </div>
         <div v-if="!loading" class="flex gap-[30px]">
           <div class="flex flex-col gap-[15px]">
-            <NewsComponent7
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[4]][0]"
-            />
+            <NewsComponent7 :news="allNews[otherIndexArr[4]][0]" />
 
-            <NewsComponent7
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[4]][1]"
-            />
+            <NewsComponent7 :news="allNews[otherIndexArr[4]][1]" />
           </div>
           <div class="flex flex-col gap-[15px]">
-            <NewsComponent7
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[4]][2]"
-            />
+            <NewsComponent7 :news="allNews[otherIndexArr[4]][2]" />
 
-            <NewsComponent7
-              :news-save-handler="newsSavedHandler"
-              :news="allNews[otherIndexArr[4]][3]"
-            />
+            <NewsComponent7 :news="allNews[otherIndexArr[4]][3]" />
           </div>
         </div>
         <NCSkel7 v-else />
