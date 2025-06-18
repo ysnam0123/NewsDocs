@@ -10,14 +10,6 @@ import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
 import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
 import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
 import SlideNewsComponent from '@/components/NewsComponents/SlideNewsComponent.vue'
-// import politicsIcon from '@/assets/icons/politicsIcon.svg'
-// import sportsIcon from '@/assets/icons/sportsIcon.svg'
-// import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
-// import cultureIcon from '@/assets/icons/cultureIcon.svg'
-// import worldIcon from '@/assets/icons/worldIcon.svg'
-// import societyIcon from '@/assets/icons/societyIcon.svg'
-// import economyIcon from '@/assets/icons/economyIcon.svg'
-// import etcIcon from '@/assets/icons/etcIcon.svg'
 import moveTop from '@/assets/icons/moveToTop.svg'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
 
@@ -51,16 +43,6 @@ import { useInterestStore } from '@/stores/interestStore'
 const allNews = ref()
 const loading = ref(true)
 const categoryNews = ref([])
-
-// 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
-const hasCategoryNews = computed(
-  () => Array.isArray(categoryNews.value) && categoryNews.value.length > 1,
-)
-const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 1)
-const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
-const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
-const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
-const hasNews6 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -123,12 +105,24 @@ const loadCategoryNews = async () => {
 // }
 
 const selectedCategory = computed(() => route.params.categoryName || null)
-
+const selectedCategoryIndex = computed(() => {
+  return interests.value.findIndex((item) => item.id === selectedCategory.value)
+})
+const indexArr = [0, 1, 2, 3, 4, 5, 6, 7]
+const otherIndexArr = computed(() => {
+  return indexArr.filter((item) => item !== selectedCategoryIndex.value)
+})
 watch(
   () => route.params.categoryName,
   async (newVal) => {
     console.log('카테고리 변경됨:', newVal)
+
+    console.log(indexArr)
+    console.log(otherIndexArr.value)
+    console.log(interests.value[otherIndexArr.value[0]].icon)
     console.log(selectedCategory.value)
+    console.log(selectedCategoryIndex.value)
+    console.log(interests.value)
 
     await loadCategoryNews()
     const storedNews = localStorage.getItem('allNews')
@@ -164,16 +158,8 @@ watch(
     <div class="mx-auto max-w-[1240px] pt-8">
       <div class="section1">
         <div v-if="!loading" class="flex gap-10 mb-20 items-center">
-          <NewsComponent0
-            v-if="hasCategoryNews"
-            :news="categoryNews[0]"
-            :news-save-handler="newsSavedHandler"
-          />
-          <NewsComponent4
-            v-if="hasCategoryNews"
-            :news-save-handler="newsSavedHandler"
-            :news="categoryNews[1]"
-          />
+          <NewsComponent0 :news="allNews[selectedCategoryIndex][0]" class="w-[786px]" />
+          <NewsComponent4 :news="allNews[selectedCategoryIndex][1]" />
         </div>
         <div v-else class="flex gap-10 mb-20 items-center">
           <NCSkel0 />
@@ -182,29 +168,16 @@ watch(
         <div class="mb-10">
           <div class="flex gap-19">
             <div v-if="!loading" class="flex flex-col gap-4">
-              <NewsComponent5
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[2]"
-              />
-              <NewsComponent5
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[3]"
-              />
+              <NewsComponent5 :news="allNews[selectedCategoryIndex][2]" />
+
+              <NewsComponent5 :news="allNews[selectedCategoryIndex][3]" />
             </div>
             <NCSkel5 v-else />
+
             <div v-if="!loading" class="flex flex-col gap-4">
-              <NewsComponent5
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[4]"
-              />
-              <NewsComponent5
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[5]"
-              />
+              <NewsComponent5 :news="allNews[selectedCategoryIndex][4]" />
+
+              <NewsComponent5 :news="allNews[selectedCategoryIndex][5]" />
             </div>
             <NCSkel5 v-else />
           </div>
@@ -216,26 +189,10 @@ watch(
         <div class="max-w-[1240px] mx-auto h-[524px] mb-15">
           <div class="flex items-center pt-10 justify-between">
             <div v-if="!loading" class="flex gap-5">
-              <SlideNewsComponent
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[6]"
-              />
-              <SlideNewsComponent
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[7]"
-              />
-              <SlideNewsComponent
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[8]"
-              />
-              <SlideNewsComponent
-                v-if="hasCategoryNews"
-                :news-save-handler="newsSavedHandler"
-                :news="categoryNews[9]"
-              />
+              <SlideNewsComponent :news="allNews[selectedCategoryIndex][6]" class="w-[292px]" />
+              <SlideNewsComponent :news="allNews[selectedCategoryIndex][7]" class="w-[292px]" />
+              <SlideNewsComponent :news="allNews[selectedCategoryIndex][8]" class="w-[292px]" />
+              <SlideNewsComponent :news="allNews[selectedCategoryIndex][9]" class="w-[292px]" />
             </div>
             <SNCSkel v-else />
           </div>
@@ -287,22 +244,22 @@ watch(
               </h2>
             </div>
           </div>
-          <!-- 경제 -->
+          <!-- 첫번째 주제 -->
           <div class="flex flex-wrap">
-            <div class="flex gap-2 mb-6">
-              <img :src="economy" class="w-8 h-8 mt-0.5" />
-              <span class="text-[26px] font-semibold dark:text-white">경제</span>
+            <div v-if="otherIndexArr" class="flex gap-2 mb-6">
+              <img :src="interests[otherIndexArr[0]].icon" class="w-8 h-8 mt-0.5" />
+              <span class="text-[26px] font-semibold dark:text-white">{{
+                interests[otherIndexArr[0]].label
+              }}</span>
             </div>
             <div v-if="!loading" class="flex flex-col gap-4">
               <NewsComponent5
-                v-if="hasNews1"
                 :news-save-handler="newsSavedHandler"
-                :news="allNews[1][0]"
+                :news="allNews[otherIndexArr[0]][0]"
               />
               <NewsComponent5
-                v-if="hasNews1"
                 :news-save-handler="newsSavedHandler"
-                :news="allNews[1][1]"
+                :news="allNews[otherIndexArr[0]][1]"
               />
             </div>
             <NCSkel5 v-else />
@@ -312,20 +269,20 @@ watch(
         <div class="w-[608px] mt-19.5">
           <!-- 제목 -->
           <div class="flex flex-wrap">
-            <div class="flex gap-2 mb-6">
-              <img :src="culture" class="w-8 h-8 mt-0.5" />
-              <span class="text-[26px] font-semibold dark:text-white">문화</span>
+            <div v-if="otherIndexArr" class="flex gap-2 mb-6">
+              <img :src="interests[otherIndexArr[1]].icon" class="w-8 h-8 mt-0.5" />
+              <span class="text-[26px] font-semibold dark:text-white">{{
+                interests[otherIndexArr[1]].label
+              }}</span>
             </div>
             <div v-if="!loading" class="flex flex-col gap-4">
               <NewsComponent6
-                v-if="hasNews3"
                 :news-save-handler="newsSavedHandler"
-                :news="allNews[3][0]"
+                :news="allNews[otherIndexArr[1]][0]"
               />
               <NewsComponent6
-                v-if="hasNews3"
                 :news-save-handler="newsSavedHandler"
-                :news="allNews[3][1]"
+                :news="allNews[otherIndexArr[1]][1]"
               />
             </div>
             <NCSkel6 v-else />
@@ -335,41 +292,39 @@ watch(
       <!-- 연예 , 해외 -->
       <div class="flex gap-[40px] my-12.5">
         <div class="flex flex-wrap">
-          <div class="flex gap-2 mb-6">
-            <img :src="celeb" class="w-8 h-8 mt-0.5" />
-            <span class="text-[26px] font-semibold dark:text-white">연예</span>
+          <div v-if="otherIndexArr" class="flex gap-2 mb-6">
+            <img :src="interests[otherIndexArr[2]].icon" class="w-8 h-8 mt-0.5" />
+            <span class="text-[26px] font-semibold dark:text-white">{{
+              interests[otherIndexArr[2]].label
+            }}</span>
           </div>
           <div v-if="!loading" class="w-[600px] flex gap-4">
             <NewsComponent10
-              v-if="hasNews5"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[5][0]"
+              :news="allNews[otherIndexArr[2]][0]"
             />
             <NewsComponent10
-              v-if="hasNews5"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[5][1]"
+              :news="allNews[otherIndexArr[2]][1]"
             />
           </div>
           <NCSkel10 v-else />
         </div>
         <div class="w-[600px]">
-          <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-            <h1 class="flex gap-[10px] items-center">
-              <img :src="global" alt="global" class="w-8 h-8 mt-0.5" />
-              <p class="text-[26px] font-semibold dark:text-white">해외</p>
-            </h1>
+          <div v-if="otherIndexArr" class="flex gap-2 mb-6">
+            <img :src="interests[otherIndexArr[3]].icon" class="w-8 h-8 mt-0.5" />
+            <span class="text-[26px] font-semibold dark:text-white">{{
+              interests[otherIndexArr[3]].label
+            }}</span>
           </div>
           <div v-if="!loading" class="flex flex-col gap-[15px]">
             <NewsComponent6
-              v-if="hasNews6"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[6][0]"
+              :news="allNews[otherIndexArr[3]][0]"
             />
             <NewsComponent6
-              v-if="hasNews6"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[6][1]"
+              :news="allNews[otherIndexArr[3]][1]"
             />
           </div>
           <NCSkel6 v-else />
@@ -378,37 +333,33 @@ watch(
 
       <!-- 사회 -->
       <div class="w-full mb-10">
-        <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-          <h1 class="flex gap-[10px] items-center">
-            <img :src="global" alt="global" class="w-8 h-8 mt-0.5" />
-            <p class="text-[26px] font-semibold dark:text-white">사회</p>
-          </h1>
+        <div v-if="otherIndexArr" class="flex gap-2 mb-6">
+          <img :src="interests[otherIndexArr[4]].icon" class="w-8 h-8 mt-0.5" />
+          <span class="text-[26px] font-semibold dark:text-white">{{
+            interests[otherIndexArr[4]].label
+          }}</span>
         </div>
         <div v-if="!loading" class="flex gap-[30px]">
           <div class="flex flex-col gap-[15px]">
             <NewsComponent7
-              v-if="hasNews2"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[2][0]"
+              :news="allNews[otherIndexArr[4]][0]"
             />
 
             <NewsComponent7
-              v-if="hasNews2"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[2][1]"
+              :news="allNews[otherIndexArr[4]][1]"
             />
           </div>
           <div class="flex flex-col gap-[15px]">
             <NewsComponent7
-              v-if="hasNews2"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[2][2]"
+              :news="allNews[otherIndexArr[4]][2]"
             />
 
             <NewsComponent7
-              v-if="hasNews2"
               :news-save-handler="newsSavedHandler"
-              :news="allNews[2][3]"
+              :news="allNews[otherIndexArr[4]][3]"
             />
           </div>
         </div>
