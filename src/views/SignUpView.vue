@@ -1,6 +1,5 @@
 <script setup>
 import { userAuthStore } from '@/stores/authStore'
-import { useThemeStore } from '@/stores/useDarkmode'
 import supabase from '@/utils/supabase'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -152,10 +151,10 @@ const isDisabled = computed(() => {
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-[#EDEBF1] relative dark:bg-[#1F1F1F]"
+    class="min-h-screen flex items-center justify-center sm:bg-[#EDEBF1] sm:dark:bg-[#1F1F1F] dark:bg-[#262626] relative"
   >
     <!-- 다크모드 버튼 -->
-    <div class="absolute top-10 right-10 z-50">
+    <div class="absolute sm:top-10 sm:right-10 top-6 right-6 z-50">
       <DarkModeButton />
     </div>
     <div
@@ -180,6 +179,7 @@ const isDisabled = computed(() => {
         :is-nickname-available="isNicknameAvailable"
         :disabled="isDisabled"
         @submit="onSignUp"
+        class="max-w-85"
       >
         <template #submit>회원가입</template>
       </UserForm>
