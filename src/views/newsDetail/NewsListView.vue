@@ -5,7 +5,6 @@ import { fetchNewsData, fetchRandomNews, fetchShortDocs } from '@/api/fetchNews'
 
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
 import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
-// import NewsComponent3 from '@/components/NewsComponents/NewsComponent3.vue'
 import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
 import SlideNewsComponent from '@/components/NewsComponents/SlideNewsComponent.vue'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
@@ -20,14 +19,12 @@ import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import supabase from '@/utils/supabase'
 
 import NewsComponent4 from '@/components/NewsComponents/NewsComponent4.vue'
 import NewsComponent0 from '@/components/NewsComponents/NewsComponent0.vue'
 import runDog from '@/assets/img/run_dog.png'
 import NewsComponent9 from '@/components/NewsComponents/NewsComponent9.vue'
 import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
-
 import { useInterestStore } from '@/stores/interestStore'
 import NCSkel9 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel9.vue'
 import NCSkel0 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel0.vue'
@@ -82,14 +79,11 @@ const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
 
-const getLikeCount = async (postId) => {
-  const { count } = await supabase
-    .from('like')
-    .select('*', { count: 'exact', head: true })
-    .eq('post_id', postId)
 
-  return count || 0
-}
+onMounted(async () => {
+  loading.value = true
+})
+
 
 // 1. 다른카테고리 뉴스 순차 로딩 (with delay)
 const loadInterestNews = async () => {
@@ -165,8 +159,8 @@ onMounted(async () => {
             <div class="flex items-center">
               <h3 class="flex text-[30px] font-semibold dark:text-white">Shorts Docs</h3>
               <span class="text-[#7A42DF] dark:text-[#A878FD] text-md ml-4 justify-center"
-                >3초만에 확인해요</span
-              >
+                >3초만에 확인해요
+              </span>
             </div>
 
             <section class="flex right-0 gap-2">
