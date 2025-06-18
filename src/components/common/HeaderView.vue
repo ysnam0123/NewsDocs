@@ -43,7 +43,7 @@ const notiHandler = () => {
       <ul class="flex gap-[32px] select-none">
         <li
           class="text-[var(--nav-text)] cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
-          @click="movePage('/myinterest')"
+          @click="movePage('/')"
         >
           맞춤 소식
         </li>

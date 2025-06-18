@@ -87,13 +87,6 @@ const handleClick = async () => {
 
 const summarizeHandler = async (articleId, description) => {
   try {
-    // if (!description) {
-    //   summaryMessage.value = '요약할 내용이 없습니다.'
-    //   await runTyped('요약할 내용이 없습니다.')
-    //   console.warn('❌ 요약할 내용이 없음')
-    //   return
-    // }
-
     summaryStore.isLoading = true
     isSummaryLoading.value = true
 
@@ -128,8 +121,6 @@ const summarizeHandler = async (articleId, description) => {
 
     if (error) {
       console.error('❌ Supabase 저장 실패', error)
-    } else {
-      console.log('💾 Supabase에 요약 저장 완료')
     }
   } catch (err) {
     console.error('❌ 요약 중 오류 발생', err)
