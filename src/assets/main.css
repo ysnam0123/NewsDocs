@@ -8,13 +8,6 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: BagelFatOne;
-  src: url('../assets/fonts/BagelFatOne.woff') format('woff');
-  src: url('../assets//fonts//BagelFatOne.woff2') format('woff2');
-}
-
-html,
 body,
 #app {
   height: 100%;

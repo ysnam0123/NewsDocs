@@ -197,10 +197,10 @@ onMounted(async () => {
 <template>
   <div class="mx-auto max-w-[1240px] pt-[50px]">
     <!-- 로그인 된 상태 -->
-    <div v-if="!userInterestLoading && isLoggedIn">
+    <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
-      <div v-if="matchedCategories">
+      <div v-if="!userInterestLoading">
         <div>
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
