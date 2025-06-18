@@ -79,6 +79,7 @@ async function onEdit(values) {
   try {
     // 현재 로그인 유저 정보 받아오기
     const user = await getCurrentUser()
+    console.log('user:', user)
     if (!user?.id) throw new Error('로그인된 유저 정보를 찾을 수 없습니다.')
     console.log(user)
     const profileUser = await fetchUser(user.id)

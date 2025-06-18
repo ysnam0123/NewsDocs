@@ -18,7 +18,7 @@ import { computed, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 import { getFreshNews } from '@/composables/newsCache'
-import { allCategegoryMap } from '@/composables/useCategoryMap'
+import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
 
@@ -57,6 +57,8 @@ const getLikeCount = async (postId) => {
 const matchedCategories = ref([])
 const userInterestLoading = ref(false)
 const introduceData = ref([])
+const introduceLoading = ref(true)
+
 onMounted(async () => {
   const {
     data: { user: supaUser },
@@ -65,7 +67,6 @@ onMounted(async () => {
   isLoggedIn.value = !!supaUser
   console.log('사용자 정보:', user.value)
 
-  const introduceLoading = ref(true)
   if (!isLoggedIn.value) {
     const { data: beforeLoginData, error: introduceError } = await supabase
       .from('for_introduce')
@@ -80,6 +81,20 @@ onMounted(async () => {
     return
   }
 
+  // user 최대 관심사
+  const { data: favoriteInterest, error: favoriteError } = await supabase
+    .from('user_interests')
+    .select('category_id')
+    .eq('user_id', user.value.id)
+    .eq('is_highest', true)
+  if (favoriteError) {
+    console.error('최대관심사 에러:', favoriteError)
+  } else {
+    favoriteInterest
+  }
+  const favoriteCategoryId = favoriteInterest?.[0]?.category_id
+  console.log('최대관심사의 카테고리 id:', favoriteCategoryId)
+
   // user_interests 에서 유저가 선택한 관심사 가져오기
   const { data: interestData, error: interestError } = await supabase
     .from('user_interests')
@@ -87,17 +102,21 @@ onMounted(async () => {
     .eq('user_id', user.value.id)
 
   const userInterestArr = interestData.map((item) => item.category_id)
-  // 나중엔 Arr1 로 바꿔주기
-  // const userInterestArr2 = [2, 3, 4, 5, 6, 7]
+
   if (interestError) {
     console.error('유저관심사 가져오기 실패:', interestError.message)
   } else {
     console.log('유저의 관심사:', userInterestArr) // [3,4,5] 이런식으로 저장됨
   }
+  const finalInterestArr = [
+    ...[favoriteCategoryId],
+    ...userInterestArr.filter((id) => id !== favoriteCategoryId),
+  ]
+  console.log('finalInterestArr:', finalInterestArr)
 
   //
-  matchedCategories.value = userInterestArr.map((num) =>
-    allCategegoryMap.find((item) => item.num === num),
+  matchedCategories.value = finalInterestArr.map((num) =>
+    allCategoryMap.find((item) => item.num === num),
   )
 
   // 원하는 카테고리 순서 (한글)
@@ -107,6 +126,7 @@ onMounted(async () => {
   userInterestLoading.value = true
 
   console.log('유저가 선택한 카테고리 객체배열:', matchedCategories)
+  console.log(matchedCategories.value[0].icon)
   console.log('유저 카테고리 한국어배열:', matchedCategoriesLabel)
   console.log('유저 카테고리 영어배열:', matchedEnglishlabel)
 
@@ -162,6 +182,7 @@ onMounted(async () => {
     post.like_count = likeCount
   }
   posts.value = data
+  userInterestLoading.value = false
 })
 </script>
 
@@ -171,12 +192,16 @@ onMounted(async () => {
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
       <!-- 섹션 1: 스포츠 -->
-      <div v-if="userInterestLoading && userInterestArr">
+      <div v-if="!userInterestLoading">
         <div>
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img :src="matchedCategories[0].icon" alt="firstLabel" />
+              <img
+                v-if="matchedCategories.value[0]"
+                :src="matchedCategories.value[0].icon"
+                alt="firstLabel"
+              />
               <p class="text-[30px] text-[var(--text-title)] font-bold">
                 {{ matchedCategories[0].label }}
               </p>
@@ -308,11 +333,7 @@ onMounted(async () => {
               </div>
             </div>
             <!-- 섹션 6: 경제 -->
-            <FourthSection
-              :news-save-handler="newsSavedHandler"
-              v-if="hasNews3"
-              :newsArr="allNews[3]"
-            />
+            <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
             <FourthSectionSkel v-else-if="loading" />
           </div>
           <div>

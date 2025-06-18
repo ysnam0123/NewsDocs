@@ -7,7 +7,7 @@ import societyIcon from '@/assets/icons/societyIcon.svg'
 import economyIcon from '@/assets/icons/economyIcon.svg'
 import etcIcon from '@/assets/icons/etcIcon.svg'
 
-export const allCategegoryMap = [
+export const allCategoryMap = [
   { num: 1, id: 'politics', label: '정치', icon: politicsIcon },
   { num: 2, id: 'sports', label: '스포츠', icon: sportsIcon },
   { num: 3, id: 'entertainment', label: '연예', icon: entertainmentIcon },
