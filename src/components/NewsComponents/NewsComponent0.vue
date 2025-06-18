@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
@@ -23,7 +23,7 @@ const handleSummary = async () => {
 
   isLoading.value = true
 
-  const result = await getOrCreateSummary(props.news.article_id, props.news.description)
+  const result = await getOrCreateSummary(props.news.news_id, props.news.description)
   if (result) {
     summary.value = result
     await runTyped(result)
@@ -31,12 +31,6 @@ const handleSummary = async () => {
 
   isLoading.value = false
 }
-
-onMounted(() => {
-  if (props.news) {
-    console.log('0번 컴포넌트 Mounted')
-  }
-})
 </script>
 <template>
   <div
@@ -46,12 +40,14 @@ onMounted(() => {
   >
     <!-- 호버했을때 나오는 창 -->
     <div
-      class="absolute w-full h-full hover:inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center text-center z-12 cursor-pointer"
+      v-if="isOpen"
+      @click="isOpen = false"
+      class="absolute w-full h-full inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center text-center z-12 cursor-pointer"
     >
       <p class="hidden group-hover:flex text-white text-[16px] hover:z-20">요약보기</p>
     </div>
     <div
-      v-if="isOpen"
+      v-if="isLoading"
       class="absolute cursor-pointer inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center gap-4 rounded-[16px] z-20 backdrop-blur-lg"
     >
       <!-- 클릭했을 때 나오는 창 -->
