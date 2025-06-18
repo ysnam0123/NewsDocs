@@ -1,4 +1,5 @@
 <script setup>
+
 import { nextTick, onMounted, ref } from 'vue'
 import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
@@ -57,6 +58,7 @@ onMounted(() => {
 </script>
 <template>
   <div v-if="props.news" class="h-[430px] relative select-none">
+
     <!-- 호버했을때 나오는 창 -->
     <div
       class="absolute w-full h-[300px] group inset-0 bg-transparent hover:bg-black/50 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"

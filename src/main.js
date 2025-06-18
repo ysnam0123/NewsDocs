@@ -6,6 +6,7 @@ import router from './router'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
+
 import '@/assets/main.css'
 import '@/assets/root.css'
 const pinia = createPinia()

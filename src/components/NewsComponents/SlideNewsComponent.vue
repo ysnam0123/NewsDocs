@@ -216,7 +216,9 @@ onMounted(() => {
         <div class="flex flex-col relative z-30 h-full">
           <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
           <div class="pr-1">
-            <div class="text-white whitespace-pre-line leading-8 overflow-scroll max-h-[220px]">
+            <div
+              class="text-white whitespace-pre-line leading-8 overflow-scroll scrollbar-hide max-h-[220px]"
+            >
               <span ref="typedTarget" class="text-white"></span>
             </div>
           </div>

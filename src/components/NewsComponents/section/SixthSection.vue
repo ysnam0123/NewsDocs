@@ -28,25 +28,6 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <!-- 제목 -->
-  <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-    <h1 class="flex gap-[10px] items-center">
-      <img :src="interestList[5].icon" alt="interestList[5].label" />
-      <p class="text-[30px] text-[var(--text-title)] font-bold">
-        {{ interestList[5].label }}
-      </p>
-    </h1>
-    <div class="flex">
-      <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-    </div>
-    <div class="ml-auto cursor-pointer">
-      <h3
-        class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
-      >
-        더보기
-      </h3>
-    </div>
-  </div>
   <div class="w-full">
     <div class="flex gap-[30px]">
       <div class="flex flex-col gap-[15px]">

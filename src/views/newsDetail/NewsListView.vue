@@ -38,6 +38,7 @@ import NCSkel7 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSk
 const router = useRouter()
 const swiperInstance = ref(null)
 const posts = ref([])
+
 const interestStore = useInterestStore()
 const interestList = computed(() => interestStore.interestList)
 const allNews = ref([])
@@ -78,9 +79,11 @@ const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
 
+
 onMounted(async () => {
   loading.value = true
 })
+
 
 // 1. 다른카테고리 뉴스 순차 로딩 (with delay)
 const loadInterestNews = async () => {
@@ -188,7 +191,7 @@ onMounted(async () => {
               @slideChange="onSlideChange"
               @swiper="onSwiper"
             >
-              <swiper-slide v-for="(news, index) in shortDocs" :key="index" class="!w-[300px]">
+              <swiper-slide v-for="(news, index) in shortDocs" :key="index" class="!w-[292x]">
                 <SlideNewsComponent v-if="hasShortDocs" :news="news" />
               </swiper-slide>
             </swiper>

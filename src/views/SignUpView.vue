@@ -57,7 +57,7 @@ async function checkEmailDuplicate() {
       isEmailAvailable.value = false
     } else {
       setFieldError('email', '')
-      isNicknameAvailable.value = true
+      isEmailAvailable.value = true
     }
   } catch (error) {
     toast.error('이메일 확인 중 오류가 발생했습니다.')
