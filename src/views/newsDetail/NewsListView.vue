@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { computed, onMounted, ref } from 'vue'
-import { fetchNewsData } from '@/api/fetchNews'
+import { onMounted, ref } from 'vue'
+
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import politicsIcon from '@/assets/icons/politicsIcon.svg'
 import sportsIcon from '@/assets/icons/sportsIcon.svg'
@@ -36,7 +36,6 @@ import NCSkel5 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSk
 import NCSkel6 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel6.vue'
 import NCSkel10 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel10.vue'
 import NCSkel7 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel7.vue'
-import { useInterestStore } from '@/stores/interestStore'
 import supabase from '@/utils/supabase'
 import { getFreshNews, getFreshRamdomNews } from '@/composables/newsCache'
 
@@ -63,22 +62,8 @@ const posts = ref([])
 const router = useRouter()
 
 const swiperInstance = ref(null)
-const interestStore = useInterestStore()
-const interestList = computed(() => interestStore.interestList)
 
 const randomResult = ref()
-const shortDocs = ref([])
-
-// 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
-const hasShortDocs = computed(() => Array.isArray(shortDocs.value) && shortDocs.value.length > 0)
-const hasRanNews = computed(
-  () => Array.isArray(randomResult.value) && randomResult.value.length > 0,
-)
-const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 1)
-const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
-const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
-const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
-const hasNews6 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
 // const getLikeCount = async (postId) => {
 //   const { count } = await supabase
@@ -106,22 +91,6 @@ const onSlideChange = () => {
   swiperInstance.value?.swiper
 }
 
-// 1. 다른카테고리 뉴스 순차 로딩 (with delay)
-// const loadInterestNews = async () => {
-//   try {
-//     const newsResults = []
-//     for (const item of interestList.value) {
-//       const result = await fetchNewsData(item.id, 'ko')
-//       newsResults.push(result)
-//       await new Promise((resolve) => setTimeout(resolve, 300))
-//     }
-//     allNews.value = newsResults
-//     console.log('관심 뉴스', allNews.value)
-//   } catch (error) {
-//     console.error('Error fetching news:', error)
-//   }
-// }
-
 onMounted(async () => {
   const {
     data: { user: supaUser },
@@ -133,7 +102,7 @@ onMounted(async () => {
   const storedRandom = localStorage.getItem('randomResult')
   if (storedRandom) {
     randomResult.value = JSON.parse(storedRandom)
-    console.log('로컬스토리지에서 불러온 랜덤뉴스:', randomResult.value)
+    console.log('로컬스토리지 - 랜덤뉴스:', randomResult.value)
   } else {
     const randomData = await getFreshRamdomNews('ko')
     randomResult.value = randomData
@@ -144,7 +113,7 @@ onMounted(async () => {
   const storedNews = localStorage.getItem('allNews')
   if (storedNews) {
     allNews.value = JSON.parse(storedNews)
-    console.log('로컬스토리지에서 불러온 뉴스:', allNews.value)
+    console.log('로컬스토리지 - 전체 카테고리 뉴스:', allNews.value)
     loading.value = false
     return
   }
@@ -152,14 +121,6 @@ onMounted(async () => {
   loading.value = true
 
   try {
-    // 각 카테고리에 대해 뉴스 가져오기
-    // const newsResults = []
-    // for (const category of interests) {
-    //   console.log(`뉴스 가져오기: ${category}`)
-    //   const result = await getFreshNews(category, 'ko')
-    //   newsResults.push(result)
-    //   await new Promise((resolve) => setTimeout(resolve, 300))
-    // }
     const newsResults = await Promise.all(interests.map((category) => getFreshNews(category, 'ko')))
     allNews.value = newsResults
     // 모든 관심사 뉴스를 로컬스토리지에 저장
