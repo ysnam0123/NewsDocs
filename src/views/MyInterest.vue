@@ -21,7 +21,7 @@ import { getFreshNews } from '@/composables/newsCache'
 import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
-import { getLikeCount } from '@/api/updateLikeNewsCount'
+import { toggleLike } from '@/api/updateLikeNewsCount'
 
 const user = ref(null)
 const loading = ref(true)
@@ -34,6 +34,14 @@ const scrollToTop = () => {
 const allNews = ref([])
 const posts = ref([])
 const router = useRouter()
+
+// 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
+const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
+const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 1)
+const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
+const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
+const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
+const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
 const matchedCategories = ref([])
 const userInterestLoading = ref(true)
@@ -165,7 +173,7 @@ onMounted(async () => {
     return
   }
   for (const post of data) {
-    const likeCount = await getLikeCount(post.post_id)
+    const likeCount = await toggleLike(post.post_id)
     post.like_count = likeCount
   }
   posts.value = data
@@ -290,7 +298,7 @@ onMounted(async () => {
               </div>
             </div>
             <div v-if="!loading">
-              <HotDocsComponent :news="news" />
+              <HotDocsComponent />
             </div>
             <div v-else>
               <div

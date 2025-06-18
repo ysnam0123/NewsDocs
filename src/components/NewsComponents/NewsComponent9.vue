@@ -87,7 +87,7 @@ onMounted(() => {
         class="h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]"
       >
         <div class="flex flex-col relative z-30 h-full">
-          <h1 class="text-[20px] text-white mb-[24px]">세줄 요약</h1>
+          <h1 class="text-[20px] text-white mb-8">세줄 요약</h1>
           <div class="flex flex-col w-full">
             <div class="max-h-[220px] overflow-y-auto scrollbar-hide pr-1">
               <div class="text-white whitespace-pre-line leading-8">
