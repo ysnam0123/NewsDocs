@@ -1,6 +1,5 @@
 <script setup>
 import { fetchOpenAi } from '@/api/fetchOpenAi'
-import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import { onMounted, ref, nextTick } from 'vue'
 import supabase from '@/utils/supabase'
 import { useNewsStore } from '@/stores/newsStore'
@@ -11,6 +10,7 @@ import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 import { useNewsActions } from '@/composables/useNewsActions'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 const { toDetailHandler, saveNews } = useNewsActions()
 // 호버 상태
 const summaryHover = ref(false)
@@ -245,6 +245,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <ScrapNotOnImg class="absolute right-[15px] top-[10px] z-15" />
+    <!-- <ScrapNotOnImg class="absolute right-[15px] top-[10px] z-15" /> -->
+    <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-15" />
   </div>
 </template>

@@ -1,6 +1,5 @@
 <script setup>
 import { fetchOpenAi } from '@/api/fetchOpenAi'
-import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import { onMounted, ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import supabase from '@/utils/supabase'
@@ -10,6 +9,7 @@ import Typed from 'typed.js'
 
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 
 // 호버 상태
 const summaryHover = ref(false)
@@ -252,7 +252,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <ScrapNotOnImg class="absolute right-[10px] top-[10px] z-20" />
+      <!-- <ScrapNotOnImg class="absolute right-[10px] top-[10px] z-20" /> -->
+      <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-15" />
     </div>
   </div>
 </template>
