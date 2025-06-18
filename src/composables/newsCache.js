@@ -53,7 +53,7 @@ export async function getFreshNews(category, language) {
           return {
             news_id: news.article_id,
             category_id: mappedId,
-            view_count: news.view_count,
+            view_count: news.view_count ?? 0,
             title: news.title,
             link: news.link,
             keywords: news.keywords ?? [],
