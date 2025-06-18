@@ -29,9 +29,11 @@ const handleSummary = async () => {
     isOpen.value = false
     return
   }
+
   isLoading.value = true
   isOpen.value = true
   await nextTick()
+
   if (summary.value) {
     await runTyped(summary.value)
   } else {
@@ -41,6 +43,7 @@ const handleSummary = async () => {
       await runTyped(result)
     }
   }
+
   isLoading.value = false
 }
 
