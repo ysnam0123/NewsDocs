@@ -126,65 +126,67 @@ async function onEdit(values) {
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="mx-auto p-[30px]">
-      <div class="flex justify-between">
-        <div class="flex flex-col justify-center space-y-4">
-          <div class="mb-5 w-full flex flex-col items-center">
-            <label
-              class="block text-[24px] font-bold w-[444px] text-left text-[#191919] mb-6 dark:text-white"
-              >내 정보 수정</label
-            >
-            <UserForm
-              ref="form"
-              :schema="editProfileSchema"
-              :show-email="false"
-              :show-name="false"
-              :show-signup-btn="false"
-              :on-check-nickname="checkNicknameDuplicate"
-              :is-nickname-available="isNicknameAvailable"
-              @submit="onEdit"
-            >
-              <template #submit></template>
-            </UserForm>
-          </div>
+    <div class="w-full flex flex-row justify-center items-start my-20 px-4">
+      <div class="w-full max-w-[444px]">
+        <label
+          class="block text-[24px] font-bold max-w-85 text-left text-[#191919] mb-6 dark:text-white"
+          >내 정보 수정</label
+        >
+        <div class="w-full">
+          <UserForm
+            ref="form"
+            :schema="editProfileSchema"
+            :show-email="false"
+            :show-name="false"
+            :show-signup-btn="false"
+            :on-check-nickname="checkNicknameDuplicate"
+            :is-nickname-available="isNicknameAvailable"
+            @submit="onEdit"
+            class="w-full"
+          >
+            <template #submit></template>
+          </UserForm>
         </div>
-        <div class="sticky top-[40px] self-start hidden sm:flex">
-          <div class="flex flex-col items-end space-y-2 ml-[46px]">
+      </div>
+      <div class="sticky top-10 w-120px justify-start mt-4 px-10 hidden sm:flex">
+        <!-- 버튼을 아래쪽에 배치 -->
+        <div class="flex flex-col items-end space-y-2">
+          <button
+            form="edit-form"
+            type="submit"
+            class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
+          >
+            변경사항 저장
+          </button>
+          <RouterLink to="/profile">
             <button
-              form="edit-form"
-              type="submit"
-              class="w-[123px] h-[44px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
+              class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
             >
-              변경사항 저장
+              취소하기
             </button>
-            <RouterLink to="/profile">
-              <button
-                class="w-[123px] h-[44px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
-              >
-                취소하기
-              </button>
-            </RouterLink>
-          </div>
+          </RouterLink>
         </div>
       </div>
     </div>
 
     <!-- 모바일용 버튼 -->
-    <div class="flex sm:hidden justify-center gap-3 px-[30px]">
-      <RouterLink to="/profile" class="flex-1">
+    <div class="flex w-full sm:hidden justify-center gap-3 px-[30px]">
+      <div class="flex w-[434px] gap-3">
+        <RouterLink to="/profile" class="flex-1">
+          <button
+            class="w-full h-[50px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
+          >
+            취소하기
+          </button>
+        </RouterLink>
         <button
-          class="w-full h-[50px] bg-[#F6F6F6] rounded-lg text-sm text-[#191919] cursor-pointer hover:bg-[#EDEDED] dark:bg-[#363636] dark:text-white dark:hover:bg-[#4A4A4A]"
+          form="edit-form"
+          type="submit"
+          class="flex-1 h-[50px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
         >
-          취소하기
+          변경사항 저장
         </button>
-      </RouterLink>
-      <button
-        form="edit-form"
-        type="submit"
-        class="flex-1 h-[50px] bg-[#7537E3] rounded-lg text-sm text-white cursor-pointer hover:bg-[#601ED5] dark:bg-[#7846D2] dark:hover:bg-[#6524D9]"
-      >
-        변경사항 저장
-      </button>
+      </div>
     </div>
   </div>
 </template>

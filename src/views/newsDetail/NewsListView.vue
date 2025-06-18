@@ -57,6 +57,7 @@ const allNews = ref()
 const posts = ref([])
 const router = useRouter()
 const swiperInstance = ref(null)
+
 const randomResult = ref()
 
 // swiper left
@@ -87,7 +88,7 @@ onMounted(async () => {
   const storedRandom = localStorage.getItem('randomResult')
   if (storedRandom) {
     randomResult.value = JSON.parse(storedRandom)
-    console.log('로컬스토리지에서 불러온 랜덤뉴스:', randomResult.value)
+    console.log('로컬스토리지 - 랜덤뉴스:', randomResult.value)
   } else {
     const randomData = await getFreshRamdomNews('ko')
     randomResult.value = randomData
@@ -98,7 +99,7 @@ onMounted(async () => {
   const storedNews = localStorage.getItem('allNews')
   if (storedNews) {
     allNews.value = JSON.parse(storedNews)
-    console.log('로컬스토리지에서 불러온 뉴스:', allNews.value)
+    console.log('로컬스토리지 - 전체 카테고리 뉴스:', allNews.value)
     loading.value = false
     return
   }
@@ -106,14 +107,6 @@ onMounted(async () => {
   loading.value = true
 
   try {
-    // 각 카테고리에 대해 뉴스 가져오기
-    // const newsResults = []
-    // for (const category of interests) {
-    //   console.log(`뉴스 가져오기: ${category}`)
-    //   const result = await getFreshNews(category, 'ko')
-    //   newsResults.push(result)
-    //   await new Promise((resolve) => setTimeout(resolve, 300))
-    // }
     const newsResults = await Promise.all(interests.map((category) => getFreshNews(category, 'ko')))
     allNews.value = newsResults
     // 모든 관심사 뉴스를 로컬스토리지에 저장

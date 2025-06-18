@@ -125,6 +125,14 @@ onMounted(async () => {
   console.log('관심사 로딩 종료', userInterestLoading.value)
   nextTick()
 
+  const storedUserInterestNews = localStorage.getItem('userInterestNews')
+  if (storedUserInterestNews) {
+    allNews.value = JSON.parse(storedUserInterestNews)
+    console.log('로컬스토리지 - 유저 관심사 뉴스:', allNews.value)
+    loading.value = false
+    return
+  }
+
   const newsResults = []
 
   if (isLoggedIn.value && userInterestArr.length > 0) {
@@ -138,6 +146,8 @@ onMounted(async () => {
         await new Promise((resolve) => setTimeout(resolve, 300))
       }
       allNews.value = newsResults
+      localStorage.setItem('userInterestNews', JSON.stringify(allNews.value))
+      console.log('로컬에 유저 관심사 뉴스 배열 저장:', allNews.value)
       console.log('allNews 결과:', allNews.value)
       loading.value = false
     } catch (error) {
@@ -185,10 +195,9 @@ onMounted(async () => {
     <!-- 로그인 된 상태 -->
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
-      <!-- 섹션 1: 스포츠 -->
-      <div v-if="!userInterestLoading && matchedCategories">
+      <div v-if="!loading && allNews">
         <div>
-          <!-- 제목 -->
+          <!-- 최고 관심사 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
               <img v-if="matchedCategories[0]" :src="matchedCategories[0].icon" alt="firstLabel" />
@@ -211,7 +220,7 @@ onMounted(async () => {
 
           <FavoriteSectionSkel v-else-if="loading" />
         </div>
-        <!-- 섹션 2 : 커뮤니티로 접근 -->
+        <!-- 커뮤니티 섹션 -->
         <div
           class="rounded-[24px] bg-[var(--section-contents-bg)] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]"
         >
@@ -235,13 +244,12 @@ onMounted(async () => {
             글쓰러 가기
           </button>
         </div>
-        <!-- 섹션 3 : 슬라이드 카드뉴스 -->
-        <!-- 제목 -->
+        <!-- 두번째 관심사 -->
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
-            <!-- <img :src="matchedCategories[1].icon" alt="secondLabel" /> -->
+            <img :src="matchedCategories[1].icon" alt="secondLabel" />
             <p class="text-[30px] text-[var(--text-title)] font-bold">
-              <!-- {{ matchedCategories[1].label }} -->
+              {{ matchedCategories[1].label }}
             </p>
           </h1>
           <div class="flex">
@@ -258,16 +266,14 @@ onMounted(async () => {
         <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
         <SecondSectionSkel v-else-if="loading" />
 
-        <!-- 섹션 4,5 연예, 핫독스 -->
         <div class="flex gap-[72px] mb-[50px]">
-          <!-- 섹션 4 : 연예 -->
-          <!-- 제목 -->
+          <!-- 세번째 관심사 -->
           <div>
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <!-- <img :src="matchedCategories[2].icon" alt="thirdLabel" /> -->
+                <img :src="matchedCategories[2].icon" alt="thirdLabel" />
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  <!-- {{ matchedCategories[2].label }} -->
+                  {{ matchedCategories[2].label }}
                 </p>
               </h1>
               <div class="flex">
@@ -285,9 +291,8 @@ onMounted(async () => {
             <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
             <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
           </div>
-          <!-- 섹션 5 : 오늘의 핫 독스 -->
+          <!-- 오늘의 핫 독스 -->
           <div class="w-[560px]">
-            <!-- 제목 -->
             <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
                 <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
@@ -349,10 +354,9 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <!-- 섹션 6, 7 -->
         <div class="flex gap-[40px] mb-[50px]">
           <div>
-            <!-- 제목 -->
+            <!-- 세 번째 관심사 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
                 <p class="text-[30px] text-[var(--text-title)] font-bold"></p>
@@ -368,17 +372,18 @@ onMounted(async () => {
                 </h3>
               </div>
             </div>
-            <!-- 섹션 6: 경제 -->
+            <!-- 섹션 6 -->
             <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
             <FourthSectionSkel v-else-if="loading" />
           </div>
+          <!-- 네번째 관심사 -->
           <div v-if="matchedCategories.length > 4">
             <!-- 제목 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <!-- <img :src="matchedCategories[4].icon" alt="fifthsLabel" /> -->
+                <img :src="matchedCategories[4].icon" alt="fifthsLabel" />
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  <!-- {{ matchedCategories[4].label }} -->
+                  {{ matchedCategories[4].label }}
                 </p>
               </h1>
               <div class="flex">
@@ -392,7 +397,6 @@ onMounted(async () => {
                 </h3>
               </div>
             </div>
-            <!-- 섹션 7 : 문화 -->
             <FifthSection
               :news-save-handler="newsSavedHandler"
               v-if="hasNews4"
@@ -402,13 +406,13 @@ onMounted(async () => {
           </div>
         </div>
 
+        <!-- 다섯번째 관심사 -->
         <div v-if="matchedCategories.length > 5">
-          <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <!-- <img :src="matchedCategories[5].icon" alt="fifthsLabel" /> -->
+              <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
               <p class="text-[30px] text-[var(--text-title)] font-bold">
-                <!-- {{ matchedCategories[5].label }} -->
+                {{ matchedCategories[5].label }}
               </p>
             </h1>
             <div class="flex">
@@ -422,7 +426,7 @@ onMounted(async () => {
               </h3>
             </div>
           </div>
-          <!-- 섹션 8: 해외 -->
+          <!-- 섹션 8 -->
           <SixthSection
             :news-save-handler="newsSavedHandler"
             v-if="hasNews5"

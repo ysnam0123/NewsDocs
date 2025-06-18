@@ -39,21 +39,27 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="flex items-center gap-[24px] w-full h-[237px] group cursor-pointer">
+  <div
+    class="flex flex-col sm:flex-row justify-center sm:items-center gap-[16px] sm:gap-[24px] w-full sm:h-[237px] py-6 sm:py-0 group cursor-pointer"
+  >
     <!-- 이미지 -->
     <div
-      class="w-[232px] h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
+      class="w-full sm:w-[232px] h-[270px] sm:h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] px-5 sm:px-0 bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
     >
       <img
         :src="props.image ? props.image : defaultImg"
         alt="게시글 이미지"
-        :class="props.image ? 'w-full h-full object-cover' : 'w-[172px] h-[91px]'"
+        :class="
+          props.image
+            ? 'w-full h-full object-cover rounded-[12px]'
+            : 'w-[90px] sm:w-[172px] h-[48px] sm:h-[91px]'
+        "
       />
     </div>
 
     <div class="flex flex-col flex-grow">
       <!-- 게시글 내용 -->
-      <div class="flex flex-col justify-center w-full h-[172px]">
+      <div class="flex flex-col justify-center w-full h-[172px] px-5 sm:px-0">
         <!-- 작성자&태그 -->
         <div class="w-full h-10 flex items-center justify-between">
           <!-- 작성자 -->
@@ -68,14 +74,14 @@ onMounted(async () => {
           <!-- 태그 -->
           <p
             v-if="categoryData"
-            class="flex items-center text-[16px] text-[#7537E3] dark:text-[#A878FD]"
+            class="flex items-center text-[14px] sm:text-[16px] text-[#7537E3] dark:text-[#A878FD]"
           >
             #{{ categoryData.title }}
           </p>
         </div>
 
         <!-- 내용 -->
-        <div class="mt-5 max-w-[574px]">
+        <div class="mt-4 sm:mt-5 w-full sm:max-w-[574px]">
           <div
             class="text-xl group-hover:text-[#515151] text-[#191919] dark:text-[#ffffff] transition-all duration-300 truncate overflow-hidden whitespace-nowrap"
           >
@@ -91,12 +97,12 @@ onMounted(async () => {
         <!-- 좋아요,댓글 -->
         <div class="flex items-center w-auto mt-auto h-[18px]">
           <ThumbsUp class="w-4 h-4 text-[#B7B7B7]" />
-          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
+          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[1px] sm:ml-[3px] text-[13px]">
             {{ props.like }}
           </div>
 
           <MessageSquare class="w-4 h-4 ml-[11px] text-[#B7B7B7]" />
-          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[3px] text-[13px]">
+          <div class="text-[#B7B7B7] dark:text-[#7A7A7A] ml-[1px] sm:ml-[3px] text-[13px]">
             {{ commentData.length }}
           </div>
         </div>

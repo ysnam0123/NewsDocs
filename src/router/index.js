@@ -54,6 +54,9 @@ const router = createRouter({
       component: () => import('../views/profile/ProfileEditView.vue'),
       meta: {
         hideHeaderBasic: true,
+        mobile: {
+          hideHeader: true,
+        },
       },
     },
     {

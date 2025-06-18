@@ -50,7 +50,7 @@ const markAllRead = async () => {
   <Teleport to="body">
     <div
       ref="alarmRef"
-      class="absolute top-[80px] right-[180px] w-[300px] h-[380px] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] dark:bg-[#343434]"
+      class="absolute top-[80px] right-[180px] w-[300px] h-[380px] rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] bg-[#FFFFFF] dark:bg-[#343434] z-50"
     >
       <div class="flex items-center w-full ml-[20px] h-[50px] text-[18px] dark:text-[#D7D7D7]">
         알림
