@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import supabase from '@/utils/supabase'
-import { fetchNewsData } from '@/api/fetchNews'
+import { fetchNewsData, fetchRandomNews } from '@/api/fetchNews'
 import { categoryIdMap } from '@/composables/useCategoryMap'
 
 const NEWS_TTL_MINUTES = 10
@@ -14,27 +14,6 @@ const getCategoryIdFromEnglishName = (category) => {
   }
   return categoryId
 }
-
-// 영어 카테고리 이름에서 category_id로 변환 (기존 함수 유지)
-// const getCategoryIdFromName = (categoryArrStr) => {
-//   let engKey = null
-//   try {
-//     if (!categoryArrStr) return null
-//     if (typeof categoryArrStr === 'string' && categoryArrStr.startsWith('[')) {
-//       const arr = JSON.parse(categoryArrStr)
-//       if (Array.isArray(arr) && arr.length > 0) {
-//         engKey = arr[0].toLowerCase()
-//       }
-//     } else if (typeof categoryArrStr === 'string') {
-//       engKey = categoryArrStr.toLowerCase()
-//     }
-//     const id = categoryIdMap[engKey] ?? null
-//     // console.log('[카테고리 매핑] 원본:', categoryArrStr, '| 추출:', engKey, '| 매핑된 ID:', id)
-//     return id
-//   } catch {
-//     return null
-//   }
-// }
 
 export async function getFreshNews(category, language) {
   // 영어 카테고리를 category_id로 변환
@@ -71,14 +50,6 @@ export async function getFreshNews(category, language) {
       await supabase.from('news').upsert(
         freshNews.map((news) => {
           const mappedId = getCategoryIdFromEnglishName(news.category) || category_id
-          // console.log(
-          //   '[뉴스 저장] news.article_id:',
-          //   news.article_id,
-          //   '| category:',
-          //   news.category,
-          //   '| category_id:',
-          //   mappedId,
-          // )
           return {
             news_id: news.article_id,
             category_id: mappedId,
@@ -97,5 +68,55 @@ export async function getFreshNews(category, language) {
       console.log('저장됨')
     }
     return freshNews || []
+  }
+}
+export async function getFreshRamdomNews(language) {
+  // Supabase에서 category_id로 뉴스 조회
+  const { data: newsArr } = await supabase
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(20)
+
+  console.log(`Supabase 조회 결과: ${newsArr?.length || 0}개`)
+
+  const now = dayjs()
+  const isFresh =
+    newsArr &&
+    newsArr.length > 0 &&
+    now.diff(dayjs(newsArr[0].created_at), 'minute') < NEWS_TTL_MINUTES
+  console.log(`신선도: ${isFresh}`)
+
+  if (isFresh) {
+    // console.log('신선한 뉴스:', newsArr)
+    return newsArr
+  } else {
+    // fetchNewsData에 한글 카테고리 이름 직접 전달
+    console.log(`신선도 false -> 랜덤한 fetchNewsData 호출`)
+    const freshRandomNews = await fetchRandomNews(language)
+    console.log(`fetchRandomNews 결과: ${freshRandomNews?.length || 0}개`)
+    console.log('fetchRandomNews:', freshRandomNews)
+    if (freshRandomNews && freshRandomNews.length > 0) {
+      await supabase.from('news').upsert(
+        freshRandomNews.map((news) => {
+          const mappedId = getCategoryIdFromEnglishName(news.category)
+          return {
+            news_id: news.article_id,
+            category_id: mappedId,
+            view_count: news.view_count,
+            title: news.title,
+            link: news.link,
+            keywords: news.keywords ?? [],
+            description: news.description,
+            pub_date: news.pub_date ?? null,
+            image_url: news.image_url,
+            source_name: news.source_name,
+            category: news.category,
+          }
+        }),
+      )
+      console.log('저장됨')
+    }
+    return freshRandomNews || []
   }
 }
