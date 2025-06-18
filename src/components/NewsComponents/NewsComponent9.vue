@@ -1,10 +1,11 @@
 <script setup>
 import { ref, nextTick, onMounted } from 'vue'
-import ScrapImg from './children/ScrapImg.vue'
+
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 
 const props = defineProps({
   news: Object,
@@ -109,6 +110,7 @@ onMounted(() => {
     <div class="w-[300px] h-[217px] mb-[16px]">
       <img :src="news.image_url" class="w-full h-full object-cover space-y-0.5 rounded-[20px]" />
     </div>
+
     <div class="mb-[12px] px-[10px]">
       <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px] line-clamp-2">
         {{ props.news.title }}
@@ -129,6 +131,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <ScrapImg class="absolute right-[8px] top-[10px] z-25" />
+    <!-- <ScrapImg class="absolute right-[8px] top-[10px] z-25" /> -->
+    <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-10" />
   </div>
 </template>

@@ -1,12 +1,12 @@
 <script setup>
 import { onMounted, ref, nextTick } from 'vue'
-import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import { ThumbsUp } from 'lucide-vue-next'
 import { Eye } from 'lucide-vue-next'
 
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
 // 호버 상태
@@ -128,6 +128,11 @@ onMounted(() => {
       </div>
     </div>
 
-    <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-20" />
+    <!-- <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-20" /> -->
+    <NewsScrapButton
+      :news-id="props.news.news_id"
+      :show-bg="false"
+      class="absolute right-[8px] top-[10px] z-15"
+    />
   </div>
 </template>

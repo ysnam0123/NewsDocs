@@ -1,5 +1,4 @@
 <script setup>
-import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import { onMounted, ref, nextTick } from 'vue'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
@@ -123,6 +122,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <ScrapNotOnImg class="absolute right-[15px] top-[10px] z-15" />
+    <!-- <ScrapNotOnImg class="absolute right-[15px] top-[10px] z-15" /> -->
+    <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-15" />
   </div>
 </template>

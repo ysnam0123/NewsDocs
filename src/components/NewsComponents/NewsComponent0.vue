@@ -1,10 +1,11 @@
 <script setup>
 import { nextTick, ref, onMounted } from 'vue'
-import ScrapImg from './children/ScrapImg.vue'
 import { ThumbsUp, Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
+
 const { getOrCreateSummary } = useSummary()
 const { typedTarget, runTyped } = useTyping()
 const summaryMessage = ref('')
@@ -124,6 +125,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <ScrapImg class="absolute right-[8px] top-[10px] z-20" />
+    <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-15" />
   </div>
 </template>

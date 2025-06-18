@@ -98,6 +98,7 @@ const notiHandler = () => {
           ></div>
         </div>
         <!-- 프로필 -->
+
         <DropBox>
           <template #activator="{ toggle }">
             <div

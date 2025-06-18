@@ -1,6 +1,5 @@
 <script setup>
 import { nextTick, ref, onMounted } from 'vue'
-import ScrapNotOnImg from './children/ScrapNotOnImg.vue'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
@@ -106,7 +105,12 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-15" />
+    <!-- <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-15" /> -->
+    <NewsScrapButton
+      :news-id="props.news.news_id"
+      :show-bg="false"
+      class="absolute right-[8px] top-[10px] z-15"
+    />
 
     <!-- 클릭했을 때 나오는 창 -->
   </div>
