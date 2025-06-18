@@ -7,11 +7,13 @@ import { useRouter } from 'vue-router'
 import { fetchLike } from '@/api/community/like'
 import CommunityPostSkel from '@/components/community/skeleton/CommunityPostSkel.vue'
 import ProfileCardSkel from '@/components/community/skeleton/ProfileCardSkel.vue'
-import { Plus } from 'lucide-vue-next'
+import { AlignLeft, Pencil, Plus, X } from 'lucide-vue-next'
+import { useModalStore } from '@/stores/newPostStore'
 
 const posts = ref([])
 const postsWithLike = ref([])
 const router = useRouter()
+const modalStore = useModalStore()
 const selectCategory = ref('전체')
 const selectedSort = ref('최신순')
 const isLoading = ref(true)
@@ -35,8 +37,16 @@ const handleSort = (sort) => {
 const goToPostDetail = (post_id) => {
   router.push(`/community/${post_id}`)
 }
+const goToMyPost = () => {
+  router.push('/profile/write')
+  mobPostHandler()
+}
+const postHandler = () => {
+  modalStore.openModal()
+  mobPostHandler()
+}
 const mobPostHandler = () => {
-  isMobOpen.value != isMobOpen.value
+  isMobOpen.value = !isMobOpen.value
 }
 
 onMounted(async () => {
@@ -94,7 +104,10 @@ const displayPost = computed(() => {
       </div>
 
       <!-- 모바일 배너 -->
-      <div class="mt-4 flex overflow-x-auto whitespace-nowrap no-scrollbar">
+      <div
+        v-if="!modalStore.isModalOpen"
+        class="mt-4 sticky top-0 z-20 bg-[#FFFFFF]/90 dark:bg-[#262626]/80 flex overflow-x-auto whitespace-nowrap no-scrollbar"
+      >
         <template v-for="category in categories" :key="category">
           <button
             @click="handleCategory(category)"
@@ -113,7 +126,7 @@ const displayPost = computed(() => {
       <!-- 모바일 게시글 -->
       <div class="flex flex-col w-full min-h-[424px]">
         <div v-if="isLoading" class="flex flex-col">
-          <CommunityPostSkel />
+          <CommunityPostSkel v-for="i in 4" :key="i" />
         </div>
         <div v-else>
           <div v-for="post in displayPost" :key="post.post_id">
@@ -132,22 +145,43 @@ const displayPost = computed(() => {
         </div>
       </div>
       <button
-        class="fixed bottom-[20px] right-[20px] z-50 flex items-center justify-center w-[52px] h-[52px] rounded-full bg-[#7A42DF] shadow-md hover:bg-[#6935c6] transition"
+        v-if="!modalStore.isModalOpen"
+        :class="[
+          'fixed bottom-[20px] right-[20px] z-50 flex items-center justify-center w-[52px] h-[52px] rounded-full transition shadow-md cursor-pointer',
+          isMobOpen ? 'bg-[#FFFFFF] hover:bg-[#F6F6F6]' : ' bg-[#7A42DF] hover:bg-[#6935c6] ',
+        ]"
         @click="mobPostHandler"
       >
-        <Plus class="w-6 h-6 text-[#FFFFFF]" />
+        <Plus v-if="!isMobOpen" class="w-6 h-6 text-[#FFFFFF]" />
+        <X v-else class="w-6 h-6 text-[#191919]" />
       </button>
-      <div v-if="isMobOpen" class="fixed flex flex-col inset-0 bg-[#000000]/30">
-        <div class="py-[8px] w-[135px] h-[88px] rounded-[8px] bg-[#FFFFFF]">
+
+      <div
+        v-if="isMobOpen"
+        class="fixed flex inset-0 bg-[#000000]/30 z-40 justify-end items-end pb-[90px] pr-4"
+      >
+        <div class="py-[8px] w-[135px] h-[88px] rounded-[8px] bg-[#FFFFFF] shadow-md">
           <!-- +버튼 모달부분 임시 -->
-          <div class="px-[12px]"></div>
-          <div class="px-[12px]"></div>
+          <div
+            @click="postHandler"
+            class="flex items-center px-[12px] py-2 cursor-pointer transition-all duration-300 bg-[#FFFFFF] dark:bg-[#262626] hover:bg-[#F6F6F6] dark:hover:bg-[#363636] active:bg-[#ECECEC] dark:active:bg-[#404040]"
+          >
+            <Pencil class="w-4 h-4" />
+            <p class="ml-[6px] text-[14px]">새 글 작성</p>
+          </div>
+          <div
+            @click="goToMyPost"
+            class="flex items-center px-[12px] py-2 cursor-pointer transition-all duration-300 bg-[#FFFFFF] dark:bg-[#262626] hover:bg-[#F6F6F6] dark:hover:bg-[#363636] active:bg-[#ECECEC] dark:active:bg-[#404040]"
+          >
+            <AlignLeft class="w-4 h-4" />
+            <p class="ml-[6px] text-[14px]">내 글 목록</p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 오른쪽 화면 -->
-    <div class="flex flex-col mt-5 w-[1110px] pl-[60px] pr-[220px]">
+    <div class="hidden sm:flex sm:flex-col sm:mt-5 sm:w-[1110px] sm:pl-[60px] sm:pr-[220px]">
       <div class="flex min-w-[834px] h-[54px] justify-between items-center">
         <!-- 배너 -->
         <div class="flex w-[514px] h-full">

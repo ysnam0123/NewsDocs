@@ -44,7 +44,7 @@ onMounted(async () => {
   >
     <!-- 이미지 -->
     <div
-      class="w-full sm:w-[232px] min-h-[236px] sm:h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
+      class="w-full sm:w-[232px] h-[270px] sm:h-[171px] flex items-center justify-center overflow-hidden rounded-[12px] bg-[#F6F6F6] group-hover:opacity-80 transition-all duration-300"
     >
       <img
         :src="props.image ? props.image : defaultImg"

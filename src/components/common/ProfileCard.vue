@@ -60,7 +60,7 @@ onMounted(async () => {
         class="sm:w-[146px] sm:h-[146px] w-[78px] h-[78px] sm:mt-[15px] rounded-full object-cover cursor-pointer"
       />
       <div class="flex flex-col items-center justify-center">
-        <p class="sm:mt-4 ml-4 sm:text-xl sm:text-[18px] text-[] dark:text-[#ffffff]">
+        <p class="sm:mt-4 ml-4 sm:text-xl text-[18px] dark:text-[#ffffff]">
           {{ currentUser?.nickname }}
         </p>
         <p class="mt-[6px] sm:text-[14px] text-[13px] text-[#8F8F8F]">

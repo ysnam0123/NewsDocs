@@ -215,7 +215,10 @@ const deleteCommentHandler = async (commentId) => {
         </div>
         <!-- 좋아요,댓글 개수 -->
 
-        <div v-if="isLoading" class="flex items-center mt-6 sm:mt-[30px] gap-4 w-[109px] h-[22px]">
+        <div
+          v-if="isLoading"
+          class="flex items-center sm:mt-[30px] gap-4 w-[109px] h-[22px] sm:w-[109px] sm:h-[22px]"
+        >
           <!-- 스켈레톤 -->
           <div class="w-[43px] h-[22px] rounded-[8px] bg-gray-300 animate-pulse"></div>
           <div class="w-[43px] h-[22px] rounded-[8px] bg-gray-300 animate-pulse"></div>
