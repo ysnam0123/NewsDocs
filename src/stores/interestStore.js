@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import politicsIcon from '@/assets/icons/politicsIcon.svg'
 import sportsIcon from '@/assets/icons/sportsIcon.svg'
 import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'

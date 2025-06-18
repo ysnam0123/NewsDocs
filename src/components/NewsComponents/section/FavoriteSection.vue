@@ -27,10 +27,16 @@ onMounted(async () => {
 <template>
   <div class="mb-[60px]">
     <!-- <div class="flex gap-[40px] mb-[50px]"></div> -->
-    <div class="flex gap-[20px] justify-between mb-8">
-      <NewsComponent8 v-if="newsArr[0]" :news="newsArr[0]" />
-      <NewsComponent8 v-if="newsArr[1]" :news="newsArr[1]" />
-      <NewsComponent8 v-if="newsArr[2]" :news="newsArr[2]" />
+    <div class="flex gap-4 justify-between mb-8">
+      <div class="flex-1">
+        <NewsComponent8 v-if="newsArr[0]" :news="newsArr[0]" />
+      </div>
+      <div class="flex-1">
+        <NewsComponent8 v-if="newsArr[1]" :news="newsArr[1]" />
+      </div>
+      <div class="flex-1">
+        <NewsComponent8 v-if="newsArr[2]" :news="newsArr[2]" />
+      </div>
     </div>
     <!-- <div class="flex flex-col gap-[24px]">
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
@@ -38,11 +44,19 @@ onMounted(async () => {
         <NewsComponent2 :news-save-handler="newsSaveHandler" v-if="newsArr[4]" :news="newsArr[4]" />
       </div> -->
 
-    <div class="flex justify-between">
-      <NewsComponent9 v-if="newsArr[5]" :news="newsArr[5]" />
-      <NewsComponent9 v-if="newsArr[7]" :news="newsArr[7]" />
-      <NewsComponent9 v-if="newsArr[6]" :news="newsArr[6]" />
-      <NewsComponent9 v-if="newsArr[8]" :news="newsArr[8]" />
+    <div class="flex justify-between gap-4">
+      <div class="flex-1">
+        <NewsComponent9 v-if="newsArr[5]" :news="newsArr[5]" />
+      </div>
+      <div class="flex-1">
+        <NewsComponent9 v-if="newsArr[7]" :news="newsArr[7]" />
+      </div>
+      <div class="flex-1">
+        <NewsComponent9 v-if="newsArr[6]" :news="newsArr[6]" />
+      </div>
+      <div class="flex-1">
+        <NewsComponent9 v-if="newsArr[8]" :news="newsArr[8]" />
+      </div>
     </div>
   </div>
 </template>

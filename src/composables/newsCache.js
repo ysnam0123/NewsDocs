@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import supabase from '@/utils/supabase'
 import { fetchNewsData } from '@/api/fetchNews'
-import { categoryIdMap, categoryNameMap } from '@/composables/useCategoryMap'
+import { categoryIdMap } from '@/composables/useCategoryMap'
 
 const NEWS_TTL_MINUTES = 10
 
@@ -82,7 +82,7 @@ export async function getFreshNews(category, language) {
           return {
             news_id: news.article_id,
             category_id: mappedId,
-            view_count: news.view_count,
+            view_count: news.view_count ?? 0,
             title: news.title,
             link: news.link,
             keywords: news.keywords ?? [],

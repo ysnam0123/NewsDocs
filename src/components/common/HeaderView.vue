@@ -1,6 +1,6 @@
 <script setup>
 import { useThemeStore } from '@/stores/useDarkmode'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import CommunityAlarm from '../community/CommunityAlarm.vue'
 import { ref } from 'vue'
 import { useNotiStore } from '@/stores/useNotiStore'
@@ -12,8 +12,9 @@ import DropBox from './DropBox.vue'
 
 const themeStore = useThemeStore()
 const router = useRouter()
+const route = useRoute()
 const isDark = computed(() => themeStore.isDark)
-
+console.log('path:', route.path)
 const isNotiOpen = ref(false)
 const notiStore = useNotiStore()
 
@@ -42,19 +43,28 @@ const notiHandler = () => {
     <div class="ml-[56px] hidden sm:flex">
       <ul class="flex gap-[32px] select-none">
         <li
-          class="text-[var(--nav-text)] cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
+          :class="[
+            'cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] text-[18px]',
+            route.path === '/' ? 'text-[#7A42DF] font-semibold' : 'text-[var(--nav-text)]',
+          ]"
           @click="movePage('/')"
         >
           맞춤 소식
         </li>
         <li
-          class="text-[var(--nav-text)] cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
+          :class="[
+            'cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] text-[18px]',
+            route.path === '/news' ? 'text-[#7A42DF] font-bold' : 'text-[var(--nav-text)]',
+          ]"
           @click="movePage('/news')"
         >
           모든 소식
         </li>
         <li
-          class="text-[var(--nav-text)] cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] hover:font-bold text-[18px]"
+          :class="[
+            'cursor-pointer flex py-[8px] duration-300 transition-all hover:text-[var(--nav-text-hover)] text-[18px]',
+            route.path === '/community' ? 'text-[#7A42DF] font-bold' : 'text-[var(--nav-text)]',
+          ]"
           @click="movePage('/community')"
         >
           의견 나누기

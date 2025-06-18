@@ -14,7 +14,7 @@ import FourthSection from '@/components/NewsComponents/section/FourthSection.vue
 import SecondSection from '@/components/NewsComponents/section/SecondSection.vue'
 import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
 import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 import { getFreshNews } from '@/composables/newsCache'
@@ -55,7 +55,7 @@ const getLikeCount = async (postId) => {
   return count || 0
 }
 const matchedCategories = ref([])
-const userInterestLoading = ref(false)
+const userInterestLoading = ref(true)
 const introduceData = ref([])
 const introduceLoading = ref(true)
 
@@ -66,7 +66,9 @@ onMounted(async () => {
   user.value = supaUser
   isLoggedIn.value = !!supaUser
   console.log('사용자 정보:', user.value)
-
+  console.log('isLoggedIn:', isLoggedIn.value)
+  console.log('userInterestLoading:', userInterestLoading.value)
+  // 로그인 전
   if (!isLoggedIn.value) {
     const { data: beforeLoginData, error: introduceError } = await supabase
       .from('for_introduce')
@@ -81,19 +83,24 @@ onMounted(async () => {
     return
   }
 
+  // 로그인 후
+
+  console.log('관심사 로드 시작:', userInterestLoading.value)
   // user 최대 관심사
   const { data: favoriteInterest, error: favoriteError } = await supabase
     .from('user_interests')
     .select('category_id')
     .eq('user_id', user.value.id)
     .eq('is_highest', true)
+
+  // id 값만 추출
+  const favoriteCategoryId = favoriteInterest?.[0]?.category_id
+
   if (favoriteError) {
     console.error('최대관심사 에러:', favoriteError)
   } else {
-    favoriteInterest
+    console.log('최대관심사의 카테고리 id:', favoriteCategoryId)
   }
-  const favoriteCategoryId = favoriteInterest?.[0]?.category_id
-  console.log('최대관심사의 카테고리 id:', favoriteCategoryId)
 
   // user_interests 에서 유저가 선택한 관심사 가져오기
   const { data: interestData, error: interestError } = await supabase
@@ -114,21 +121,23 @@ onMounted(async () => {
   ]
   console.log('finalInterestArr:', finalInterestArr)
 
-  //
   matchedCategories.value = finalInterestArr.map((num) =>
     allCategoryMap.find((item) => item.num === num),
   )
-
   // 원하는 카테고리 순서 (한글)
-  const matchedCategoriesLabel = matchedCategories.value.map((item) => item.label)
+  // const matchedCategoriesLabel = matchedCategories.value.map((item) => item.label)
+  // console.log('유저 카테고리 한국어배열:', matchedCategoriesLabel)
+
   // 영어 카테고리
   const matchedEnglishlabel = matchedCategories.value.map((item) => item.id)
-  userInterestLoading.value = true
 
   console.log('유저가 선택한 카테고리 객체배열:', matchedCategories)
   console.log(matchedCategories.value[0].icon)
-  console.log('유저 카테고리 한국어배열:', matchedCategoriesLabel)
   console.log('유저 카테고리 영어배열:', matchedEnglishlabel)
+
+  userInterestLoading.value = false
+  console.log('관심사 로딩 종료', userInterestLoading.value)
+  nextTick()
 
   const newsResults = []
 
@@ -182,12 +191,11 @@ onMounted(async () => {
     post.like_count = likeCount
   }
   posts.value = data
-  userInterestLoading.value = false
 })
 </script>
 
 <template>
-  <div class="mx-auto max-w-[1240px] pt-[50px]">
+  <div class="mx-auto sm:max-w-[1240px] pt-[50px]">
     <!-- 로그인 된 상태 -->
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
@@ -197,14 +205,7 @@ onMounted(async () => {
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img
-                v-if="matchedCategories.value[0]"
-                :src="matchedCategories.value[0].icon"
-                alt="firstLabel"
-              />
-              <p class="text-[30px] text-[var(--text-title)] font-bold">
-                {{ matchedCategories[0].label }}
-              </p>
+              <p class="text-[30px] text-[var(--text-title)] font-bold"></p>
             </h1>
             <div class="flex">
               <h2 class="text-[var(--text-sub-purple)] text-[16px]">내가 가장 관심있는</h2>
@@ -240,7 +241,7 @@ onMounted(async () => {
           </div>
           <button
             @click="router.push('/community')"
-            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
+            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#7846D2 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
           >
             글쓰러 가기
           </button>
@@ -249,9 +250,9 @@ onMounted(async () => {
         <!-- 제목 -->
         <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
-            <img :src="matchedCategories[1].icon" alt="secondLabel" />
+            <!-- <img :src="matchedCategories[1].icon" alt="secondLabel" /> -->
             <p class="text-[30px] text-[var(--text-title)] font-bold">
-              {{ matchedCategories[1].label }}
+              <!-- {{ matchedCategories[1].label }} -->
             </p>
           </h1>
           <div class="flex">
@@ -275,9 +276,9 @@ onMounted(async () => {
           <div>
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[2].icon" alt="thirdLabel" />
+                <!-- <img :src="matchedCategories[2].icon" alt="thirdLabel" /> -->
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[2].label }}
+                  <!-- {{ matchedCategories[2].label }} -->
                 </p>
               </h1>
               <div class="flex">
@@ -307,7 +308,56 @@ onMounted(async () => {
                 <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
               </div>
             </div>
-            <HotDocsComponent />
+            <div v-if="!loading">
+              <HotDocsComponent />
+            </div>
+            <div v-else>
+              <div
+                class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
+              >
+                <div class="relative w-[580px] flex flex-col gap-[24px]"></div>
+                <div class="flex">
+                  <div class="w-[150px] h-[150px] bg-gray-300 rounded-[20px]"></div>
+                  <div>
+                    <div class="w-[350px] h-[35px] mt-3 ml-5 bg-gray-300 rounded-[20px]"></div>
+                    <div class="w-[350px] h-[22px] mt-5 ml-5 bg-gray-300 rounded-[20px]"></div>
+                    <div class="w-[350px] h-[22px] mt-2 ml-5 bg-gray-300 rounded-[20px]"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <!-- 섹션 6, 7 -->
@@ -316,10 +366,7 @@ onMounted(async () => {
             <!-- 제목 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[3].icon" alt="fourthLabel" />
-                <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[3].label }}
-                </p>
+                <p class="text-[30px] text-[var(--text-title)] font-bold"></p>
               </h1>
               <div class="flex">
                 <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
@@ -340,9 +387,9 @@ onMounted(async () => {
             <!-- 제목 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[4].icon" alt="fifthsLabel" />
+                <!-- <img :src="matchedCategories[4].icon" alt="fifthsLabel" /> -->
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[4].label }}
+                  <!-- {{ matchedCategories[4].label }} -->
                 </p>
               </h1>
               <div class="flex">
@@ -370,9 +417,9 @@ onMounted(async () => {
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
+              <!-- <img :src="matchedCategories[5].icon" alt="fifthsLabel" /> -->
               <p class="text-[30px] text-[var(--text-title)] font-bold">
-                {{ matchedCategories[5].label }}
+                <!-- {{ matchedCategories[5].label }} -->
               </p>
             </h1>
             <div class="flex">
@@ -395,6 +442,7 @@ onMounted(async () => {
           <SixthSectionSkel v-else-if="loading" />
         </div>
       </div>
+
       <!-- 관심사 없는 상태 -->
       <div v-else>
         <h2 class="text-[24px] text-center">관심사를 설정해주세요!</h2>
@@ -413,7 +461,7 @@ onMounted(async () => {
         <IntroduceSection v-if="!introduceLoading" :newsArr="introduceData" />
         <IntroduceSkel v-else class="mb-8" />
       </div>
-      <p class="text-center mb-3">로그인 후 맞춤 뉴스와 커뮤니티를 이용할 수 있습니다.</p>
+      <p class="text-center mb-3">로그인 후 맞춤뉴스와 커뮤니티를 이용할 수 있습니다.</p>
       <button
         @click="router.push('/login')"
         class="mx-auto flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5] transition duration-300"

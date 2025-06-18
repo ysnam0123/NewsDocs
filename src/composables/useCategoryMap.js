@@ -29,7 +29,6 @@ export const categoryNameMap = {
   entertainment: '연예',
   entertain: '연예',
   culture: '문화',
-  // abroad: '해외',
   world: '해외',
   society: '사회',
   economy: '경제',
@@ -45,7 +44,6 @@ export const categoryIdMap = {
   entertainment: 3, // 연예
   entertain: 3, // 연예 (동의어)
   culture: 4, // 문화
-  // abroad: 5, // 해외
   world: 5, // 해외 (동의어)
   society: 6, // 사회
   economy: 7, // 경제
