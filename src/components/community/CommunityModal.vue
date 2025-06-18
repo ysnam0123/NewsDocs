@@ -144,12 +144,14 @@ onMounted
 </script>
 <template>
   <Teleport to="body">
-    <div class="fixed inset-0 bg-[#000000]/30 flex justify-center items-center">
-      <div class="flex flex-col w-120 h-[679px] bg-[#ffffff] dark:bg-[#262626] rounded-[16px] p-8">
+    <div class="fixed inset-0 bg-[#000000]/30 flex items-center justify-center">
+      <div
+        class="flex flex-col w-full sm:w-120 h-full sm:h-[679px] bg-[#ffffff] dark:bg-[#262626] sm:rounded-[16px] pt-[10px] px-[30px] sm:p-8"
+      >
         <div class="relative inline-block">
           <button
             @click="toggleModal"
-            class="flex relative w-[132px] h-[46px] justify-between items-center rounded-[8px] border border-gray-200 dark:border-[#4D4D4D] cursor-pointer px-[10px] hover:border-[#BBBBBB] dark:hover:border-[#797979]"
+            class="flex relative w-[132px] h-[40px] sm:h-[46px] justify-between items-center rounded-[8px] border border-gray-200 dark:border-[#4D4D4D] cursor-pointer px-[10px] hover:border-[#BBBBBB] dark:hover:border-[#797979]"
           >
             <p
               class="flex items-center gap-2 text-[14px] dark:text-[#D7D7D7] leading-[40px]"
@@ -168,7 +170,7 @@ onMounted
           <!-- 정렬 모달 -->
           <div
             v-if="isSortOpen"
-            class="absolute top-[100%] pt-[12px] w-[132px] bg-[#ffffff] dark:bg-[#363636] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] z-40"
+            class="absolute top-[100%] pt-[12px] w-[132px] bg-[#ffffff] dark:bg-[#363636] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.16)] z-[999]"
           >
             <ul>
               <li
@@ -184,7 +186,7 @@ onMounted
           </div>
         </div>
         <div
-          class="flex flex-col h-[49px] w-[416px] mt-6 border-b border-b-[#DFDFDF] dark:border-b-[#4D4D4D] group hover:border-b-[#BBBBBB] dark:hover:border-b-[#797979] focus-within:!border-b-[#191919] dark:focus-within:!border-b-[#ffffff]"
+          class="flex flex-col min-h-[49px] w-full sm:w-[416px] mt-6 border-b border-b-[#DFDFDF] dark:border-b-[#4D4D4D] group hover:border-b-[#BBBBBB] dark:hover:border-b-[#797979] focus-within:!border-b-[#191919] dark:focus-within:!border-b-[#ffffff]"
         >
           <input
             v-model="title"
@@ -197,7 +199,7 @@ onMounted
         <div
           @click="handleUploadClick"
           :class="[
-            'flex flex-col items-center justify-center w-[416px] min-h-[197px] mt-6 border border-[#EAEAEA] dark:border-[#343434] rounded-[12px] bg-[#F6F6F6] dark:bg-[#2C2C2C] hover:bg-[#ECECEC] dark:hover:bg-[#1F1F1F] cursor-pointer overflow-hidden',
+            'flex flex-col items-center justify-center w-full sm:w-[416px] min-h-[197px] flex-shrink-0  mt-6 border border-[#EAEAEA] dark:border-[#343434] rounded-[12px] bg-[#F6F6F6] dark:bg-[#2C2C2C] hover:bg-[#ECECEC] dark:hover:bg-[#1F1F1F] cursor-pointer overflow-hidden',
             isUploading
               ? 'pointer-events-none opacity-50 cursor-not-allowed bg-gray-300 animate-pulse'
               : '',
@@ -240,35 +242,37 @@ onMounted
           </template>
           <template v-else>
             <Image class="w-5 h-5 text-[#BBBBBB]" />
-            <p class="min-w-[116px] mt-[6px] text-[14px] text-[#BBBBBB] text-center">
+            <p class="w-full sm:min-w-[116px] mt-[6px] text-[14px] text-[#BBBBBB] text-center">
               눌러서 이미지 업로드
             </p>
           </template>
         </div>
 
-        <div class="mt-4 w-104">
+        <div class="flex-1 mt-4 w-full sm:w-104 flex">
           <!-- 게시글 입력 -->
           <textarea
             v-model="content"
-            class="w-full h-[197px] rounded-[12px] text-[14px] text-[#191919] dark:text-[#ffffff] placeholder-gray-300 dark:placeholder-[#585858] border border-gray-200 dark:border-[#343434] p-4 focus:outline-none"
+            class="w-full min-h-[197px] mb-[80px] sm:mb-0 rounded-[12px] text-[14px] text-[#191919] dark:text-[#ffffff] placeholder-gray-300 dark:placeholder-[#585858] border border-gray-200 dark:border-[#343434] p-4 focus:outline-none"
             placeholder="나누고 싶은 의견을 작성하세요"
           />
-          <!-- 취소, 업로드 버튼 -->
-          <div class="flex justify-end mt-6 w-full h-11 gap-[10px]">
-            <button
-              @click="handleModal"
-              class="flex items-center justify-center w-[110px] h-11 rounded-[8px] bg-[#F6F6F6] dark:bg-[#2D2D2D] hover:bg-[#DFDFDF] dark:hover:bg-[#404040] cursor-pointer text-[14px] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
-            >
-              취소
-            </button>
+        </div>
+        <!-- 취소, 업로드 버튼 -->
+        <div
+          class="flex justify-center sm:justify-end mt-6 w-full h-11 gap-[10px] py-5 sm:py-0 bg-[#ffffff] dark:bg-[#262626] absolute bottom-[36px] left-0 sm:static px-[30px] sm:px-0"
+        >
+          <button
+            @click="handleModal"
+            class="flex items-center justify-center w-full sm:w-[110px] h-[50px] sm:h-11 rounded-[8px] bg-[#F6F6F6] dark:bg-[#2D2D2D] hover:bg-[#DFDFDF] dark:hover:bg-[#404040] cursor-pointer text-[14px] text-[#191919] dark:text-[#ffffff] transition-all duration-300"
+          >
+            취소
+          </button>
 
-            <button
-              @click="handleFinalUpload"
-              class="flex items-center justify-center w-[110px] h-11 rounded-[8px] bg-[#7537E3] dark:bg-[#7846D2] hover:bg-[#601ED5] dark:hover:bg-[#6524D9] cursor-pointer text-[14px] text-[#FFFFFF] transition-all duration-300"
-            >
-              {{ props.mode === 'edit' ? '수정' : '업로드' }}
-            </button>
-          </div>
+          <button
+            @click="handleFinalUpload"
+            class="flex items-center justify-center w-full sm:w-[110px] h-[50px] sm:h-11 rounded-[8px] bg-[#7537E3] dark:bg-[#7846D2] hover:bg-[#601ED5] dark:hover:bg-[#6524D9] cursor-pointer text-[14px] text-[#FFFFFF] transition-all duration-300"
+          >
+            {{ props.mode === 'edit' ? '수정' : '업로드' }}
+          </button>
         </div>
       </div>
     </div>

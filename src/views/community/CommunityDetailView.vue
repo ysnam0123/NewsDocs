@@ -171,9 +171,9 @@ const deleteCommentHandler = async (commentId) => {
 }
 </script>
 <template>
-  <div class="flex w-[1440px] mx-auto">
+  <div class="flex sm:w-[1440px] sm:mx-auto">
     <!-- 왼쪽 화면 -->
-    <div class="w-[328px] pl-[100px] mt-[40px]">
+    <div class="hidden sm:block sm:w-[328px] sm:pl-[100px] sm:mt-[40px]">
       <div class="sticky top-[40px] w-full">
         <!-- 프로필 & 태그 -->
         <ProfileCardSkel v-if="isLoading" />
@@ -182,11 +182,11 @@ const deleteCommentHandler = async (commentId) => {
     </div>
 
     <!-- 오른쪽 화면 -->
-    <div class="flex flex-col mt-[40px] w-[1112px]">
-      <div class="w-[888px] pl-[58px] min-h-screen">
+    <div class="flex flex-col sm:mt-[40px] w-full px-5 sm:w-[1112px]">
+      <div class="w-full sm:w-[888px] sm:pl-[58px] sm:min-h-screen">
         <button
           @click="goToCommunity"
-          class="w-40 h-10 gap-[10px] flex items-center cursor-pointer"
+          class="hidden sm:flex w-40 h-10 gap-[10px] items-center cursor-pointer"
         >
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center bg-[#ffffff] hover:bg-[#F6F6F6] dark:bg-[#363636] dark:hover:bg-[#4A4A4A]"
@@ -210,18 +210,21 @@ const deleteCommentHandler = async (commentId) => {
             :userName="writer.nickname"
             :userImg="writer.profile_img"
             :currentUserId="currentUser.user_id"
-            class="mt-5"
+            class="sm:mx-5"
           />
         </div>
         <!-- 좋아요,댓글 개수 -->
 
-        <div v-if="isLoading" class="flex items-center mt-[30px] gap-4 w-[109px] h-[22px]">
+        <div
+          v-if="isLoading"
+          class="flex items-center sm:mt-[30px] gap-4 w-[109px] h-[22px] sm:w-[109px] sm:h-[22px]"
+        >
           <!-- 스켈레톤 -->
           <div class="w-[43px] h-[22px] rounded-[8px] bg-gray-300 animate-pulse"></div>
           <div class="w-[43px] h-[22px] rounded-[8px] bg-gray-300 animate-pulse"></div>
         </div>
 
-        <div v-else class="flex items-center mt-[30px] w-auto h-[22px]">
+        <div v-else class="flex items-center mt-6 sm:mt-[30px] w-auto h-[22px]">
           <div
             @click="toggleLike"
             class="flex cursor-pointer items-center"
@@ -240,7 +243,9 @@ const deleteCommentHandler = async (commentId) => {
           </div>
         </div>
         <!-- 댓글입력 -->
-        <label class="relative w-[830px] mt-[20px] inline-block">
+        <label
+          class="relative w-full sm:w-[830px] mt-4 sm:mt-[20px] mb-[38px] sm:mb-0 inline-block"
+        >
           <input
             v-model="inputContent"
             @keyup.enter="commentSubmitHandler"
@@ -259,7 +264,7 @@ const deleteCommentHandler = async (commentId) => {
         <div v-else>
           <div
             v-if="comments.length === 0"
-            class="w-full h-[200px] flex items-center justify-center text-[#CECECE]"
+            class="w-full h-[200px] sm:h-[200px] flex items-center justify-center text-[#CECECE]"
           >
             아직 댓글이 없습니다.
           </div>
@@ -283,7 +288,7 @@ const deleteCommentHandler = async (commentId) => {
                 :createdAt="comment.created_at"
               />
             </template>
-            <div class="w-full h-[64px]"></div>
+            <div class="hidden sm:block w-full h-[64px]"></div>
           </div>
         </div>
       </div>
