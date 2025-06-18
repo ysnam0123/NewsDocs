@@ -41,7 +41,7 @@ onMounted(() => {
 <template>
   <div
     v-if="props.news"
-    class="relative rounded-[16px] h-[468px] select-none group"
+    class="relative rounded-[16px] w-full h-[468px] select-none group"
     @click.stop="handleSummary"
   >
     <!-- 호버했을때 나오는 창 -->

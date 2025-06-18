@@ -42,14 +42,6 @@ const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.le
 const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
 const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
-const getLikeCount = async (postId) => {
-  const { count } = await supabase
-    .from('like')
-    .select('*', { count: 'exact', head: true })
-    .eq('post_id', postId)
-
-  return count || 0
-}
 const matchedCategories = ref([])
 const userInterestLoading = ref(true)
 const introduceData = ref([])
@@ -291,21 +283,19 @@ onMounted(async () => {
             <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
             <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
           </div>
-          <div>
-            <!-- 섹션 5 : 오늘의 핫 독스 -->
-            <div class="w-[560px]">
-              <!-- 제목 -->
-              <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-                <h1 class="flex gap-[10px] items-center">
-                  <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
-                  <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
-                </h1>
-                <div class="flex">
-                  <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
-                </div>
+          <!-- 섹션 5 : 오늘의 핫 독스 -->
+          <div class="w-[560px]">
+            <!-- 제목 -->
+            <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
+              <h1 class="flex gap-[10px] items-center">
+                <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
+                <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
+              </h1>
+              <div class="flex">
+                <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
               </div>
-              <HotDocsComponent />
             </div>
+            <HotDocsComponent />
           </div>
         </div>
         <!-- 섹션 6, 7 -->
@@ -334,13 +324,13 @@ onMounted(async () => {
             <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
             <FourthSectionSkel v-else-if="loading" />
           </div>
-          <div>
+          <div v-if="matchedCategories.length > 4">
             <!-- 제목 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[4].icon" alt="fifthsLabel" />
+                <!-- <img :src="matchedCategories[4].icon" alt="fifthsLabel" /> -->
                 <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[4].label }}
+                  <!-- {{ matchedCategories[4].label }} -->
                 </p>
               </h1>
               <div class="flex">
@@ -364,13 +354,13 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div>
+        <div v-if="matchedCategories.length > 5">
           <!-- 제목 -->
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
-              <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
+              <!-- <img :src="matchedCategories[5].icon" alt="fifthsLabel" /> -->
               <p class="text-[30px] text-[var(--text-title)] font-bold">
-                {{ matchedCategories[5].label }}
+                <!-- {{ matchedCategories[5].label }} -->
               </p>
             </h1>
             <div class="flex">
