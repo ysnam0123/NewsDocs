@@ -10,6 +10,10 @@ import BackButton from '@/components/common/BackButton.vue'
 import NewsRecommend from './NewsRecommend.vue'
 import CommunityRecommend from './CommunityRecommend.vue'
 import { fetchCrawledText } from '@/api/fetchCrawledText'
+import { useToast } from 'vue-toastification'
+
+const userId = ref(null)
+const toast = useToast()
 
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
@@ -54,31 +58,38 @@ const isShortOrEllipsis = (desc) => {
 }
 
 const handleLikeToggle = async () => {
-  if (!news.value) return
-  const currentLike = news.value.like_count ?? 0
+  if (!news.value || !userId.value) {
+    toast('로그인이 필요합니다.')
+    return
+  }
 
   if (!hasLiked.value) {
-    // 좋아요 추가
-    const { data, error } = await supabase
-      .from('news')
-      .update({ like_count: currentLike + 1 })
-      .eq('news_id', news.value.news_id)
-      .select('like_count')
-      .single()
+    const { error } = await supabase
+      .from('like')
+      .insert([{ user_id: userId.value, news_id: news.value.news_id }])
     if (!error) {
-      news.value.like_count = data.like_count
+      // 증가
+      await supabase
+        .from('news')
+        .update({ like_count: (news.value.like_count ?? 0) + 1 })
+        .eq('news_id', news.value.news_id)
+      news.value.like_count++
       hasLiked.value = true
     }
   } else {
     // 좋아요 취소
-    const { data, error } = await supabase
-      .from('news')
-      .update({ like_count: Math.max(currentLike - 1, 0) })
+    const { error } = await supabase
+      .from('like')
+      .delete()
+      .eq('user_id', userId.value)
       .eq('news_id', news.value.news_id)
-      .select('like_count')
-      .single()
     if (!error) {
-      news.value.like_count = data.like_count
+      // 감소
+      await supabase
+        .from('news')
+        .update({ like_count: Math.max((news.value.like_count ?? 1) - 1, 0) })
+        .eq('news_id', news.value.news_id)
+      news.value.like_count--
       hasLiked.value = false
     }
   }
@@ -86,7 +97,10 @@ const handleLikeToggle = async () => {
 
 onMounted(async () => {
   const newsId = route.params.id
-
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  userId.value = user?.id ?? null
   const { data, error } = await supabase
     .from('news')
     .select(`*, category:category_id (title)`)
