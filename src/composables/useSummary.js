@@ -21,19 +21,11 @@ export const useSummary = () => {
         console.log('기존 요약')
         return savedSummary.summaries_contents
       }
+
       // open ai 요약 생성
       const result = await fetchOpenAi(description)
       console.log('요약 결과:', result)
-      // const { data } = await supabase
-      //   .from('news')
-      //   .select('news_id')
-      //   .eq('news_id', articleId)
-      //   .maybeSingle()
 
-      // if (!data) {
-      //   console.warn('news테이블에 해당 뉴스가 존재하지 않음 요약 저장 실패')
-      //   return result
-      // }
       // 새로 만든 summary insert
       const { error: insertError } = await supabase
         .from('summaries')

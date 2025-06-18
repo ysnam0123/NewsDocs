@@ -1,23 +1,26 @@
 <script setup>
 import { fetchHotDocs } from '@/api/fetchHotDocs'
-import { useNewsActions } from '@/composables/useNewsActions'
 import { Eye, ThumbsUp } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 const hotDocs = ref([])
-const { toDetailHandler, saveNews } = useNewsActions()
-const handleClick = async (news) => {
-  await saveNews(news)
-  await toDetailHandler(news)
+const route = useRoute()
+const props = defineProps({
+  news: Object,
+})
+
+const handleClick = () => {
+  console.log(props.news.news_id)
+  route.push(`/news/detail/${props.news.article_id}`)
 }
 onMounted(async () => {
   hotDocs.value = await fetchHotDocs()
-  console.log('핫 뉴스:', hotDocs.value)
 })
 </script>
 <template>
   <div
-    class="flex flex-col text-[var(--text-title)] h-[792px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
+    class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
   >
     <div
       v-for="(news, index) in hotDocs"
@@ -26,7 +29,7 @@ onMounted(async () => {
       :class="[
         'flex gap-[20px] w-[496px] cursor-pointer',
         index === 0
-          ? 'h-[151px] mb-5 '
+          ? 'h-[151px] mb-5'
           : 'py-[23px] border-t-1 border-t-[#E0E0E0] dark:border-t-[#343434] h-[146px]',
       ]"
     >

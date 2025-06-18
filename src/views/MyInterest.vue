@@ -21,6 +21,7 @@ import { getFreshNews } from '@/composables/newsCache'
 import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
+import { toggleLike } from '@/api/updateLikeNewsCount'
 
 const user = ref(null)
 const loading = ref(true)
@@ -112,6 +113,7 @@ onMounted(async () => {
   matchedCategories.value = finalInterestArr.map((num) =>
     allCategoryMap.find((item) => item.num === num),
   )
+
   // 영어 카테고리
   const matchedEnglishlabel = matchedCategories.value.map((item) => item.id)
 
@@ -181,7 +183,7 @@ onMounted(async () => {
     return
   }
   for (const post of data) {
-    const likeCount = await getLikeCount(post.post_id)
+    const likeCount = await toggleLike(post.post_id)
     post.like_count = likeCount
   }
   posts.value = data
@@ -189,7 +191,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-[1240px] pt-[50px]">
+  <div class="mx-auto sm:max-w-[1240px] pt-[50px]">
     <!-- 로그인 된 상태 -->
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
@@ -237,7 +239,7 @@ onMounted(async () => {
           </div>
           <button
             @click="router.push('/community')"
-            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
+            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#7846D2 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
           >
             글쓰러 가기
           </button>
@@ -300,7 +302,56 @@ onMounted(async () => {
                 <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
               </div>
             </div>
-            <HotDocsComponent />
+            <div v-if="!loading">
+              <HotDocsComponent :news="news" />
+            </div>
+            <div v-else>
+              <div
+                class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
+              >
+                <div class="relative w-[580px] flex flex-col gap-[24px]"></div>
+                <div class="flex">
+                  <div class="w-[150px] h-[150px] bg-gray-300 rounded-[20px]"></div>
+                  <div>
+                    <div class="w-[350px] h-[35px] mt-3 ml-5 bg-gray-300 rounded-[20px]"></div>
+                    <div class="w-[350px] h-[22px] mt-5 ml-5 bg-gray-300 rounded-[20px]"></div>
+                    <div class="w-[350px] h-[22px] mt-2 ml-5 bg-gray-300 rounded-[20px]"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col">
+                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+                  <div class="flex gap-3 mt-3">
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="flex gap-[40px] mb-[50px]">
@@ -308,10 +359,7 @@ onMounted(async () => {
             <!-- 세 번째 관심사 -->
             <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
               <h1 class="flex gap-[10px] items-center">
-                <img :src="matchedCategories[3].icon" alt="fourthLabel" />
-                <p class="text-[30px] text-[var(--text-title)] font-bold">
-                  {{ matchedCategories[3].label }}
-                </p>
+                <p class="text-[30px] text-[var(--text-title)] font-bold"></p>
               </h1>
               <div class="flex">
                 <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
@@ -406,7 +454,7 @@ onMounted(async () => {
         <IntroduceSection v-if="!introduceLoading" :newsArr="introduceData" />
         <IntroduceSkel v-else class="mb-8" />
       </div>
-      <p class="text-center mb-3">로그인 후 맞춤 뉴스와 커뮤니티를 이용할 수 있습니다.</p>
+      <p class="text-center mb-3">로그인 후 맞춤뉴스와 커뮤니티를 이용할 수 있습니다.</p>
       <button
         @click="router.push('/login')"
         class="mx-auto flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5] transition duration-300"

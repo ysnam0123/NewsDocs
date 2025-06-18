@@ -10,14 +10,14 @@ import NewsComponent6 from '@/components/NewsComponents/NewsComponent6.vue'
 import NewsComponent7 from '@/components/NewsComponents/NewsComponent7.vue'
 import NewsComponent10 from '@/components/NewsComponents/NewsComponent10.vue'
 import SlideNewsComponent from '@/components/NewsComponents/SlideNewsComponent.vue'
-import politicsIcon from '@/assets/icons/politicsIcon.svg'
-import sportsIcon from '@/assets/icons/sportsIcon.svg'
-import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
-import cultureIcon from '@/assets/icons/cultureIcon.svg'
-import worldIcon from '@/assets/icons/worldIcon.svg'
-import societyIcon from '@/assets/icons/societyIcon.svg'
-import economyIcon from '@/assets/icons/economyIcon.svg'
-import etcIcon from '@/assets/icons/etcIcon.svg'
+// import politicsIcon from '@/assets/icons/politicsIcon.svg'
+// import sportsIcon from '@/assets/icons/sportsIcon.svg'
+// import entertainmentIcon from '@/assets/icons/entertainmentIcon.svg'
+// import cultureIcon from '@/assets/icons/cultureIcon.svg'
+// import worldIcon from '@/assets/icons/worldIcon.svg'
+// import societyIcon from '@/assets/icons/societyIcon.svg'
+// import economyIcon from '@/assets/icons/economyIcon.svg'
+// import etcIcon from '@/assets/icons/etcIcon.svg'
 import moveTop from '@/assets/icons/moveToTop.svg'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
 
@@ -35,6 +35,8 @@ const route = useRoute()
 
 const newsStore = useNewsStore()
 const posts = ref([])
+const interestStore = useInterestStore()
+const interests = computed(() => interestStore.interestList)
 
 import NCSkel0 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel0.vue'
 import NCSkel4 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel4.vue'
@@ -43,8 +45,10 @@ import NCSkel5 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSk
 import NCSkel6 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel6.vue'
 import NCSkel10 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel10.vue'
 import NCSkel7 from '@/components/NewsComponents/skeleton/NewsComponentSkel/NCSkel7.vue'
+import { getFreshNews } from '@/composables/newsCache'
+import { useInterestStore } from '@/stores/interestStore'
 
-const allNews = ref([])
+const allNews = ref()
 const loading = ref(true)
 const categoryNews = ref([])
 
@@ -124,9 +128,31 @@ watch(
   () => route.params.categoryName,
   async (newVal) => {
     console.log('카테고리 변경됨:', newVal)
+    console.log(selectedCategory.value)
 
-    loading.value = true
     await loadCategoryNews()
+    const storedNews = localStorage.getItem('allNews')
+    if (storedNews) {
+      allNews.value = JSON.parse(storedNews)
+      console.log('로컬 스토리지 - 전체 카테고리 뉴스:', allNews.value)
+      loading.value = false
+      return
+    } else {
+      try {
+        const newsResults = await Promise.all(
+          interests.value.map((category) => getFreshNews(category, 'ko')),
+        )
+        allNews.value = newsResults
+        // 모든 관심사 뉴스를 로컬스토리지에 저장
+        localStorage.setItem('allNews', JSON.stringify(newsResults))
+        console.log('로컬스토리지에 저장됨:', allNews.value)
+        loading.value = false
+      } catch (error) {
+        console.error('Error fetching news:', error)
+        loading.value = false
+      }
+    }
+
     loading.value = false
     console.log('로딩 종료:', loading.value)
   },

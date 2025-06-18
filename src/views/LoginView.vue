@@ -55,13 +55,13 @@ async function onLogin() {
 </script>
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-[#EDEBF1] dark:bg-[#1F1F1F] relative"
+    class="min-h-screen flex items-center justify-center sm:bg-[#EDEBF1] sm:dark:bg-[#1F1F1F] dark:bg-[#262626] relative"
   >
     <div class="absolute top-10 right-10 z-50">
       <DarkModeButton />
     </div>
     <div
-      class="bg-white dark:bg-[#262626] rounded-[16px] w-[464px] h-[696px] pt-[50px] flex flex-col items-center justify-center"
+      class="bg-white dark:bg-[#262626] rounded-[16px] w-full max-w-[464px] h-auto pt-[50px] mx-4 flex flex-col items-center justify-center"
     >
       <router-link to="/">
         <img src="@/assets/img/logo.svg" alt="logo" class="w-[46px] h-[46px] mx-auto" />
@@ -72,15 +72,15 @@ async function onLogin() {
         </h1>
       </router-link>
       <form @submit.prevent="onLogin" class="flex flex-col items-center w-full">
-        <div class="mb-4 w-full flex flex-col items-center">
-          <div class="relative">
+        <div class="w-full w-max-80 mb-4 flex flex-col items-center">
+          <div class="w-full relative max-w-80">
             <input
               type="email"
               v-model="email"
               placeholder=""
               required
               :class="[
-                'peer w-[360px] h-[61px] text-[16px] rounded-[12px] px-4 pt-6 pb-2 border focus:outline-none transition-colors dark:text-white',
+                'peer w-full max-w-80 h-[61px] text-[16px] rounded-[12px] px-4 pt-6 pb-2 border focus:outline-none transition-colors dark:text-white',
                 emailTouched && !isEmailValid
                   ? 'border-[#F34040] '
                   : 'border-[#DFDFDF] dark:border-[#4D4D4D]',
@@ -100,14 +100,14 @@ async function onLogin() {
             </p>
           </div>
         </div>
-        <div class="mb-6 w-full flex flex-col items-center">
-          <div class="relative">
+        <div class="mb-6 w-full w-max-80 flex flex-col items-center">
+          <div class="relative w-full max-w-80">
             <input
               type="password"
               v-model="password"
               placeholder=""
               required
-              class="peer w-[360px] h-[61px] dark:text-white text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
+              class="peer max-w-80 w-full h-[61px] dark:text-white text-[16px] rounded-[12px] px-4 py-2 pt-6 focus:outline-none border border-[#DFDFDF] dark:border-[#4D4D4D]"
             />
             <label
               class="absolute left-[16px] top-[12px] text-[#BDBDBD] text-[12px] transition-all duration-200 pointer-events-none origin-[0] peer-focus:top-[12px] peer-focus:text-[12px] peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-[20px]"
@@ -119,23 +119,23 @@ async function onLogin() {
           type="submit"
           :disabled="isLoginDisabled"
           :class="[
-            'w-[360px] h-[50px] text-white text-[16px] font-semibold rounded-[10px] mx-[40px] transition-colors duration-300 ',
+            'w-full max-w-80 h-[50px] text-[16px] font-semibold rounded-[10px] mx-[40px] transition-colors duration-300 ',
             isLoginDisabled
-              ? 'bg-[#B3B3B3] cursor-not-allowed dark:bg-[#363636]'
-              : 'bg-[#7537e3]  hover:bg-[#601ED5] cursor-pointer',
+              ? 'bg-[#f2f2f2] text-[#b3b3b3] cursor-not-allowed dark:bg-[#363636]'
+              : 'bg-[#7537e3] text-white hover:bg-[#601ED5] cursor-pointer',
           ]"
         >
           로그인
         </button>
       </form>
-      <div class="flex items-center w-[360px] my-[32px]">
+      <div class="flex items-center w-full max-w-[360px] my-[32px]">
         <div class="flex-grow border-t border-[#ADADAD] dark:border-[#585858]"></div>
         <span class="mx-4 text-[#ADADAD] text-[16px] dark:border-[#585858]">또는</span>
         <div class="flex-grow border-t border-[#ADADAD] dark:border-[#585858]"></div>
       </div>
       <div class="flex flex-col gap-[12px] items-center w-full">
         <button
-          class="flex items-center justify-center border border-[#DFDFDF] dark:hover:bg-[#3a3a3a] dark:border-[#4D4D4D] dark:text-white rounded-[8px] py-2 text-[16px] font-medium w-[360px] h-[50px] hover:bg-[#F9F9F9] transition-colors duration-300 cursor-pointer"
+          class="flex items-center justify-center border w-full border-[#DFDFDF] dark:hover:bg-[#3a3a3a] dark:border-[#4D4D4D] dark:text-white rounded-[8px] py-2 text-[16px] font-medium max-w-80 h-[50px] hover:bg-[#F9F9F9] transition-colors duration-300 cursor-pointer"
           @click="onGoogleLogin"
         >
           <img
