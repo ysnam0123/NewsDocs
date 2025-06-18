@@ -163,7 +163,7 @@ defineExpose({ errors, values, setFieldError })
           <!-- 랜덤 닉네임 생성 버튼 -->
           <button
             type="button"
-            class="cursor-pointer ml-3 w-12.5 h-12.5 hover:bg-[#F2F2F2] dark:hover:bg-[#515151] flex items-center justify-center border-[#DFDFDF] dark:border-[#363636] focus:outline-none border rounded-[8px]"
+            class="cursor-pointer ml-3 w-12.5 h-12.5 hover:bg-[#F2F2F2] dark:border-[#4D4D4D] dark:hover:bg-[#515151] flex items-center justify-center border-[#DFDFDF] focus:outline-none border rounded-[8px]"
             @click="handleRandomNickname"
           >
             <Dices

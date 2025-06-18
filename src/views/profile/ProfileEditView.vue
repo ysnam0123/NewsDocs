@@ -126,7 +126,7 @@ async function onEdit(values) {
 </script>
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="w-full flex flex-row justify-center items-start px-4">
+    <div class="w-full flex flex-row justify-center items-start my-20 px-4">
       <div class="w-full max-w-[444px]">
         <label
           class="block text-[24px] font-bold max-w-85 text-left text-[#191919] mb-6 dark:text-white"
