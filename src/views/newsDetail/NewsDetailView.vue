@@ -44,6 +44,7 @@ const handleSummary = async () => {
   isLoading.value = false
 }
 onMounted(async () => {
+  const newsId = route.params.id
   const { data, error } = await supabase
     .from('news')
     .select(`*, category:category_id (title)`)
@@ -130,14 +131,14 @@ onMounted(async () => {
       <hr class="text-gray-200 dark:text-[#282828]" />
     </section>
     <div class="mr-2">
-      <NewsRecommend class="sm:flex hidden" />
+      <NewsRecommend v-if="news && news.category_id" :category-id="news.category_id" />
     </div>
   </section>
   <section>
     <CommunityRecommend
       v-if="news"
       :category-id="news.category_id"
-      :category-label="categoryLabel"
+      :category-label="news.category?.title"
     />
   </section>
 </template>
