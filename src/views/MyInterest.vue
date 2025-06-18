@@ -309,7 +309,7 @@ onMounted(async () => {
               </div>
             </div>
             <div v-if="!loading">
-              <HotDocsComponent />
+              <HotDocsComponent :news="news" />
             </div>
             <div v-else>
               <div
