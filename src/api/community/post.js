@@ -20,7 +20,6 @@ export const postUpload = () => {
       console.log('imageError:', imageError)
       throw new Error('이미지 업로드 실패')
     } else {
-      alert('이미지 업로드 성공!')
       console.log('이미지 업로드 성공!:', uploadData)
     }
     const { data: publicUrlData } = supabase.storage.from('post-images').getPublicUrl(fileName)
