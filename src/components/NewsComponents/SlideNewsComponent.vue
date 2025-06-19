@@ -50,7 +50,10 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="rounded-[16px] h-[384px] relative select-none cursor-pointer">
+  <div
+    v-if="props.news"
+    class="rounded-[16px] sm:h-[384px] sm:w-full w-[185px] h-[202px] relative select-none cursor-pointer"
+  >
     <!-- 호버했을때 나오는 창 -->
     <div
       class="absolute w-full h-full group inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center z-12 cursor-pointer"
@@ -76,18 +79,18 @@ onMounted(() => {
       <template v-else-if="summaryMessage">
         <!-- 요약할 내용 없음 메시지 표시 -->
         <div
-          class="flex flex-col items-center justify-center text-white text-center text-[16px] px-4"
+          class="flex flex-col items-center justify-center text-white overflow-scroll text-center text-[16px] px-4"
         >
-          <img :src="dogNotFound" alt="noDescribe" class="w-[200px]" />
+          <img :src="dogNotFound" alt="noDescribe" class="sm:w-[200px] w-full h-full" />
           {{ summaryMessage }}
         </div>
       </template>
 
       <div
         v-show="!isLoading"
-        class="w-full h-[384px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]"
+        class="w-full sm:h-[384px] h-full rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]"
       >
-        <div class="flex flex-col relative z-30 h-full">
+        <div class="flex flex-col relative z-30">
           <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
           <div class="pr-1">
             <div
@@ -109,9 +112,9 @@ onMounted(() => {
 
     <img :src="news.image_url" alt="slide" class="w-full h-full object-cover rounded-[16px]" />
     <div
-      class="flex flex-col px-[20px] absolute h-[187px] w-[292px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
+      class="flex flex-col px-[20px] absolute sm:w-[292px] w-full h-full bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
     >
-      <p class="text-[20px] text-white mt-auto break-words line-clamp-2">
+      <p class="sm:text-[20px] text-[13px] text-white mt-auto break-words line-clamp-2">
         {{ props.news.title }}
       </p>
       <!-- 좋아요 박스 -->

@@ -122,11 +122,11 @@ onMounted(() => {
       <div>
         <div class="px-[10px] select-none">
           <div
-            class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-1"
+            class="text-[var(--text-title)] sm:text-[20px] text-[15px] font-bold mt-[12px] mb-[5px] line-clamp-1"
           >
             {{ props.news.title }}
           </div>
-          <div class="text-[16px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
+          <div class="sm:text-[16px] text-[10px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
             {{ props.news.description || '' }}
           </div>
           <!-- 좋아요 박스 -->

@@ -48,7 +48,10 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="h-[384px] relative select-none group">
+  <div
+    v-if="props.news"
+    class="sm:w-[292px] sm:h-[384px] w-[185px] h-[202px] relative select-none group"
+  >
     <!-- 호버했을때 나오는 창 -->
     <div
       @click.stop="handleSummary"
@@ -103,12 +106,12 @@ onMounted(() => {
       </router-link>
     </div>
 
-    <div class="relative w-[292px] h-[384px]">
+    <div class="relative w-full h-full">
       <img :src="news.image_url" alt="newsImage" class="w-full h-full object-cover rounded-3xl" />
       <div
-        class="flex flex-col px-[20px] absolute h-[187px] w-[292px] bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
+        class="flex flex-col px-[20px] absolute sm:h-[187px] h-full sm:w-[292px] w-full bg-linear-to-t from-black to-transparent bottom-0 z-10 rounded-[16px]"
       >
-        <p class="font-bold text-[20px] text-[white] mt-auto line-clamp-2">
+        <p class="font-bold sm:text-[20px] text-[12px] text-[white] mt-auto line-clamp-2">
           {{ props.news.title }}
         </p>
         <!-- 좋아요 박스 -->
