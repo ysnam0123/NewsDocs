@@ -1,79 +1,119 @@
-<script setup></script>
+<script setup>
+import { fetchHotDocs } from '@/api/fetchHotDocs'
+import { Eye, ThumbsUp } from 'lucide-vue-next'
+import { onMounted, computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const newsList = ref([])
+const isLoading = ref(true)
+
+// 조회수 상위 5개만 보여줌
+const hotDocs = computed(() => {
+  return [...newsList.value].sort((a, b) => b.view_count - a.view_count).slice(0, 5)
+})
+const handleClick = (news) => {
+  console.log(hotDocs)
+  router.push(`/news/detail/${news.news_id}`)
+}
+
+onMounted(async () => {
+  newsList.value = await fetchHotDocs()
+  console.log('hotNewsList:', newsList.value)
+  isLoading.value = false
+})
+</script>
 <template>
   <div
-    class="flex flex-col text-[var(--text-title)] h-[792px] border-1 border-[#e0e0e0] rounded-[18px] px-[32px] pt-[28px]"
+    v-if="!isLoading"
+    class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
   >
-    <!-- 이미지가 있는 기사 -->
-    <div class="flex gap-[20px] w-[496px] h-[151px] mb-[20px]">
-      <img
-        src="@/assets/img/exImage/skiChampion.svg"
-        alt="ski CHampion"
-        class="w-[151px] h-[151px] rounded-[20px]"
-      />
-      <div class="flex flex-col w-[325px]">
-        <h1 class="mb-[11px] font-semibold text-[18px]">
-          스키 챔피언 김보민.. 화려한 슬라이딩 선보여 엄청난 속도
-        </h1>
-        <h3 class="mb-[15px] font-medium text-[16px] text-[#7f7f7f]">
-          김판곤 감독이 이끄는 울산은 6일 인천국제공항으롵 통해 스키 슬라이팅 엄청난속도
-        </h3>
-        <!-- 좋아요 상자 -->
-        <div class="flex gap-[8px]">
-          <div class="flex gap-[4px] items-center text-[13px] text-[#939393]">
-            <img src="@/assets/img/Thumbs-up.svg" alt="likes" class="w-[16px] h-[16px]" />
-            <p class="mt-[4px] text-[12px]">32</p>
-          </div>
-
-          <div class="flex gap-[4px] items-center text-[13px] text-[#939393]">
-            <img src="@/assets/img/View.svg" alt="likes" class="w-[16px] h-[16px]" />
-            <p class="mt-[4px] text-[12px]">32</p>
+    <div
+      v-for="(news, index) in hotDocs"
+      :key="news.news_id"
+      @click="handleClick(news)"
+      :class="[
+        'flex gap-[20px] sm:w-[496px] min-w-[300] cursor-pointer',
+        index === 0
+          ? 'h-[151px] mb-5'
+          : 'py-[23px] border-t-1 border-t-[#E0E0E0] dark:border-t-[#343434] h-[146px]',
+      ]"
+    >
+      <div class="flex gap-[20px]">
+        <img
+          v-if="index === 0"
+          :src="news.image_url"
+          alt="news image"
+          class="sm:w-[151px] sm:h-[151px] w-[120px] h-[120px] rounded-[20px] object-cover"
+        />
+        <div :class="['flex flex-col', index === 0 ? 'sm:w-[325px] w-[170px]' : 'w-full']">
+          <h1 class="sm:mb-[11px] mb-0 font-semibold sm:text-[18px] text-[13px]">
+            {{ news.title }}
+          </h1>
+          <span
+            class="mb-[15px] min-h-[35px] sm:text-[15px] text-[12px] text-[#7f7f7f] line-clamp-2"
+          >
+            {{ news.description }}
+          </span>
+          <div class="flex gap-[8px]">
+            <div class="flex gap-[4px] items-center sm:text-[13px] text-[#939393]">
+              <ThumbsUp class="w-4 mt-0.5 mr-1" />
+              <p class="mt-[3px] mr-0.5">{{ news.like.length ?? 0 }}</p>
+            </div>
+            <div class="flex gap-[4px] items-center text-[13px] text-[#939393]">
+              <Eye class="w-4 mt-0.5 mr-1" />
+              <p class="mt-[3px]">{{ news.view_count ?? 0 }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- 이미지가 없는 기사 -->
-    <div class="w-[496px] h-[146px] py-[23px] border-t-1 border-[#E0E0E0]">
-      <h1 class="mb-[12px] font-semibold text-[18px]">
-        [속보] 개표 40% 돌파, ‘당선 확실’ 이재명 후보...”국민들의 위대한 결정에 경의” 진정한
-        대한민국 만들것.
-      </h1>
-      <h3 class="font-medium text-[16px] text-[#7f7f7f]">
-        김판곤 감독이 이끄는 울산은 6일 인천국제공항을 통해 2025 FIFA 클럽월드컵이 열리는 결전지
-        미국으로 출국했다.
-      </h3>
-    </div>
-    <!-- 이미지가 없는 기사 -->
-    <div class="w-[496px] h-[146px] py-[23px] border-t-1 border-[#E0E0E0]">
-      <h1 class="mb-[12px] font-semibold text-[18px]">
-        [속보] 개표 40% 돌파, ‘당선 확실’ 이재명 후보...”국민들의 위대한 결정에 경의” 진정한
-        대한민국 만들것.
-      </h1>
-      <h3 class="font-medium text-[16px] text-[#7f7f7f]">
-        김판곤 감독이 이끄는 울산은 6일 인천국제공항을 통해 2025 FIFA 클럽월드컵이 열리는 결전지
-        미국으로 출국했다.
-      </h3>
-    </div>
-    <!-- 이미지가 없는 기사 -->
-    <div class="w-[496px] h-[146px] py-[23px] border-t-1 border-[#E0E0E0]">
-      <h1 class="mb-[12px] font-semibold text-[18px]">
-        [속보] 개표 40% 돌파, ‘당선 확실’ 이재명 후보...”국민들의 위대한 결정에 경의” 진정한
-        대한민국 만들것.
-      </h1>
-      <h3 class="font-medium text-[16px] text-[#7f7f7f]">
-        김판곤 감독이 이끄는 울산은 6일 인천국제공항을 통해 2025 FIFA 클럽월드컵이 열리는 결전지
-        미국으로 출국했다.
-      </h3>
-    </div>
-    <!-- 이미지가 없는 기사 -->
-    <div class="w-[496px] h-[146px] py-[23px] border-t-1 border-[#E0E0E0]">
-      <h1 class="mb-[12px] font-semibold text-[18px]">
-        [속보] 개표 40% 돌파, ‘당선 확실’ 이재명 후보...”국민들의 위대한 결정에 경의” 진정한
-        대한민국 만들것.
-      </h1>
-      <h3 class="font-medium text-[16px] text-[#7f7f7f]">
-        김판곤 감독이 이끄는 울산은 6일 인천국제공항을 통해 2025 FIFA 클럽월드컵이 열리는 결전지
-        미국으로 출국했다.
-      </h3>
+  </div>
+  <div v-else>
+    <div
+      class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
+    >
+      <div class="relative w-[580px] flex flex-col gap-[24px]"></div>
+      <div class="flex">
+        <div class="w-[150px] h-[150px] bg-gray-300 rounded-[20px]"></div>
+        <div>
+          <div class="w-[350px] h-[35px] mt-3 ml-5 bg-gray-300 rounded-[20px]"></div>
+          <div class="w-[350px] h-[22px] mt-5 ml-5 bg-gray-300 rounded-[20px]"></div>
+          <div class="w-[350px] h-[22px] mt-2 ml-5 bg-gray-300 rounded-[20px]"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

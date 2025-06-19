@@ -1,17 +1,16 @@
 <script setup>
 import { userAuthStore } from '@/stores/authStore'
-import { useThemeStore } from '@/stores/useDarkmode'
 import supabase from '@/utils/supabase'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import UserForm from '@/components/UserForm.vue'
 import { signUpSchema } from '@/utils/userSchema'
+import DarkModeButton from '@/components/common/DarkModeButton.vue'
 
 const toast = useToast()
 const router = useRouter()
 const authStore = userAuthStore()
-const { toggleDark } = useThemeStore()
 
 //중복 체크 결과
 const isEmailAvailable = ref(false)
@@ -43,8 +42,8 @@ async function checkEmailDuplicate() {
     toast.error('폼이 초기화되지 않았습니다. 다시 시도해주세요.')
     return
   }
-  const { errors, values } = form.value
-  if (errors.email) return
+  const { values, setFieldError } = form.value
+  if (!values.email) return
   isCheckingEmail.value = true
   try {
     const { data } = await supabase
@@ -53,10 +52,10 @@ async function checkEmailDuplicate() {
       .eq('email', values.email)
       .maybeSingle()
     if (data) {
-      errors.email = '이미 등록된 이메일입니다.'
+      setFieldError('email', '이미 등록된 이메일입니다.')
       isEmailAvailable.value = false
     } else {
-      errors.email = ''
+      setFieldError('email', '')
       isEmailAvailable.value = true
     }
   } catch (error) {
@@ -152,14 +151,11 @@ const isDisabled = computed(() => {
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-[#EDEBF1] relative dark:bg-[#1F1F1F]"
+    class="min-h-screen flex items-center justify-center sm:bg-[#EDEBF1] sm:dark:bg-[#1F1F1F] dark:bg-[#262626] relative"
   >
     <!-- 다크모드 버튼 -->
-    <div
-      class="absolute top-10 right-10 w-[40px] h-[40px] cursor-pointer rounded-[100%] bg-[#F6F6F6] dark:bg-[#262626] hover:bg-white flex items-center justify-center z-50 transition-colors duration-300"
-      @click="toggleDark()"
-    >
-      <img src="@/assets/icons/toDarkMode.svg" alt="modeToggle" class="w-[24px] h-[24px]" />
+    <div class="absolute sm:top-10 sm:right-10 top-6 right-6 z-50">
+      <DarkModeButton />
     </div>
     <div
       class="bg-white dark:bg-[#262626] rounded-[20px] w-[464px] min-h-[779px] py-10 flex flex-col items-center justify-center"
@@ -183,6 +179,7 @@ const isDisabled = computed(() => {
         :is-nickname-available="isNicknameAvailable"
         :disabled="isDisabled"
         @submit="onSignUp"
+        class="max-w-85"
       >
         <template #submit>회원가입</template>
       </UserForm>

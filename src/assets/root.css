@@ -5,6 +5,8 @@
   --sub-text: #8f8f8f;
   --message-bg: #efefef;
   --border-gray: #ebebeb;
+  --mobile-text: #bbbbbb;
+  --mobile-active-text: #191919;
 
   --main-color: #7b42df;
   --light-purple: #ece1ff;
@@ -51,9 +53,7 @@
   --section-contents-bg: #eeeded;
   --section-contents-border: #343434;
   --show-more: #191919;
-
-  /* 모든 소식 */
-  --newsnav-bg: #f3f3f3;
+  --section-community-border: #e3e3e3 /* 모든 소식 */ --newsnav-bg: #f3f3f3;
   --newsnav-color: #191919;
   --newsnav-hover: #e0e0e0;
   --newsnav-selected: #191919;
@@ -78,6 +78,8 @@
   --sub-text: #8f8f8f;
   --message-bg: #3c3c3c;
   --border-gray: #ebebeb;
+  --mobile-text: #6f6f6f;
+  --mobile-active-text: #ffffff;
 
   --main-color: #7b42df;
   --light-purple: #ece1ff;

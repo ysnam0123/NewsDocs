@@ -1,24 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router/dist/vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import SignUpView from '@/views/SignUpView.vue'
+
 import { useInterestStore } from '@/stores/interestStore'
+import MyInterest from '../views/MyInterest.vue'
+import NewsLayout from '@/layout/NewsLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'MyInterest',
+      component: MyInterest,
       meta: {
         hideHeaderBasic: true,
+        hideMobileHeader: true,
       },
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+
+      component: () => import('../views/LoginView.vue'),
       meta: {
         hideHeader: true,
         hideFooter: true,
@@ -28,23 +30,15 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: SignUpView,
-      meta: { hideHeader: true, hideFooter: true },
+      component: () => import('../views/SignUpView.vue'),
+      meta: { hideHeader: true, hideFooter: true, hideHeaderBasic: true },
     },
-    // {
-    //   path: '/practicePage',
-    //   name: 'practice',
-    //   component: () => import('../components/NewsComponents/PracticePage.vue'),
-    //   meta: {
-    //     hideHeaderBasic: true,
-    //   },
-    // },
     {
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/ProfileView.vue'),
       meta: {
-        hideHeaderBasic: true,
+        hideHeaderBasic: false,
       },
     },
     {
@@ -61,6 +55,9 @@ const router = createRouter({
       component: () => import('../views/profile/ProfileEditView.vue'),
       meta: {
         hideHeaderBasic: true,
+        mobile: {
+          hideHeader: true,
+        },
       },
     },
     {
@@ -106,43 +103,29 @@ const router = createRouter({
       },
     },
     {
-      path: '/myinterest',
-      name: 'myInterest',
-      component: () => import('../views/MyInterest.vue'),
-      meta: {
-        hideHeaderBasic: true,
-      },
-    },
-    {
       path: '/news',
-      name: 'newsLayout',
-      component: () => import('../layout/NewsLayout.vue'),
-      meta: {
-        hideHeader: false,
-        hideFooter: true,
-        hideHeaderBasic: true,
-      },
+      name: 'news',
+      component: NewsLayout,
       children: [
-        {
-          path: '',
-          name: 'newsList',
-          component: () => import('../views/newsDetail/NewsListView.vue'),
-          meta: {
-            hideHeaderBasic: true,
-            hideHeader: false,
-          },
-        },
         {
           path: 'detail/:id',
           name: 'newsDetail',
           component: () => import('../views/newsDetail/NewsDetailView.vue'),
-          props: true,
-          meta: {
-            hideHeaderBasic: true,
-            hideHeader: false,
-          },
+        },
+        {
+          path: '',
+          name: 'allNews',
+          component: () => import('../views/newsDetail/NewsListView.vue'),
+        },
+        {
+          path: ':categoryName',
+          name: 'Category',
+          component: () => import('../views/newsDetail/CategoryView.vue'),
         },
       ],
+      meta: {
+        hideMobileHeader: true,
+      },
     },
     {
       path: '/community',

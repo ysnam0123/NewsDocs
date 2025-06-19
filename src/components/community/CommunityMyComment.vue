@@ -45,15 +45,15 @@ onMounted(async () => {
 </script>
 <template>
   <!-- 내 댓글 -->
-  <div class="flex min-w-[830px] min-h-[58px] items-center mt-6">
+  <div class="flex w-full sm:min-w-[830px] min-h-[65px] sm:min-h-[58px] items-center mt-6">
     <img
       @click="goToProfile"
       :src="user?.profile_img ? user?.profile_img : defaultImg"
       alt="댓글 프로필 이미지"
-      class="w-[58px] h-[58px] rounded-full cursor-pointer"
+      class="w-10 sm:w-[58px] h-10 sm:h-[58px] rounded-full cursor-pointer"
     />
-    <div class="flex flex-col w-full ml-[17px]">
-      <div class="pl-[14px] w-full flex items-center justify-between">
+    <div class="flex flex-col w-full ml-[12px] sm:ml-[17px]">
+      <div class="sm:ml-[14px] w-full flex items-center justify-between">
         <div class="flex items-center">
           <span
             @click="goToProfile"
@@ -70,7 +70,7 @@ onMounted(async () => {
         />
       </div>
 
-      <div class="flex ml-[14px] mt-[2px] text-[16px] text-[#191919] dark:text-[#8F8F8F]">
+      <div class="flex sm:ml-[14px] mt-[2px] text-[16px] text-[#191919] dark:text-[#8F8F8F]">
         <form
           @submit.prevent="saveEdit"
           v-if="isEditing"

@@ -20,6 +20,9 @@ const goToMyPost = () => {
 const goToLogin = () => {
   router.push('/login')
 }
+const goToProfile = () => {
+  router.push('/profile')
+}
 const postHandler = () => {
   modalStore.openModal()
 }
@@ -36,7 +39,7 @@ onMounted(async () => {
         interestArr.value = await Promise.all(
           interests.value.map((interest) => fetchCategory(interest.category_id)),
         )
-        console.log(interestArr.value)
+        // console.log(interestArr.value)
       }
     }
   } catch (e) {
@@ -45,51 +48,47 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="relative flex flex-col items-center w-[170px] min-h-[260px]">
+  <div
+    class="relative flex items-center sm:flex-col sm:items-center sm:w-[170px] min-w-[203px] whitespace-nowrap sm:h-auto h-[78px] bg-[#FFFFFF] dark:bg-[#262626]"
+  >
     <!-- 프로필 -->
-    <div class="w-full flex flex-col items-center">
+    <div class="flex sm:flex-col sm:items-center">
       <img
+        @click="goToProfile"
         :src="currentUser && currentUser.profile_img ? currentUser.profile_img : defaultImg"
         alt="프로필이미지"
-        class="w-[146px] h-[146px] mt-[15px] rounded-full"
+        class="sm:w-[146px] sm:h-[146px] w-[78px] h-[78px] sm:mt-[15px] rounded-full object-cover cursor-pointer"
       />
-      <p class="mt-4 text-xl dark:text-[#ffffff]">{{ currentUser?.nickname }}</p>
-      <p class="mt-[6px] text-[14px] text-[#8F8F8F]">
-        {{ interestArr.map((i) => i.title).join(', ') }}
-      </p>
+      <div class="flex flex-col items-center justify-center">
+        <p class="sm:mt-4 ml-4 sm:text-xl text-[18px] dark:text-[#ffffff]">
+          {{ currentUser?.nickname }}
+        </p>
+        <p class="mt-[6px] sm:text-[14px] text-[13px] text-[#8F8F8F]">
+          {{ interestArr.map((i) => i.title).join(', ') }}
+        </p>
+      </div>
     </div>
-    <!-- <div class="w-full flex flex-col items-center">
-      <img
-        :src="profileImg ? profileImg : defaultImg"
-        alt="프로필이미지"
-        class="w-[146px] h-[146px] mt-[15px] rounded-full"
-      />
-      <p class="mt-4 text-xl dark:text-[#ffffff]">{{ user?.nickname }}</p>
-      <p class="mt-[6px] text-[14px] text-[#8F8F8F]">스포츠, 정치, 문화</p>
-    </div> -->
 
     <!-- 버튼 -->
     <button
-      class="mt-8 w-[170px] h-[50px] rounded-lg bg-[#7537E3] dark:bg-[#7846D2] hover:bg-[#601ED5] dark:hover:bg-[#6524D9] text-[#ffffff] text-[16px] transition-all duration-300 cursor-pointer"
+      class="sm:block hidden mt-8 w-[170px] h-[50px] rounded-lg bg-[#7537E3] dark:bg-[#7846D2] hover:bg-[#601ED5] dark:hover:bg-[#6524D9] text-[#ffffff] text-[16px] transition-all duration-300 cursor-pointer"
       @click="postHandler"
     >
       새 글 작성
     </button>
     <button
       @click="goToMyPost"
-      class="mt-[10px] w-[170px] h-[50px] rounded-lg border border-[#7537E3] dark:border-[#7846D2] bg-[#ffffff] dark:bg-transparent hover:bg-[#F3ECFF] dark:hover:bg-[#2C204A] text-[#7537E3] dark:text-[#B185FF] text-[16px] transition-all duration-300 cursor-pointer"
+      class="sm:block hidden mt-[10px] w-[170px] h-[50px] rounded-lg border border-[#7537E3] dark:border-[#7846D2] bg-[#ffffff] dark:bg-transparent hover:bg-[#F3ECFF] dark:hover:bg-[#2C204A] text-[#7537E3] dark:text-[#B185FF] text-[16px] transition-all duration-300 cursor-pointer"
     >
       내가 작성한 글
     </button>
-    <!-- <div v-if="!currentUser">로그인 안되어있습니다</div>
-    <div v-else>로그인 되어있습니다</div> -->
 
     <!-- 비로그인시 로그인 하러가기 버튼-->
     <div
       v-if="!currentUser"
-      class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/70 dark:bg-black/30 text-center"
+      class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/70 dark:bg-[#262626]/70 text-center"
     >
-      <p class="text-[14px] font-medium text-[#7537E3] dark:text-[#C2A5FF]">로그인이 필요합니다</p>
+      <p class="text-[14px] font-medium text-[#7537E3] dark:text-[#A878FD]">로그인이 필요합니다</p>
       <button
         @click="goToLogin"
         class="mt-3 px-3 py-1.5 bg-[#7537E3] text-white text-sm rounded-md hover:bg-[#5E2BC0] transition cursor-pointer"

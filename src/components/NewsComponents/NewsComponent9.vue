@@ -1,202 +1,147 @@
 <script setup>
-import { onMounted, ref, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-import supabase from '@/utils/supabase'
-import { fetchOpenAi } from '@/api/fetchOpenAi'
-import { useNewsStore } from '@/stores/newsStore'
-import { useSummaryStore } from '@/stores/summaryNews'
-import Typed from 'typed.js'
-import ScrapImg from './children/ScrapImg.vue'
-import { ThumbsUp } from 'lucide-vue-next'
-import { Eye } from 'lucide-vue-next'
+import { ref, nextTick, onMounted } from 'vue'
 
-const summaryHover = ref(false)
-const hoverHandler = () => {
-  summaryHover.value = true
-}
-const hoverOut = () => {
-  summaryHover.value = false
-}
-const wantSummary = ref(false)
-const summarizeToggle = () => {
-  wantSummary.value = !wantSummary.value
-}
+// import { Eye } from 'lucide-vue-next'
+import dogNotFound from '@/assets/img/dog-notfound-v2.png'
+import { useSummary } from '@/composables/useSummary'
+import { useTyping } from '@/composables/useTyping'
+import NewsScrapButton from '../common/NewsScrapButton.vue'
 
 const props = defineProps({
   news: Object,
-  newsSaveHandler: Function,
-  newsDetail: Function,
 })
 
-const router = useRouter()
-const isOpen = ref(false)
-const summaryStore = useSummaryStore()
-const newsStore = useNewsStore()
+const { getOrCreateSummary } = useSummary()
+const { runTyped, typedTarget } = useTyping()
 const isLoading = ref(true)
-const typedTarget = ref(null)
-let typedInstance = null
+const summaryMessage = ref('')
+const isOpen = ref(false)
+const summary = ref('')
+const isSummaryLoading = ref(true)
 
-const handleClick = async () => {
-  if (newsStore.selectedNews?.article_id !== props.news.article_id) {
-    console.log('저장 호출됨:', props.news.title)
-    await props.newsSaveHandler(props.news)
-  }
-  if (!props.news.description) return
-  isOpen.value = !isOpen.value
-
+const handleSummary = async () => {
   if (isOpen.value) {
-    if (!summaryStore.summaryNews) {
-      await summarizeHandler()
-    } else {
-      await runTyped(summaryStore.summaryNews)
-    }
+    isOpen.value = false
+    return
   }
-}
 
-const runTyped = async (text) => {
+  isLoading.value = true
+  isOpen.value = true
   await nextTick()
 
-  if (typedTarget.value) {
-    if (typedInstance) {
-      typedInstance.destroy()
-    }
-    typedTarget.value.innerText = ''
-    new Typed(typedTarget.value, {
-      strings: [text],
-      typeSpeed: 20,
-      showCursor: false,
-    })
+  if (summary.value) {
+    await runTyped(summary.value)
   } else {
-    console.warn('value is null')
-  }
-}
-
-const summarizeHandler = async () => {
-  try {
-    if (!props.news.description) return
-
-    const { data: savedSummary } = await supabase
-      .from('summaries')
-      .select('summaries_contents')
-      .eq('news_id', props.news.article_id)
-      .maybeSingle()
-
-    if (savedSummary && savedSummary.summaries_contents) {
-      summaryStore.summaryNews = savedSummary.summaries_contents
-      await runTyped(savedSummary.summaries_contents)
-      return
+    const result = await getOrCreateSummary(props.news.news_id, props.news.description)
+    if (result) {
+      summary.value = result
+      await runTyped(result)
     }
-    const result = await fetchOpenAi(props.news.description)
-    summaryStore.summaryNews = result
-    await runTyped(result)
-    const { error } = await supabase
-      .from('summaries')
-      .insert([{ news_id: props.news.article_id, summaries_contents: result }])
-      .select()
-
-    if (error) {
-      console.error('요약 저장 실패', error)
-      const { error } = await supabase
-        .from('summaries')
-        .select('*')
-        .eq('news_id', props.news.article_id)
-    }
-  } catch (err) {
-    console.error('요약 중 요류', err)
-  } finally {
-    isLoading.value = false
   }
+
+  isLoading.value = false
 }
 
-const toDetailHandler = () => {
-  router.push(`/news/detail/${props.news.article_id}`)
-}
+// 마운트 후 상태 초기화
 onMounted(() => {
   if (props.news) {
-    isLoading.value = false
+    isSummaryLoading.value = false
+    console.log('🟢 컴포넌트 Mounted → 로딩 상태 false')
   }
 })
 </script>
 <template>
-  <div v-if="props.news" class="w-[300px] h-[385px] relative select-none" @click="handleClick">
+  <div v-if="props.news" class="group sm:w-full sm:h-[385px] h-[120px] relative select-none">
     <!-- 호버했을때 나오는 창 -->
     <div
-      v-show="!wantSummary"
-      v-if="summaryHover"
-      class="absolute w-[300px] h-[217px] inset-0 bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
-      @click="summarizeToggle"
-      @mouseleave="hoverOut"
+      class="absolute w-full sm:h-[217px] h-full group inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center z-10 cursor-pointer"
+      @click.stop="handleSummary"
     >
-      <p class="text-white font-semibold text-[16px] z-20">요약보기</p>
+      <p class="text-white hidden group-hover:flex text-[16px] z-20">요약보기</p>
     </div>
 
     <!-- 클릭했을 때 나오는 창 -->
     <div
-      v-if="wantSummary"
-      class="cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col items-center justify-center gap-4 rounded-[20px] z-20 backdrop-blur-lg"
-      @click="summarizeToggle"
+      v-if="isOpen"
+      @click="isOpen = false"
+      class="w-full cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col rounded-[20px] z-20 backdrop-blur-lg"
     >
-      <template v-if="isSummaryLoading">
-        <div class="flex flex-col animate-pulse shrink-0">
-          <div class="mb-8 h-7 w-[84px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[500px] bg-[#626262]/70 rounded-md"></div>
-          <div class="mb-3 h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
-          <div class="h-8 w-[400px] bg-[#626262]/70 rounded-md"></div>
+      <template v-if="isLoading">
+        <div class="hidden sm:flex w-full flex-col animate-pulse shrink-0 px-7 py-9">
+          <div class="mb-8 h-7 w-[40%] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-7 w-[80%] bg-[#626262]/70 rounded-md"></div>
+          <div class="mb-3 h-7 w-[80%] bg-[#626262]/70 rounded-md"></div>
+          <div class="h-8 w-[35%] bg-[#626262]/70 rounded-md"></div>
         </div>
       </template>
-      <template v-else-if="summaryStore.summaryNews">
+      <template v-if="summaryMessage">
+        <!-- 요약할 내용 없음 메시지 표시 -->
         <div
-          class="w-[300px] h-[385px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-hidden"
+          class="flex flex-col items-center justify-center text-white text-center font-semibold text-[16px] px-4"
         >
-          <div class="flex flex-col justify-between relative z-30 h-full">
-            <div>
-              <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
-              <div class="max-h-[220px] overflow-y-auto pr-1">
-                <div class="text-white whitespace-pre-line leading-8">
-                  <span ref="typedTarget" class="text-white"></span>
-                </div>
+          <img :src="dogNotFound" alt="noDescribe" class="w-[150px]" />
+          {{ summaryMessage }}
+        </div>
+      </template>
+      <div
+        v-show="!isLoading"
+        class="sm:h-[385px] max-h-[120px] sm:w-full w-[calc(100%-81px)] rounded-[20px] absolute top-0 sm:pt-[40px] sm:pb-[32px] sm:px-[32px] px-8"
+      >
+        <div class="flex flex-col relative z-30 h-full">
+          <h1 class="text-[20px] text-white mb-8 hidden sm:block">세줄 요약</h1>
+          <div class="flex flex-col w-full">
+            <div class="sm:max-h-[220px] max-h-[120px] overflow-y-auto scrollbar-hide pr-1">
+              <div class="text-white whitespace-pre-line leading-8">
+                <span
+                  ref="typedTarget"
+                  class="sm:text-lg text-[13px] w-full sm:py-0 py-4 text-left block"
+                ></span>
               </div>
             </div>
-
-            <!-- 버튼 (카드 안쪽에 위치) -->
-            <button
-              class="w-[81px] h-[33px] px-[16px] z-40 py-[8px] text-[14px] font-semibold bg-white rounded-[8px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
-              @click="toDetailHandler"
-            >
-              원문보기
-            </button>
           </div>
         </div>
-      </template>
+      </div>
+
+      <router-link
+        :to="`/news/detail/${props.news.news_id}`"
+        class="absolute sm:bottom-5 bottom-8 right-4 z-30 w-[81px] sm:h-[33px] h-[50px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+      >
+        원문보기
+      </router-link>
     </div>
 
-    <div class="w-[300px] h-[217px] mb-[16px]">
-      <img
-        :src="news.image_url"
-        class="w-full h-full object-cover space-y-0.5 rounded-[20px]"
-        @mouseover="hoverHandler"
-      />
-    </div>
-    <div class="mb-[12px] px-[10px]">
-      <div class="text-xl text-[var(--text-title)] font-bold mb-[10px] max-h-[56px] line-clamp-2">
-        {{ props.news.title }}
+    <div class="flex sm:flex-col flex-row sm:gap-0 gap-4">
+      <div class="sm:w-full w-[120px] sm:h-[217px] h-[120px] sm:mb-[16px] flex-shrink-0">
+        <img :src="news.image_url" class="w-full h-full object-cover space-y-0.5 rounded-[20px]" />
       </div>
-      <div class="text-sm text-[#A8A8A8] min-h-[40px] line-clamp-2 mb-[12px]">
-        {{ props.news.description || '' }}
-      </div>
-      <!-- 좋아요 박스 -->
-      <div class="flex gap-2 text-[#A8A8A8] mb-16">
-        <div class="flex gap-1">
-          <ThumbsUp class="w-4" />
-          <span>23</span>
+
+      <div class="flex flex-col justify-between sm:mb-[12px] sm:px-[10px] w-full">
+        <div
+          class="sm:text-xl text-[12px] text-[var(--text-title)] font-bold mb-[10px] sm:max-h-[56px] min-h-110px sm:w-full min-w-[182px] line-clamp-2"
+        >
+          {{ props.news.title }}
         </div>
-        <div class="flex gap-1">
-          <Eye class="w-4" />
-          <span>300</span>
+        <div class="sm:text-sm text-[10px] text-[#A8A8A8] min-h-[40px] line-clamp-2 mb-[12px]">
+          {{ props.news.description || '' }}
         </div>
+        <!-- 좋아요 박스 -->
+        <!-- <div class="flex gap-2 text-[#A8A8A8] mb-16">
+          <div class="flex gap-1">
+            <ThumbsUp class="w-4" />
+            <span>23</span>
+          </div>
+          <div class="flex gap-1">
+            <Eye class="w-4" />
+            <span>300</span>
+          </div> 
+        </div>-->
       </div>
     </div>
 
-    <ScrapImg class="absolute right-[8px] top-[10px] z-25" />
+    <!-- <ScrapImg class="absolute right-[8px] top-[10px] z-25" /> -->
+    <NewsScrapButton
+      :news-id="props.news.news_id"
+      class="hidden sm:block absolute right-[8px] top-[10px] z-10"
+    />
   </div>
 </template>

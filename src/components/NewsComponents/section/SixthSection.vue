@@ -28,30 +28,15 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <!-- 제목 -->
-  <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
-    <h1 class="flex gap-[10px] items-center">
-      <img :src="interestList[5].icon" alt="interestList[5].label" />
-      <p class="text-[30px] text-[var(--text-title)] font-bold">
-        {{ interestList[5].label }}
-      </p>
-    </h1>
-    <div class="flex">
-      <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
-    </div>
-    <div class="ml-auto cursor-pointer">
-      <h3 class="text-[16px] text-[var(--show-more)] underline font-medium select-none">더보기</h3>
-    </div>
-  </div>
   <div class="w-full">
     <div class="flex gap-[30px]">
       <div class="flex flex-col gap-[15px]">
-        <NewsComponent7 :news-save-handler="newsSaveHandler" v-if="newsArr[0]" :news="newsArr[0]" />
-        <NewsComponent7 :news-save-handler="newsSaveHandler" v-if="newsArr[1]" :news="newsArr[1]" />
+        <NewsComponent7 v-if="newsArr[0]" :news="newsArr[0]" />
+        <NewsComponent7 v-if="newsArr[1]" :news="newsArr[1]" />
       </div>
       <div class="flex flex-col gap-[15px]">
-        <NewsComponent7 :news-save-handler="newsSaveHandler" v-if="newsArr[2]" :news="newsArr[2]" />
-        <NewsComponent7 :news-save-handler="newsSaveHandler" v-if="newsArr[3]" :news="newsArr[3]" />
+        <NewsComponent7 v-if="newsArr[2]" :news="newsArr[2]" />
+        <NewsComponent7 v-if="newsArr[3]" :news="newsArr[3]" />
       </div>
     </div>
   </div>
