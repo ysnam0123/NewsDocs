@@ -12,6 +12,8 @@ const notiStore = useNotiStore() // 알림 스토어
 const isOpen = ref(false)
 const dropdownRef = ref(null)
 const router = useRouter()
+const dropdownActivatorRef = ref(null)
+const dropdownMenuRef = ref(null)
 
 const open = () => {
   isOpen.value = true
@@ -24,11 +26,13 @@ const toggle = () => {
 }
 
 const goToMypage = () => {
+  console.log('click')
   router.push('/profile')
   close()
 }
 
 const logoutHandler = async () => {
+  console.log('click logout')
   try {
     //로그아웃시 해당 사용자 알림 렌더링 지우기
     await notiStore.removeChannel()
@@ -45,12 +49,18 @@ const logoutHandler = async () => {
 }
 
 const handleClickOutside = (event) => {
-  if (isOpen.value && dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+  const target = event.target
+  if (
+    isOpen.value &&
+    !dropdownActivatorRef.value.contains(target) &&
+    !(dropdownMenuRef.value && dropdownMenuRef.value.contains(target))
+  ) {
     close()
   }
 }
 
 const handleProfileClick = () => {
+  console.log('click profile')
   if (!authStore.isLoggedIn) {
     router.push('/login') // 로그인되지 않은 경우 로그인 페이지로 이동
   } else {
