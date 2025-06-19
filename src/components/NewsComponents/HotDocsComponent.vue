@@ -1,23 +1,32 @@
 <script setup>
 import { fetchHotDocs } from '@/api/fetchHotDocs'
 import { Eye, ThumbsUp } from 'lucide-vue-next'
-import { onMounted, ref } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const hotDocs = ref([])
 const router = useRouter()
+const newsList = ref([])
+const isLoading = ref(true)
 
+// 조회수 상위 5개만 보여줌
+const hotDocs = computed(() => {
+  return [...newsList.value].sort((a, b) => b.view_count - a.view_count).slice(0, 5)
+})
 const handleClick = (news) => {
-  console.log(news)
+  console.log(hotDocs)
   router.push(`/news/detail/${news.news_id}`)
 }
+
 onMounted(async () => {
-  hotDocs.value = await fetchHotDocs()
+  newsList.value = await fetchHotDocs()
+  console.log('hotNewsList:', newsList.value)
+  isLoading.value = false
 })
 </script>
 <template>
   <div
-    class="flex flex-col text-[var(--text-title)] sm:h-[790px] min-h-[578px] sm:w-full w-full border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] sm:px-[32px] px-3 sm:pt-[28px] pt-3"
+    v-if="!isLoading"
+    class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
   >
     <div
       v-for="(news, index) in hotDocs"
@@ -49,13 +58,60 @@ onMounted(async () => {
           <div class="flex gap-[8px]">
             <div class="flex gap-[4px] items-center sm:text-[13px] text-[#939393]">
               <ThumbsUp class="w-4 mt-0.5 mr-1" />
-              <p class="mt-[3px] mr-0.5">{{ news.like_count ?? 0 }}</p>
+              <p class="mt-[3px] mr-0.5">{{ news.like.length ?? 0 }}</p>
             </div>
             <div class="flex gap-[4px] items-center text-[13px] text-[#939393]">
-              <Eye class="w-4.5 mt-0.5 mr-1" />
-              <p class="mt-[3px]">{{ news.view_count }}</p>
+              <Eye class="w-4 mt-0.5 mr-1" />
+              <p class="mt-[3px]">{{ news.view_count ?? 0 }}</p>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else>
+    <div
+      class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
+    >
+      <div class="relative w-[580px] flex flex-col gap-[24px]"></div>
+      <div class="flex">
+        <div class="w-[150px] h-[150px] bg-gray-300 rounded-[20px]"></div>
+        <div>
+          <div class="w-[350px] h-[35px] mt-3 ml-5 bg-gray-300 rounded-[20px]"></div>
+          <div class="w-[350px] h-[22px] mt-5 ml-5 bg-gray-300 rounded-[20px]"></div>
+          <div class="w-[350px] h-[22px] mt-2 ml-5 bg-gray-300 rounded-[20px]"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
+        <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
+        <div class="flex gap-3 mt-3">
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
+          <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
         </div>
       </div>
     </div>

@@ -21,8 +21,7 @@ import { getFreshNews } from '@/composables/newsCache'
 import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
-import { toggleLike } from '@/api/updateLikeNewsCount'
-
+// import { toggleLike } from '@/api/updateLikeNewsCount'
 const user = ref(null)
 const loading = ref(true)
 const isLoggedIn = ref(false)
@@ -34,6 +33,7 @@ const scrollToTop = () => {
 const allNews = ref([])
 const posts = ref([])
 const router = useRouter()
+const hotLoading = ref(true)
 
 // 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
 const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
@@ -54,10 +54,6 @@ onMounted(async () => {
   } = await supabase.auth.getUser()
   user.value = supaUser
   isLoggedIn.value = !!supaUser
-  console.log('사용자 정보:', user.value)
-  console.log('isLoggedIn:', isLoggedIn.value)
-  console.log('userInterestLoading:', userInterestLoading.value)
-
   // 로그인 전
   if (!isLoggedIn.value) {
     const { data: beforeLoginData, error: introduceError } = await supabase
@@ -136,7 +132,6 @@ onMounted(async () => {
     allNews.value = JSON.parse(storedUserInterestNews)
     console.log('로컬스토리지 - 유저 관심사 뉴스:', allNews.value)
     loading.value = false
-    return
   }
 
   const newsResults = []
@@ -163,7 +158,7 @@ onMounted(async () => {
   } else {
     loading.value = false
   }
-  // post 불러오기
+
   const { data, error } = await supabase
     .from('post')
     .select(
@@ -184,15 +179,13 @@ onMounted(async () => {
     )
     .order('created_at', { ascending: true })
     .limit(3)
+
   if (error) {
     console.error('post 불러오기 실패', error)
     return
   }
-  for (const post of data) {
-    const likeCount = await toggleLike(post.post_id)
-    post.like_count = likeCount
-  }
   posts.value = data
+  hotLoading.value = false
 })
 </script>
 
@@ -243,18 +236,23 @@ onMounted(async () => {
             <span>나의 관심사에 대해</span> <br /><span>사람들과 이야기해봐요!</span>
           </h1>
           <div>
-            <div class="flex flex-row justify-between gap-[24px]">
-              <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
+            <div v-if="hotLoading" class="flex gap-6">
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
             </div>
-            <div v-if="loading" class="flex gap-6">
-              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+            <div v-else class="flex flex-row justify-between gap-[24px]">
+              <NewsComponentCommunity
+                v-for="post in posts"
+                :key="post.post_id"
+                :post="post"
+                :interest-data="interestData"
+              />
             </div>
           </div>
           <button
             @click="router.push('/community')"
-            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#7846D2 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
+            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
           >
             글쓰러 가기
           </button>
@@ -327,55 +325,8 @@ onMounted(async () => {
                 </h2>
               </div>
             </div>
-            <div v-if="!loading">
+            <div>
               <HotDocsComponent />
-            </div>
-            <div v-else>
-              <div
-                class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
-              >
-                <div class="relative w-[580px] flex flex-col gap-[24px]"></div>
-                <div class="flex">
-                  <div class="w-[150px] h-[150px] bg-gray-300 rounded-[20px]"></div>
-                  <div>
-                    <div class="w-[350px] h-[35px] mt-3 ml-5 bg-gray-300 rounded-[20px]"></div>
-                    <div class="w-[350px] h-[22px] mt-5 ml-5 bg-gray-300 rounded-[20px]"></div>
-                    <div class="w-[350px] h-[22px] mt-2 ml-5 bg-gray-300 rounded-[20px]"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -430,12 +381,8 @@ onMounted(async () => {
                 </h3>
               </div>
             </div>
-            <FifthSection
-              :news-save-handler="newsSavedHandler"
-              v-if="hasNews4"
-              :newsArr="allNews[4]"
-            />
-            <FifthSecionSkel v-else-if="loading" class="mb-5" hidden sm:block />
+            <FifthSection v-if="hasNews4" :newsArr="allNews[4]" />
+            <FifthSecionSkel v-else-if="loading" class="mb-5" />
           </div>
         </div>
 
@@ -461,7 +408,7 @@ onMounted(async () => {
           </div> -->
         <!-- 섹션 8 -->
         <!-- <SixthSection
-            :news-save-handler="newsSavedHandler"
+            
             v-if="hasNews5"
             :newsArr="allNews[5]"
           />

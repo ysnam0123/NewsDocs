@@ -39,8 +39,16 @@ onMounted(async () => {
 
     userScrap.value = await fetchUserScrap(profileUser.value.user_id)
 
-    const scrapNewsId = userScrap.value.map((item) => item.news_id)
-    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
+    // created_at 기준으로 최신순 정렬
+    const sortedScrapList = [...userScrap.value].sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    )
+
+    const sortedScrapNews = await Promise.all(
+      sortedScrapList.map((item) => fetchScrapNews(item.news_id)),
+    )
+
+    scrapNews.value = sortedScrapNews.flat()
     isLoading.value = false
   } catch (e) {
     alert(e.message)

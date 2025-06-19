@@ -7,8 +7,7 @@ import { useNewsStore } from '@/stores/newsStore'
 import { useSummaryStore } from '@/stores/summaryNews2'
 import Typed from 'typed.js'
 
-import { ThumbsUp } from 'lucide-vue-next'
-import { Eye } from 'lucide-vue-next'
+// import { Eye } from 'lucide-vue-next'
 import NewsScrapButton from '../common/NewsScrapButton.vue'
 
 // 호버 상태
@@ -201,7 +200,7 @@ onMounted(() => {
         <div class="flex flex-col relative z-30 h-full">
           <div class="flex flex-col text-[15px]">
             <div
-              class="overflow-scroll px-4 py-2 max-w-[320px] max-h-[130px] text-white whitespace-pre-line leading-8"
+              class="px-4 py-2 max-w-[320px] max-h-[130px] text-white whitespace-pre-line leading-8"
             >
               <span ref="typedTarget" class="text-white"></span>
             </div>
@@ -240,16 +239,10 @@ onMounted(() => {
         </div>
 
         <!-- 좋아요 박스 -->
-        <div class="flex gap-2 text-[#A8A8A8] mb-16">
-          <div class="flex gap-1">
-            <ThumbsUp class="w-4" />
-            <span>23</span>
-          </div>
-          <div class="flex gap-1">
-            <Eye class="w-4" />
-            <span>300</span>
-          </div>
-        </div>
+        <!-- <div class="flex gap-2 text-[#A8A8A8] mb-16">
+          <Eye class="w-4" />
+          <span>2</span>
+        </div> -->
       </div>
 
       <!-- <ScrapNotOnImg class="absolute right-[10px] top-[10px] z-20" /> -->

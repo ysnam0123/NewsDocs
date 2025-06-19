@@ -23,8 +23,6 @@ const news = ref(null)
 const summary = ref('')
 const route = useRoute()
 const hasLiked = ref(false)
-//console.log('너의 이름은', route.params)
-
 const crawledText = ref('')
 const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅
 원문으로 안내해줄게 📰✨`
@@ -39,10 +37,14 @@ const handleSummary = async () => {
   await nextTick()
   if (summary.value) {
     await runTyped(summary.value)
+    console.log('서머리밸류', summary.value)
   } else {
     const result = await getOrCreateSummary(news.value.news_id, news.value.description)
+    console.log('result', result)
     if (result) {
       summary.value = result
+      await nextTick()
+
       await runTyped(result)
     }
   }
@@ -110,12 +112,17 @@ onMounted(async () => {
   if (data && !error) {
     news.value = data
     console.log(news.value.source_name)
-    const text = await fetchCrawledText(news.value.source_name, news.value.link)
-
-    crawledText.value = text
+    // 설명이 짧거나 ...일 때만 크롤링 요청
     if (isShortOrEllipsis(news.value.description)) {
       console.log('크롤링 필요:', news.value.source_name, news.value.link)
-      crawledText.value = await fetchCrawledText(news.value.source_name, news.value.link)
+      try {
+        crawledText.value = await fetchCrawledText(news.value.source_name, news.value.link)
+      } catch (e) {
+        console.error('크롤링 실패:', e)
+        crawledText.value = ''
+      }
+    } else {
+      crawledText.value = news.value.description
     }
   }
 })
@@ -191,7 +198,7 @@ onMounted(async () => {
           <p class="text-lg">요약중...</p>
         </div>
         <!-- 요약보기 -->
-        <div v-else>
+        <div v-show="!isLoading">
           <div class="py-5 mx-8">
             <h2 class="text-lg mb-4 text-[#7537E3] dark:text-[#A26EFF] font-semibold">
               세 줄 요약

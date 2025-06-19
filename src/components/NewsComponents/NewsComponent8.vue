@@ -1,12 +1,13 @@
 <script setup>
 import { nextTick, onMounted, ref } from 'vue'
-import { ThumbsUp, Eye } from 'lucide-vue-next'
+// import { Eye } from 'lucide-vue-next'
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
 import { useTyping } from '@/composables/useTyping'
 import NewsScrapButton from '../common/NewsScrapButton.vue'
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
+
 // 호버 상태
 const summaryHover = ref(false)
 const isSummaryLoading = ref(true)
@@ -128,16 +129,10 @@ onMounted(() => {
             {{ props.news.description || '' }}
           </div>
           <!-- 좋아요 박스 -->
-          <div class="flex gap-2 text-[#A8A8A8] mb-16">
-            <div class="flex gap-1">
-              <ThumbsUp class="w-4" />
-              <span>23</span>
-            </div>
-            <div class="flex gap-1">
-              <Eye class="w-4" />
-              <span>300</span>
-            </div>
-          </div>
+          <!-- <div class="flex gap-2 text-[#A8A8A8] mb-16">
+            <Eye class="w-4" />
+            <span>12</span>
+          </div> -->
         </div>
       </div>
       <NewsScrapButton :news-id="props.news.news_id" class="absolute right-[8px] top-[10px] z-10" />
