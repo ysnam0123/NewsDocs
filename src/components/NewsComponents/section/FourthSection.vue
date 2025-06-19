@@ -1,6 +1,7 @@
 <script setup>
 import NewsComponent5 from '@/components/NewsComponents/NewsComponent5.vue'
 import { computed, onMounted, ref } from 'vue'
+import NewsComponent9 from '../NewsComponent9.vue'
 
 const randomIndex = ref(0)
 
@@ -25,10 +26,26 @@ onMounted(async () => {
 <template>
   <div class="flex flex-col">
     <!-- 뉴스 목록 -->
-    <div class="w-[600px]" v-if="newsArr.length >= 2">
+    <div class="sm:block hidden w-[600px]" v-if="newsArr.length >= 2">
       <div class="flex flex-col gap-[15px]">
-        <NewsComponent5 v-if="newsArr[0]" :news="newsArr[4]" />
-        <NewsComponent5 v-if="newsArr[1]" :news="newsArr[5]" />
+        <NewsComponent5 v-if="newsArr[4]" :news="newsArr[4]" />
+        <NewsComponent5 v-if="newsArr[5]" :news="newsArr[5]" />
+      </div>
+    </div>
+    <div class="block sm:hidden">
+      <div class="flex flex-col gap-4 px-4 mb-14 max-w-[600px] mx-auto">
+        <div class="">
+          <NewsComponent9 v-if="newsArr[6]" :news="newsArr[6]" />
+        </div>
+        <div class="">
+          <NewsComponent9 v-if="newsArr[7]" :news="newsArr[7]" />
+        </div>
+        <div class="">
+          <NewsComponent9 v-if="newsArr[8]" :news="newsArr[8]" />
+        </div>
+        <div class="">
+          <NewsComponent9 v-if="newsArr[9]" :news="newsArr[9]" />
+        </div>
       </div>
     </div>
   </div>

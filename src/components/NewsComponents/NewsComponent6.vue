@@ -46,7 +46,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="props.news" class="flex h-[184px] relative">
+  <div v-if="props.news" class="flex w-full sm:h-[184px] h-[124px] relative">
     <!-- 호버했을때 나오는 창 -->
     <div
       class="absolute w-full h-full group inset-0 hover:bg-black/30 rounded-[20px] flex items-center justify-center z-12 cursor-pointer"
@@ -62,7 +62,7 @@ onMounted(() => {
     >
       <!-- 클릭했을 때 나오는 창 -->
       <template v-if="isLoading">
-        <div class="flex flex-col animate-pulse shrink-0 px-6 py-6">
+        <div class="hidden sm:flex flex-col animate-pulse shrink-0 px-6 py-6">
           <div class="mb-8 h-7 w-[90px] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[450px] bg-[#626262]/70 rounded-md"></div>
           <div class="h-8 w-[430px] bg-[#626262]/70 rounded-md"></div>
@@ -77,12 +77,19 @@ onMounted(() => {
           {{ summaryMessage }}
         </div>
       </template>
-      <div v-show="!isLoading" class="max-w-[500px] h-full rounded-[20px] z-30 absolute top-0">
+      <div
+        v-show="!isLoading"
+        class="sm:max-w-[500px] w-full sm:h-full max-h-[120px] rounded-[20px] z-30 absolute top-0 overflow-scroll"
+      >
         <!-- 요약된 내용 -->
         <div class="flex flex-col relative h-full">
           <div class="flex flex-col">
             <div class="px-4 py-2 text-white whitespace-pre-line leading-8">
-              <span v-show="!isLoading" ref="typedTarget" class="text-white"></span>
+              <span
+                v-show="!isLoading"
+                ref="typedTarget"
+                class="sm:text-lg text-[13px] w-full sm:py-0 py-4 text-left block"
+              ></span>
             </div>
           </div>
         </div>
@@ -96,19 +103,25 @@ onMounted(() => {
       </router-link>
     </div>
 
-    <div class="w-[600px] h-[184px]">
-      <img :src="news.image_url" alt="dmz" class="rounded-[16px] w-full h-full object-cover" />
+    <div>
+      <img :src="news.image_url" alt="dmz" class="rounded-[16px] w-[600px] h-full object-cover" />
     </div>
     <div
-      class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] bg-linear-to-t from-black to-transparent w-[600px] bottom-0 z-10 rounded-[16px]"
+      class="flex items-center justify-between px-[20px] pt-[20px] absolute h-[83px] bg-linear-to-t from-black to-transparent sm:w-[600px] w-full bottom-0 z-10 rounded-[16px]"
     >
-      <p class="font-bold w-[400px] text-[18px] text-[white] line-clamp-2">
+      <p class="font-bold w-[400px] sm:text-[18px] text-[13px] text-[white] line-clamp-2">
         {{ props.news.title }}
       </p>
       <!-- 좋아요 박스 -->
-      <!-- <div class="flex gap-2 text-[#A8A8A8]">
-        <Eye class="w-4" />
-        <span>3</span>
+      <!-- <div class="hidden sm:flex gap-2 text-[#A8A8A8]">
+        <div class="flex gap-1">
+          <ThumbsUp class="w-4" />
+          <span>23</span>
+        </div>
+        <div class="flex gap-1">
+          <Eye class="w-4" />
+          <span>300</span>
+        </div>
       </div> -->
     </div>
 

@@ -13,6 +13,7 @@ const router = createRouter({
       component: MyInterest,
       meta: {
         hideHeaderBasic: true,
+        hideMobileHeader: true,
       },
     },
     {
@@ -122,6 +123,9 @@ const router = createRouter({
           component: () => import('../views/newsDetail/CategoryView.vue'),
         },
       ],
+      meta: {
+        hideMobileHeader: true,
+      },
     },
     {
       path: '/community',

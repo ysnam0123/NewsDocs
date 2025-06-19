@@ -24,7 +24,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-[460px]">
+  <div class="sm:block hidden h-[460px]">
     <div class="flex gap-[24px] overflow-x-scroll">
       <div class="flex-1">
         <SlideNewsComponent v-if="newsArr[0]" :news="newsArr[0]" />
@@ -36,6 +36,18 @@ onMounted(async () => {
         <SlideNewsComponent v-if="newsArr[2]" :news="newsArr[2]" />
       </div>
       <div class="flex-1">
+        <SlideNewsComponent v-if="newsArr[3]" :news="newsArr[3]" />
+      </div>
+    </div>
+  </div>
+  <div class="block sm:hidden mb-7">
+    <div class="flex flex-col gap-6 px-1 mb-5">
+      <div class="flex gap-2">
+        <SlideNewsComponent v-if="newsArr[0]" :news="newsArr[0]" />
+        <SlideNewsComponent v-if="newsArr[1]" :news="newsArr[1]" />
+      </div>
+      <div class="flex gap-2 mb-4">
+        <SlideNewsComponent v-if="newsArr[2]" :news="newsArr[2]" />
         <SlideNewsComponent v-if="newsArr[3]" :news="newsArr[3]" />
       </div>
     </div>

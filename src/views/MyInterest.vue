@@ -4,7 +4,7 @@ import FavoriteSectionSkel from '@/components/NewsComponents/skeleton/FavoriteSe
 import FifthSecionSkel from '@/components/NewsComponents/skeleton/FifthSecionSkel.vue'
 import FourthSectionSkel from '@/components/NewsComponents/skeleton/FourthSectionSkel.vue'
 import SecondSectionSkel from '@/components/NewsComponents/skeleton/SecondSectionSkel.vue'
-import SixthSectionSkel from '@/components/NewsComponents/skeleton/SixthSectionSkel.vue'
+// import SixthSectionSkel from '@/components/NewsComponents/skeleton/SixthSectionSkel.vue'
 import ThirdSectionSkel from '@/components/NewsComponents/skeleton/ThirdSectionSkel.vue'
 import HotDocsComponent from '@/components/NewsComponents/HotDocsComponent.vue'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
@@ -12,7 +12,7 @@ import FavoriteSection from '@/components/NewsComponents/section/FavoriteSection
 import FifthSection from '@/components/NewsComponents/section/FifthSection.vue'
 import FourthSection from '@/components/NewsComponents/section/FourthSection.vue'
 import SecondSection from '@/components/NewsComponents/section/SecondSection.vue'
-import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
+// import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
 import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
@@ -41,7 +41,7 @@ const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.le
 const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
 const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
 const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
-const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
+// const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
 const matchedCategories = ref([])
 const userInterestLoading = ref(true)
@@ -123,7 +123,12 @@ onMounted(async () => {
   nextTick()
 
   const storedUserInterestNews = localStorage.getItem('userInterestNews')
-  if (storedUserInterestNews) {
+  console.log('storedUserInterestNews:', JSON.parse(storedUserInterestNews).length)
+  console.log(userInterestArr.length)
+  if (
+    storedUserInterestNews &&
+    JSON.parse(storedUserInterestNews).length === finalInterestArr.length
+  ) {
     allNews.value = JSON.parse(storedUserInterestNews)
     console.log('로컬스토리지 - 유저 관심사 뉴스:', allNews.value)
     loading.value = false
@@ -185,26 +190,30 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="mx-auto sm:max-w-[1240px] pt-[50px]">
+  <div class="mx-auto sm:max-w-[1240px] w-full pt-[50px]">
     <!-- 로그인 된 상태 -->
     <div v-if="isLoggedIn">
       <!-- 관심사 있는 상태 -->
-      <div v-if="!loading && allNews">
+      <div v-if="!loading && allNews" class="px-5">
         <div>
           <!-- 최고 관심사 -->
-          <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
+          <div
+            class="select-none flex items-center sm:gap-[20px] gap-[8px] font-semibold mb-[30px]"
+          >
             <h1 class="flex gap-[10px] items-center">
               <img v-if="matchedCategories[0]" :src="matchedCategories[0].icon" alt="firstLabel" />
-              <p class="text-[30px] text-[var(--text-title)] font-bold">
+              <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
                 {{ matchedCategories[0].label }}
               </p>
             </h1>
             <div class="flex">
-              <h2 class="text-[var(--text-sub-purple)] text-[16px]">내가 가장 관심있는</h2>
+              <h2 class="text-[var(--text-sub-purple)] sm:text-[16px] text-[12px]">
+                내가 가장 관심있는
+              </h2>
             </div>
             <div class="ml-auto cursor-pointer">
               <h3
-                class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+                class="sm:text-[16px] text-[12px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
               >
                 더보기
               </h3>
@@ -212,14 +221,19 @@ onMounted(async () => {
           </div>
           <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
 
-          <FavoriteSectionSkel v-else-if="loading" />
+          <FavoriteSectionSkel v-else-if="loading" class="hidden sm:block" />
         </div>
         <!-- 커뮤니티 섹션 -->
         <div
-          class="rounded-[24px] bg-[var(--section-contents-bg)] w-[1240px] h-[510px] px-[60px] py-[53px] mb-[60px]"
+          class="rounded-[24px] bg-[var(--section-contents-bg)] sm:w-[1240px] w-full h-[510px] px-[60px] py-[53px] mb-[60px]"
         >
-          <h1 class="text-[30px] text-[var(--text-title)] font-bold mb-[32px] select-none">
+          <h1
+            class="sm:block hidden text-[30px] text-[var(--text-title)] font-bold mb-[32px] select-none"
+          >
             나의 관심사에 대해 사람들과 이야기해보세요!
+          </h1>
+          <h1 class="block sm:hidden text-[20px] text-[var(--text-title)] select-none">
+            <span>나의 관심사에 대해</span> <br /><span>사람들과 이야기해봐요!</span>
           </h1>
           <div>
             <div v-if="hotLoading" class="flex gap-6">
@@ -244,43 +258,47 @@ onMounted(async () => {
           </button>
         </div>
         <!-- 두번째 관심사 -->
-        <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
+        <div class="select-none flex items-center sm:gap-[20px] gap-[8px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
             <img :src="matchedCategories[1].icon" alt="secondLabel" />
-            <p class="text-[30px] text-[var(--text-title)] font-bold">
+            <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
               {{ matchedCategories[1].label }}
             </p>
           </h1>
           <div class="flex">
-            <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
+            <h2 class="text-[var(--text-sub-purple)] sm:text-[16px] text-[12px]">나의 관심사</h2>
           </div>
           <div class="ml-auto cursor-pointer">
             <h3
-              class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+              class="sm:text-[16px] text-[12px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
             >
               더보기
             </h3>
           </div>
         </div>
         <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
-        <SecondSectionSkel v-else-if="loading" />
+        <SecondSectionSkel v-else-if="loading" class="hidden sm:block" />
 
-        <div class="flex gap-[72px] mb-[50px]">
+        <div class="flex sm:flex-row flex-col sm:gap-[72px] gap-0 mb-[50px]">
           <!-- 세번째 관심사 -->
           <div>
-            <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
+            <div
+              class="select-none sm:w-[608px] w-full flex items-center sm:gap-[20px] gap-[8px] font-semibold sm:mb-[30px] mb-3"
+            >
               <h1 class="flex gap-[10px] items-center">
                 <img :src="matchedCategories[2].icon" alt="thirdLabel" />
-                <p class="text-[30px] text-[var(--text-title)] font-bold">
+                <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
                   {{ matchedCategories[2].label }}
                 </p>
               </h1>
               <div class="flex">
-                <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
+                <h2 class="text-[var(--text-sub-purple)] sm:text-[16px] text-[12px]">
+                  나의 관심사
+                </h2>
               </div>
               <div class="ml-auto cursor-pointer">
                 <h3
-                  class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
+                  class="sm:text-[16px] text-[12px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
                 >
                   더보기
                 </h3>
@@ -288,17 +306,23 @@ onMounted(async () => {
             </div>
 
             <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
-            <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
+            <ThirdSectionSkel v-else-if="loading" class="mt-[50px] hidden sm:block" />
           </div>
           <!-- 오늘의 핫 독스 -->
-          <div class="w-[560px]">
-            <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
+          <div class="sm:w-[560px] w-full">
+            <div
+              class="select-none flex items-center sm:gap-[20px] gap-[10px] font-semibold sm:mb-[30px] mb-[2px]"
+            >
               <h1 class="flex gap-[10px] items-center">
                 <img src="../assets/icons/hotDocsIcon.svg" alt="hotDocs" />
-                <p class="text-[30px] text-[var(--text-title)] font-bold">오늘의 핫 독스</p>
+                <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
+                  오늘의 핫 독스
+                </p>
               </h1>
               <div class="flex">
-                <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
+                <h2 class="text-[var(--text-sub-purple)] sm:text-[16px] text-[12px]">
+                  세상은 지금
+                </h2>
               </div>
             </div>
             <div>
@@ -306,16 +330,22 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <div class="flex gap-[40px] mb-[50px]">
+        <div class="sm:flex sm:gap-[40px] mb-[50px]">
           <div>
             <!-- 세 번째 관심사 -->
-            <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
-              <h1 class="flex gap-[10px] items-center">
-                <p class="text-[30px] text-[var(--text-title)] font-bold"></p>
-              </h1>
-              <div class="flex">
-                <h2 class="text-[var(--text-sub-purple)] text-[16px]">나의 관심사</h2>
+            <div
+              class="select-none sm:w-[608px] w-full flex items-center sm:gap-[20px] gap-[8px] font-semibold sm:mb-[30px] mb-3"
+            >
+              <div class="flex gap-[10px] items-center">
+                <img :src="matchedCategories[3].icon" alt="secondLabel" />
+                <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
+                  {{ matchedCategories[3].label }}
+                </p>
+                <h2 class="text-[var(--text-sub-purple)] sm:text-[16px] text-[12px]">
+                  나의 관심사
+                </h2>
               </div>
+
               <div class="ml-auto cursor-pointer">
                 <h3
                   class="text-[16px] text-[var(--show-more)] underline underline-offset-2 font-medium select-none"
@@ -326,15 +356,17 @@ onMounted(async () => {
             </div>
             <!-- 섹션 6 -->
             <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
-            <FourthSectionSkel v-else-if="loading" />
+            <FourthSectionSkel v-else-if="loading" class="hidden sm:block" />
           </div>
           <!-- 네번째 관심사 -->
           <div v-if="matchedCategories.length > 4">
             <!-- 제목 -->
-            <div class="select-none w-[608px] flex items-center gap-[20px] font-semibold mb-[30px]">
+            <div
+              class="select-none sm:w-[608px] w-full flex items-center sm:gap-[20px] gap-[8px] font-semibold mb-[30px]"
+            >
               <h1 class="flex gap-[10px] items-center">
                 <img :src="matchedCategories[4].icon" alt="fifthsLabel" />
-                <p class="text-[30px] text-[var(--text-title)] font-bold">
+                <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
                   {{ matchedCategories[4].label }}
                 </p>
               </h1>
@@ -355,7 +387,7 @@ onMounted(async () => {
         </div>
 
         <!-- 다섯번째 관심사 -->
-        <div v-if="matchedCategories.length > 5">
+        <!-- <div v-if="matchedCategories.length > 5">
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
               <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
@@ -373,11 +405,15 @@ onMounted(async () => {
                 더보기
               </h3>
             </div>
-          </div>
-          <!-- 섹션 8 -->
-          <SixthSection v-if="hasNews5" :newsArr="allNews[5]" />
+          </div> -->
+        <!-- 섹션 8 -->
+        <!-- <SixthSection
+            
+            v-if="hasNews5"
+            :newsArr="allNews[5]"
+          />
           <SixthSectionSkel v-else-if="loading" />
-        </div>
+        </div> -->
       </div>
 
       <!-- 관심사 없는 상태 -->
@@ -408,7 +444,7 @@ onMounted(async () => {
     </div>
 
     <!-- 탑으로 이동 버튼 -->
-    <div v-if="isLoggedIn" class="mb-25">
+    <div v-if="isLoggedIn" class="mb-25 hidden sm:block">
       <img
         src="@/assets/icons/moveToTop.svg"
         alt="move to top Button"

@@ -68,7 +68,7 @@ onMounted(() => {
     >
       <!-- 클릭했을 때 나오는 창 -->
       <template v-if="isLoading">
-        <div class="flex flex-col animate-pulse shrink-0 px-6">
+        <div class="hidden sm:flex flex-col animate-pulse shrink-0 px-6">
           <div class="mb-8 h-7 w-[95px] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[450px] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[420px] bg-[#626262]/70 rounded-md"></div>

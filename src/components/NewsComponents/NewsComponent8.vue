@@ -72,7 +72,7 @@ onMounted(() => {
       @click="isOpen = false"
     >
       <template v-if="isLoading">
-        <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
+        <div class="hidden sm:flex flex-col animate-pulse shrink-0 px-6 py-15">
           <div class="mb-8 h-7 w-[30%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[70%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[50%] bg-[#626262]/70 rounded-md"></div>
@@ -121,11 +121,11 @@ onMounted(() => {
       <div>
         <div class="px-[10px] select-none">
           <div
-            class="text-[var(--text-title)] text-[20px] font-bold mt-[12px] mb-[5px] line-clamp-1"
+            class="text-[var(--text-title)] sm:text-[20px] text-[15px] font-bold mt-[12px] mb-[5px] line-clamp-1"
           >
             {{ props.news.title }}
           </div>
-          <div class="text-[16px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
+          <div class="sm:text-[16px] text-[10px] text-[#A8A8A8] min-h-[50px] mb-[5px] line-clamp-2">
             {{ props.news.description || '' }}
           </div>
           <!-- 좋아요 박스 -->
