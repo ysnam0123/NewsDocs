@@ -1,8 +1,9 @@
 <script setup>
 import { fetchHotDocs } from '@/api/fetchHotDocs'
-import { Eye, ThumbsUp } from 'lucide-vue-next'
+import { ThumbsUp } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import ViewCount from '../common/ViewCount.vue'
 
 const hotDocs = ref([])
 const router = useRouter()
@@ -13,6 +14,13 @@ const handleClick = (news) => {
 }
 onMounted(async () => {
   hotDocs.value = await fetchHotDocs()
+})
+
+onMounted(() => {
+  console.log('hotNewsList:', hotDocs.value)
+  hotDocs.value.forEach((news) => {
+    console.log('각 news_id:', news.news_id)
+  })
 })
 </script>
 <template>
@@ -48,7 +56,7 @@ onMounted(async () => {
               <p class="mt-[3px] mr-0.5">{{ news.like_count ?? 0 }}</p>
             </div>
             <div class="flex gap-[4px] items-center text-[13px] text-[#939393]">
-              <Eye class="w-4.5 mt-0.5 mr-1" />
+              <ViewCount :news-id="news.news_id" />
               <p class="mt-[3px]">{{ news.view_count }}</p>
             </div>
           </div>

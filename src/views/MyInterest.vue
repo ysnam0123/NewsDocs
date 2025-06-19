@@ -22,7 +22,6 @@ import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
 import { toggleLike } from '@/api/updateLikeNewsCount'
-
 const user = ref(null)
 const loading = ref(true)
 const isLoggedIn = ref(false)
@@ -54,9 +53,6 @@ onMounted(async () => {
   } = await supabase.auth.getUser()
   user.value = supaUser
   isLoggedIn.value = !!supaUser
-  console.log('사용자 정보:', user.value)
-  console.log('isLoggedIn:', isLoggedIn.value)
-  console.log('userInterestLoading:', userInterestLoading.value)
   // 로그인 전
   if (!isLoggedIn.value) {
     const { data: beforeLoginData, error: introduceError } = await supabase
@@ -130,7 +126,6 @@ onMounted(async () => {
     allNews.value = JSON.parse(storedUserInterestNews)
     console.log('로컬스토리지 - 유저 관심사 뉴스:', allNews.value)
     loading.value = false
-    return
   }
 
   const newsResults = []
@@ -157,7 +152,7 @@ onMounted(async () => {
   } else {
     loading.value = false
   }
-  // post 불러오기
+
   const { data, error } = await supabase
     .from('post')
     .select(
@@ -178,6 +173,7 @@ onMounted(async () => {
     )
     .order('created_at', { ascending: true })
     .limit(3)
+
   if (error) {
     console.error('post 불러오기 실패', error)
     return
@@ -229,7 +225,12 @@ onMounted(async () => {
           </h1>
           <div>
             <div class="flex flex-row justify-between gap-[24px]">
-              <NewsComponentCommunity v-for="post in posts" :key="post.post_id" :post="post" />
+              <NewsComponentCommunity
+                v-for="post in posts"
+                :key="post.post_id"
+                :post="post"
+                :interest-data="interestData"
+              />
             </div>
             <div v-if="loading" class="flex gap-6">
               <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
@@ -239,7 +240,7 @@ onMounted(async () => {
           </div>
           <button
             @click="router.push('/community')"
-            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#7846D2 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
+            class="select-none mx-auto mt-[42px] flex rounded-[8px] justify-center items-center w-[194px] h-[50px] text-white text-[16px] bg-[#7537E3] cursor-pointer hover:bg-[#601ED5 dark:bg-[#7846D2] dark:hover:bg-[#6524D9] transition duration-300"
           >
             글쓰러 가기
           </button>
@@ -303,7 +304,7 @@ onMounted(async () => {
               </div>
             </div>
             <div v-if="!loading">
-              <HotDocsComponent />
+              <HotDocsComponent v-if="news" :news-id="news.news_id" />
             </div>
             <div v-else>
               <div
@@ -397,11 +398,7 @@ onMounted(async () => {
                 </h3>
               </div>
             </div>
-            <FifthSection
-              :news-save-handler="newsSavedHandler"
-              v-if="hasNews4"
-              :newsArr="allNews[4]"
-            />
+            <FifthSection v-if="hasNews4" :newsArr="allNews[4]" />
             <FifthSecionSkel v-else-if="loading" class="mb-5" />
           </div>
         </div>
@@ -427,11 +424,7 @@ onMounted(async () => {
             </div>
           </div>
           <!-- 섹션 8 -->
-          <SixthSection
-            :news-save-handler="newsSavedHandler"
-            v-if="hasNews5"
-            :newsArr="allNews[5]"
-          />
+          <SixthSection v-if="hasNews5" :newsArr="allNews[5]" />
           <SixthSectionSkel v-else-if="loading" />
         </div>
       </div>

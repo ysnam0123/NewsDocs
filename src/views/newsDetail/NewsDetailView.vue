@@ -34,15 +34,23 @@ const handleSummary = async () => {
   await nextTick()
   if (summary.value) {
     await runTyped(summary.value)
+    console.log('서머리밸류', summary.value)
   } else {
-    const result = await getOrCreateSummary(news.value.news_id, news.value.description)
+    const result = await getOrCreateSummary(newsId, news.value.description)
+    console.log('result', result)
     if (result) {
       summary.value = result
+      await nextTick()
+      console.log('타이핑 타겟 확인:', typedTarget.value)
+
+      console.log('서머리밸류2', summary.value)
+
       await runTyped(result)
     }
   }
   isLoading.value = false
 }
+
 onMounted(async () => {
   const { data, error } = await supabase
     .from('news')
@@ -110,7 +118,7 @@ onMounted(async () => {
           <p class="text-lg">요약중...</p>
         </div>
         <!-- 요약보기 -->
-        <div v-else>
+        <div v-show="!isLoading">
           <div class="py-5 mx-8">
             <h2 class="text-lg mb-4 text-[#7537E3] dark:text-[#A26EFF] font-semibold">
               세 줄 요약
