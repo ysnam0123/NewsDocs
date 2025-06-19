@@ -1,12 +1,14 @@
 <script setup>
-import BookmarkLine from '@/assets/icons/bookmark.svg'
-import BookmarkFilled from '@/assets/icons/bookmark-filled.svg'
+import BookmarkLine from '@/assets/icons/scrap-none.svg'
+import BookmarkHover from '@/assets/icons/scrap-hover.svg'
+import BookmarkFilled from '@/assets/icons/scraped.svg'
 import { onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
 const isBookmarked = ref(false)
 const userId = ref(null)
+const hovered = ref(false)
 
 const props = defineProps({
   newsId: { type: String, required: true },
@@ -65,9 +67,16 @@ onMounted(async () => {
       'bg-transparent': !props.showBg,
     }"
     @click.stop="toggleBookmark"
+    @mouseover="hovered = true"
+    @mouseleave="hovered = false"
   >
-    <BookmarkLine v-if="!isBookmarked" class="w-6 h-7 text-[#8F8F8F] hover:text-[#7A42DF]" />
-    <BookmarkFilled v-else class="w-6 h-7 text-[#7A42DF]" />
+    <img
+      v-if="!isBookmarked"
+      :src="hovered ? BookmarkHover : BookmarkLine"
+      class="object-contain"
+      alt="북마크"
+    />
+    <img v-else :src="BookmarkFilled" class="object-contain" />
   </button>
 </template>
 

@@ -34,7 +34,7 @@ const moreViewHandler = (post) => {
   <div>
     <div class="flex my-10 justify-between">
       <h2 class="text-xl font-semibold justify-between dark:text-white">
-        <span class="text-[#7537E3] dark:text-[#A878FD]">'{{ props.categoryLabel }}' </span>에 대한
+        <span class="text-[#7537E3] dark:text-[#A878FD]">{{ props.categoryLabel }} </span>에 대한
         다른 유저의 생각
       </h2>
       <button

@@ -90,9 +90,7 @@ onMounted(() => {
         </div>
       </template>
 
-      <div
-        class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-scroll"
-      >
+      <div class="w-full h-[470px] rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]">
         <!-- 요약된 내용 -->
         <div class="flex flex-col relative z-30 h-full">
           <h1 class="text-[20px] font-semibold text-white mb-[32px]">세줄 요약</h1>
