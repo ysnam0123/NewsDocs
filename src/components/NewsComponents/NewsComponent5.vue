@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref, nextTick } from 'vue'
-import { ThumbsUp } from 'lucide-vue-next'
-import { Eye } from 'lucide-vue-next'
+// import { Eye } from 'lucide-vue-next'
 
 import dogNotFound from '@/assets/img/dog-notfound-v2.png'
 import { useSummary } from '@/composables/useSummary'
@@ -116,16 +115,10 @@ onMounted(() => {
         {{ props.news.description || '' }}
       </span>
       <!-- 좋아요 박스 -->
-      <div class="flex gap-2 text-[#A8A8A8] mt-auto">
-        <div class="flex gap-1">
-          <ThumbsUp class="w-6" />
-          <span>23</span>
-        </div>
-        <div class="flex gap-1">
-          <Eye class="w-6" />
-          <span>300</span>
-        </div>
-      </div>
+      <!-- <div class="flex gap-2 text-[#A8A8A8] mt-auto">
+        <Eye class="w-6" />
+        <span>10</span>
+      </div> -->
     </div>
 
     <!-- <ScrapNotOnImg class="absolute right-[20px] top-[20px] z-20" /> -->
