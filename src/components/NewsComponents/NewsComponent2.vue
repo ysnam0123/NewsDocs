@@ -201,7 +201,7 @@ onMounted(() => {
         <div class="flex flex-col relative z-30 h-full">
           <div class="flex flex-col text-[15px]">
             <div
-              class="overflow-scroll px-4 py-2 max-w-[320px] max-h-[130px] text-white whitespace-pre-line leading-8"
+              class="px-4 py-2 max-w-[320px] max-h-[130px] text-white whitespace-pre-line leading-8"
             >
               <span ref="typedTarget" class="text-white"></span>
             </div>
