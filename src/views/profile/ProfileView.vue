@@ -14,11 +14,13 @@ import { getCurrentUser } from '@/api/getCurrentUser'
 import { fetchUser } from '@/api/fetchUser'
 import { fetchUserByNickname } from '@/api/fetchUserByNickname'
 import { fetchInterest } from '@/api/fetchInterest'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { fetchUserScrap } from '@/api/fetchUserScrap'
 import { fetchScrapNews } from '@/api/fetchScrapNews'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 const posts = ref([])
 const route = useRoute()
 const router = useRouter()
@@ -43,20 +45,30 @@ onMounted(async () => {
   try {
     posts.value = await fetchPost()
     const user = await getCurrentUser()
+
     currentUser.value = await fetchUser(user?.id)
 
     profileUser.value = nicknameParam ? await fetchUserByNickname(nicknameParam) : currentUser.value
 
     userScrap.value = await fetchUserScrap(profileUser.value.user_id)
 
-    const scrapNewsId = userScrap.value.map((item) => item.news_id)
-    scrapNews.value = (await Promise.all(scrapNewsId.map((id) => fetchScrapNews(id)))).flat()
+    // created_at 기준으로 최신순 정렬
+    const sortedScrapList = [...userScrap.value].sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    )
+
+    const sortedScrapNews = await Promise.all(
+      sortedScrapList.map((item) => fetchScrapNews(item.news_id)),
+    )
+
+    scrapNews.value = sortedScrapNews.flat()
 
     interest.value = await fetchInterest(profileUser.value.user_id)
     categorys.value = interest.value?.map((item) => item.category_id) || []
     isLoading.value = false
   } catch (e) {
-    alert(e.message)
+    console.log(e)
+    toast.error('해당 기능은 회원가입 후 이용하실 수 있습니다.')
   }
 })
 
