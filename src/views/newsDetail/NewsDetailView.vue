@@ -110,12 +110,17 @@ onMounted(async () => {
   if (data && !error) {
     news.value = data
     console.log(news.value.source_name)
-    const text = await fetchCrawledText(news.value.source_name, news.value.link)
-
-    crawledText.value = text
+    // 설명이 짧거나 ...일 때만 크롤링 요청
     if (isShortOrEllipsis(news.value.description)) {
       console.log('크롤링 필요:', news.value.source_name, news.value.link)
-      crawledText.value = await fetchCrawledText(news.value.source_name, news.value.link)
+      try {
+        crawledText.value = await fetchCrawledText(news.value.source_name, news.value.link)
+      } catch (e) {
+        console.error('크롤링 실패:', e)
+        crawledText.value = ''
+      }
+    } else {
+      crawledText.value = news.value.description
     }
   }
 })
