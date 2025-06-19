@@ -303,55 +303,8 @@ onMounted(async () => {
                 <h2 class="text-[var(--text-sub-purple)] text-[16px]">세상은 지금</h2>
               </div>
             </div>
-            <div v-if="!loading">
-              <HotDocsComponent v-if="news" :news-id="news.news_id" />
-            </div>
-            <div v-else>
-              <div
-                class="flex flex-col text-[var(--text-title)] h-[790px] border-1 border-[#e0e0e0] dark:border-[#343434] rounded-[18px] px-[32px] pt-[28px]"
-              >
-                <div class="relative w-[580px] flex flex-col gap-[24px]"></div>
-                <div class="flex">
-                  <div class="w-[150px] h-[150px] bg-gray-300 rounded-[20px]"></div>
-                  <div>
-                    <div class="w-[350px] h-[35px] mt-3 ml-5 bg-gray-300 rounded-[20px]"></div>
-                    <div class="w-[350px] h-[22px] mt-5 ml-5 bg-gray-300 rounded-[20px]"></div>
-                    <div class="w-[350px] h-[22px] mt-2 ml-5 bg-gray-300 rounded-[20px]"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="w-[450px] h-[35px] mt-3 bg-gray-300 rounded-[20px]"></div>
-                  <div class="w-[350px] h-[22px] mt-5 bg-gray-300 rounded-[20px]"></div>
-                  <div class="flex gap-3 mt-3">
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                    <div class="w-[20px] h-[20px] mt-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
+            <div>
+              <HotDocsComponent />
             </div>
           </div>
         </div>

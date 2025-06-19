@@ -7,6 +7,7 @@ import { useTyping } from '@/composables/useTyping'
 import NewsScrapButton from '../common/NewsScrapButton.vue'
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
+
 // 호버 상태
 const summaryHover = ref(false)
 const isSummaryLoading = ref(true)
