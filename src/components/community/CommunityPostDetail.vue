@@ -26,7 +26,7 @@ const isEditModalOpen = ref(false) //게시글 수정 모달
 const updated = ref(null)
 
 const handleProfile = () => {
-  router.push(`/profile/${props.userId}`)
+  router.push(`/profile/${props.userName}`)
 }
 //게시글 삭제
 const deleteHandler = async () => {
