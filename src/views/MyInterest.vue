@@ -21,7 +21,7 @@ import { getFreshNews } from '@/composables/newsCache'
 import { allCategoryMap } from '@/composables/useCategoryMap'
 import IntroduceSection from '@/components/NewsComponents/introduce/IntroduceSection.vue'
 import IntroduceSkel from '@/components/NewsComponents/introduce/IntroduceSkel.vue'
-import { toggleLike } from '@/api/updateLikeNewsCount'
+// import { toggleLike } from '@/api/updateLikeNewsCount'
 const user = ref(null)
 const loading = ref(true)
 const isLoggedIn = ref(false)
@@ -33,6 +33,7 @@ const scrollToTop = () => {
 const allNews = ref([])
 const posts = ref([])
 const router = useRouter()
+const hotLoading = ref(true)
 
 // 각 인덱스별 존재 여부를 안전하게 체크하는 computed 변수들
 const hasNews0 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 0)
@@ -178,11 +179,8 @@ onMounted(async () => {
     console.error('post 불러오기 실패', error)
     return
   }
-  for (const post of data) {
-    const likeCount = await toggleLike(post.post_id)
-    post.like_count = likeCount
-  }
   posts.value = data
+  hotLoading.value = false
 })
 </script>
 
@@ -224,18 +222,18 @@ onMounted(async () => {
             나의 관심사에 대해 사람들과 이야기해보세요!
           </h1>
           <div>
-            <div class="flex flex-row justify-between gap-[24px]">
+            <div v-if="hotLoading" class="flex gap-6">
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
+            </div>
+            <div v-else class="flex flex-row justify-between gap-[24px]">
               <NewsComponentCommunity
                 v-for="post in posts"
                 :key="post.post_id"
                 :post="post"
                 :interest-data="interestData"
               />
-            </div>
-            <div v-if="loading" class="flex gap-6">
-              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
-              <div class="w-[358px] h-[243px] rounded-[16px] animate-pulse bg-gray-300"></div>
             </div>
           </div>
           <button
