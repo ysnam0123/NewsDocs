@@ -9,20 +9,23 @@ import { useTyping } from '@/composables/useTyping'
 import BackButton from '@/components/common/BackButton.vue'
 import NewsRecommend from './NewsRecommend.vue'
 import CommunityRecommend from './CommunityRecommend.vue'
+import { fetchCrawledText } from '@/api/fetchCrawledText'
+import { useToast } from 'vue-toastification'
+
+const userId = ref(null)
+const toast = useToast()
 
 const { getOrCreateSummary } = useSummary()
 const { runTyped, typedTarget } = useTyping()
 const isOpen = ref(false)
 const isLoading = ref(true)
 const news = ref(null)
-const categoryLabel = ref(null)
 const summary = ref('')
-const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅 
-원문으로 안내해줄게 📰✨`
 const route = useRoute()
-console.log('너의 이름은', route.params)
-const newsId = route.params.id
-console.log('detail page newsId', newsId)
+const hasLiked = ref(false)
+const crawledText = ref('')
+const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅
+원문으로 안내해줄게 📰✨`
 const handleSummary = async () => {
   if (isOpen.value) {
     isOpen.value = false
@@ -36,14 +39,11 @@ const handleSummary = async () => {
     await runTyped(summary.value)
     console.log('서머리밸류', summary.value)
   } else {
-    const result = await getOrCreateSummary(newsId, news.value.description)
+    const result = await getOrCreateSummary(news.value.news_id, news.value.description)
     console.log('result', result)
     if (result) {
       summary.value = result
       await nextTick()
-      console.log('타이핑 타겟 확인:', typedTarget.value)
-
-      console.log('서머리밸류2', summary.value)
 
       await runTyped(result)
     }
@@ -51,15 +51,74 @@ const handleSummary = async () => {
   isLoading.value = false
 }
 
+//말줄임표 확인
+const isShortOrEllipsis = (desc) => {
+  if (!desc) return true
+  if (desc.length < 30) return true
+  // 말줄임표 정규식 체크
+  return /(\.\.\.|…|\.{2,3})\s*$/.test(desc)
+}
+
+const handleLikeToggle = async () => {
+  if (!news.value || !userId.value) {
+    toast('로그인이 필요합니다.')
+    return
+  }
+
+  if (!hasLiked.value) {
+    const { error } = await supabase
+      .from('like')
+      .insert([{ user_id: userId.value, news_id: news.value.news_id }])
+    if (!error) {
+      // 증가
+      await supabase
+        .from('news')
+        .update({ like_count: (news.value.like_count ?? 0) + 1 })
+        .eq('news_id', news.value.news_id)
+      news.value.like_count++
+      hasLiked.value = true
+    }
+  } else {
+    // 좋아요 취소
+    const { error } = await supabase
+      .from('like')
+      .delete()
+      .eq('user_id', userId.value)
+      .eq('news_id', news.value.news_id)
+    if (!error) {
+      // 감소
+      await supabase
+        .from('news')
+        .update({ like_count: Math.max((news.value.like_count ?? 1) - 1, 0) })
+        .eq('news_id', news.value.news_id)
+      news.value.like_count--
+      hasLiked.value = false
+    }
+  }
+}
+
 onMounted(async () => {
+  const newsId = route.params.id
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  userId.value = user?.id ?? null
   const { data, error } = await supabase
     .from('news')
     .select(`*, category:category_id (title)`)
     .eq('news_id', newsId)
     .maybeSingle()
+
   if (data && !error) {
-    console.log('찾았다', data)
     news.value = data
+    console.log(news.value.source_name)
+    const text = await fetchCrawledText(news.value.source_name, news.value.link)
+
+    crawledText.value = text
+    if (isShortOrEllipsis(news.value.description)) {
+      console.log('크롤링 필요:', news.value.source_name, news.value.link)
+      crawledText.value = await fetchCrawledText(news.value.source_name, news.value.link)
+    }
   }
 })
 </script>
@@ -81,8 +140,24 @@ onMounted(async () => {
           <span class="text-sm text-[#A6A6A6]">{{ news.source_name }}</span>
         </div>
         <div class="flex justify-center items-center gap-2">
-          <ThumbsUp class="cursor-pointer" />
-          <Eye /><span class="mr-2">{{ news.view_count ?? 0 }}</span>
+          <ThumbsUp
+            :class="[
+              'cursor-pointer hover:text-[#191919]',
+              hasLiked ? 'text-[#7A42DF]' : 'text-[#6A6A6A]',
+            ]"
+            @click="handleLikeToggle"
+          />
+          <span
+            :class="[
+              'mr-2 font-medium text-[#6A6A6A]',
+              hasLiked ? 'text-[#7A42DF]' : 'text-[#6A6A6A]',
+            ]"
+          >
+            {{ news.like_count ?? 0 }}</span
+          >
+          <Eye class="text-[#6A6A6A] font-medium" /><span class="mr-2 text-[#6A6A6A]">{{
+            news.view_count ?? 0
+          }}</span>
         </div>
       </div>
       <div class="bg-[#f5f5f5]/70 rounded-2xl">
@@ -130,7 +205,11 @@ onMounted(async () => {
         </div>
       </div>
       <span class="leading-[29px] text-lg text-left dark:text-white font-extralight line-clamp-10">
-        {{ news.description || defaultMessage }}
+        {{
+          news.description && !isShortOrEllipsis(news.description)
+            ? news.description
+            : crawledText || defaultMessage
+        }}
       </span>
       <button class="cursor-pointer mb-10 text-[#AEAEAE] hover:underline underline-offset-2">
         <a :href="news.link" target="_blank">원문보기</a>
@@ -138,14 +217,14 @@ onMounted(async () => {
       <hr class="text-gray-200 dark:text-[#282828]" />
     </section>
     <div class="mr-2">
-      <NewsRecommend class="sm:flex hidden" />
+      <NewsRecommend v-if="news && news.category_id" :category-id="news.category_id" />
     </div>
   </section>
   <section>
     <CommunityRecommend
       v-if="news"
       :category-id="news.category_id"
-      :category-label="categoryLabel"
+      :category-label="news.category?.title"
     />
   </section>
 </template>
