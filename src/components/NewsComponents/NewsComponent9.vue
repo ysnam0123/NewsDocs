@@ -133,8 +133,8 @@ onMounted(() => {
           <div class="flex gap-1">
             <Eye class="w-4" />
             <span>300</span>
-          </div> -->
-        </div>
+          </div> 
+        </div>-->
       </div>
     </div>
 
