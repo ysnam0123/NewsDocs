@@ -1,5 +1,4 @@
 import supabase from '@/utils/supabase'
-
 export const fetchPost = async () => {
   const { data, error } = await supabase
     .from('post')

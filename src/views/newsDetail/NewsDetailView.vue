@@ -23,8 +23,6 @@ const news = ref(null)
 const summary = ref('')
 const route = useRoute()
 const hasLiked = ref(false)
-//console.log('너의 이름은', route.params)
-
 const crawledText = ref('')
 const defaultMessage = `앗, 아직 뉴스 내용이 없는 것 같아! 😅
 원문으로 안내해줄게 📰✨`
@@ -39,10 +37,14 @@ const handleSummary = async () => {
   await nextTick()
   if (summary.value) {
     await runTyped(summary.value)
+    console.log('서머리밸류', summary.value)
   } else {
     const result = await getOrCreateSummary(news.value.news_id, news.value.description)
+    console.log('result', result)
     if (result) {
       summary.value = result
+      await nextTick()
+
       await runTyped(result)
     }
   }
@@ -191,7 +193,7 @@ onMounted(async () => {
           <p class="text-lg">요약중...</p>
         </div>
         <!-- 요약보기 -->
-        <div v-else>
+        <div v-show="!isLoading">
           <div class="py-5 mx-8">
             <h2 class="text-lg mb-4 text-[#7537E3] dark:text-[#A26EFF] font-semibold">
               세 줄 요약
