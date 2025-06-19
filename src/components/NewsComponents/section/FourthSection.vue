@@ -33,7 +33,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="block sm:hidden">
-      <div class="flex flex-col gap-4 px-4 mb-4 max-w-[600px] mx-auto">
+      <div class="flex flex-col gap-4 px-4 mb-14 max-w-[600px] mx-auto">
         <div class="">
           <NewsComponent9 v-if="newsArr[6]" :news="newsArr[6]" />
         </div>

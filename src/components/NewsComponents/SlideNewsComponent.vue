@@ -52,7 +52,7 @@ onMounted(() => {
 <template>
   <div
     v-if="props.news"
-    class="rounded-[16px] sm:h-[384px] sm:w-full w-[185px] h-[202px] relative select-none cursor-pointer"
+    class="rounded-[16px] sm:h-[384px] sm:w-full w-[185px] h-[232px] relative select-none cursor-pointer"
   >
     <!-- 호버했을때 나오는 창 -->
     <div
@@ -68,7 +68,7 @@ onMounted(() => {
     >
       <!-- 클릭했을 때 나오는 창 -->
       <template v-if="isLoading">
-        <div class="flex flex-col h-full py-10 px-7 animate-pulse shrink-0">
+        <div class="hidden sm:flex flex-col h-full py-10 px-7 animate-pulse shrink-0">
           <div class="mb-6 h-8 w-[35%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-4 h-6.5 w-[85%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-4 h-6.5 w-[85%] bg-[#626262]/70 rounded-md"></div>
@@ -91,10 +91,10 @@ onMounted(() => {
         class="w-full sm:h-[384px] h-full rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]"
       >
         <div class="flex flex-col relative z-30">
-          <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
+          <h1 class="hidden sm:block text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
           <div class="pr-1">
             <div
-              class="text-white whitespace-pre-line leading-8 overflow-scroll scrollbar-hide max-h-[220px]"
+              class="text-white whitespace-pre-line leading-8 overflow-scroll scrollbar-hide sm:max-h-[220px] max-h-[calc(100%-40px)]"
             >
               <span v-show="!isLoading" ref="typedTarget" class="text-white"></span>
             </div>
@@ -104,7 +104,7 @@ onMounted(() => {
 
       <router-link
         :to="`/news/detail/${props.news.news_id}`"
-        class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+        class="absolute sm:bottom-5 bottom-2 sm:right-4 right-2 z-30 sm:w-[81px] sm:h-[33px] h-[40px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] flex items-center cursor-pointer hover:bg-[#D2D2D2]"
       >
         원문보기
       </router-link>

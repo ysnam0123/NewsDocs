@@ -71,7 +71,7 @@ onMounted(() => {
       @click="isOpen = false"
     >
       <template v-if="isLoading">
-        <div class="flex flex-col animate-pulse shrink-0 px-6 py-15">
+        <div class="hidden sm:flex flex-col animate-pulse shrink-0 px-6 py-15">
           <div class="mb-8 h-7 w-[30%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[70%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[50%] bg-[#626262]/70 rounded-md"></div>

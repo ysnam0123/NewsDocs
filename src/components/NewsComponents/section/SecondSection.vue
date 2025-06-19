@@ -41,7 +41,7 @@ onMounted(async () => {
     </div>
   </div>
   <div class="block sm:hidden mb-7">
-    <div class="flex flex-col items-center gap-10 px-1 mb-5">
+    <div class="flex flex-col gap-6 px-1 mb-5">
       <div class="flex gap-2">
         <SlideNewsComponent v-if="newsArr[0]" :news="newsArr[0]" />
         <SlideNewsComponent v-if="newsArr[1]" :news="newsArr[1]" />

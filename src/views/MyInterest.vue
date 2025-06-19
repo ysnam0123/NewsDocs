@@ -4,7 +4,7 @@ import FavoriteSectionSkel from '@/components/NewsComponents/skeleton/FavoriteSe
 import FifthSecionSkel from '@/components/NewsComponents/skeleton/FifthSecionSkel.vue'
 import FourthSectionSkel from '@/components/NewsComponents/skeleton/FourthSectionSkel.vue'
 import SecondSectionSkel from '@/components/NewsComponents/skeleton/SecondSectionSkel.vue'
-import SixthSectionSkel from '@/components/NewsComponents/skeleton/SixthSectionSkel.vue'
+// import SixthSectionSkel from '@/components/NewsComponents/skeleton/SixthSectionSkel.vue'
 import ThirdSectionSkel from '@/components/NewsComponents/skeleton/ThirdSectionSkel.vue'
 import HotDocsComponent from '@/components/NewsComponents/HotDocsComponent.vue'
 import NewsComponentCommunity from '@/components/NewsComponents/NewsComponentCommunity.vue'
@@ -12,7 +12,7 @@ import FavoriteSection from '@/components/NewsComponents/section/FavoriteSection
 import FifthSection from '@/components/NewsComponents/section/FifthSection.vue'
 import FourthSection from '@/components/NewsComponents/section/FourthSection.vue'
 import SecondSection from '@/components/NewsComponents/section/SecondSection.vue'
-import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
+// import SixthSection from '@/components/NewsComponents/section/SixthSection.vue'
 import ThirdSection from '@/components/NewsComponents/section/ThirdSection.vue'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import supabase from '@/utils/supabase'
@@ -41,7 +41,7 @@ const hasNews1 = computed(() => Array.isArray(allNews.value) && allNews.value.le
 const hasNews2 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 2)
 const hasNews3 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 3)
 const hasNews4 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 4)
-const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
+// const hasNews5 = computed(() => Array.isArray(allNews.value) && allNews.value.length > 5)
 
 const matchedCategories = ref([])
 const userInterestLoading = ref(true)
@@ -57,6 +57,7 @@ onMounted(async () => {
   console.log('사용자 정보:', user.value)
   console.log('isLoggedIn:', isLoggedIn.value)
   console.log('userInterestLoading:', userInterestLoading.value)
+
   // 로그인 전
   if (!isLoggedIn.value) {
     const { data: beforeLoginData, error: introduceError } = await supabase
@@ -126,7 +127,12 @@ onMounted(async () => {
   nextTick()
 
   const storedUserInterestNews = localStorage.getItem('userInterestNews')
-  if (storedUserInterestNews) {
+  console.log('storedUserInterestNews:', JSON.parse(storedUserInterestNews).length)
+  console.log(userInterestArr.length)
+  if (
+    storedUserInterestNews &&
+    JSON.parse(storedUserInterestNews).length === finalInterestArr.length
+  ) {
     allNews.value = JSON.parse(storedUserInterestNews)
     console.log('로컬스토리지 - 유저 관심사 뉴스:', allNews.value)
     loading.value = false
@@ -222,7 +228,7 @@ onMounted(async () => {
           </div>
           <FavoriteSection v-if="hasNews0" :newsArr="allNews[0]" />
 
-          <FavoriteSectionSkel v-else-if="loading" />
+          <FavoriteSectionSkel v-else-if="loading" class="hidden sm:block" />
         </div>
         <!-- 커뮤니티 섹션 -->
         <div
@@ -256,7 +262,7 @@ onMounted(async () => {
         <!-- 두번째 관심사 -->
         <div class="select-none flex items-center sm:gap-[20px] gap-[8px] font-semibold mb-[30px]">
           <h1 class="flex gap-[10px] items-center">
-            <!-- <img :src="matchedCategories[1].icon" alt="secondLabel" /> -->
+            <img :src="matchedCategories[1].icon" alt="secondLabel" />
             <p class="sm:text-[30px] text-[20px] text-[var(--text-title)] font-bold">
               {{ matchedCategories[1].label }}
             </p>
@@ -273,7 +279,7 @@ onMounted(async () => {
           </div>
         </div>
         <SecondSection v-if="hasNews1" :newsArr="allNews[1]" />
-        <SecondSectionSkel v-else-if="loading" />
+        <SecondSectionSkel v-else-if="loading" class="hidden sm:block" />
 
         <div class="flex sm:flex-row flex-col sm:gap-[72px] gap-0 mb-[50px]">
           <!-- 세번째 관심사 -->
@@ -302,7 +308,7 @@ onMounted(async () => {
             </div>
 
             <ThirdSection v-if="hasNews2" :newsArr="allNews[2]" />
-            <ThirdSectionSkel v-else-if="loading" class="mt-[50px]" />
+            <ThirdSectionSkel v-else-if="loading" class="mt-[50px] hidden sm:block" />
           </div>
           <!-- 오늘의 핫 독스 -->
           <div class="sm:w-[560px] w-full">
@@ -399,7 +405,7 @@ onMounted(async () => {
             </div>
             <!-- 섹션 6 -->
             <FourthSection v-if="hasNews3" :newsArr="allNews[3]" />
-            <FourthSectionSkel v-else-if="loading" />
+            <FourthSectionSkel v-else-if="loading" class="hidden sm:block" />
           </div>
           <!-- 네번째 관심사 -->
           <div v-if="matchedCategories.length > 4">
@@ -429,12 +435,12 @@ onMounted(async () => {
               v-if="hasNews4"
               :newsArr="allNews[4]"
             />
-            <FifthSecionSkel v-else-if="loading" class="mb-5" />
+            <FifthSecionSkel v-else-if="loading" class="mb-5" hidden sm:block />
           </div>
         </div>
 
         <!-- 다섯번째 관심사 -->
-        <div v-if="matchedCategories.length > 5">
+        <!-- <div v-if="matchedCategories.length > 5">
           <div class="select-none flex items-center gap-[20px] font-semibold mb-[30px]">
             <h1 class="flex gap-[10px] items-center">
               <img :src="matchedCategories[5].icon" alt="fifthsLabel" />
@@ -452,15 +458,15 @@ onMounted(async () => {
                 더보기
               </h3>
             </div>
-          </div>
-          <!-- 섹션 8 -->
-          <SixthSection
+          </div> -->
+        <!-- 섹션 8 -->
+        <!-- <SixthSection
             :news-save-handler="newsSavedHandler"
             v-if="hasNews5"
             :newsArr="allNews[5]"
           />
           <SixthSectionSkel v-else-if="loading" />
-        </div>
+        </div> -->
       </div>
 
       <!-- 관심사 없는 상태 -->
@@ -491,7 +497,7 @@ onMounted(async () => {
     </div>
 
     <!-- 탑으로 이동 버튼 -->
-    <div v-if="isLoggedIn" class="mb-25">
+    <div v-if="isLoggedIn" class="mb-25 hidden sm:block">
       <img
         src="@/assets/icons/moveToTop.svg"
         alt="move to top Button"

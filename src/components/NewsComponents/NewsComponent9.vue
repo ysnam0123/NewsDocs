@@ -67,7 +67,7 @@ onMounted(() => {
       class="w-full cursor-pointer absolute inset-0 bg-black/70 hover:bg-black/80 flex flex-col rounded-[20px] z-20 backdrop-blur-lg"
     >
       <template v-if="isLoading">
-        <div class="w-full flex flex-col animate-pulse shrink-0 px-7 py-9">
+        <div class="hidden sm:flex w-full flex-col animate-pulse shrink-0 px-7 py-9">
           <div class="mb-8 h-7 w-[40%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-7 w-[80%] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-7 w-[80%] bg-[#626262]/70 rounded-md"></div>

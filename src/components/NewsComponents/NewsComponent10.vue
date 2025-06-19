@@ -50,7 +50,7 @@ onMounted(() => {
 <template>
   <div
     v-if="props.news"
-    class="sm:w-[292px] sm:h-[384px] w-[185px] h-[202px] relative select-none group"
+    class="sm:w-[292px] sm:h-[384px] w-[185px] h-[222px] relative select-none group"
   >
     <!-- 호버했을때 나오는 창 -->
     <div
@@ -68,7 +68,7 @@ onMounted(() => {
     >
       <!-- 클릭했을 때 나오는 창 -->
       <template v-if="isLoading">
-        <div class="w-full flex flex-col animate-pulse shrink-0 ml-3">
+        <div class="w-full hidden sm:flex flex-col animate-pulse shrink-0 ml-3">
           <div class="mb-8 h-7 w-[80px] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[250px] bg-[#626262]/70 rounded-md"></div>
           <div class="mb-3 h-8 w-[230px] bg-[#626262]/70 rounded-md"></div>
@@ -87,20 +87,21 @@ onMounted(() => {
 
       <div
         v-show="!isLoading"
-        class="w-full h-full rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px] overflow-y-auto"
+        class="w-full h-full rounded-[20px] absolute top-0 pt-[40px] pb-[32px] px-[32px]"
       >
         <div class="flex flex-col relative z-30 h-full">
-          <h1 class="text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
-          <div class="max-h-[220px] pr-1">
-            <div class="text-white whitespace-pre-line w-full text-left leading-8">
-              <span ref="typedTarget" class="text-white w-full text-left"></span>
-            </div>
+          <h1 class="hidden sm:block text-[20px] font-semibold text-white mb-[24px]">세줄 요약</h1>
+
+          <div
+            class="sm:max-h-[220px] max-h-[calc(100%-20px)] pr-1 text-white whitespace-pre-line w-full text-left leading-8 overflow-scroll"
+          >
+            <span ref="typedTarget" class="text-white w-full text-left"></span>
           </div>
         </div>
       </div>
       <router-link
         :to="`/news/detail/${props.news.news_id}`"
-        class="absolute bottom-5 right-4 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-[16px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
+        class="absolute sm:bottom-5 bottom-2 sm:right-4 right-3 z-30 w-[81px] h-[33px] px-[16px] py-[8px] text-[14px] font-semibold bg-white rounded-[8px] mt-[16px] ml-auto flex items-center cursor-pointer hover:bg-[#D2D2D2]"
       >
         원문보기
       </router-link>
