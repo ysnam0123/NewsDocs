@@ -78,10 +78,7 @@ onMounted(() => {
           {{ summaryMessage }}
         </div>
       </template>
-      <div
-        v-show="!isLoading"
-        class="max-w-[500px] h-full rounded-[20px] z-30 absolute top-0 overflow-scroll"
-      >
+      <div v-show="!isLoading" class="max-w-[500px] h-full rounded-[20px] z-30 absolute top-0">
         <!-- 요약된 내용 -->
         <div class="flex flex-col relative h-full">
           <div class="flex flex-col">

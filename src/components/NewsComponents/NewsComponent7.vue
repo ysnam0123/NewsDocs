@@ -55,7 +55,7 @@ onMounted(() => {
 
     <div
       v-if="isOpen"
-      class="cursor-pointer inset-0 bg-black/70 hover:bg-black/80 flex flex-col gap-4 rounded-[20px] z-20 backdrop-blur-lg absolute top-0 overflow-scroll"
+      class="cursor-pointer inset-0 bg-black/70 hover:bg-black/80 flex flex-col gap-4 rounded-[20px] z-20 backdrop-blur-lg absolute top-0"
       @click="isOpen = false"
     >
       <!-- 클릭했을 때 나오는 창 -->
