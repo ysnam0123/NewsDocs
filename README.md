@@ -4,6 +4,8 @@
 <h3><b>프로그래머스 데브코스 프론트엔드 3차 프로젝트</b></h3>
 <h4><b>TEAM: team-gpt</b></h4>
 
+<img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/3ee94841-4c5c-4a97-b560-b8d609ffb7c8" />
+<br />
 🔗 [NewsDocs 바로가기](https://newsdocs.netlify.app/)
 
 </div>
