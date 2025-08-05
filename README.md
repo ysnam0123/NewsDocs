@@ -4,7 +4,6 @@
 <h3><b>프로그래머스 데브코스 프론트엔드 3차 프로젝트</b></h3>
 <h4><b>TEAM: team-gpt</b></h4>
 
-![run_dog](https://raw.githubusercontent.com/marchbom/news-dog/main/src/assets/img/run_dog.png)
 🔗 [NewsDocs 바로가기](https://newsdocs.netlify.app/)
 
 </div>
@@ -106,10 +105,7 @@
 
 <br />
 
-<!-- Top Button -->
-<p style='background: black; width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: auto;'><a href="#top" style='color: white; '>▲</a></p>
 
-<br>
 
 ## <span id="5">🤝 5. 컨벤션</span>
 
